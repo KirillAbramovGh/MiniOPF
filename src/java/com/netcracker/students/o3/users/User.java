@@ -6,19 +6,19 @@ import java.math.BigInteger;
 
 public interface User extends HasId
 {
-    public BigInteger getId();
+    BigInteger getId();
 
-    public void setId(final BigInteger id);
+    void setId(final BigInteger id);
 
-    public String getName();
+    String getName();
 
-    public void setName(final String name);
+    void setName(final String name);
 
-    public String getLogin();
+    String getLogin();
 
-    public void setLogin(final String login);
+    void setLogin(final String login);
 
-    public String getPassword();
+    String getPassword();
 
-    public void setPassword(final String password);
+    void setPassword(final String password);
 }

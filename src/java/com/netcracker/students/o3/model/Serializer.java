@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Serializer
@@ -26,8 +27,8 @@ public class Serializer
     public synchronized <T> void serializeList(HashMap<BigInteger,T> list,File file) throws IOException
     {
         OutputStream outputStream = new FileOutputStream(file,true);
-        var values = list.values();
-        for (var o: values)
+        Collection<T> values = list.values();
+        for (T o: values)
         {
             objectMapper.writeValue(outputStream,o);
         }

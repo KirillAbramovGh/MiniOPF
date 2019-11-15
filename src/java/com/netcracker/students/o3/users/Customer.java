@@ -1,104 +1,22 @@
 package com.netcracker.students.o3.users;
 
-import com.netcracker.students.o3.services.Service;
-
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 
-public class Customer implements User
+public interface Customer extends User
 {
-    private BigInteger id;
-    private String name;
-    private String login;
-    private String password;
-    private BigDecimal moneyBalance;
-    private ArrayList<BigInteger> connectedServicesIds;
-    private BigInteger areaId;
+     BigInteger getId();
 
-    @Override
-    public String toString()
-    {
-        return "Customer{" +
-                "id=" + id +
-                ", moneyBalance=" + moneyBalance +
-                '}';
-    }
-    public Customer(){}
-    public Customer(final BigInteger id, final BigDecimal moneyBalance)
-    {
-        this.id = id;
-        this.moneyBalance = moneyBalance;
-    }
+     void setId(final BigInteger id);
 
-    public BigDecimal getMoneyBalance()
-    {
-        return moneyBalance;
-    }
+     String getName();
 
-    public void setMoneyBalance(final BigDecimal moneyBalance)
-    {
-        this.moneyBalance = moneyBalance;
-    }
+     void setName(final String name);
 
-    public ArrayList<BigInteger> getConnectedServicesIds()
-    {
-        return connectedServicesIds;
-    }
+     String getLogin();
 
-    public void setConnectedServicesIds(final ArrayList<BigInteger> connectedServicesIds)
-    {
-        this.connectedServicesIds = connectedServicesIds;
-    }
+     void setLogin(final String login);
 
-    public BigInteger getAreaId()
-    {
-        return areaId;
-    }
+     String getPassword();
 
-    public void setAreaId(final BigInteger areaId)
-    {
-        this.areaId = areaId;
-    }
-
-    public BigInteger getId()
-    {
-        return id;
-    }
-
-    public void setId(final BigInteger id)
-    {
-        this.id = id;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(final String name)
-    {
-        this.name = name;
-    }
-
-    public String getLogin()
-    {
-        return login;
-    }
-
-    public void setLogin(final String login)
-    {
-        this.login = login;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(final String password)
-    {
-        this.password = password;
-    }
-
+     void setPassword(final String password);
 }

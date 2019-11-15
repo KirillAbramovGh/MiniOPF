@@ -8,8 +8,8 @@ import com.netcracker.students.o3.services.Service;
 import com.netcracker.students.o3.services.ServiceImpl;
 import com.netcracker.students.o3.templates.Template;
 import com.netcracker.students.o3.templates.TemplateImpl;
-import com.netcracker.students.o3.users.Customer;
-import com.netcracker.students.o3.users.Employer;
+import com.netcracker.students.o3.users.CustomerImpl;
+import com.netcracker.students.o3.users.EmployerImpl;
 import com.netcracker.students.o3.users.User;
 
 import java.io.File;
@@ -63,8 +63,8 @@ public class ModelImpl
         orders = serializer.deserializeList(ordersFile,OrderImpl.class);
         templates = serializer.deserializeList(templatesFile,TemplateImpl.class);
         services = serializer.deserializeList(servicesFile,ServiceImpl.class);
-        customers = serializer.deserializeList(customerFile,Customer.class);
-        employers = serializer.deserializeList(employeeFile, Employer.class);
+        customers = serializer.deserializeList(customerFile, CustomerImpl.class);
+        employers = serializer.deserializeList(employeeFile, EmployerImpl.class);
         areas = serializer.deserializeList(areasFile, AreaImpl.class);
     }
 
@@ -128,7 +128,7 @@ public class ModelImpl
     }
 
     public synchronized  void addUser(User user){
-        if(user instanceof Customer){
+        if(user instanceof CustomerImpl){
             customers.put(user.getId(),user);
         }else{
             employers.put(user.getId(),user);
@@ -173,7 +173,7 @@ public class ModelImpl
     }
 
     public synchronized  void setUser(User user){
-        if(user instanceof Customer){
+        if(user instanceof CustomerImpl){
             customers.put(user.getId(),user);
         }else{
             employers.put(user.getId(),user);
