@@ -1,5 +1,5 @@
 package com.netcracker.students.o3.view;
 
-public interface View
+public class ViewImpl implements View
 {
 }

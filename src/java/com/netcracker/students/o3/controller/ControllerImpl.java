@@ -1,5 +1,6 @@
 package com.netcracker.students.o3.controller;
 
-public interface Controller
+public class ControllerImpl implements Controller
 {
+
 }

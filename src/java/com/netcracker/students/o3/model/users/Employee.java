@@ -1,4 +1,4 @@
-package com.netcracker.students.o3.users;
+package com.netcracker.students.o3.model.users;
 
 import java.math.BigInteger;
 
