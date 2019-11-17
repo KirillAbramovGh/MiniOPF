@@ -94,97 +94,145 @@ public class Model
 
     public void addOrder(Order order)
     {
-        orders.put(order.getId(), order);
+        synchronized (orders)
+        {
+            orders.put(order.getId(), order);
+        }
     }
 
     public void addService(Service service)
     {
-        services.put(service.getId(), service);
-
+        synchronized (services)
+        {
+            services.put(service.getId(), service);
+        }
     }
 
     public void addTemplate(Template template)
     {
-        templates.put(template.getId(), template);
+        synchronized (templates)
+        {
+            templates.put(template.getId(), template);
+        }
     }
 
     public void addCustomer(Customer customer)
     {
-        customers.put(customer.getId(), customer);
+        synchronized (customers)
+        {
+            customers.put(customer.getId(), customer);
+        }
     }
 
     public void addEmployee(Employee employee)
     {
-        employers.put(employee.getId(), employee);
+        synchronized (employers)
+        {
+            employers.put(employee.getId(), employee);
+        }
     }
 
     public void addArea(Area area)
     {
-        if (!orders.containsKey(area.getId()))
-        {
-            areas.put(area.getId(), area);
-        }
-
+            synchronized (areas)
+            {
+                areas.put(area.getId(), area);
+            }
     }
 
     public void deleteOrderById(BigInteger id)
     {
-        orders.remove(id);
+        synchronized (orders)
+        {
+            orders.remove(id);
+        }
     }
 
     public void deleteTemplateById(BigInteger id)
     {
-        templates.remove(id);
+        synchronized (templates)
+        {
+            templates.remove(id);
+        }
     }
 
     public void deleteServiceById(BigInteger id)
     {
-        services.remove(id);
+        synchronized (services)
+        {
+            services.remove(id);
+        }
     }
 
     public void deleteCustomerById(BigInteger id)
     {
-        customers.remove(id);
+        synchronized (customers)
+        {
+            customers.remove(id);
+        }
     }
 
     public void deleteEmployeeById(BigInteger id)
     {
-        employers.remove(id);
+        synchronized (employers)
+        {
+            employers.remove(id);
+        }
     }
 
     public void deleteAreaById(BigInteger id)
     {
-        areas.remove(id);
+        synchronized (areas)
+        {
+            areas.remove(id);
+        }
     }
 
     public void setOrder(Order order)
     {
-        orders.put(order.getId(), order);
+        synchronized (orders)
+        {
+            orders.put(order.getId(), order);
+        }
     }
 
     public void setTemplate(Template template)
     {
-        templates.put(template.getId(), template);
+        synchronized (templates)
+        {
+            templates.put(template.getId(), template);
+        }
     }
 
     public void setService(Service service)
     {
-        services.put(service.getId(), service);
+        synchronized (services)
+        {
+            services.put(service.getId(), service);
+        }
     }
 
     public void setCustomer(Customer user)
     {
-        customers.put(user.getId(), user);
+        synchronized (customers)
+        {
+            customers.put(user.getId(), user);
+        }
     }
 
     public void setEmployee(Employee employee)
     {
-        employers.put(employee.getId(), employee);
+        synchronized (employers)
+        {
+            employers.put(employee.getId(), employee);
+        }
     }
 
     public void setArea(Area area)
     {
+        synchronized (areas){
         areas.put(area.getId(), area);
+        }
     }
 
     public static Model getInstance()
