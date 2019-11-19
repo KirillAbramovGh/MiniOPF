@@ -1,5 +1,5 @@
 package com.netcracker.students.o3.view;
 
-public class EmployeeView
+public class EmployeeView implements View
 {
 }
