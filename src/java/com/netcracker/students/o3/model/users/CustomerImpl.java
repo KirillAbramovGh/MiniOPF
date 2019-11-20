@@ -1,5 +1,4 @@
 package com.netcracker.students.o3.model.users;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -16,6 +15,11 @@ public class CustomerImpl implements Customer
     private BigInteger areaId;
 
 
+    public CustomerImpl(final BigInteger id, final String name)
+    {
+        this.id = id;
+        this.name = name;
+    }
 
     @Override
     public String toString()
