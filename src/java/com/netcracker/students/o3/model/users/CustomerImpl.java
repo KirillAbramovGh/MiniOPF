@@ -15,11 +15,7 @@ public class CustomerImpl implements Customer
     private BigInteger areaId;
 
 
-    public CustomerImpl(final BigInteger id, final String name)
-    {
-        this.id = id;
-        this.name = name;
-    }
+
 
     @Override
     public String toString()
@@ -29,12 +25,7 @@ public class CustomerImpl implements Customer
                 ", moneyBalance=" + moneyBalance +
                 '}';
     }
-    public CustomerImpl(){}
-    public CustomerImpl(final BigInteger id, final BigDecimal moneyBalance)
-    {
-        this.id = id;
-        this.moneyBalance = moneyBalance;
-    }
+
 
     public BigDecimal getMoneyBalance()
     {

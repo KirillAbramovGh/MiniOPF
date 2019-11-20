@@ -31,7 +31,7 @@ public class Main
 
         model.addCustomer(customer);
         Serializer serializer = new SerializerImpl();
-       serializer.serializeModel();
-        serializer.deserializeModel();
+       serializer.serializeModel(model);
+        serializer.deserializeModel(model);
     }
 }

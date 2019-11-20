@@ -1,11 +1,18 @@
 package com.netcracker.students.o3.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.orders.Order;
+import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.services.Service;
+import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
+import com.netcracker.students.o3.model.users.CustomerImpl;
 import com.netcracker.students.o3.model.users.Employee;
+import com.netcracker.students.o3.model.users.EmployerImpl;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -15,11 +22,17 @@ public class Model
 {
     private static Model instance;
 
+    @JsonDeserialize(as = HashMap.class,keyAs = BigInteger.class,contentAs = OrderImpl.class)
     private final Map<BigInteger, Order> orders;
+    @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = TemplateImpl.class)
     private final Map<BigInteger, Template> templates;
+    @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = ServiceImpl.class)
     private final Map<BigInteger, Service> services;
+    @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = CustomerImpl.class)
     private final Map<BigInteger, Customer> customers;
+    @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = EmployerImpl.class)
     private final Map<BigInteger, Employee> employers;
+    @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = AreaImpl.class)
     private final Map<BigInteger, Area> areas;
 
     private Model()
@@ -31,6 +44,7 @@ public class Model
         employers = new HashMap<>();
         areas = new HashMap<>();
     }
+
 
     public Map<BigInteger, Order> getOrders()
     {

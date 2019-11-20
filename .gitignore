@@ -1,6 +1,4 @@
-/src/java/com/netcracker/students/o3/view/desktop.ini
-/src/java/com/netcracker/students/o3/model/desktop.ini
-/src/java/com/netcracker/students/o3/controller/desktop.ini
-*.ini
+.idea
 *.iml
-.idea/
+*.iws
+*.ipr

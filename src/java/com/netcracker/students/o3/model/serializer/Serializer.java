@@ -1,9 +1,11 @@
 package com.netcracker.students.o3.model.serializer;
 
+import com.netcracker.students.o3.model.Model;
+
 import java.io.IOException;
 
 public interface Serializer
 {
-    void serializeModel() throws IOException;
-    void deserializeModel() throws IOException;
+    void serializeModel(Model model) throws IOException;
+    void deserializeModel(Model model) throws IOException;
 }
