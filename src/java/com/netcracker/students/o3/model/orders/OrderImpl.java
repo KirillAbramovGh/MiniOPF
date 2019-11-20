@@ -1,12 +1,11 @@
 package com.netcracker.students.o3.model.orders;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.netcracker.students.o3.model.HasId;
 
 import java.math.BigInteger;
 import java.util.Date;
 
-public class OrderImpl extends HasId implements Order
+public class OrderImpl implements Order
 {
     private BigInteger id;
     private BigInteger templateId;
@@ -27,12 +26,7 @@ public class OrderImpl extends HasId implements Order
                 '}';
     }
 
-    @Override
-    @JsonIgnore
-    public String getType()
-    {
-        return "order";
-    }
+
     public BigInteger getId()
     {
         return id;

@@ -1,13 +1,12 @@
 package com.netcracker.students.o3.model.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.netcracker.students.o3.model.HasId;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
-public class ServiceImpl extends HasId implements Service
+public class ServiceImpl implements Service
 {
     private BigInteger id;
     private BigInteger userId;
@@ -29,12 +28,7 @@ public class ServiceImpl extends HasId implements Service
                 '}';
     }
 
-    @Override
-    @JsonIgnore
-    public String getType()
-    {
-        return "service";
-    }
+
 
     public BigInteger getId()
     {

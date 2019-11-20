@@ -1,12 +1,11 @@
 package com.netcracker.students.o3.model.users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.netcracker.students.o3.model.HasId;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
-public class CustomerImpl extends HasId implements Customer
+public class CustomerImpl implements Customer
 {
     private BigInteger id;
     private String name;
@@ -17,14 +16,6 @@ public class CustomerImpl extends HasId implements Customer
     private BigInteger areaId;
 
 
-
-
-    @Override
-    @JsonIgnore
-    public String getType()
-    {
-        return "customer";
-    }
 
     @Override
     public String toString()

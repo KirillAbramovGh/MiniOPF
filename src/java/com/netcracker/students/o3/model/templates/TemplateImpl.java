@@ -1,14 +1,13 @@
 package com.netcracker.students.o3.model.templates;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.netcracker.students.o3.model.HasId;
 import com.netcracker.students.o3.model.area.Area;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
-public class TemplateImpl extends HasId implements Template
+public class TemplateImpl implements Template
 {
     private BigInteger id;
     private String name;
@@ -28,12 +27,6 @@ public class TemplateImpl extends HasId implements Template
                 '}';
     }
 
-    @Override
-    @JsonIgnore
-    public String getType()
-    {
-        return "template";
-    }
     public BigInteger getId()
     {
         return id;

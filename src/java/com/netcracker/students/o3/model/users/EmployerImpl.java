@@ -1,11 +1,10 @@
 package com.netcracker.students.o3.model.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.netcracker.students.o3.model.HasId;
 
 import java.math.BigInteger;
 
-public class EmployerImpl extends HasId implements Employee
+public class EmployerImpl implements Employee
 {
     private BigInteger id;
     private String name;
@@ -37,12 +36,6 @@ public class EmployerImpl extends HasId implements Employee
         return id;
     }
 
-    @Override
-    @JsonIgnore
-    public String getType()
-    {
-        return "employee";
-    }
 
     @Override
     public void setId(final BigInteger id)
