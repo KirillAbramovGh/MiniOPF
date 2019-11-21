@@ -52,21 +52,21 @@ public interface Controller
     static void createEmployee(BigInteger employeeId){};
 
 
-     /*static Template[] getTemplatesByAreaId( BigInteger areaId){
-       return templates;
-    };*/
+     static Template[] getTemplatesByAreaId( BigInteger areaId){
+       return null;
+    };
 
-    /*static Templates[] getAllTemplates(){
-        return templates;
-    };*/
+    static Templates[] getAllTemplates(){
+        return null;
+    };
 
-    /*static Order[] getOrdersByCustomerId(BigInteger customerId){
-        return orders;
-    };*/
+    static Order[] getOrdersByCustomerId(BigInteger customerId){
+        return null;
+    };
 
-    /*static Order[] getOrdersByEmployeeId(BigInteger employeeId){
-        return employees;
-    }*/
+    static Order[] getOrdersByEmployeeId(BigInteger employeeId){
+        return null;
+    }
 
     // В контроллере должны лежать функции и кастомера, и работника
 
