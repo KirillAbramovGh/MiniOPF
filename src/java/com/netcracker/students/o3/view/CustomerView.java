@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class CustomerView implements View
 {
-    @Override
+
     public void start() throws IOException
     {
 
