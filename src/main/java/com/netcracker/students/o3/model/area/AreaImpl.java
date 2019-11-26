@@ -10,6 +10,13 @@ public class AreaImpl implements Area
     private String name;
     private String description;
 
+    public AreaImpl(){}
+    public AreaImpl(final BigInteger id, final String name, final String description)
+    {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
 
     @Override
     public String toString()

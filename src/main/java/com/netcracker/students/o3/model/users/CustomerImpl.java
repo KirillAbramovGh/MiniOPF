@@ -14,26 +14,32 @@ public class CustomerImpl implements Customer
     private ArrayList<BigInteger> connectedServicesIds;
     private BigInteger areaId;
 
+    public CustomerImpl()
+    {
 
-    public CustomerImpl(final BigInteger id, final String name)
+    }
+
+    public CustomerImpl(final BigInteger id, final String name, final String login, final String password)
     {
         this.id = id;
         this.name = name;
+        this.login = login;
+        this.password = password;
+        connectedServicesIds = new ArrayList<>();
     }
 
     @Override
     public String toString()
     {
-        return "Customer{" +
+        return "CustomerImpl{" +
                 "id=" + id +
+                ", name='" + name + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
                 ", moneyBalance=" + moneyBalance +
+                ", connectedServicesIds=" + connectedServicesIds +
+                ", areaId=" + areaId +
                 '}';
-    }
-    public CustomerImpl(){}
-    public CustomerImpl(final BigInteger id, final BigDecimal moneyBalance)
-    {
-        this.id = id;
-        this.moneyBalance = moneyBalance;
     }
 
     public BigDecimal getMoneyBalance()

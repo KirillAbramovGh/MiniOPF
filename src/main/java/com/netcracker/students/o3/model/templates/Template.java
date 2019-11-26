@@ -17,13 +17,14 @@ public interface Template
      void setName(final String name);
 
      BigDecimal getCost();
+
      void setCost(final BigDecimal cost);
 
      String getDescription();
 
      void setDescription(final String description);
 
-     ArrayList<Area> getPossibleAreas();
+     ArrayList<BigInteger> getPossibleAreasId();
 
-     void setPossibleAreas(final ArrayList<Area> possibleAreas);
+     void setPossibleAreasId(final ArrayList<BigInteger> possibleAreasId);
 }

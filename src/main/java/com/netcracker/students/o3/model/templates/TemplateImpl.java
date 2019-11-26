@@ -13,8 +13,17 @@ public class TemplateImpl implements Template
     private String name;
     private BigDecimal cost;
     private String description;
-    private ArrayList<Area> possibleAreas;
+    private ArrayList<BigInteger> possibleAreasId;
 
+
+    public TemplateImpl(){}
+    public TemplateImpl(final BigInteger id, final String name, final BigDecimal cost, final String description)
+    {
+        this.id = id;
+        this.name = name;
+        this.cost = cost;
+        this.description = description;
+    }
 
     @Override
     public String toString()
@@ -67,13 +76,14 @@ public class TemplateImpl implements Template
         this.description = description;
     }
 
-    public ArrayList<Area> getPossibleAreas()
+
+    public ArrayList<BigInteger> getPossibleAreasId()
     {
-        return possibleAreas;
+        return possibleAreasId;
     }
 
-    public void setPossibleAreas(final ArrayList<Area> possibleAreas)
+    public void setPossibleAreasId(final ArrayList<BigInteger> possibleAreasId)
     {
-        this.possibleAreas = possibleAreas;
+        this.possibleAreasId = possibleAreasId;
     }
 }
