@@ -8,4 +8,8 @@ public class WrongInputException extends IOException
     {
         super(s);
     }
+
+    public WrongInputException()
+    {
+    }
 }

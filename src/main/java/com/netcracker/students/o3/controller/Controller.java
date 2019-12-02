@@ -71,7 +71,9 @@ public interface Controller
 
     BigInteger login(String login, String password);
 
-    BigInteger register(String login, String password, String Name, BigInteger areaId);
+    BigInteger registerCustomer(String login, String password, String Name, BigInteger areaId);
+
+    BigInteger registerEmployee(String login, String password, String Name);
 
     boolean checkPassword(BigInteger id, String password);
 

@@ -199,7 +199,7 @@ public class ControllerImpl implements Controller
 
 
     @Override
-    public BigInteger register(final String login, final String password, final String name, final BigInteger areaId)
+    public BigInteger registerCustomer(final String login, final String password, final String name, final BigInteger areaId)
     {
         for (Customer v : model.getCustomers().values())
         {
