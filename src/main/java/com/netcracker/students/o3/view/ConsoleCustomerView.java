@@ -241,10 +241,17 @@ public class ConsoleCustomerView implements View
                 case "6":
                 case "7":
                 case "8":
-                    ControllerImpl.getInstance().createOrder(templates.get(from+Integer.parseInt(punct)).getId());
+                    ControllerImpl.getInstance().createOrder(templates.get(from + Integer.parseInt(punct)).getId());
                     break;
                 case "9":
-                    showTemplates(from + 8);
+                    if (from + 8 < templates.size())
+                    {
+                        showTemplates(from + 8);
+                    }
+                    else
+                    {
+                        throw new WrongInputException("Введите номер одного из пунктов!");
+                    }
                     break;
                 case "0":
                     break;

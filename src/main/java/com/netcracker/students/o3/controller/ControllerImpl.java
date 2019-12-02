@@ -14,16 +14,16 @@ import com.netcracker.students.o3.model.users.Employee;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class ControllerImpl implements Controller
 {
     private final Model model;
     private static Controller instance;
-    private ControllerImpl(){
+
+    private ControllerImpl()
+    {
         model = Model.getInstance();
     }
-
 
 
     @Override
@@ -149,7 +149,7 @@ public class ControllerImpl implements Controller
     @Override
     public void createOrder(final BigInteger templateId)
     {
-        Order order = new OrderImpl(model.getNextId(),templateId);
+        Order order = new OrderImpl(model.getNextId(), templateId);
         model.addOrder(order);
     }
 
@@ -180,13 +180,17 @@ public class ControllerImpl implements Controller
     @Override
     public BigInteger login(final String login, final String password)
     {
-        for(Customer customer : model.getCustomers().values()){
-            if(customer.getLogin().equals(login) && customer.getPassword().equals(password)){
+        for (Customer customer : model.getCustomers().values())
+        {
+            if (customer.getLogin().equals(login) && customer.getPassword().equals(password))
+            {
                 return customer.getId();
             }
         }
-        for(Employee employee : model.getEmployers().values()){
-            if(employee.getLogin().equals(login) && employee.getPassword().equals(password)){
+        for (Employee employee : model.getEmployers().values())
+        {
+            if (employee.getLogin().equals(login) && employee.getPassword().equals(password))
+            {
                 return employee.getId();
             }
         }
@@ -195,19 +199,23 @@ public class ControllerImpl implements Controller
 
 
     @Override
-    public BigInteger register(final String login, final String password, final String name,final BigInteger areaId)
+    public BigInteger register(final String login, final String password, final String name, final BigInteger areaId)
     {
-        for(Customer v:model.getCustomers().values()){
-            if(v.getLogin().equals(login)){
+        for (Customer v : model.getCustomers().values())
+        {
+            if (v.getLogin().equals(login))
+            {
 
             }
         }
-        for(Employee v:model.getEmployers().values()){
-            if(v.getLogin().equals(login)){
+        for (Employee v : model.getEmployers().values())
+        {
+            if (v.getLogin().equals(login))
+            {
 
             }
         }
-        Customer customer = new CustomerImpl(model.getNextId(),name,login,password);
+        Customer customer = new CustomerImpl(model.getNextId(), name, login, password);
         customer.setAreaId(areaId);
         model.addCustomer(customer);
         return customer.getId();
@@ -222,8 +230,10 @@ public class ControllerImpl implements Controller
     @Override
     public boolean checkLogin(final String login)
     {
-        for(Customer customer : model.getCustomers().values()){
-            if(customer.getLogin().equals(login)){
+        for (Customer customer : model.getCustomers().values())
+        {
+            if (customer.getLogin().equals(login))
+            {
                 return false;
             }
         }
@@ -234,8 +244,10 @@ public class ControllerImpl implements Controller
     public ArrayList<Service> getSuspendedServices(final BigInteger id)
     {
         ArrayList<Service> services = new ArrayList<>();
-        for(BigInteger v:model.getCustomerById(id).getConnectedServicesIds()){
-            if(model.getServiceById(v).getStatus() == ServiceStatus.Suspended){
+        for (BigInteger v : model.getCustomerById(id).getConnectedServicesIds())
+        {
+            if (model.getServiceById(v).getStatus() == ServiceStatus.Suspended)
+            {
                 services.add(model.getServiceById(v));
             }
         }
@@ -246,8 +258,10 @@ public class ControllerImpl implements Controller
     public ArrayList<Service> getEnteringServices(final BigInteger id)
     {
         ArrayList<Service> services = new ArrayList<>();
-        for(BigInteger v:model.getCustomerById(id).getConnectedServicesIds()){
-            if(model.getServiceById(v).getStatus() == ServiceStatus.Entering){
+        for (BigInteger v : model.getCustomerById(id).getConnectedServicesIds())
+        {
+            if (model.getServiceById(v).getStatus() == ServiceStatus.Entering)
+            {
                 services.add(model.getServiceById(v));
             }
         }
@@ -264,7 +278,8 @@ public class ControllerImpl implements Controller
     public ArrayList<Service> getActiveServices(final BigInteger id)
     {
         ArrayList<Service> services = new ArrayList<>();
-        for(BigInteger serviceId : model.getCustomerById(id).getConnectedServicesIds()){
+        for (BigInteger serviceId : model.getCustomerById(id).getConnectedServicesIds())
+        {
             services.add(model.getServiceById(serviceId));
         }
 
@@ -275,8 +290,10 @@ public class ControllerImpl implements Controller
     public ArrayList<Template> getTemplatesByAreaId(final BigInteger areaId)
     {
         ArrayList<Template> templates = new ArrayList<>();
-        for(Template template : model.getTemplates().values()){
-            if(template.getPossibleAreasId().contains(areaId)){
+        for (Template template : model.getTemplates().values())
+        {
+            if (template.getPossibleAreasId().contains(areaId))
+            {
                 templates.add(template);
             }
         }
@@ -288,8 +305,9 @@ public class ControllerImpl implements Controller
     public ArrayList<Template> getAllTemplates()
     {
         ArrayList<Template> templates = new ArrayList<>();
-        for(Template template : model.getTemplates().values()){
-                templates.add(template);
+        for (Template template : model.getTemplates().values())
+        {
+            templates.add(template);
         }
 
         return templates;
@@ -316,13 +334,13 @@ public class ControllerImpl implements Controller
     @Override
     public boolean isCustomer(final BigInteger id)
     {
-        return model.getCustomerById(id)!=null;
+        return model.getCustomerById(id) != null;
     }
 
     @Override
     public boolean isEmployee(final BigInteger id)
     {
-        return model.getEmployeeById(id)!=null;
+        return model.getEmployeeById(id) != null;
     }
 
     @Override
@@ -341,7 +359,8 @@ public class ControllerImpl implements Controller
     public ArrayList<Area> getAreas()
     {
         ArrayList<Area> areas = new ArrayList<>();
-        for(Area area : model.getAreas().values()){
+        for (Area area : model.getAreas().values())
+        {
             areas.add(area);
         }
         return areas;
@@ -404,13 +423,15 @@ public class ControllerImpl implements Controller
     @Override
     public void putOnBalance(final BigInteger customerId, final BigDecimal money)
     {
-       Customer customer =  model.getCustomerById(customerId);
-       BigDecimal currentMoney = customer.getMoneyBalance();
-       customer.setMoneyBalance(currentMoney.add(money));
+        Customer customer = model.getCustomerById(customerId);
+        BigDecimal currentMoney = customer.getMoneyBalance();
+        customer.setMoneyBalance(currentMoney.add(money));
     }
 
-    public static Controller getInstance(){
-        if(instance == null){
+    public static Controller getInstance()
+    {
+        if (instance == null)
+        {
             instance = new ControllerImpl();
         }
 
