@@ -2,6 +2,7 @@ package com.netcracker.students.o3.view;
 
 import com.netcracker.students.o3.Exceptions.NullInputException;
 import com.netcracker.students.o3.Exceptions.PasswordException;
+import com.netcracker.students.o3.Exceptions.UnpossibleChangeAreaException;
 import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
@@ -149,7 +150,7 @@ public class ConsoleCustomerView implements View
         ControllerImpl.getInstance().getCustomer(customerId).setName(name);
     }
 
-    private void changeArea() throws WrongInputException
+    private void changeArea() throws WrongInputException, UnpossibleChangeAreaException
     {
         Controller controller = ControllerImpl.getInstance();
         Scanner scanner = new Scanner(System.in);
@@ -177,7 +178,7 @@ public class ConsoleCustomerView implements View
             if (!controller.getTemplate(service.getTemplateId()).getPossibleAreasId()
                     .contains(areas.get(punct).getId()))
             {
-
+                throw new UnpossibleChangeAreaException("Вы не можете поменять район");
             }
         }
         for (Service service : controller.getEnteringServices(customerId))
@@ -185,7 +186,7 @@ public class ConsoleCustomerView implements View
             if (!controller.getTemplate(service.getTemplateId()).getPossibleAreasId()
                     .contains(areas.get(punct).getId()))
             {
-
+                throw new UnpossibleChangeAreaException("Вы не можете поменять район");
             }
         }
         controller.getCustomer(customerId).setAreaId(areas.get(punct).getId());

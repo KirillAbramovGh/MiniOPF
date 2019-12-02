@@ -10,6 +10,7 @@ import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.CustomerImpl;
 import com.netcracker.students.o3.model.users.Employee;
+import com.netcracker.students.o3.model.users.EmployerImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -219,6 +220,15 @@ public class ControllerImpl implements Controller
         customer.setAreaId(areaId);
         model.addCustomer(customer);
         return customer.getId();
+    }
+
+    @Override
+    public BigInteger registerEmployee(final String login, final String password, final String Name)
+    {
+        Employee employee = new EmployerImpl();
+        employee.setId(model.getNextId());
+        model.addEmployee(employee);
+        return employee.getId();
     }
 
     @Override
