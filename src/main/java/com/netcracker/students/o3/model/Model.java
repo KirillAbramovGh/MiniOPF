@@ -24,19 +24,59 @@ public class Model
     private static Model instance;
 
     @JsonDeserialize(as = HashMap.class,keyAs = BigInteger.class,contentAs = OrderImpl.class)
-    private final Map<BigInteger, Order> orders;
+    private Map<BigInteger, Order> orders;
     @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = TemplateImpl.class)
-    private final Map<BigInteger, Template> templates;
+    private Map<BigInteger, Template> templates;
     @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = ServiceImpl.class)
-    private final Map<BigInteger, Service> services;
+    private Map<BigInteger, Service> services;
     @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = CustomerImpl.class)
-    private final Map<BigInteger, Customer> customers;
+    private Map<BigInteger, Customer> customers;
     @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = EmployerImpl.class)
-    private final Map<BigInteger, Employee> employers;
+    private Map<BigInteger, Employee> employers;
     @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = AreaImpl.class)
-    private final Map<BigInteger, Area> areas;
+    private Map<BigInteger, Area> areas;
 
-    private BigInteger id;
+    public void setOrders(final Map<BigInteger, Order> orders)
+    {
+        this.orders = orders;
+    }
+
+    public void setTemplates(final Map<BigInteger, Template> templates)
+    {
+        this.templates = templates;
+    }
+
+    public void setServices(final Map<BigInteger, Service> services)
+    {
+        this.services = services;
+    }
+
+    public void setCustomers(final Map<BigInteger, Customer> customers)
+    {
+        this.customers = customers;
+    }
+
+    public void setEmployers(final Map<BigInteger, Employee> employers)
+    {
+        this.employers = employers;
+    }
+
+    public void setAreas(final Map<BigInteger, Area> areas)
+    {
+        this.areas = areas;
+    }
+
+    @JsonIgnore
+    private BigInteger lastId;
+
+    public static Model getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new Model();
+        }
+        return instance;
+    }
 
     private Model()
     {
@@ -46,24 +86,28 @@ public class Model
         customers = new HashMap<>();
         employers = new HashMap<>();
         areas = new HashMap<>();
-        id = BigInteger.ZERO;
+        lastId = BigInteger.ZERO;
     }
 
-    public BigInteger getId()
+    @JsonIgnore
+    public BigInteger getLastId()
     {
-        return id;
+        return lastId;
     }
 
-    public void setId(final BigInteger id)
+    @JsonIgnore
+    public void setLastId(final BigInteger lastId)
     {
-        this.id = id;
+        this.lastId = lastId;
     }
 
     @JsonIgnore
     public BigInteger getNextId(){
-        id = id.add(BigInteger.ONE);
-        return id;
+        lastId = lastId.add(BigInteger.ONE);
+        return lastId;
     }
+
+
     public Map<BigInteger, Order> getOrders()
     {
         return orders;
@@ -94,6 +138,7 @@ public class Model
         return areas;
     }
 
+
     public Order getOrderById(BigInteger id)
     {
         return orders.get(id);
@@ -123,6 +168,7 @@ public class Model
     {
         return areas.get(id);
     }
+
 
     public void addOrder(Order order)
     {
@@ -171,6 +217,7 @@ public class Model
                 areas.put(area.getId(), area);
             }
     }
+
 
     public void deleteOrderById(BigInteger id)
     {
@@ -267,13 +314,5 @@ public class Model
         }
     }
 
-    public static Model getInstance()
-    {
-        if (instance == null)
-        {
-            instance = new Model();
-        }
-        return instance;
-    }
 
 }

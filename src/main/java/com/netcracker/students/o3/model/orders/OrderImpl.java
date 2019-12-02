@@ -1,7 +1,5 @@
 package com.netcracker.students.o3.model.orders;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -14,6 +12,16 @@ public class OrderImpl implements Order
     private OrderStatus status;
     private OrderAction action;
     private Date creationDate;
+
+    public OrderImpl()
+    {
+    }
+
+    public OrderImpl(final BigInteger id, final BigInteger templateId)
+    {
+        this.id = id;
+        this.templateId = templateId;
+    }
 
     @Override
     public String toString()

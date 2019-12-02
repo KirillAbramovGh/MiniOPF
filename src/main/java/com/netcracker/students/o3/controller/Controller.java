@@ -7,9 +7,13 @@ import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.Employee;
 
+import org.w3c.dom.DOMStringList;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public interface Controller
 {
@@ -52,8 +56,9 @@ public interface Controller
     void createCustomer(BigInteger customerId);
     void createEmployee(BigInteger employeeId);
     BigInteger login(String login,String password);
-    BigInteger register(String login,String password,String Name);
+    BigInteger register(String login,String password,String Name,BigInteger areaId);
     boolean checkPassword(BigInteger id,String password);
+    boolean checkLogin(String login);
     ArrayList<Service> getSuspendedServices(BigInteger id);
     ArrayList<Service> getEnteringServices(BigInteger id);
     String getCustomerString(BigInteger id);
@@ -70,6 +75,22 @@ public interface Controller
 
     Customer getCustomer(BigInteger id);
     Employee getEmployee(BigInteger id);
+
+    List<Area> getAreas();
+    List<Template> getTemplates();
+    List<Service> getServices();
+    List<Customer> getCustomers();
+    List<Order> getOrders();
+    List<Employee> getEmployes();
+
+
+    Area getArea(BigInteger id);
+    Template getTemplate(BigInteger id);
+    Service getService(BigInteger id);
+    Order getOrder(BigInteger id);
+
+    void putOnBalance(BigInteger customerId,BigDecimal money);
+
     // В контроллере должны лежать функции и кастомера, и работника
 
     //дублирование методов модели с проверкой delete() и set() методов на дурака

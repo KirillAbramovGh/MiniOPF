@@ -1,7 +1,9 @@
 package com.netcracker.students.o3.controller;
 
 import com.netcracker.students.o3.model.Model;
+import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.orders.Order;
+import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceStatus;
 import com.netcracker.students.o3.model.templates.Template;
@@ -12,6 +14,7 @@ import com.netcracker.students.o3.model.users.Employee;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class ControllerImpl implements Controller
 {
@@ -144,9 +147,10 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public void createOrder(final BigInteger orderId)
+    public void createOrder(final BigInteger templateId)
     {
-
+        Order order = new OrderImpl(model.getNextId(),templateId);
+        model.addOrder(order);
     }
 
     @Override
@@ -191,7 +195,7 @@ public class ControllerImpl implements Controller
 
 
     @Override
-    public BigInteger register(final String login, final String password, final String name)
+    public BigInteger register(final String login, final String password, final String name,final BigInteger areaId)
     {
         for(Customer v:model.getCustomers().values()){
             if(v.getLogin().equals(login)){
@@ -204,6 +208,7 @@ public class ControllerImpl implements Controller
             }
         }
         Customer customer = new CustomerImpl(model.getNextId(),name,login,password);
+        customer.setAreaId(areaId);
         model.addCustomer(customer);
         return customer.getId();
     }
@@ -212,6 +217,17 @@ public class ControllerImpl implements Controller
     public boolean checkPassword(final BigInteger id, final String password)
     {
         return model.getCustomerById(id).getPassword().equals(password);
+    }
+
+    @Override
+    public boolean checkLogin(final String login)
+    {
+        for(Customer customer : model.getCustomers().values()){
+            if(customer.getLogin().equals(login)){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -247,7 +263,12 @@ public class ControllerImpl implements Controller
     @Override
     public ArrayList<Service> getActiveServices(final BigInteger id)
     {
-        return null;
+        ArrayList<Service> services = new ArrayList<>();
+        for(BigInteger serviceId : model.getCustomerById(id).getConnectedServicesIds()){
+            services.add(model.getServiceById(serviceId));
+        }
+
+        return services;
     }
 
     @Override
@@ -266,7 +287,12 @@ public class ControllerImpl implements Controller
     @Override
     public ArrayList<Template> getAllTemplates()
     {
-        return null;
+        ArrayList<Template> templates = new ArrayList<>();
+        for(Template template : model.getTemplates().values()){
+                templates.add(template);
+        }
+
+        return templates;
     }
 
     @Override
@@ -309,6 +335,78 @@ public class ControllerImpl implements Controller
     public Employee getEmployee(final BigInteger id)
     {
         return model.getEmployeeById(id);
+    }
+
+    @Override
+    public ArrayList<Area> getAreas()
+    {
+        ArrayList<Area> areas = new ArrayList<>();
+        for(Area area : model.getAreas().values()){
+            areas.add(area);
+        }
+        return areas;
+    }
+
+    @Override
+    public ArrayList<Template> getTemplates()
+    {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Service> getServices()
+    {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Customer> getCustomers()
+    {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Order> getOrders()
+    {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Employee> getEmployes()
+    {
+        return null;
+    }
+
+    @Override
+    public Area getArea(final BigInteger id)
+    {
+        return null;
+    }
+
+    @Override
+    public Template getTemplate(final BigInteger id)
+    {
+        return null;
+    }
+
+    @Override
+    public Service getService(final BigInteger id)
+    {
+        return null;
+    }
+
+    @Override
+    public Order getOrder(final BigInteger id)
+    {
+        return null;
+    }
+
+    @Override
+    public void putOnBalance(final BigInteger customerId, final BigDecimal money)
+    {
+       Customer customer =  model.getCustomerById(customerId);
+       BigDecimal currentMoney = customer.getMoneyBalance();
+       customer.setMoneyBalance(currentMoney.add(money));
     }
 
     public static Controller getInstance(){

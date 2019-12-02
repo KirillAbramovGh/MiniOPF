@@ -16,7 +16,7 @@ public class CustomerImpl implements Customer
 
     public CustomerImpl()
     {
-
+        moneyBalance = BigDecimal.ZERO;
     }
 
     public CustomerImpl(final BigInteger id, final String name, final String login, final String password)
@@ -26,20 +26,13 @@ public class CustomerImpl implements Customer
         this.login = login;
         this.password = password;
         connectedServicesIds = new ArrayList<>();
+        moneyBalance = BigDecimal.ZERO;
     }
 
     @Override
     public String toString()
     {
-        return "CustomerImpl{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", moneyBalance=" + moneyBalance +
-                ", connectedServicesIds=" + connectedServicesIds +
-                ", areaId=" + areaId +
-                '}';
+        return name+" "+"Баланс: " + moneyBalance;
     }
 
     public BigDecimal getMoneyBalance()
