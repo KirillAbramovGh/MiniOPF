@@ -1,5 +1,6 @@
 package com.netcracker.students.o3.controller;
 
+import com.netcracker.students.o3.Exceptions.IncorrectCredentialsException;
 import com.netcracker.students.o3.model.Model;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.orders.Order;
@@ -11,6 +12,7 @@ import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.CustomerImpl;
 import com.netcracker.students.o3.model.users.Employee;
 import com.netcracker.students.o3.model.users.EmployerImpl;
+import com.netcracker.students.o3.model.users.User;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -179,28 +181,30 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public BigInteger login(final String login, final String password)
+    public User getUserByCredentials(final String login, final String password)
+            throws IncorrectCredentialsException
     {
         for (Customer customer : model.getCustomers().values())
         {
             if (customer.getLogin().equals(login) && customer.getPassword().equals(password))
             {
-                return customer.getId();
+                return customer;
             }
         }
         for (Employee employee : model.getEmployers().values())
         {
             if (employee.getLogin().equals(login) && employee.getPassword().equals(password))
             {
-                return employee.getId();
+                return employee;
             }
         }
-        return null;
+        throw new IncorrectCredentialsException("Неправильный логин или пароль!");
     }
 
 
     @Override
-    public BigInteger registerCustomer(final String login, final String password, final String name, final BigInteger areaId)
+    public BigInteger registerCustomer(final String login, final String password, final String name,
+            final BigInteger areaId)
     {
         for (Customer v : model.getCustomers().values())
         {
@@ -238,7 +242,7 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public boolean checkLogin(final String login)
+    public boolean isLoginExists(final String login)
     {
         for (Customer customer : model.getCustomers().values())
         {

@@ -1,7 +1,7 @@
 import com.netcracker.students.o3.model.Model;
 import com.netcracker.students.o3.model.serializer.Serializer;
 import com.netcracker.students.o3.model.serializer.SerializerImpl;
-import com.netcracker.students.o3.view.startConsoleView;
+import com.netcracker.students.o3.view.StartConsoleView;
 
 import java.io.IOException;
 
@@ -12,6 +12,6 @@ public class Main
         Model model = Model.getInstance();
         Serializer serializer = new SerializerImpl();
         serializer.deserializeModel(model);
-        new startConsoleView().start();
+        new StartConsoleView().start();
     }
 }

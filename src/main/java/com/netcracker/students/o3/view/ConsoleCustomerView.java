@@ -1,7 +1,6 @@
 package com.netcracker.students.o3.view;
 
-import com.netcracker.students.o3.Exceptions.NullInputException;
-import com.netcracker.students.o3.Exceptions.PasswordException;
+import com.netcracker.students.o3.Exceptions.IncorrectPasswordException;
 import com.netcracker.students.o3.Exceptions.UnpossibleChangeAreaException;
 import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.controller.Controller;
@@ -9,6 +8,7 @@ import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.users.User;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -16,11 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import jdk.internal.joptsimple.internal.Strings;
+
 public class ConsoleCustomerView implements View
 {
     private final BigInteger customerId;
+    private Controller controller = ControllerImpl.getInstance();
 
-    public ConsoleCustomerView(BigInteger id)
+    ConsoleCustomerView(BigInteger id)
     {
         this.customerId = id;
     }
@@ -28,9 +31,9 @@ public class ConsoleCustomerView implements View
     @Override
     public void start()
     {
-        String punct = "";
+        String choice = "";
         Scanner scanner = new Scanner(System.in);
-        while (!punct.equals("0"))
+        while (!"0".equals(choice))
         {
             showTitle();
             System.out.println("---------------------------------------------------------");
@@ -43,70 +46,82 @@ public class ConsoleCustomerView implements View
             System.out.println("7 - пополнить баланс");
             System.out.println("0 - Выход");
             System.out.print("Ваш выбор: ");
-            punct = scanner.nextLine();
-            try
-            {
-                switch (punct)
-                {
-                    case "1":
-                        availableTemplates();
-                        break;
-                    case "2":
-                        showInactiveServices();
-                        break;
-                    case "3":
-                        changePassword();
-                        break;
-                    case "4":
-                        changeName();
-                        break;
-                    case "5":
-                        changeArea();
-                        break;
-                    case "6":
-                        changeLogin();
-                        break;
-                    case "7":
-                        changeBalance();
-                        break;
-                    case "0":
-                        System.out.println("Вы уверены?");
-                        System.out.println("1 - да");
-                        System.out.println("2 - нет");
-                        punct = scanner.nextLine();
-                        switch (punct)
-                        {
-                            case "1":
-                                punct = "0";
-                                break;
-                            default:
-                                punct = "";
-                                break;
-                        }
-                        break;
-                    default:
-                        throw new WrongInputException("Введите номер одного из пунктов!");
-                }
-            }
-            catch (Exception e)
-            {
-                System.out.println(e.getMessage());
-            }
 
+            choice = scanner.nextLine();
+
+            clearScreen();
+            switch (choice)
+            {
+                case "1":
+                    availableTemplates();
+                    break;
+                case "2":
+                    showInactiveServices();
+                    break;
+                case "3":
+                    changePassword();
+                    break;
+                case "4":
+                    changeName();
+                    break;
+                case "5":
+                    changeArea();
+                    break;
+                case "6":
+                    changeLogin();
+                    break;
+                case "7":
+                    changeBalance();
+                    break;
+                case "0":
+                    System.out.println("Вы уверены?");
+                    System.out.println("1 - да");
+                    System.out.println("2 - нет");
+                    choice = scanner.nextLine();
+                    if ("1".equals(choice))
+                    {
+                        choice = "0";
+                    }
+                    else
+                    {
+                        choice = "";
+                    }
+                    break;
+                default:
+                    System.out.println("Введите номер одного из пунктов!");
+            }
         }
-
     }
 
-    private void changeBalance() throws WrongInputException
+
+    private void changeBalance()
     {
         Scanner scanner = new Scanner(System.in);
+
         System.out.println("Введите сумму пополнения: ");
+        String money = scanner.nextLine();
+
+        BigDecimal balanceInc = null;
         try
         {
-            BigDecimal money = BigDecimal.valueOf(Double.parseDouble(scanner.nextLine()));
-            if (money.doubleValue() > 0)
+            balanceInc = parseMoney(money);
+        }
+        catch (WrongInputException e)
+        {
+            System.out.println(e.getMessage());
+            changeBalance();
+        }
+        controller.putOnBalance(customerId, balanceInc);
+    }
+
+    private BigDecimal parseMoney(String money) throws WrongInputException
+    {
+        try
+        {
+            BigDecimal balanceInc = BigDecimal.valueOf(Double.parseDouble(money));
+            if (balanceInc.doubleValue() > 0)
             {
-                ControllerImpl.getInstance().putOnBalance(customerId, money);
+                return balanceInc;
             }
             else
             {
@@ -119,77 +134,61 @@ public class ConsoleCustomerView implements View
         }
     }
 
-    private void changeLogin() throws NullInputException
+    private void changeLogin()
     {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Введите новый логин: ");
-        String newLogin = scanner.nextLine();
-        if (newLogin == null || newLogin.equals(""))
-        {
-            throw new NullInputException("Логин не может быть пустым");
-        }
-        if (ControllerImpl.getInstance().checkLogin(newLogin))
-        {
-            ControllerImpl.getInstance().getCustomer(customerId).setLogin(newLogin);
-        }
-        else
-        {
-            System.out.println("Логин занят");
-        }
-    }
 
-    private void changeName() throws NullInputException
-    {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Введите новое имя: ");
-        String name = scanner.nextLine();
-        if (name.equals(""))
-        {
-            throw new NullInputException("Имя не может быть пустым");
-        }
-        ControllerImpl.getInstance().getCustomer(customerId).setName(name);
-    }
+        System.out.print("Введите логин: ");
+        String login = scanner.nextLine();
 
-    private void changeArea() throws WrongInputException, UnpossibleChangeAreaException
-    {
-        Controller controller = ControllerImpl.getInstance();
-        Scanner scanner = new Scanner(System.in);
-        int number = 1;
-        List<Area> areas = controller.getAreas();
-        for (Area area : areas)
-        {
-            System.out.println(number++ + ")" + "" + area);
-        }
-        int punct = 0;
         try
         {
-            punct = Integer.parseInt(scanner.nextLine()) - 1;
-            if (punct > areas.size() || punct < 1)
-            {
-                throw new WrongInputException("");
-            }
+            checkNull(login, "Логин");
+            checkLoginExists(login);
         }
-        catch (Exception e)
+        catch (WrongInputException e)
         {
-            throw new WrongInputException("Неверный ввод!");
+            System.out.println(e.getMessage());
+            changeLogin();
         }
-        for (Service service : controller.getActiveServices(customerId))
+    }
+
+    private void changeName()
+    {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Введите новое имя: ");
+        String name = scanner.nextLine();
+
+        try
         {
-            if (!controller.getTemplate(service.getTemplateId()).getPossibleAreasId()
-                    .contains(areas.get(punct).getId()))
-            {
-                throw new UnpossibleChangeAreaException("Вы не можете поменять район");
-            }
+            checkNull(name, "Имя");
         }
-        for (Service service : controller.getEnteringServices(customerId))
+        catch (WrongInputException e)
         {
-            if (!controller.getTemplate(service.getTemplateId()).getPossibleAreasId()
-                    .contains(areas.get(punct).getId()))
-            {
-                throw new UnpossibleChangeAreaException("Вы не можете поменять район");
-            }
+            System.out.println(e.getMessage());
+            changeName();
         }
-        controller.getCustomer(customerId).setAreaId(areas.get(punct).getId());
+
+        controller.getCustomer(customerId).setName(name);
+    }
+
+    private void changeArea()
+    {
+        List<Area> areas = controller.getAreas();
+
+        int areaNumber = chooseArea();
+        try
+        {
+            checkPossibleToChangeArea(areaNumber);
+        }
+        catch (UnpossibleChangeAreaException e)
+        {
+            System.out.println(e.getMessage());
+            changeArea();
+        }
+
+        controller.getCustomer(customerId).setAreaId(areas.get(areaNumber).getId());
     }
 
     @Override
@@ -201,38 +200,24 @@ public class ConsoleCustomerView implements View
         }
     }
 
-    private void availableTemplates() throws WrongInputException
+    private void availableTemplates()
     {
         showTemplates(0);
     }
 
-    private void showTemplates(int from) throws WrongInputException
+    private void showTemplates(int from)
     {
         Scanner scanner = new Scanner(System.in);
-        Controller controller = ControllerImpl.getInstance();
+
         ArrayList<Template> templates = controller.getTemplatesByAreaId(controller.getCustomerAreaId(customerId));
-        String punct = "";
 
-        while (!punct.equals("0"))
+        String choice = null;
+        while (!"0".equals(choice))
         {
-            System.out.printf("%-10s%-20s%-10s%n", "Name", "Description", "Cost");
-            int number = 1;
-            for (int i = from; i < 8 + from && i < templates.size(); i++)
-            {
-                Template template = templates.get(i);
-                System.out.print(number + ") ");
-                number++;
-                System.out
-                        .printf("%-10s%-20s%-10s%n", template.getName(), template.getDescription(), template.getCost());
-            }
-            if (from + 8 < templates.size())
-            {
-                System.out.println("\n9)Следующая страница");
-            }
-            System.out.println("0)Предыдущая страница");
-            punct = scanner.nextLine();
+            printTitleTemplates(from, templates);
+            choice = scanner.nextLine();
 
-            switch (punct)
+            switch (choice)
             {
                 case "1":
                 case "2":
@@ -242,7 +227,7 @@ public class ConsoleCustomerView implements View
                 case "6":
                 case "7":
                 case "8":
-                    ControllerImpl.getInstance().createOrder(templates.get(from + Integer.parseInt(punct)).getId());
+                    ControllerImpl.getInstance().createOrder(templates.get(from + Integer.parseInt(choice)).getId());
                     break;
                 case "9":
                     if (from + 8 < templates.size())
@@ -251,48 +236,82 @@ public class ConsoleCustomerView implements View
                     }
                     else
                     {
-                        throw new WrongInputException("Введите номер одного из пунктов!");
+                        System.out.println("Введите номер одного из пунктов!");
                     }
                     break;
                 case "0":
                     break;
                 default:
-                    throw new WrongInputException("Введите номер одного из пунктов!");
+                    System.out.println("Введите номер одного из пунктов!");
             }
         }
     }
 
-    private void changePassword() throws PasswordException
+    private void printTitleTemplates(int from, ArrayList<Template> templates)
+    {
+        System.out.printf("%-10s%-20s%-10s%n", "Name", "Description", "Cost");
+
+        int number = 1;
+        for (int i = from; i < 8 + from && i < templates.size(); i++)
+        {
+            Template template = templates.get(i);
+            System.out.print(number + ") ");
+            number++;
+            System.out
+                    .printf("%-10s%-20s%-10s%n", template.getName(), template.getDescription(), template.getCost());
+        }
+
+        if (from + 8 < templates.size())
+        {
+            System.out.println("\n9)Следующая страница");
+        }
+
+        System.out.println("0)Предыдущая страница");
+    }
+
+    private void changePassword()
     {
         Scanner scanner = new Scanner(System.in);
+
         System.out.print("Введите старый пароль: ");
         String oldPassword = scanner.nextLine();
-        if (ControllerImpl.getInstance().checkPassword(customerId, oldPassword))
+
+        if (controller.checkPassword(customerId, oldPassword))
         {
             System.out.print("Введите новый пароль: ");
+
             String newPassword = scanner.nextLine();
-            checkNewPassword(newPassword);
-            ControllerImpl.getInstance().getCustomer(customerId)
-                    .setPassword(newPassword);
+            try
+            {
+                checkNewPassword(newPassword);
+            }
+            catch (IncorrectPasswordException e)
+            {
+                System.out.println(e.getMessage());
+                changePassword();
+            }
+            controller.getCustomer(customerId).setPassword(newPassword);
+
             System.out.println("Пароль успешно изменён.");
         }
         else
         {
             System.out.println("Неверный пароль!");
+            changePassword();
         }
     }
 
-    private void checkNewPassword(final String password) throws PasswordException
+    private void checkNewPassword(final String password) throws IncorrectPasswordException
     {
-        if (password == null || password.equals(""))
+        if (Strings.isNullOrEmpty(password))
         {
-            throw new PasswordException("Пароль не может быть пустым!");
+            throw new IncorrectPasswordException("Пароль не может быть пустым!");
         }
         for (int i = 0; i < password.length(); i++)
         {
             if (!Character.isLetterOrDigit(password.charAt(i)))
             {
-                throw new PasswordException("Пароль может состоять только из букв и цифр!");
+                throw new IncorrectPasswordException("Пароль может состоять только из букв и цифр!");
             }
         }
     }
@@ -313,8 +332,8 @@ public class ConsoleCustomerView implements View
 
     private void showInactiveServices()
     {
-        ArrayList<Service> suspendedServices = ControllerImpl.getInstance().getSuspendedServices(customerId);
-        ArrayList<Service> enteringServices = ControllerImpl.getInstance().getEnteringServices(customerId);
+        ArrayList<Service> suspendedServices = controller.getSuspendedServices(customerId);
+        ArrayList<Service> enteringServices = controller.getEnteringServices(customerId);
 
         if (suspendedServices.size() > 0)
         {
@@ -344,4 +363,93 @@ public class ConsoleCustomerView implements View
 
     }
 
+    private void checkNull(final String value, final String nameOfField) throws WrongInputException
+    {
+        if (Strings.isNullOrEmpty(value))
+        {
+            throw new WrongInputException(nameOfField + " не может быть пустым");
+        }
+    }
+
+    private int chooseArea()
+    {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Выберите район: ");
+
+        List<Area> areas = controller.getAreas();
+        for (int i = 0; i < areas.size(); i++)
+        {
+            System.out.println(i + 1 + ")" + "" + areas.get(i));
+        }
+
+        int choice;
+        try
+        {
+            choice = Integer.parseInt(scanner.nextLine()) - 1;
+            checkRange(areas.size(), choice);
+        }
+        catch (NumberFormatException e1)
+        {
+            System.out.println("Выберите один из пунктов!");
+            return chooseArea();
+        }
+        catch (WrongInputException e)
+        {
+            System.out.println(e.getMessage());
+            return chooseArea();
+        }
+
+        return choice;
+    }
+
+    private void checkRange(int r, int value) throws WrongInputException
+    {
+        if (value < 1 || value > r)
+        {
+            throw new WrongInputException("Выберите один из пунктов");
+        }
+    }
+
+    private void checkLoginExists(final String login) throws WrongInputException
+    {
+        for (User user : controller.getCustomers())
+        {
+            if (user.getLogin().equals(login) && !user.getId().equals(customerId))
+            {
+                throw new WrongInputException("Такой логин уже существует");
+            }
+        }
+
+        for (User user : controller.getEmployes())
+        {
+            if (user.getLogin().equals(login) && !user.getId().equals(customerId))
+            {
+                throw new WrongInputException("Такой логин уже существует");
+            }
+        }
+    }
+
+    private void checkPossibleToChangeArea(int areaNumber) throws UnpossibleChangeAreaException
+    {
+        List<Area> areas = controller.getAreas();
+
+        for (Service service : controller.getActiveServices(customerId))
+        {
+            if (!controller.getTemplate(service.getTemplateId()).getPossibleAreasId()
+                    .contains(areas.get(areaNumber).getId()))
+            {
+                throw new UnpossibleChangeAreaException("Вы не можете поменять район");
+            }
+        }
+
+        for (Service service : controller.getEnteringServices(customerId))
+        {
+            if (!controller.getTemplate(service.getTemplateId()).getPossibleAreasId()
+                    .contains(areas.get(areaNumber).getId()))
+            {
+                throw new UnpossibleChangeAreaException("Вы не можете поменять район");
+            }
+        }
+    }
 }

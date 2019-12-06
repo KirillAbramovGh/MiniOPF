@@ -1,11 +1,14 @@
 package com.netcracker.students.o3.controller;
 
+import com.netcracker.students.o3.Exceptions.IncorrectCredentialsException;
+import com.netcracker.students.o3.Exceptions.IncorrectPasswordException;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.Employee;
+import com.netcracker.students.o3.model.users.User;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -69,7 +72,7 @@ public interface Controller
 
     void createEmployee(BigInteger employeeId);
 
-    BigInteger login(String login, String password);
+    User getUserByCredentials(String login, String password) throws IncorrectCredentialsException;
 
     BigInteger registerCustomer(String login, String password, String Name, BigInteger areaId);
 
@@ -77,7 +80,7 @@ public interface Controller
 
     boolean checkPassword(BigInteger id, String password);
 
-    boolean checkLogin(String login);
+    boolean isLoginExists(String login);
 
     ArrayList<Service> getSuspendedServices(BigInteger id);
 
