@@ -6,6 +6,9 @@ import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.orders.Order;
+import com.netcracker.students.o3.model.orders.OrderAction;
+import com.netcracker.students.o3.model.orders.OrderStatus;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.users.User;
@@ -226,7 +229,8 @@ public class ConsoleCustomerView implements View
                 case "6":
                 case "7":
                 case "8":
-                    ControllerImpl.getInstance().createOrder(templates.get(from + Integer.parseInt(choice)).getId());
+                    ControllerImpl.getInstance().createOrder(templates.get(from + Integer.parseInt(choice)).getId(),null,null,
+                            OrderStatus.Entering, OrderAction.New);
                     break;
                 case "9":
                     if (from + 8 < templates.size())
