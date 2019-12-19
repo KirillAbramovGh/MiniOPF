@@ -7,7 +7,9 @@ import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.model.Model;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.orders.Order;
+import com.netcracker.students.o3.model.orders.OrderAction;
 import com.netcracker.students.o3.model.orders.OrderImpl;
+import com.netcracker.students.o3.model.orders.OrderStatus;
 import com.netcracker.students.o3.model.serializer.Serializer;
 import com.netcracker.students.o3.model.serializer.SerializerImpl;
 import com.netcracker.students.o3.model.services.Service;
@@ -159,40 +161,47 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public void createArea(final BigInteger areaId)
+    public BigInteger createCustomer(final String name, final String login, final String password)
     {
-
+        BigInteger customerId = model.createCustomer(name,login,password);
+        return customerId;
     }
 
     @Override
-    public void createOrder(final BigInteger templateId)
+    public BigInteger createEmployee(final String name, final String login, final String password)
     {
-        Order order = new OrderImpl(model.getNextId(), templateId);
-        model.addOrder(order);
+        BigInteger employeeId = model.createEmployee(name,login,password);
+        return employeeId;
     }
 
     @Override
-    public void createService(final BigInteger serviceId)
+    public BigInteger createOrder(final BigInteger templateId, final BigInteger serviceId, final BigInteger employeeId,
+            final OrderStatus status, final OrderAction action)
     {
-
+        BigInteger orderId = model.createOrder(templateId,serviceId,employeeId,status,action);
+        return orderId;
     }
 
     @Override
-    public void createTemplate(final BigInteger templateId)
+    public BigInteger createTemplate(final String name, final BigDecimal cost, final String description)
     {
-
+        BigInteger templateId = model.createTemplate(name,cost,description);
+        return templateId;
     }
 
     @Override
-    public void createCustomer(final BigInteger customerId)
+    public BigInteger createService(final BigInteger userId, final BigInteger templateId, final ServiceStatus status,
+            final BigDecimal cost)
     {
-
+        BigInteger serviceId = model.createService(userId,templateId,status,cost);
+        return serviceId;
     }
 
     @Override
-    public void createEmployee(final BigInteger employeeId)
+    public BigInteger createArea(final String name, final String description)
     {
-
+        BigInteger areaId = model.createArea(name,description);
+        return areaId;
     }
 
     @Override

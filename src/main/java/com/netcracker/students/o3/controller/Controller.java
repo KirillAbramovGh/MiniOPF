@@ -5,11 +5,20 @@ import com.netcracker.students.o3.Exceptions.LoginOccupiedException;
 import com.netcracker.students.o3.Exceptions.UnpossibleChangeAreaException;
 import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.orders.Order;
+import com.netcracker.students.o3.model.orders.OrderAction;
+import com.netcracker.students.o3.model.orders.OrderImpl;
+import com.netcracker.students.o3.model.orders.OrderStatus;
 import com.netcracker.students.o3.model.services.Service;
+import com.netcracker.students.o3.model.services.ServiceImpl;
+import com.netcracker.students.o3.model.services.ServiceStatus;
 import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
+import com.netcracker.students.o3.model.users.CustomerImpl;
 import com.netcracker.students.o3.model.users.Employee;
+import com.netcracker.students.o3.model.users.EmployerImpl;
 import com.netcracker.students.o3.model.users.User;
 
 import java.math.BigDecimal;
@@ -58,17 +67,21 @@ public interface Controller
     void deepDeleteEmployee(BigInteger employeeId);
 
     //создает сущности
-    void createArea(BigInteger areaId);
 
-    void createOrder(BigInteger orderId);
+     BigInteger createCustomer(String name,String login,String password);
 
-    void createService(BigInteger serviceId);
+     BigInteger createEmployee(String name,String login,String password);
 
-    void createTemplate(BigInteger templateId);
+     BigInteger createOrder(BigInteger templateId,BigInteger serviceId,BigInteger employeeId,
+            OrderStatus status, OrderAction action);
 
-    void createCustomer(BigInteger customerId);
+     BigInteger createTemplate(String name, BigDecimal cost,String description);
 
-    void createEmployee(BigInteger employeeId);
+     BigInteger createService(BigInteger userId,BigInteger templateId, ServiceStatus status,BigDecimal cost);
+
+     BigInteger createArea(String name,String description);
+
+
 
     User getUserByCredentials(String login, String password) throws IncorrectCredentialsException;
 

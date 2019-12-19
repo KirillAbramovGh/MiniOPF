@@ -28,7 +28,19 @@ public class ServiceImpl implements Service
                 '}';
     }
 
+    public ServiceImpl()
+    {
+    }
 
+    public ServiceImpl(final BigInteger id, final BigInteger userId, final BigInteger templateId,
+            final ServiceStatus status, final BigDecimal cost)
+    {
+        this.id = id;
+        this.userId = userId;
+        this.templateId = templateId;
+        this.status = status;
+        this.cost = cost;
+    }
 
     public BigInteger getId()
     {

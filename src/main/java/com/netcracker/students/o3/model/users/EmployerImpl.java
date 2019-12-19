@@ -24,10 +24,13 @@ public class EmployerImpl implements Employee
     }
 
     public EmployerImpl(){}
-    public EmployerImpl(final BigInteger id, final String name)
+
+    public EmployerImpl(final BigInteger id, final String name, final String login, final String password)
     {
         this.id = id;
         this.name = name;
+        this.login = login;
+        this.password = password;
     }
 
     @Override

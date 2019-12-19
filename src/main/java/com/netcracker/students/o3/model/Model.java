@@ -5,9 +5,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.orders.Order;
+import com.netcracker.students.o3.model.orders.OrderAction;
 import com.netcracker.students.o3.model.orders.OrderImpl;
+import com.netcracker.students.o3.model.orders.OrderStatus;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceImpl;
+import com.netcracker.students.o3.model.services.ServiceStatus;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
@@ -15,6 +18,7 @@ import com.netcracker.students.o3.model.users.CustomerImpl;
 import com.netcracker.students.o3.model.users.Employee;
 import com.netcracker.students.o3.model.users.EmployerImpl;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -109,6 +113,57 @@ public class Model
     }
 
 
+
+    public BigInteger createCustomer(String name,String login,String password){
+        Customer newCustomer = new CustomerImpl(getNextId(),name,login,password);
+        BigInteger customerId = newCustomer.getId();
+
+        addCustomer(newCustomer);
+        return customerId;
+    }
+
+    public BigInteger createEmployee(String name,String login,String password){
+        Employee newEmployee = new EmployerImpl(getNextId(),name,login,password);
+        BigInteger employeeId = newEmployee.getId();
+
+        addEmployee(newEmployee);
+        return employeeId;
+    }
+
+    public BigInteger createOrder(BigInteger templateId,BigInteger serviceId,BigInteger employeeId,
+            OrderStatus status, OrderAction action){
+        Order newOrder = new OrderImpl(getNextId(),templateId,serviceId,employeeId,status,action);
+        BigInteger orderId = newOrder.getId();
+
+        addOrder(newOrder);
+        return orderId;
+    }
+
+    public BigInteger createTemplate(String name, BigDecimal cost,String description){
+        Template newTemplate = new TemplateImpl(getNextId(),name,cost,description);
+        BigInteger templateId = newTemplate.getId();
+
+        addTemplate(newTemplate);
+        return templateId;
+    }
+
+    public BigInteger createService(BigInteger userId,BigInteger templateId, ServiceStatus status,BigDecimal cost){
+        Service newService = new ServiceImpl(getNextId(),userId,templateId,status,cost);
+        BigInteger serviceId = newService.getId();
+
+        addService(newService);
+        return serviceId;
+    }
+
+    public BigInteger createArea(String name,String description){
+        Area newArea = new AreaImpl(getNextId(),name,description);
+        BigInteger areaId = newArea.getId();
+
+        addArea(newArea);
+        return areaId;
+    }
+
+
     public Map<BigInteger, Order> getOrders()
     {
         return orders;
@@ -140,6 +195,7 @@ public class Model
     }
 
 
+
     public Order getOrderById(BigInteger id)
     {
         return orders.get(id);
@@ -169,6 +225,7 @@ public class Model
     {
         return areas.get(id);
     }
+
 
 
     public void addOrder(Order order)
@@ -267,6 +324,7 @@ public class Model
             areas.remove(id);
         }
     }
+
 
     public void setOrder(Order order)
     {

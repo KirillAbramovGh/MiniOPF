@@ -17,10 +17,16 @@ public class OrderImpl implements Order
     {
     }
 
-    public OrderImpl(final BigInteger id, final BigInteger templateId)
+    public OrderImpl(final BigInteger id, final BigInteger templateId, final BigInteger serviceId,
+            final BigInteger employeeId,
+            final OrderStatus status, final OrderAction action)
     {
         this.id = id;
         this.templateId = templateId;
+        this.serviceId = serviceId;
+        this.employeeId = employeeId;
+        this.status = status;
+        this.action = action;
     }
 
     @Override
