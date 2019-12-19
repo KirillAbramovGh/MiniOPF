@@ -12,7 +12,6 @@ import com.netcracker.students.o3.model.users.User;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -191,7 +190,7 @@ public class ConsoleCustomerView implements View
         controller.getCustomer(customerId).setAreaId(areas.get(areaNumber).getId());
     }
 
-    @Override
+
     public void clearScreen()
     {
         for (int i = 0; i < 100; i++)
@@ -209,7 +208,7 @@ public class ConsoleCustomerView implements View
     {
         Scanner scanner = new Scanner(System.in);
 
-        ArrayList<Template> templates = controller.getTemplatesByAreaId(controller.getCustomerAreaId(customerId));
+        List<Template> templates = controller.getTemplatesByAreaId(controller.getCustomerAreaId(customerId));
 
         String choice = null;
         while (!"0".equals(choice))
@@ -247,7 +246,7 @@ public class ConsoleCustomerView implements View
         }
     }
 
-    private void printTitleTemplates(int from, ArrayList<Template> templates)
+    private void printTitleTemplates(int from, List<Template> templates)
     {
         System.out.printf("%-10s%-20s%-10s%n", "Name", "Description", "Cost");
 
@@ -332,8 +331,8 @@ public class ConsoleCustomerView implements View
 
     private void showInactiveServices()
     {
-        ArrayList<Service> suspendedServices = controller.getSuspendedServices(customerId);
-        ArrayList<Service> enteringServices = controller.getEnteringServices(customerId);
+        List<Service> suspendedServices = controller.getSuspendedServices(customerId);
+        List<Service> enteringServices = controller.getEnteringServices(customerId);
 
         if (suspendedServices.size() > 0)
         {

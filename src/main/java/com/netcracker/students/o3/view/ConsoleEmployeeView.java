@@ -8,9 +8,5 @@ public class ConsoleEmployeeView implements View
 
     }
 
-    @Override
-    public void clearScreen()
-    {
 
-    }
 }

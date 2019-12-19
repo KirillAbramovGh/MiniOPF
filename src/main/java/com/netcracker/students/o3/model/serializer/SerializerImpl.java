@@ -25,7 +25,7 @@ public class SerializerImpl implements Serializer
     public void deserializeModel(Model model) throws IOException
     {
         ObjectMapper objectMapper = new ObjectMapper();
-        File file = new File("entities.json");
+        File file = new File("C:\\Users\\Kirill\\IdeaProjects\\MiniOPF\\entities.json");
         Model newModel = objectMapper.readValue(file, Model.class);
 
         model.setCustomers(newModel.getCustomers());

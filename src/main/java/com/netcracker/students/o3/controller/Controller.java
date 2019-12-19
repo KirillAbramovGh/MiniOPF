@@ -1,7 +1,9 @@
 package com.netcracker.students.o3.controller;
 
 import com.netcracker.students.o3.Exceptions.IncorrectCredentialsException;
-import com.netcracker.students.o3.Exceptions.IncorrectPasswordException;
+import com.netcracker.students.o3.Exceptions.LoginOccupiedException;
+import com.netcracker.students.o3.Exceptions.UnpossibleChangeAreaException;
+import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.services.Service;
@@ -12,7 +14,6 @@ import com.netcracker.students.o3.model.users.User;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface Controller
@@ -21,19 +22,16 @@ public interface Controller
 
     void suspendOrder(BigInteger orderId);
 
-    //трется employeeId и ордер возвращается в Entering
     void stopOrder(BigInteger orderId);
 
     void completeOrder(BigInteger orderId);
 
-    //Value положительный - прибавить n рублей на счет пользователя. Отрицательный - списать средства
     void changeBalance(BigInteger customerId, BigDecimal value);
 
     void createCustomer(Customer customer);
 
     void createEmployee(/*set of parameters*/);
 
-    //удаляет только непривязанные к другим объектам сущности
     void deleteArea(BigInteger areaId);
 
     void deleteOrder(BigInteger orderId);
@@ -82,31 +80,30 @@ public interface Controller
 
     boolean isLoginExists(String login);
 
-    ArrayList<Service> getSuspendedServices(BigInteger id);
+    List<Service> getSuspendedServices(BigInteger customerId);
 
-    ArrayList<Service> getEnteringServices(BigInteger id);
+    List<Service> getEnteringServices(BigInteger customerId);
 
-    String getCustomerString(BigInteger id);
 
-    ArrayList<Service> getActiveServices(BigInteger id);
+    List<Service> getActiveServices(BigInteger customerId);
 
-    ArrayList<Template> getTemplatesByAreaId(BigInteger areaId);
+    List<Template> getTemplatesByAreaId(BigInteger areaId);
 
-    ArrayList<Template> getAllTemplates();
+    List<Template> getAllTemplates();
 
-    ArrayList<Order> getOrdersByCustomerId(BigInteger customerId);
+    List<Order> getOrdersByCustomerId(BigInteger customerId);
 
-    ArrayList<Order> getOrdersByEmployeeId(BigInteger employeeId);
+    List<Order> getOrdersByEmployeeId(BigInteger employeeId);
 
     BigInteger getCustomerAreaId(BigInteger customerId);
 
-    boolean isCustomer(BigInteger id);
+    boolean isCustomer(BigInteger userId);
 
-    boolean isEmployee(BigInteger id);
+    boolean isEmployee(BigInteger userId);
 
-    Customer getCustomer(BigInteger id);
+    Customer getCustomer(BigInteger userId);
 
-    Employee getEmployee(BigInteger id);
+    Employee getEmployee(BigInteger userId);
 
     List<Area> getAreas();
 
@@ -121,17 +118,36 @@ public interface Controller
     List<Employee> getEmployes();
 
 
-    Area getArea(BigInteger id);
+    Area getArea(BigInteger areaId);
 
-    Template getTemplate(BigInteger id);
+    Template getTemplate(BigInteger templateId);
 
-    Service getService(BigInteger id);
+    Service getService(BigInteger serviceId);
 
-    Order getOrder(BigInteger id);
+    Order getOrder(BigInteger orderId);
 
     void putOnBalance(BigInteger customerId, BigDecimal money);
 
-    // В контроллере должны лежать функции и кастомера, и работника
+    List<Service> getServicesByAreaId(BigInteger areaId);
 
-    //дублирование методов модели с проверкой delete() и set() методов на дурака
+    boolean isCustomerLogin(String login);
+
+    boolean isEmployeeLogin(String login);
+
+    BigDecimal getBalance(BigInteger customerId);
+
+    String getCustomerFio(BigInteger customerId);
+
+    String getAreaName(BigInteger customerId);
+
+    List<Service> getCustomerAvailableServices(BigInteger customerId);
+
+    void setCustomerName(BigInteger customerId, String name) throws WrongInputException;
+
+    void setUserLogin(BigInteger userId, String login) throws LoginOccupiedException, WrongInputException;
+
+    void setUserPassword(BigInteger userId, String password) throws WrongInputException;
+
+    void setCustomerArea(BigInteger customerId, BigInteger areaId) throws UnpossibleChangeAreaException;
+
 }

@@ -15,6 +15,7 @@ import java.util.Scanner;
 
 import jdk.internal.joptsimple.internal.Strings;
 
+
 public class StartConsoleView
 {
 
@@ -206,9 +207,9 @@ public class StartConsoleView
         System.out.println("Выберите район: ");
 
         List<Area> areas = controller.getAreas();
-        for (int i = 0;i<areas.size();i++)
+        for (int i = 0; i < areas.size(); i++)
         {
-            System.out.println(i+1 + ")" + "" + areas.get(i));
+            System.out.println(i + 1 + ")" + "" + areas.get(i));
         }
 
         BigInteger areaId;

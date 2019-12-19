@@ -18,16 +18,6 @@ public class AreaImpl implements Area
         this.description = description;
     }
 
-    @Override
-    public String toString()
-    {
-        return "AreaImpl{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
-
     public BigInteger getId()
     {
         return id;
@@ -56,5 +46,11 @@ public class AreaImpl implements Area
     public void setDescription(final String description)
     {
         this.description = description;
+    }
+
+    @Override
+    public String toString()
+    {
+        return name;
     }
 }

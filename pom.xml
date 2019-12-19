@@ -5,6 +5,19 @@
          >
     <modelVersion>4.0.0</modelVersion>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>13</source>
+                    <target>13</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <groupId>com.netcracker.students.o3</groupId>
     <artifactId>MiniOPF</artifactId>
     <version>1.0-SNAPSHOT</version>

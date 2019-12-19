@@ -1,5 +1,4 @@
 {
-  "lastId": 18,
   "orders": {},
   "templates": {
     "1": {
@@ -147,15 +146,26 @@
       ]
     }
   },
-  "services": {},
+  "services": {
+    "19": {
+      "id": 19,
+      "userId": 18,
+      "templateId": 1,
+      "status": "Entering",
+      "cost": 900,
+      "activationDate": null
+    }
+  },
   "customers": {
     "18": {
       "id": 18,
       "name": "K",
       "login": "L",
       "password": "P",
-      "moneyBalance": 0,
-      "connectedServicesIds": [],
+      "moneyBalance": 5,
+      "connectedServicesIds": [
+        19
+      ],
       "areaId": 16
     }
   },
@@ -181,5 +191,6 @@
       "name": "SovietDistrict",
       "description": "parapapam"
     }
-  }
+  },
+  "lastId": 0
 }

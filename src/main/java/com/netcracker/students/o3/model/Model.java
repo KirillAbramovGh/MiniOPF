@@ -35,6 +35,8 @@ public class Model
     private Map<BigInteger, Employee> employers;
     @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = AreaImpl.class)
     private Map<BigInteger, Area> areas;
+    private BigInteger lastId;
+
 
     public void setOrders(final Map<BigInteger, Order> orders)
     {
@@ -66,8 +68,7 @@ public class Model
         this.areas = areas;
     }
 
-    @JsonIgnore
-    private BigInteger lastId;
+
 
     public static Model getInstance()
     {
@@ -89,13 +90,13 @@ public class Model
         lastId = BigInteger.ZERO;
     }
 
-    @JsonIgnore
+
     public BigInteger getLastId()
     {
         return lastId;
     }
 
-    @JsonIgnore
+
     public void setLastId(final BigInteger lastId)
     {
         this.lastId = lastId;
