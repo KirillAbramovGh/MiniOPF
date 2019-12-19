@@ -37,10 +37,6 @@ public interface Controller
 
     void changeBalance(BigInteger customerId, BigDecimal value);
 
-    void createCustomer(Customer customer);
-
-    void createEmployee(/*set of parameters*/);
-
     void deleteArea(BigInteger areaId);
 
     void deleteOrder(BigInteger orderId);
@@ -68,7 +64,7 @@ public interface Controller
 
     //создает сущности
 
-     BigInteger createCustomer(String name,String login,String password);
+     BigInteger createCustomer(String name,String login,String password,BigInteger areaId);
 
      BigInteger createEmployee(String name,String login,String password);
 

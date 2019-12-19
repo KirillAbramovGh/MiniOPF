@@ -77,18 +77,6 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public void createCustomer(final Customer customer)
-    {
-
-    }
-
-    @Override
-    public void createEmployee()
-    {
-
-    }
-
-    @Override
     public void deleteArea(final BigInteger areaId)
     {
 
@@ -161,9 +149,9 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public BigInteger createCustomer(final String name, final String login, final String password)
+    public BigInteger createCustomer(final String name, final String login, final String password,final BigInteger areaId)
     {
-        BigInteger customerId = model.createCustomer(name,login,password);
+        BigInteger customerId = model.createCustomer(name,login,password,areaId);
         return customerId;
     }
 
@@ -231,24 +219,7 @@ public class ControllerImpl implements Controller
     public BigInteger registerCustomer(final String login, final String password, final String name,
             final BigInteger areaId)
     {
-        for (Customer v : model.getCustomers().values())
-        {
-            if (v.getLogin().equals(login))
-            {
-
-            }
-        }
-        for (Employee v : model.getEmployers().values())
-        {
-            if (v.getLogin().equals(login))
-            {
-
-            }
-        }
-        Customer customer = new CustomerImpl(model.getNextId(), name, login, password);
-        customer.setAreaId(areaId);
-        model.addCustomer(customer);
-        return customer.getId();
+        return  createCustomer(name,login,password,areaId);
     }
 
     @Override

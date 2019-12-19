@@ -114,8 +114,8 @@ public class Model
 
 
 
-    public BigInteger createCustomer(String name,String login,String password){
-        Customer newCustomer = new CustomerImpl(getNextId(),name,login,password);
+    public BigInteger createCustomer(String name,String login,String password,BigInteger areaId){
+        Customer newCustomer = new CustomerImpl(getNextId(),name,login,password,areaId);
         BigInteger customerId = newCustomer.getId();
 
         addCustomer(newCustomer);

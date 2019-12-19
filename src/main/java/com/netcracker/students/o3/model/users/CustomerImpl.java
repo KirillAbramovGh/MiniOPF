@@ -19,12 +19,14 @@ public class CustomerImpl implements Customer
         moneyBalance = BigDecimal.ZERO;
     }
 
-    public CustomerImpl(final BigInteger id, final String name, final String login, final String password)
+    public CustomerImpl(final BigInteger id, final String name, final String login, final String password,
+            final BigInteger areaId )
     {
         this.id = id;
         this.name = name;
         this.login = login;
         this.password = password;
+        this.areaId = areaId;
         connectedServicesIds = new ArrayList<>();
         moneyBalance = BigDecimal.ZERO;
     }
