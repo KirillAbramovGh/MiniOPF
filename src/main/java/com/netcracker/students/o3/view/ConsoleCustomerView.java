@@ -6,7 +6,6 @@ import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.model.area.Area;
-import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderAction;
 import com.netcracker.students.o3.model.orders.OrderStatus;
 import com.netcracker.students.o3.model.services.Service;
@@ -424,7 +423,7 @@ public class ConsoleCustomerView implements View
             }
         }
 
-        for (User user : controller.getEmployes())
+        for (User user : controller.getEmployers())
         {
             if (user.getLogin().equals(login) && !user.getId().equals(customerId))
             {

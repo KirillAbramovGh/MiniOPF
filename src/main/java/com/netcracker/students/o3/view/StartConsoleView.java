@@ -73,12 +73,12 @@ public class StartConsoleView
         String login = getInputLogin();
         String password = getInputPassword();
 
-        User user = controller.getUserByCredentials(login, password);
-        if (user instanceof Customer)
+        BigInteger userId = controller.getUserIdByCredentials(login, password);
+        if (controller.isCustomer(userId))
         {
-            new ConsoleCustomerView(user.getId()).start();
+            new ConsoleCustomerView(userId).start();
         }
-        else if (user instanceof Employee)
+        else
         {
             // todo Кенан вызов вьюхи
         }

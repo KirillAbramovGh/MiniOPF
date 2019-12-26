@@ -8,7 +8,6 @@ import com.netcracker.students.o3.model.Model;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderAction;
-import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.orders.OrderStatus;
 import com.netcracker.students.o3.model.serializer.Serializer;
 import com.netcracker.students.o3.model.serializer.SerializerImpl;
@@ -16,7 +15,6 @@ import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceStatus;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.users.Customer;
-import com.netcracker.students.o3.model.users.CustomerImpl;
 import com.netcracker.students.o3.model.users.Employee;
 import com.netcracker.students.o3.model.users.EmployerImpl;
 import com.netcracker.students.o3.model.users.User;
@@ -39,12 +37,20 @@ public class ControllerImpl implements Controller
         try
         {
             serializer.deserializeModel(model);
-        }catch (Exception e){
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
 
+    @Override
+    public void disconnectService(final BigInteger customerId, final BigInteger serviceId)
+    {
+        model.getServiceById(serviceId).setStatus(ServiceStatus.Disconnected);
+        model.getCustomerById(customerId).getConnectedServicesIds().remove(serviceId);
+    }
 
     @Override
     public void startOrder(final BigInteger orderId, final BigInteger employeeId)
@@ -149,16 +155,17 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public BigInteger createCustomer(final String name, final String login, final String password,final BigInteger areaId)
+    public BigInteger createCustomer(final String name, final String login, final String password,
+            final BigInteger areaId)
     {
-        BigInteger customerId = model.createCustomer(name,login,password,areaId);
+        BigInteger customerId = model.createCustomer(name, login, password, areaId);
         return customerId;
     }
 
     @Override
     public BigInteger createEmployee(final String name, final String login, final String password)
     {
-        BigInteger employeeId = model.createEmployee(name,login,password);
+        BigInteger employeeId = model.createEmployee(name, login, password);
         return employeeId;
     }
 
@@ -166,41 +173,40 @@ public class ControllerImpl implements Controller
     public BigInteger createOrder(final BigInteger templateId, final BigInteger serviceId, final BigInteger employeeId,
             final OrderStatus status, final OrderAction action)
     {
-        BigInteger orderId = model.createOrder(templateId,serviceId,employeeId,status,action);
+        BigInteger orderId = model.createOrder(templateId, serviceId, employeeId, status, action);
         return orderId;
     }
 
     @Override
     public BigInteger createTemplate(final String name, final BigDecimal cost, final String description)
     {
-        BigInteger templateId = model.createTemplate(name,cost,description);
+        BigInteger templateId = model.createTemplate(name, cost, description);
         return templateId;
     }
 
     @Override
-    public BigInteger createService(final BigInteger userId, final BigInteger templateId, final ServiceStatus status,
-            final BigDecimal cost)
+    public BigInteger createService(final BigInteger userId, final BigInteger templateId, final ServiceStatus status)
     {
-        BigInteger serviceId = model.createService(userId,templateId,status,cost);
+        BigInteger serviceId = model.createService(userId, templateId, status);
         return serviceId;
     }
 
     @Override
     public BigInteger createArea(final String name, final String description)
     {
-        BigInteger areaId = model.createArea(name,description);
+        BigInteger areaId = model.createArea(name, description);
         return areaId;
     }
 
     @Override
-    public User getUserByCredentials(final String login, final String password)
+    public BigInteger getUserIdByCredentials(final String login, final String password)
             throws IncorrectCredentialsException
     {
         for (Customer customer : model.getCustomers().values())
         {
             if (customer.getLogin().equals(login) && customer.getPassword().equals(password))
             {
-                return customer;
+                return customer.getId();
             }
         }
 
@@ -208,7 +214,7 @@ public class ControllerImpl implements Controller
         {
             if (employee.getLogin().equals(login) && employee.getPassword().equals(password))
             {
-                return employee;
+                return employee.getId();
             }
         }
         throw new IncorrectCredentialsException("Неправильный логин или пароль!");
@@ -219,7 +225,7 @@ public class ControllerImpl implements Controller
     public BigInteger registerCustomer(final String login, final String password, final String name,
             final BigInteger areaId)
     {
-        return  createCustomer(name,login,password,areaId);
+        return createCustomer(name, login, password, areaId);
     }
 
     @Override
@@ -279,9 +285,20 @@ public class ControllerImpl implements Controller
         ArrayList<Service> services = new ArrayList<>();
         for (BigInteger serviceId : model.getCustomerById(customerId).getConnectedServicesIds())
         {
-            services.add(model.getServiceById(serviceId));
+            if (model.getServiceById(serviceId).getStatus() == ServiceStatus.Active)
+            {
+                services.add(model.getServiceById(serviceId));
+            }
         }
 
+        return services;
+    }
+
+    @Override
+    public List<Service> getEnteringAndActiveServices(final BigInteger customerId)
+    {
+        List<Service> services = new ArrayList<>(getEnteringServices(customerId));
+        services.addAll(getActiveServices(customerId));
         return services;
     }
 
@@ -368,31 +385,41 @@ public class ControllerImpl implements Controller
     @Override
     public List<Template> getTemplates()
     {
-        return null;
+        List<Template> templates = new ArrayList<>();
+        templates.addAll(model.getTemplates().values());
+        return templates;
     }
 
     @Override
     public List<Service> getServices()
     {
-        return null;
+        List<Service> services = new ArrayList<>();
+        services.addAll(model.getServices().values());
+        return services;
     }
 
     @Override
     public List<Customer> getCustomers()
     {
-        return null;
+        List<Customer> customers = new ArrayList<>();
+        customers.addAll(model.getCustomers().values());
+        return customers;
     }
 
     @Override
     public List<Order> getOrders()
     {
-        return null;
+        List<Order> orders = new ArrayList<>();
+        orders.addAll(model.getOrders().values());
+        return orders;
     }
 
     @Override
-    public List<Employee> getEmployes()
+    public List<Employee> getEmployers()
     {
-        return null;
+        List<Employee> employers = new ArrayList<>();
+        employers.addAll(model.getEmployers().values());
+        return employers;
     }
 
     @Override
@@ -433,9 +460,11 @@ public class ControllerImpl implements Controller
         List<Service> availableServices = new ArrayList<>();
         List<Service> allServices = getServices();
 
-        for(Service service : allServices ){
+        for (Service service : allServices)
+        {
             Template template = getTemplate(service.getTemplateId());
-            if(template.getPossibleAreasId().contains(areaId)){
+            if (template.getPossibleAreasId().contains(areaId))
+            {
                 availableServices.add(service);
             }
         }
@@ -448,8 +477,10 @@ public class ControllerImpl implements Controller
     {
         List<Customer> customers = getCustomers();
 
-        for(User user : customers){
-            if(user.getLogin().equals(login)){
+        for (User user : customers)
+        {
+            if (user.getLogin().equals(login))
+            {
                 return false;
             }
         }
@@ -460,10 +491,12 @@ public class ControllerImpl implements Controller
     @Override
     public boolean isEmployeeLogin(final String login)
     {
-        List<Employee> employees = getEmployes();
+        List<Employee> employees = this.getEmployers();
 
-        for(User user : employees){
-            if(user.getLogin().equals(login)){
+        for (User user : employees)
+        {
+            if (user.getLogin().equals(login))
+            {
                 return false;
             }
         }
@@ -481,24 +514,27 @@ public class ControllerImpl implements Controller
         return instance;
     }
 
-    public BigDecimal getBalance(BigInteger customerId){
-        System.out.println(getCustomer(customerId));
+    public BigDecimal getBalance(BigInteger customerId)
+    {
         return getCustomer(customerId).getMoneyBalance();
     }
 
-    public String getCustomerFio(BigInteger customerId){
+    public String getCustomerFio(BigInteger customerId)
+    {
         return getCustomer(customerId).getName();
     }
 
-    public String getAreaName(BigInteger customerId){
+    public String getAreaName(BigInteger customerId)
+    {
         return getArea(getCustomer(customerId).getAreaId()).getName();
     }
 
-    public List<Service> getCustomerAvailableServices(BigInteger customerId){
-        return getServicesByAreaId(getCustomerAreaId(customerId));
+    public List<Template> getCustomerAvailableTemplates(BigInteger customerId)
+    {
+        return getTemplatesByAreaId(getCustomerAreaId(customerId));
     }
 
-    public void setCustomerName(BigInteger customerId,String name) throws WrongInputException
+    public void setCustomerName(BigInteger customerId, String name) throws WrongInputException
     {
         if (!name.isEmpty())
         {
@@ -510,23 +546,34 @@ public class ControllerImpl implements Controller
         }
     }
 
-    public void setUserLogin(BigInteger userId,String login) throws LoginOccupiedException, WrongInputException
+    public void setUserLogin(BigInteger userId, String login) throws LoginOccupiedException, WrongInputException
     {
-        if(!login.isEmpty()){
-            if(!isLoginExists(login)){
+        if (!login.isEmpty())
+        {
+            if (!isLoginExists(login))
+            {
                 getUser(userId).setLogin(login);
-            }else {
-                throw new LoginOccupiedException("Логин занят");
             }
-        }else {
+            else
+            {
+                if (!getUser(userId).getLogin().equals(login))
+                {
+                    throw new LoginOccupiedException("Логин занят");
+                }
+            }
+        }
+        else
+        {
             throw new WrongInputException("Логин не может быть пустым");
         }
     }
 
-    private User getUser(BigInteger userId){
+    private User getUser(BigInteger userId)
+    {
         User user = getCustomer(userId);
 
-        if(user == null){
+        if (user == null)
+        {
             user = getEmployee(userId);
         }
 
@@ -535,28 +582,87 @@ public class ControllerImpl implements Controller
 
     public void setUserPassword(BigInteger userId, String password) throws WrongInputException
     {
-        if(!password.isEmpty()){
+        if (!password.isEmpty())
+        {
             getUser(userId).setPassword(password);
-        }else {
+        }
+        else
+        {
             throw new WrongInputException("Пароль не может быть пустым");
         }
     }
 
     public void setCustomerArea(BigInteger customerId, BigInteger areaId) throws UnpossibleChangeAreaException
     {
-        List<Service> activeAndEnteringServices = getEnteringServices(customerId);
-        activeAndEnteringServices.addAll(getActiveServices(customerId));
-
-        for (Service service: activeAndEnteringServices
-             )
+        if (getAvailableAreas(customerId).contains(getArea(areaId)))
         {
-            Template template = getTemplate(service.getTemplateId());
-            if (!template.getPossibleAreasId().contains(areaId))
+            getCustomer(customerId).setAreaId(areaId);
+        }
+        else
+        {
+            throw new UnpossibleChangeAreaException("Невозможно изменить район");
+        }
+    }
+
+    @Override
+    public void suspendOrResumeService(final BigInteger customerId, final BigInteger serviceId)
+    {
+        if (getService(serviceId).getStatus() == ServiceStatus.Active)
+        {
+            suspendService(customerId, serviceId);
+        }
+        else if (getService(serviceId).getStatus() == ServiceStatus.Suspended)
+        {
+            resumeService(customerId, serviceId);
+        }
+    }
+
+    @Override
+    public void suspendService(final BigInteger customerId, final BigInteger serviceId)
+    {
+        getService(serviceId).setStatus(ServiceStatus.Suspended);
+    }
+
+    @Override
+    public void resumeService(final BigInteger customerId, final BigInteger serviceId)
+    {
+        getService(serviceId).setStatus(ServiceStatus.Active);
+    }
+
+    @Override
+    public void connectService(final BigInteger customerId, final BigInteger templateId)
+    {
+        BigInteger serviceId = model.createService(customerId, templateId, ServiceStatus.Entering);
+        getCustomer(customerId).getConnectedServicesIds().add(serviceId);
+    }
+
+    @Override
+    public List<Area> getAvailableAreas(final BigInteger customerId)
+    {
+        List<Service> services = getEnteringAndActiveServices(customerId);
+        List<Area> availableAreas = new ArrayList<>();
+
+        if (services.size() > 0)
+        {
+            availableAreas.add(getArea(getCustomerAreaId(customerId)));
+            for (Service service : services)
             {
-                throw new UnpossibleChangeAreaException("Не возможно изменить район");
+                Template template = getTemplate(service.getTemplateId());
+                for (BigInteger areaId : template.getPossibleAreasId())
+                {
+                    if (!availableAreas.contains(getArea(areaId)))
+                    {
+                        availableAreas.add(getArea(areaId));
+                    }
+                }
             }
         }
+        else
+        {
+            availableAreas.addAll(getAreas());
+        }
 
-        getCustomer(customerId).setAreaId(areaId);
+        return availableAreas;
     }
+
 }

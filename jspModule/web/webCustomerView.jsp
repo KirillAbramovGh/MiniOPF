@@ -1,13 +1,6 @@
-<%@ page import="com.netcracker.students.o3.model.services.Service" %>
-<%@ page import="java.math.BigInteger" %>
+<%@ page import="com.netcracker.students.o3.model.area.Area" %>
+<%@ page import="java.util.List" %>
 <%@ page import="jsp.WebCustomerView" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Kirill
-  Date: 13.12.2019
-  Time: 16:30
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
@@ -85,42 +78,156 @@
             display: block;
         }
     </style>
-    <% WebCustomerView webCustomerView = new WebCustomerView();
-        webCustomerView.start(BigInteger.valueOf(18));
+    <style>
+        .prokrutka {
+            height: 70%;
+            overflow-y: scroll; /* прокрутка по вертикали */
+        }
+
+        .settings {
+            height: 70%;
+            padding: 5px;
+            margin: 5px;
+        }
+    </style>
+    <script>
+        let request = new XMLHttpRequest();
+
+        function showBalanceForm() {
+            let sum = prompt("Введите сумму пополнения", "0");
+            if (parseFloat(sum)) {
+                var body = "sum=" + sum;
+                request.open("POST", "http://localhost:8080/jspModule_war_exploded/webCustomerView.jsp?" + body);
+                request.onreadystatechange = reqReadyStateChange;
+                request.send();
+            } else {
+                alert("Введите число");
+            }
+        }
+
+        function reqReadyStateChange() {
+            if (request.readyState == 4) {
+                let status = request.status;
+                if (status == 200) {
+                    document.getElementById("output").innerHTML = request.responseText;
+                }
+            }
+        }
+    </script>
+    <%!
+        WebCustomerView webCustomerView;
+    %>
+    <%
+        if (webCustomerView == null)
+        {
+            webCustomerView = new WebCustomerView();
+            webCustomerView.start(request.getParameter("login"), request.getParameter("password"));
+        }
     %>
 </head>
 
 <body>
-
 <%!
-    public String showEnteringServices(WebCustomerView webCustomerView)
+    private List<Area> availableAreas;
+
+    private String selectArea(WebCustomerView webCustomerView)
     {
         String resultHtml = "";
-
-        int i = 1;
-        for (Service service : webCustomerView.getEnteringServices())
+        availableAreas = webCustomerView.getAvailableAreas();
+        int id = 0;
+        for (Area area : availableAreas)
         {
-
-            resultHtml += "<tr>" +
-                    "<th>" + i + "</th>" +
-                    "<th>" + webCustomerView.getServiceName(service.getId()) + "</th>" +
-                    "<th>" + service.getCost() + "</th>" +
-                    "<th>" +
-                    "<input type='button' value='disconnect'>" +
-                    "</th>" +
-                    "</tr>";
-            i++;
+            if (webCustomerView.getAreaName().equals(area.getName()))
+            {
+                resultHtml += "<option selected value='" + area.getName() + "'>" + area.getName() + "</option>";
+            }
+            else
+            {
+                resultHtml +=
+                        "<option>" + area.getName() + "</option>"
+                ;
+            }
+            id++;
         }
-        System.out.println(resultHtml);
         return resultHtml;
+    }
+
+    private void disconnect(String key)
+    {
+        String numb = key.substring(10);
+        int value = Integer.parseInt(numb);
+        webCustomerView.disconnectService(value - 1);
+    }
+
+    private void suspendOrResume(String key)
+    {
+        String numb = key.substring(14);
+        int value = Integer.parseInt(numb);
+        webCustomerView.suspendOrResumeService(value - 1);
+    }
+
+    private void connect(String key)
+    {
+        String numb = key.substring(7);
+        int value = Integer.parseInt(numb);
+        webCustomerView.connectService(value - 1);
     }
 %>
 <h1 align="right">
-    <form action="webCustomerView.jsp" method="get">
-        Balance: <%=webCustomerView.getBalance()%>
-        <input type="button" name="putOnBalance" value="put">
-        Fio:<%=webCustomerView.getFIO()%>
-    </form>
+    <%
+        for (String key : request.getParameterMap().keySet())
+        {
+            if (request.getParameterMap().get(key) != null)
+            {
+                if (key.startsWith("disconnect"))
+                {
+                    disconnect(key);
+                }
+                else if (key.startsWith("suspend/resume"))
+                {
+                    suspendOrResume(key);
+                }
+                else if (key.startsWith("connect"))
+                {
+                    connect(key);
+                }
+                else if (key.equals("change"))
+                {
+                    String name = request.getParameter("fio");
+                    String login = request.getParameter("login");
+                    String password = request.getParameter("password");
+                    String area = request.getParameter("area");
+
+                    Area newArea = null;
+
+                    for (Area a : availableAreas)
+                    {
+                        if (a.getName().equals(area))
+                        {
+                            newArea = a;
+                            break;
+                        }
+                    }
+
+
+                    webCustomerView.changeName(name);
+                    webCustomerView.changeLogin(login);
+                    webCustomerView.changePassword(password);
+                    webCustomerView.changeArea(newArea);
+
+                }
+            }
+        }
+
+        String textValue = request.getParameter("sum");
+        if (textValue != null && !textValue.isEmpty())
+        {
+            webCustomerView.addBalance(textValue);
+        }
+    %>
+    Balance: <%=webCustomerView.getBalance()%>
+    <input type="button" name="putOnBalance" value="add" onclick="showBalanceForm()">
+    Fio:<%=webCustomerView.getFIO()%>
 </h1>
 
 
@@ -134,16 +241,29 @@
     <input type="radio" name="inset" value="" id="tab_3">
     <label for="tab_3">Настройки</label>
 
-    <div id="txt_1">
-        <table border="1" width="auto" cellpadding="20">
-            <%=showEnteringServices(webCustomerView)%>
-        </table>
+    <div id="txt_1" class="prokrutka">
+        <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
+            <table border="1" width="auto" cellpadding="20">
+                <%=webCustomerView.showEnteringServices()%>
+            </table>
+        </form>
     </div>
-    <div id="txt_2">
 
+    <div id="txt_2" class="prokrutka">
+        <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
+            <%=webCustomerView.showAllTemplates()%>
+        </form>
     </div>
-    <div id="txt_3">
-
+    <div id="txt_3" class="settings">
+        <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
+            Name: <input type="text" name="fio" value="<%=webCustomerView.getFIO()%>"><br/>
+            Login: <input type="text" name="login" value="<%=webCustomerView.getLogin()%>"><br/>
+            Password: <input type="password" name="password" value=""><br/>
+            Area: <select name="area">
+            <%=selectArea(webCustomerView)%>
+        </select>
+            <input type="submit" name="change">
+        </form>
     </div>
 </div>
 
@@ -152,15 +272,6 @@
 <footer>
     <div align="center">
         © NetCracker ERC
-
-        <span>
-            <script type="text/javascript">
-                function corc() {
-                    document.write("ahaha");
-                }
-                corc();
-            </script>
-        </span>
     </div>
 </footer>
 

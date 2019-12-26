@@ -1,6 +1,7 @@
 package com.netcracker.students.o3.model.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.netcracker.students.o3.model.Model;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -12,7 +13,6 @@ public class ServiceImpl implements Service
     private BigInteger userId;
     private BigInteger templateId;
     private ServiceStatus status;
-    private BigDecimal cost;
     private Date activationDate;
 
     @Override
@@ -23,23 +23,23 @@ public class ServiceImpl implements Service
                 ", userId=" + userId +
                 ", templateId=" + templateId +
                 ", status=" + status +
-                ", cost=" + cost +
+                ", cost=" + getCost() +
                 ", activationDate=" + activationDate +
                 '}';
     }
 
     public ServiceImpl()
     {
+
     }
 
     public ServiceImpl(final BigInteger id, final BigInteger userId, final BigInteger templateId,
-            final ServiceStatus status, final BigDecimal cost)
+            final ServiceStatus status)
     {
         this.id = id;
         this.userId = userId;
         this.templateId = templateId;
         this.status = status;
-        this.cost = cost;
     }
 
     public BigInteger getId()
@@ -84,12 +84,8 @@ public class ServiceImpl implements Service
 
     public BigDecimal getCost()
     {
-        return cost;
-    }
-
-    public void setCost(final BigDecimal cost)
-    {
-        this.cost = cost;
+        return Model.getInstance()
+                .getTemplateById(templateId).getCost();
     }
 
     public Date getActivationDate()
@@ -100,5 +96,11 @@ public class ServiceImpl implements Service
     public void setActivationDate(final Date activationDate)
     {
         this.activationDate = activationDate;
+    }
+
+    @Override
+    public String getName()
+    {
+       return Model.getInstance().getTemplateById(templateId).getName();
     }
 }

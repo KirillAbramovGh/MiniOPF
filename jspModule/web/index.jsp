@@ -11,7 +11,7 @@
     <title>$Title$</title>
   </head>
   <body>
-  <jsp:forward page="webCustomerView.jsp"></jsp:forward>
+  <jsp:forward page="startView.jsp"></jsp:forward>
   $END$
   </body>
 </html>

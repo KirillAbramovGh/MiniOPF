@@ -8,6 +8,8 @@ import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderAction;
 import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.orders.OrderStatus;
+import com.netcracker.students.o3.model.serializer.Serializer;
+import com.netcracker.students.o3.model.serializer.SerializerImpl;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.services.ServiceStatus;
@@ -18,6 +20,7 @@ import com.netcracker.students.o3.model.users.CustomerImpl;
 import com.netcracker.students.o3.model.users.Employee;
 import com.netcracker.students.o3.model.users.EmployerImpl;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -147,8 +150,8 @@ public class Model
         return templateId;
     }
 
-    public BigInteger createService(BigInteger userId,BigInteger templateId, ServiceStatus status,BigDecimal cost){
-        Service newService = new ServiceImpl(getNextId(),userId,templateId,status,cost);
+    public BigInteger createService(BigInteger userId,BigInteger templateId, ServiceStatus status){
+        Service newService = new ServiceImpl(getNextId(),userId,templateId,status);
         BigInteger serviceId = newService.getId();
 
         addService(newService);
@@ -374,4 +377,15 @@ public class Model
     }
 
 
+    private void onDataChange(){
+        Serializer serializer = new SerializerImpl();
+        try
+        {
+            serializer.serializeModel(this);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

@@ -27,6 +27,7 @@ import java.util.List;
 
 public interface Controller
 {
+    void disconnectService(BigInteger customerId,BigInteger serviceId);
     void startOrder(BigInteger orderId, BigInteger employeeId);
 
     void suspendOrder(BigInteger orderId);
@@ -73,13 +74,13 @@ public interface Controller
 
      BigInteger createTemplate(String name, BigDecimal cost,String description);
 
-     BigInteger createService(BigInteger userId,BigInteger templateId, ServiceStatus status,BigDecimal cost);
+     BigInteger createService(BigInteger userId,BigInteger templateId, ServiceStatus status);
 
      BigInteger createArea(String name,String description);
 
 
 
-    User getUserByCredentials(String login, String password) throws IncorrectCredentialsException;
+    BigInteger getUserIdByCredentials(String login, String password) throws IncorrectCredentialsException;
 
     BigInteger registerCustomer(String login, String password, String Name, BigInteger areaId);
 
@@ -95,6 +96,8 @@ public interface Controller
 
 
     List<Service> getActiveServices(BigInteger customerId);
+
+    List<Service> getEnteringAndActiveServices(BigInteger customerId);
 
     List<Template> getTemplatesByAreaId(BigInteger areaId);
 
@@ -124,7 +127,7 @@ public interface Controller
 
     List<Order> getOrders();
 
-    List<Employee> getEmployes();
+    List<Employee> getEmployers();
 
 
     Area getArea(BigInteger areaId);
@@ -149,7 +152,7 @@ public interface Controller
 
     String getAreaName(BigInteger customerId);
 
-    List<Service> getCustomerAvailableServices(BigInteger customerId);
+    List<Template> getCustomerAvailableTemplates(BigInteger customerId);
 
     void setCustomerName(BigInteger customerId, String name) throws WrongInputException;
 
@@ -159,4 +162,13 @@ public interface Controller
 
     void setCustomerArea(BigInteger customerId, BigInteger areaId) throws UnpossibleChangeAreaException;
 
+    void suspendOrResumeService(BigInteger customerId,BigInteger serviceId);
+
+    void suspendService(BigInteger customerId,BigInteger serviceId);
+
+    void resumeService(BigInteger customerId,BigInteger serviceId);
+
+    void connectService(BigInteger customerId,BigInteger serviceId);
+
+    List<Area> getAvailableAreas(BigInteger customerId);
 }

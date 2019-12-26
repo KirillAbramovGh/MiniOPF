@@ -6,27 +6,28 @@ import java.util.Date;
 
 public interface Service
 {
-    public BigInteger getId();
+    BigInteger getId();
 
-    public void setId(final BigInteger id);
+    void setId(final BigInteger id);
 
-    public BigInteger getUserId();
+    BigInteger getUserId();
 
-    public void setUserId(final BigInteger userId);
+    void setUserId(final BigInteger userId);
 
-    public BigInteger getTemplateId();
+    BigInteger getTemplateId();
 
-    public void setTemplateId(final BigInteger templateId);
+    void setTemplateId(final BigInteger templateId);
 
-    public ServiceStatus getStatus();
+    ServiceStatus getStatus();
 
-    public void setStatus(final ServiceStatus status);
+    void setStatus(final ServiceStatus status);
 
-    public BigDecimal getCost();
+    BigDecimal getCost();
 
-    public void setCost(final BigDecimal cost);
+    Date getActivationDate();
 
-    public Date getActivationDate();
+    void setActivationDate(final Date activationDate);
 
-    public void setActivationDate(final Date activationDate);
+    String getName();
+
 }

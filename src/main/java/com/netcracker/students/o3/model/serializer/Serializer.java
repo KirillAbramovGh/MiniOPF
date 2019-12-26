@@ -1,6 +1,7 @@
 package com.netcracker.students.o3.model.serializer;
 
 import com.netcracker.students.o3.model.Model;
+import com.netcracker.students.o3.model.users.Customer;
 
 import java.io.IOException;
 
