@@ -82,7 +82,8 @@ public interface Controller
 
     BigInteger getUserIdByCredentials(String login, String password) throws IncorrectCredentialsException;
 
-    BigInteger registerCustomer(String login, String password, String Name, BigInteger areaId);
+    BigInteger registerCustomer(String login, String password, String Name, BigInteger areaId)
+            throws LoginOccupiedException;
 
     BigInteger registerEmployee(String login, String password, String Name);
 

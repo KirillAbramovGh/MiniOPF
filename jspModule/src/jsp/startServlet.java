@@ -1,6 +1,7 @@
 package jsp;
 
 import com.netcracker.students.o3.Exceptions.IncorrectCredentialsException;
+import com.netcracker.students.o3.Exceptions.LoginOccupiedException;
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.model.area.Area;
@@ -25,23 +26,35 @@ public class startServlet extends HttpServlet
     {
         if (req.getParameter("loginUser") != null)
         {
-            if (login(req) != null)
+            BigInteger id = login(req);
+            if (id != null)
             {
+                req.getSession().setAttribute("id", id);
                 forward("/webCustomerView.jsp", req, resp);
+            }else {
+                forward("/startView.jsp",req,resp);
             }
         }
         else if (req.getParameter("regCustomer") != null)
         {
-            if (regCustomer(req) != null)
+            BigInteger id = regCustomer(req);
+            if (id != null)
             {
+                req.getSession().setAttribute("id",id);
                 forward("/webCustomerView.jsp", req, resp);
+            }else {
+                forward("/startView.jsp",req,resp);
             }
         }
         else if (req.getParameter("reqAdmin") != null)
         {
-            if (regEmployee(req) != null)
+            BigInteger id = regEmployee(req);
+            if (id != null)
             {
+                req.getSession().setAttribute("id",id);
 
+            }else {
+                forward("/startView.jsp",req,resp);
             }
         }
 
@@ -113,7 +126,13 @@ public class startServlet extends HttpServlet
         BigInteger userId = null;
         if (!login.isEmpty() && !password.isEmpty() && !name.isEmpty())
         {
-            userId = controller.registerCustomer(login, password, name, areaId);
+            try
+            {
+                userId = controller.registerCustomer(login, password, name, areaId);
+            }
+            catch (LoginOccupiedException e)
+            {
+            }
         }
 
         return userId;

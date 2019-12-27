@@ -1,11 +1,10 @@
 package com.netcracker.students.o3.model.templates;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.Model;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.List;
 
 public class TemplateImpl implements Template
 {
@@ -13,10 +12,13 @@ public class TemplateImpl implements Template
     private String name;
     private BigDecimal cost;
     private String description;
-    private ArrayList<BigInteger> possibleAreasId;
+    private List<BigInteger> possibleAreasId;
 
 
-    public TemplateImpl(){}
+    public TemplateImpl()
+    {
+    }
+
     public TemplateImpl(final BigInteger id, final String name, final BigDecimal cost, final String description)
     {
         this.id = id;
@@ -77,12 +79,12 @@ public class TemplateImpl implements Template
     }
 
 
-    public ArrayList<BigInteger> getPossibleAreasId()
+    public List<BigInteger> getPossibleAreasId()
     {
         return possibleAreasId;
     }
 
-    public void setPossibleAreasId(final ArrayList<BigInteger> possibleAreasId)
+    public void setPossibleAreasId(final List<BigInteger> possibleAreasId)
     {
         this.possibleAreasId = possibleAreasId;
     }

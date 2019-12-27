@@ -111,59 +111,80 @@ public class Model
 
     @JsonIgnore
     public BigInteger getNextId(){
-        lastId = lastId.add(BigInteger.ONE);
-        return lastId;
+        synchronized (lastId)
+        {
+            lastId = lastId.add(BigInteger.ONE);
+            return lastId;
+        }
     }
 
 
 
     public BigInteger createCustomer(String name,String login,String password,BigInteger areaId){
-        Customer newCustomer = new CustomerImpl(getNextId(),name,login,password,areaId);
-        BigInteger customerId = newCustomer.getId();
+        synchronized (customers)
+        {
+            Customer newCustomer = new CustomerImpl(getNextId(), name, login, password, areaId);
+            BigInteger customerId = newCustomer.getId();
 
-        addCustomer(newCustomer);
-        return customerId;
+            addCustomer(newCustomer);
+            return customerId;
+        }
     }
 
     public BigInteger createEmployee(String name,String login,String password){
-        Employee newEmployee = new EmployerImpl(getNextId(),name,login,password);
-        BigInteger employeeId = newEmployee.getId();
+        synchronized (employers)
+        {
+            Employee newEmployee = new EmployerImpl(getNextId(), name, login, password);
+            BigInteger employeeId = newEmployee.getId();
+            addEmployee(newEmployee);
 
-        addEmployee(newEmployee);
-        return employeeId;
+            return employeeId;
+        }
     }
 
     public BigInteger createOrder(BigInteger templateId,BigInteger serviceId,BigInteger employeeId,
             OrderStatus status, OrderAction action){
-        Order newOrder = new OrderImpl(getNextId(),templateId,serviceId,employeeId,status,action);
-        BigInteger orderId = newOrder.getId();
+        synchronized (orders)
+        {
+            Order newOrder = new OrderImpl(getNextId(), templateId, serviceId, employeeId, status, action);
+            BigInteger orderId = newOrder.getId();
 
-        addOrder(newOrder);
-        return orderId;
+            addOrder(newOrder);
+            return orderId;
+        }
     }
 
     public BigInteger createTemplate(String name, BigDecimal cost,String description){
-        Template newTemplate = new TemplateImpl(getNextId(),name,cost,description);
-        BigInteger templateId = newTemplate.getId();
+        synchronized (templates)
+        {
+            Template newTemplate = new TemplateImpl(getNextId(), name, cost, description);
+            BigInteger templateId = newTemplate.getId();
 
-        addTemplate(newTemplate);
-        return templateId;
+            addTemplate(newTemplate);
+            return templateId;
+        }
     }
 
     public BigInteger createService(BigInteger userId,BigInteger templateId, ServiceStatus status){
-        Service newService = new ServiceImpl(getNextId(),userId,templateId,status);
-        BigInteger serviceId = newService.getId();
+        synchronized (services)
+        {
+            Service newService = new ServiceImpl(getNextId(), userId, templateId, status);
+            BigInteger serviceId = newService.getId();
 
-        addService(newService);
-        return serviceId;
+            addService(newService);
+            return serviceId;
+        }
     }
 
     public BigInteger createArea(String name,String description){
-        Area newArea = new AreaImpl(getNextId(),name,description);
-        BigInteger areaId = newArea.getId();
+        synchronized (areas)
+        {
+            Area newArea = new AreaImpl(getNextId(), name, description);
+            BigInteger areaId = newArea.getId();
 
-        addArea(newArea);
-        return areaId;
+            addArea(newArea);
+            return areaId;
+        }
     }
 
 
@@ -237,6 +258,9 @@ public class Model
         {
             orders.put(order.getId(), order);
         }
+        synchronized (this){
+            onDataChange();
+        }
     }
 
     public void addService(Service service)
@@ -244,6 +268,9 @@ public class Model
         synchronized (services)
         {
             services.put(service.getId(), service);
+        }
+        synchronized (this){
+            onDataChange();
         }
     }
 
@@ -253,6 +280,9 @@ public class Model
         {
             templates.put(template.getId(), template);
         }
+        synchronized (this){
+            onDataChange();
+        }
     }
 
     public void addCustomer(Customer customer)
@@ -260,6 +290,9 @@ public class Model
         synchronized (customers)
         {
             customers.put(customer.getId(), customer);
+        }
+        synchronized (this){
+            onDataChange();
         }
     }
 
@@ -269,6 +302,9 @@ public class Model
         {
             employers.put(employee.getId(), employee);
         }
+        synchronized (this){
+            onDataChange();
+        }
     }
 
     public void addArea(Area area)
@@ -277,6 +313,9 @@ public class Model
             {
                 areas.put(area.getId(), area);
             }
+        synchronized (this){
+            onDataChange();
+        }
     }
 
 
@@ -286,6 +325,7 @@ public class Model
         {
             orders.remove(id);
         }
+            onDataChange();
     }
 
     public void deleteTemplateById(BigInteger id)
@@ -294,6 +334,7 @@ public class Model
         {
             templates.remove(id);
         }
+            onDataChange();
     }
 
     public void deleteServiceById(BigInteger id)
@@ -302,6 +343,7 @@ public class Model
         {
             services.remove(id);
         }
+            onDataChange();
     }
 
     public void deleteCustomerById(BigInteger id)
@@ -310,6 +352,7 @@ public class Model
         {
             customers.remove(id);
         }
+            onDataChange();
     }
 
     public void deleteEmployeeById(BigInteger id)
@@ -318,6 +361,7 @@ public class Model
         {
             employers.remove(id);
         }
+            onDataChange();
     }
 
     public void deleteAreaById(BigInteger id)
@@ -326,6 +370,7 @@ public class Model
         {
             areas.remove(id);
         }
+            onDataChange();
     }
 
 
@@ -335,6 +380,7 @@ public class Model
         {
             orders.put(order.getId(), order);
         }
+            onDataChange();
     }
 
     public void setTemplate(Template template)
@@ -343,6 +389,7 @@ public class Model
         {
             templates.put(template.getId(), template);
         }
+            onDataChange();
     }
 
     public void setService(Service service)
@@ -351,14 +398,16 @@ public class Model
         {
             services.put(service.getId(), service);
         }
+            onDataChange();
     }
 
-    public void setCustomer(Customer user)
+    public void setCustomer(Customer customer)
     {
         synchronized (customers)
         {
-            customers.put(user.getId(), user);
+            customers.put(customer.getId(), customer);
         }
+            onDataChange();
     }
 
     public void setEmployee(Employee employee)
@@ -367,6 +416,7 @@ public class Model
         {
             employers.put(employee.getId(), employee);
         }
+            onDataChange();
     }
 
     public void setArea(Area area)
@@ -374,18 +424,22 @@ public class Model
         synchronized (areas){
         areas.put(area.getId(), area);
         }
+            onDataChange();
     }
 
 
     private void onDataChange(){
-        Serializer serializer = new SerializerImpl();
-        try
+        synchronized (this)
         {
-            serializer.serializeModel(this);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
+            Serializer serializer = new SerializerImpl();
+            try
+            {
+                serializer.serializeModel(this);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }

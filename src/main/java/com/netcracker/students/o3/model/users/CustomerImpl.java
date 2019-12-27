@@ -1,8 +1,11 @@
 package com.netcracker.students.o3.model.users;
 
+import com.netcracker.students.o3.model.Model;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerImpl implements Customer
 {
@@ -11,7 +14,7 @@ public class CustomerImpl implements Customer
     private String login;
     private String password;
     private BigDecimal moneyBalance;
-    private ArrayList<BigInteger> connectedServicesIds;
+    private List<BigInteger> connectedServicesIds;
     private BigInteger areaId;
 
     public CustomerImpl()
@@ -47,12 +50,12 @@ public class CustomerImpl implements Customer
         this.moneyBalance = moneyBalance;
     }
 
-    public ArrayList<BigInteger> getConnectedServicesIds()
+    public List<BigInteger> getConnectedServicesIds()
     {
         return connectedServicesIds;
     }
 
-    public void setConnectedServicesIds(final ArrayList<BigInteger> connectedServicesIds)
+    public void setConnectedServicesIds(final List<BigInteger> connectedServicesIds)
     {
         this.connectedServicesIds = connectedServicesIds;
     }
@@ -65,6 +68,18 @@ public class CustomerImpl implements Customer
     public void setAreaId(final BigInteger areaId)
     {
         this.areaId = areaId;
+    }
+
+    @Override
+    public void addConnectedServiceId(final BigInteger serviceId)
+    {
+        connectedServicesIds.add(serviceId);
+    }
+
+    @Override
+    public void disconnectService(final BigInteger serviceId)
+    {
+        connectedServicesIds.remove(serviceId);
     }
 
     public BigInteger getId()

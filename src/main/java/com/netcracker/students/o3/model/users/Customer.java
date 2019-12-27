@@ -3,6 +3,7 @@ package com.netcracker.students.o3.model.users;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface Customer extends User
 {
@@ -26,11 +27,15 @@ public interface Customer extends User
 
      void setMoneyBalance(final BigDecimal moneyBalance);
 
-     ArrayList<BigInteger> getConnectedServicesIds();
+     List<BigInteger> getConnectedServicesIds();
 
-     void setConnectedServicesIds(final ArrayList<BigInteger> connectedServicesIds);
+     void setConnectedServicesIds(final List<BigInteger> connectedServicesIds);
 
      BigInteger getAreaId();
 
-     public void setAreaId(final BigInteger areaId);
+     void setAreaId(final BigInteger areaId);
+
+     void addConnectedServiceId(BigInteger serviceId);
+
+     void disconnectService(BigInteger serviceId);
 }

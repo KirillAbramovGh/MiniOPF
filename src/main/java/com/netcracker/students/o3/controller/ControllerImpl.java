@@ -49,7 +49,10 @@ public class ControllerImpl implements Controller
     public void disconnectService(final BigInteger customerId, final BigInteger serviceId)
     {
         model.getServiceById(serviceId).setStatus(ServiceStatus.Disconnected);
-        model.getCustomerById(customerId).getConnectedServicesIds().remove(serviceId);
+        model.getCustomerById(customerId).disconnectService(serviceId);
+
+        model.setCustomer(model.getCustomerById(customerId));
+        model.setService(model.getServiceById(serviceId));
     }
 
     @Override
@@ -158,44 +161,38 @@ public class ControllerImpl implements Controller
     public BigInteger createCustomer(final String name, final String login, final String password,
             final BigInteger areaId)
     {
-        BigInteger customerId = model.createCustomer(name, login, password, areaId);
-        return customerId;
+        return model.createCustomer(name, login, password, areaId);
     }
 
     @Override
     public BigInteger createEmployee(final String name, final String login, final String password)
     {
-        BigInteger employeeId = model.createEmployee(name, login, password);
-        return employeeId;
+        return model.createEmployee(name, login, password);
     }
 
     @Override
     public BigInteger createOrder(final BigInteger templateId, final BigInteger serviceId, final BigInteger employeeId,
             final OrderStatus status, final OrderAction action)
     {
-        BigInteger orderId = model.createOrder(templateId, serviceId, employeeId, status, action);
-        return orderId;
+        return model.createOrder(templateId, serviceId, employeeId, status, action);
     }
 
     @Override
     public BigInteger createTemplate(final String name, final BigDecimal cost, final String description)
     {
-        BigInteger templateId = model.createTemplate(name, cost, description);
-        return templateId;
+        return model.createTemplate(name, cost, description);
     }
 
     @Override
     public BigInteger createService(final BigInteger userId, final BigInteger templateId, final ServiceStatus status)
     {
-        BigInteger serviceId = model.createService(userId, templateId, status);
-        return serviceId;
+        return model.createService(userId, templateId, status);
     }
 
     @Override
     public BigInteger createArea(final String name, final String description)
     {
-        BigInteger areaId = model.createArea(name, description);
-        return areaId;
+        return model.createArea(name, description);
     }
 
     @Override
@@ -223,18 +220,20 @@ public class ControllerImpl implements Controller
 
     @Override
     public BigInteger registerCustomer(final String login, final String password, final String name,
-            final BigInteger areaId)
+            final BigInteger areaId) throws LoginOccupiedException
     {
-        return createCustomer(name, login, password, areaId);
+        if (!isLoginExists(login))
+        {
+            return createCustomer(name, login, password, areaId);
+        }
+
+        throw new LoginOccupiedException("Login occupied");
     }
 
     @Override
     public BigInteger registerEmployee(final String login, final String password, final String Name)
     {
-        Employee employee = new EmployerImpl();
-        employee.setId(model.getNextId());
-        model.addEmployee(employee);
-        return employee.getId();
+       return model.createEmployee(Name,login,password);
     }
 
     @Override
@@ -320,13 +319,8 @@ public class ControllerImpl implements Controller
     @Override
     public List<Template> getAllTemplates()
     {
-        ArrayList<Template> templates = new ArrayList<>();
-        for (Template template : model.getTemplates().values())
-        {
-            templates.add(template);
-        }
 
-        return templates;
+        return new ArrayList<>(model.getTemplates().values());
     }
 
     @Override
@@ -374,52 +368,37 @@ public class ControllerImpl implements Controller
     @Override
     public List<Area> getAreas()
     {
-        ArrayList<Area> areas = new ArrayList<>();
-        for (Area area : model.getAreas().values())
-        {
-            areas.add(area);
-        }
-        return areas;
+        return new ArrayList<>(model.getAreas().values());
     }
 
     @Override
     public List<Template> getTemplates()
     {
-        List<Template> templates = new ArrayList<>();
-        templates.addAll(model.getTemplates().values());
-        return templates;
+        return new ArrayList<>(model.getTemplates().values());
     }
 
     @Override
     public List<Service> getServices()
     {
-        List<Service> services = new ArrayList<>();
-        services.addAll(model.getServices().values());
-        return services;
+        return new ArrayList<>(model.getServices().values());
     }
 
     @Override
     public List<Customer> getCustomers()
     {
-        List<Customer> customers = new ArrayList<>();
-        customers.addAll(model.getCustomers().values());
-        return customers;
+        return new ArrayList<>(model.getCustomers().values());
     }
 
     @Override
     public List<Order> getOrders()
     {
-        List<Order> orders = new ArrayList<>();
-        orders.addAll(model.getOrders().values());
-        return orders;
+        return new ArrayList<>(model.getOrders().values());
     }
 
     @Override
     public List<Employee> getEmployers()
     {
-        List<Employee> employers = new ArrayList<>();
-        employers.addAll(model.getEmployers().values());
-        return employers;
+        return new ArrayList<>(model.getEmployers().values());
     }
 
     @Override
@@ -452,6 +431,8 @@ public class ControllerImpl implements Controller
         Customer customer = model.getCustomerById(customerId);
         BigDecimal currentMoney = customer.getMoneyBalance();
         customer.setMoneyBalance(currentMoney.add(money));
+
+        model.setCustomer(customer);
     }
 
     @Override
@@ -539,6 +520,7 @@ public class ControllerImpl implements Controller
         if (!name.isEmpty())
         {
             getCustomer(customerId).setName(name);
+            model.setCustomer(model.getCustomerById(customerId));
         }
         else
         {
@@ -553,6 +535,11 @@ public class ControllerImpl implements Controller
             if (!isLoginExists(login))
             {
                 getUser(userId).setLogin(login);
+                if(isCustomer(userId)){
+                    model.setCustomer(model.getCustomerById(userId));
+                }else if(isEmployee(userId)){
+                    model.setEmployee(model.getEmployeeById(userId));
+                }
             }
             else
             {
@@ -585,6 +572,11 @@ public class ControllerImpl implements Controller
         if (!password.isEmpty())
         {
             getUser(userId).setPassword(password);
+            if(isCustomer(userId)){
+                model.setCustomer(model.getCustomerById(userId));
+            }else if(isEmployee(userId)){
+                model.setEmployee(model.getEmployeeById(userId));
+            }
         }
         else
         {
@@ -597,6 +589,7 @@ public class ControllerImpl implements Controller
         if (getAvailableAreas(customerId).contains(getArea(areaId)))
         {
             getCustomer(customerId).setAreaId(areaId);
+            model.setCustomer(model.getCustomerById(customerId));
         }
         else
         {
@@ -621,12 +614,14 @@ public class ControllerImpl implements Controller
     public void suspendService(final BigInteger customerId, final BigInteger serviceId)
     {
         getService(serviceId).setStatus(ServiceStatus.Suspended);
+        model.setService(model.getServiceById(serviceId));
     }
 
     @Override
     public void resumeService(final BigInteger customerId, final BigInteger serviceId)
     {
         getService(serviceId).setStatus(ServiceStatus.Active);
+        model.setService(model.getServiceById(serviceId));
     }
 
     @Override
@@ -634,6 +629,7 @@ public class ControllerImpl implements Controller
     {
         BigInteger serviceId = model.createService(customerId, templateId, ServiceStatus.Entering);
         getCustomer(customerId).getConnectedServicesIds().add(serviceId);
+        model.setService(model.getServiceById(serviceId));
     }
 
     @Override

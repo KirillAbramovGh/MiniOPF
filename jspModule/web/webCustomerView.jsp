@@ -1,7 +1,8 @@
 <%@ page import="com.netcracker.students.o3.model.area.Area" %>
 <%@ page import="java.util.List" %>
 <%@ page import="jsp.WebCustomerView" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.math.BigInteger" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -115,14 +116,11 @@
         }
     </script>
     <%!
-        WebCustomerView webCustomerView;
+        WebCustomerView webCustomerView = new WebCustomerView();
     %>
     <%
-        if (webCustomerView == null)
-        {
-            webCustomerView = new WebCustomerView();
-            webCustomerView.start(request.getParameter("login"), request.getParameter("password"));
-        }
+        BigInteger id = (BigInteger) request.getSession().getAttribute("id");
+        webCustomerView.start(id);
     %>
 </head>
 

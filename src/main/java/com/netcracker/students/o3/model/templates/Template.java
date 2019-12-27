@@ -5,6 +5,7 @@ import com.netcracker.students.o3.model.area.Area;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface Template
 {
@@ -24,7 +25,7 @@ public interface Template
 
      void setDescription(final String description);
 
-     ArrayList<BigInteger> getPossibleAreasId();
+     List<BigInteger> getPossibleAreasId();
 
-     void setPossibleAreasId(final ArrayList<BigInteger> possibleAreasId);
+     void setPossibleAreasId(final List<BigInteger> possibleAreasId);
 }

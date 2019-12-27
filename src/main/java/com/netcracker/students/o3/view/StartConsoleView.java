@@ -1,6 +1,7 @@
 package com.netcracker.students.o3.view;
 
 import com.netcracker.students.o3.Exceptions.IncorrectCredentialsException;
+import com.netcracker.students.o3.Exceptions.LoginOccupiedException;
 import com.netcracker.students.o3.Exceptions.RegisterException;
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
@@ -85,7 +86,7 @@ public class StartConsoleView
 
     }
 
-    private void register()
+    private void register() throws LoginOccupiedException
     {
         String name = getInputName();
         String login = getInputLogin();

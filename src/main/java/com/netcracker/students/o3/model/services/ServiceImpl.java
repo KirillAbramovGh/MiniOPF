@@ -1,6 +1,5 @@
 package com.netcracker.students.o3.model.services;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.netcracker.students.o3.model.Model;
 
 import java.math.BigDecimal;
@@ -101,6 +100,6 @@ public class ServiceImpl implements Service
     @Override
     public String getName()
     {
-       return Model.getInstance().getTemplateById(templateId).getName();
+        return Model.getInstance().getTemplateById(templateId).getName();
     }
 }

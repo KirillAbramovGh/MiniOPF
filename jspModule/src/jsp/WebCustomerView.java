@@ -31,6 +31,11 @@ public class WebCustomerView
         this.customerId = controller.getUserIdByCredentials(login,password);
     }
 
+    public void start(BigInteger id){
+        controller = ControllerImpl.getInstance();
+        customerId = id;
+    }
+
     public String getServiceName(BigInteger serviceId)
     {
         Service service = controller.getService(serviceId);
