@@ -1,7 +1,7 @@
 <%@ page import="com.netcracker.students.o3.model.area.Area" %>
+<%@ page import="java.math.BigInteger" %>
 <%@ page import="java.util.List" %>
 <%@ page import="jsp.WebCustomerView" %>
-<%@ page import="java.math.BigInteger" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <html lang="en">
 <head>
@@ -126,13 +126,13 @@
 
 <body>
 <%!
-    private List<Area> availableAreas;
+
 
     private String selectArea(WebCustomerView webCustomerView)
     {
         String resultHtml = "";
-        availableAreas = webCustomerView.getAvailableAreas();
-        int id = 0;
+        List<Area> availableAreas = webCustomerView.getAvailableAreas();
+
         for (Area area : availableAreas)
         {
             if (webCustomerView.getAreaName().equals(area.getName()))
@@ -145,7 +145,6 @@
                         "<option>" + area.getName() + "</option>"
                 ;
             }
-            id++;
         }
         return resultHtml;
     }
@@ -153,28 +152,38 @@
     private void disconnect(String key)
     {
         String numb = key.substring(10);
-        int value = Integer.parseInt(numb);
-        webCustomerView.disconnectService(value - 1);
+        if (!numb.equals(""))
+        {
+            int value = Integer.parseInt(numb);
+            webCustomerView.disconnectService(value - 1);
+        }
     }
 
     private void suspendOrResume(String key)
     {
         String numb = key.substring(14);
-        int value = Integer.parseInt(numb);
-        webCustomerView.suspendOrResumeService(value - 1);
+        if (!numb.equals(""))
+        {
+            int value = Integer.parseInt(numb);
+            webCustomerView.suspendOrResumeService(value - 1);
+        }
     }
 
     private void connect(String key)
     {
         String numb = key.substring(7);
-        int value = Integer.parseInt(numb);
-        webCustomerView.connectService(value - 1);
+        if (!numb.equals(""))
+        {
+            int value = Integer.parseInt(numb);
+            webCustomerView.connectService(value - 1);
+        }
     }
 %>
 <h1 align="right">
     <%
         for (String key : request.getParameterMap().keySet())
         {
+
             if (request.getParameterMap().get(key) != null)
             {
                 if (key.startsWith("disconnect"))
@@ -198,7 +207,7 @@
 
                     Area newArea = null;
 
-                    for (Area a : availableAreas)
+                    for (Area a : webCustomerView.getAvailableAreas())
                     {
                         if (a.getName().equals(area))
                         {

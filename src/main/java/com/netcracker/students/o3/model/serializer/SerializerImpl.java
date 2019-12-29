@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netcracker.students.o3.model.Model;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class SerializerImpl implements Serializer
@@ -12,7 +13,7 @@ public class SerializerImpl implements Serializer
     public void serializeModel(Model model) throws IOException
     {
         ObjectMapper objectMapper = new ObjectMapper();
-        File file = new File("entities.json");
+        File file = new File("C:\\Users\\Kirill\\IdeaProjects\\MiniOPF\\entities.json");
         objectMapper.writeValue(file, model);
     }
 

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public interface Customer extends User
 {
@@ -27,9 +28,9 @@ public interface Customer extends User
 
      void setMoneyBalance(final BigDecimal moneyBalance);
 
-     List<BigInteger> getConnectedServicesIds();
+     Set<BigInteger> getConnectedServicesIds();
 
-     void setConnectedServicesIds(final List<BigInteger> connectedServicesIds);
+     void setConnectedServicesIds(final Set<BigInteger> connectedServicesIds);
 
      BigInteger getAreaId();
 

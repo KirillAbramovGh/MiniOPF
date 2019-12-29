@@ -1,7 +1,8 @@
 <%@ page import="com.netcracker.students.o3.controller.Controller" %>
 <%@ page import="com.netcracker.students.o3.controller.ControllerImpl" %>
 <%@ page import="com.netcracker.students.o3.model.area.Area" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="jsp.HtmlSelectBuilder" %><%--
   Created by IntelliJ IDEA.
   User: Kirill
   Date: 26.12.2019
@@ -92,16 +93,14 @@
         {
             Controller controller = ControllerImpl.getInstance();
             List<Area> areas = controller.getAreas();
+            HtmlSelectBuilder selectBuilder = new HtmlSelectBuilder();
+            selectBuilder.setNameAttribute("area");
 
-            String resultHtml = "";
-            int id = 0;
-            for (Area area : areas)
-            {
-                resultHtml +=
-                        "<option>" + area.getName() + "</option>";
-                id++;
+            for(Area area : areas){
+                selectBuilder.addElement(area.getName());
             }
-            return resultHtml;
+
+            return selectBuilder.built();
         }
     %>
 </head>
@@ -128,9 +127,7 @@
             <input type="text" name="fio" value="FIO"><br/>
             <input type="text" name="login" value="login"><br/>
             <input type="password" name="password" value="password"><br/>
-            <select name="area">
-                <%=showArea()%>
-            </select><br/>
+                <%=showArea()%><br/>
             <input type="submit" name="regCustomer" value="Register">
         </form>
     </div>

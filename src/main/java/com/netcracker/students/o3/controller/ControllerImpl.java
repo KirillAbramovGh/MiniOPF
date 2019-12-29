@@ -225,9 +225,10 @@ public class ControllerImpl implements Controller
         if (!isLoginExists(login))
         {
             return createCustomer(name, login, password, areaId);
+        }else
+        {
+            throw new LoginOccupiedException("Login occupied");
         }
-
-        throw new LoginOccupiedException("Login occupied");
     }
 
     @Override
@@ -245,6 +246,7 @@ public class ControllerImpl implements Controller
     @Override
     public boolean isLoginExists(final String login)
     {
+
         return isEmployeeLogin(login) || isCustomerLogin(login);
     }
 
@@ -462,11 +464,11 @@ public class ControllerImpl implements Controller
         {
             if (user.getLogin().equals(login))
             {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     @Override
@@ -478,11 +480,11 @@ public class ControllerImpl implements Controller
         {
             if (user.getLogin().equals(login))
             {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     public static Controller getInstance()
@@ -630,6 +632,7 @@ public class ControllerImpl implements Controller
         BigInteger serviceId = model.createService(customerId, templateId, ServiceStatus.Entering);
         getCustomer(customerId).getConnectedServicesIds().add(serviceId);
         model.setService(model.getServiceById(serviceId));
+        model.setCustomer(model.getCustomerById(customerId));
     }
 
     @Override

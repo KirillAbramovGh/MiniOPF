@@ -5,7 +5,9 @@ import com.netcracker.students.o3.model.Model;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CustomerImpl implements Customer
 {
@@ -14,7 +16,7 @@ public class CustomerImpl implements Customer
     private String login;
     private String password;
     private BigDecimal moneyBalance;
-    private List<BigInteger> connectedServicesIds;
+    private Set<BigInteger> connectedServicesIds;
     private BigInteger areaId;
 
     public CustomerImpl()
@@ -30,7 +32,7 @@ public class CustomerImpl implements Customer
         this.login = login;
         this.password = password;
         this.areaId = areaId;
-        connectedServicesIds = new ArrayList<>();
+        connectedServicesIds = new HashSet<>();
         moneyBalance = BigDecimal.ZERO;
     }
 
@@ -50,12 +52,12 @@ public class CustomerImpl implements Customer
         this.moneyBalance = moneyBalance;
     }
 
-    public List<BigInteger> getConnectedServicesIds()
+    public Set<BigInteger> getConnectedServicesIds()
     {
         return connectedServicesIds;
     }
 
-    public void setConnectedServicesIds(final List<BigInteger> connectedServicesIds)
+    public void setConnectedServicesIds(final Set<BigInteger> connectedServicesIds)
     {
         this.connectedServicesIds = connectedServicesIds;
     }

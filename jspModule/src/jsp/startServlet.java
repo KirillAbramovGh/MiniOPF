@@ -97,7 +97,7 @@ public class startServlet extends HttpServlet
         }
         catch (IncorrectCredentialsException e)
         {
-
+            e.printStackTrace();
         }
 
         return userId;
@@ -132,6 +132,7 @@ public class startServlet extends HttpServlet
             }
             catch (LoginOccupiedException e)
             {
+                e.printStackTrace();
             }
         }
 

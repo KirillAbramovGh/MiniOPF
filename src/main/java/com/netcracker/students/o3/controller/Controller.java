@@ -5,21 +5,14 @@ import com.netcracker.students.o3.Exceptions.LoginOccupiedException;
 import com.netcracker.students.o3.Exceptions.UnpossibleChangeAreaException;
 import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.model.area.Area;
-import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderAction;
-import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.orders.OrderStatus;
 import com.netcracker.students.o3.model.services.Service;
-import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.services.ServiceStatus;
 import com.netcracker.students.o3.model.templates.Template;
-import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
-import com.netcracker.students.o3.model.users.CustomerImpl;
 import com.netcracker.students.o3.model.users.Employee;
-import com.netcracker.students.o3.model.users.EmployerImpl;
-import com.netcracker.students.o3.model.users.User;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -27,7 +20,8 @@ import java.util.List;
 
 public interface Controller
 {
-    void disconnectService(BigInteger customerId,BigInteger serviceId);
+    void disconnectService(BigInteger customerId, BigInteger serviceId);
+
     void startOrder(BigInteger orderId, BigInteger employeeId);
 
     void suspendOrder(BigInteger orderId);
@@ -65,19 +59,18 @@ public interface Controller
 
     //создает сущности
 
-     BigInteger createCustomer(String name,String login,String password,BigInteger areaId);
+    BigInteger createCustomer(String name, String login, String password, BigInteger areaId);
 
-     BigInteger createEmployee(String name,String login,String password);
+    BigInteger createEmployee(String name, String login, String password);
 
-     BigInteger createOrder(BigInteger templateId,BigInteger serviceId,BigInteger employeeId,
+    BigInteger createOrder(BigInteger templateId, BigInteger serviceId, BigInteger employeeId,
             OrderStatus status, OrderAction action);
 
-     BigInteger createTemplate(String name, BigDecimal cost,String description);
+    BigInteger createTemplate(String name, BigDecimal cost, String description);
 
-     BigInteger createService(BigInteger userId,BigInteger templateId, ServiceStatus status);
+    BigInteger createService(BigInteger userId, BigInteger templateId, ServiceStatus status);
 
-     BigInteger createArea(String name,String description);
-
+    BigInteger createArea(String name, String description);
 
 
     BigInteger getUserIdByCredentials(String login, String password) throws IncorrectCredentialsException;
@@ -163,13 +156,13 @@ public interface Controller
 
     void setCustomerArea(BigInteger customerId, BigInteger areaId) throws UnpossibleChangeAreaException;
 
-    void suspendOrResumeService(BigInteger customerId,BigInteger serviceId);
+    void suspendOrResumeService(BigInteger customerId, BigInteger serviceId);
 
-    void suspendService(BigInteger customerId,BigInteger serviceId);
+    void suspendService(BigInteger customerId, BigInteger serviceId);
 
-    void resumeService(BigInteger customerId,BigInteger serviceId);
+    void resumeService(BigInteger customerId, BigInteger serviceId);
 
-    void connectService(BigInteger customerId,BigInteger serviceId);
+    void connectService(BigInteger customerId, BigInteger serviceId);
 
     List<Area> getAvailableAreas(BigInteger customerId);
 }
