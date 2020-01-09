@@ -75,7 +75,8 @@
 
         #tab_1:checked ~ #txt_1,
         #tab_2:checked ~ #txt_2,
-        #tab_3:checked ~ #txt_3 {
+        #tab_3:checked ~ #txt_3,
+        #tab_4:checked ~ #txt_4 {
             display: block;
         }
     </style>
@@ -126,7 +127,11 @@
 
 <body>
 <%!
+String resultSearch = "";
 
+    private void showSearchResult(String req){
+        resultSearch = webCustomerView.getSearchResult(req);
+    }
 
     private String selectArea(WebCustomerView webCustomerView)
     {
@@ -155,7 +160,7 @@
         if (!numb.equals(""))
         {
             int value = Integer.parseInt(numb);
-            webCustomerView.disconnectService(value - 1);
+            webCustomerView.disconnectService(BigInteger.valueOf(value));
         }
     }
 
@@ -165,7 +170,7 @@
         if (!numb.equals(""))
         {
             int value = Integer.parseInt(numb);
-            webCustomerView.suspendOrResumeService(value - 1);
+            webCustomerView.suspendOrResumeService(BigInteger.valueOf(value));
         }
     }
 
@@ -175,7 +180,7 @@
         if (!numb.equals(""))
         {
             int value = Integer.parseInt(numb);
-            webCustomerView.connectService(value - 1);
+            webCustomerView.connectService(BigInteger.valueOf(value));
         }
     }
 %>
@@ -222,6 +227,8 @@
                     webCustomerView.changePassword(password);
                     webCustomerView.changeArea(newArea);
 
+                }else if(key.equals("searchButton")){
+                    showSearchResult(request.getParameter("searchField"));
                 }
             }
         }
@@ -248,10 +255,13 @@
     <input type="radio" name="inset" value="" id="tab_3">
     <label for="tab_3">Настройки</label>
 
+    <input type="radio" name="inset" value="" id="tab_4">
+    <label for="tab_4">Поиск</label>
+
     <div id="txt_1" class="prokrutka">
         <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
             <table border="1" width="auto" cellpadding="20">
-                <%=webCustomerView.showEnteringServices()%>
+                <%=webCustomerView.showEnteringActiveServices()%>
             </table>
         </form>
     </div>
@@ -270,6 +280,13 @@
             <%=selectArea(webCustomerView)%>
         </select>
             <input type="submit" name="change">
+        </form>
+    </div>
+    <div id="txt_4" class="prokrutka">
+        <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
+            <input type="text" name="searchField" value="">
+            <input type="submit" name="searchButton" value="Search">
+            <%=resultSearch%>
         </form>
     </div>
 </div>

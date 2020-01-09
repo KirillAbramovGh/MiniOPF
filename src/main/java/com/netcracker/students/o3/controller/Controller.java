@@ -164,5 +164,7 @@ public interface Controller
 
     void connectService(BigInteger customerId, BigInteger serviceId);
 
+    List<Service> getCustomerServices(BigInteger customerId);
+
     List<Area> getAvailableAreas(BigInteger customerId);
 }

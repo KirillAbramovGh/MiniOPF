@@ -1,7 +1,5 @@
 package com.netcracker.students.o3.model.templates;
 
-import com.netcracker.students.o3.model.Model;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;

@@ -16,7 +16,6 @@ import com.netcracker.students.o3.model.services.ServiceStatus;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.Employee;
-import com.netcracker.students.o3.model.users.EmployerImpl;
 import com.netcracker.students.o3.model.users.User;
 
 import java.math.BigDecimal;
@@ -302,6 +301,7 @@ public class ControllerImpl implements Controller
         services.addAll(getActiveServices(customerId));
         return services;
     }
+
 
     @Override
     public List<Template> getTemplatesByAreaId(final BigInteger areaId)
@@ -636,6 +636,19 @@ public class ControllerImpl implements Controller
     }
 
     @Override
+    public List<Service> getCustomerServices(final BigInteger customerId)
+    {
+       Customer customer = model.getCustomerById(customerId);
+       List<Service> result = new ArrayList<>();
+
+       for(BigInteger serviceId : customer.getConnectedServicesIds()){
+           result.add(model.getServiceById(serviceId));
+       }
+
+       return result;
+    }
+
+    @Override
     public List<Area> getAvailableAreas(final BigInteger customerId)
     {
         List<Service> services = getEnteringAndActiveServices(customerId);
@@ -663,5 +676,7 @@ public class ControllerImpl implements Controller
 
         return availableAreas;
     }
+
+
 
 }
