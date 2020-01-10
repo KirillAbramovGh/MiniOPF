@@ -139,7 +139,7 @@ public class Searcher
         return result;
     }
 
-    public Set<Service> searchServices(List<Service> services, String searchField)
+    public List<Service> searchServices(List<Service> services, String searchField)
     {
         Set<Service> result = new HashSet<>();
 
@@ -148,10 +148,10 @@ public class Searcher
         result.addAll(searchServiceByStatus(services, searchField));
         result.addAll(searchServiceByCost(services, parseBigDecimal(searchField)));
 
-        return result;
+        return new ArrayList<>(result);
     }
 
-    public Set<Template> searchTemplates(List<Template> templates, String searchField)
+    public List<Template> searchTemplates(List<Template> templates, String searchField)
     {
         Set<Template> result = new HashSet<>();
 
@@ -160,7 +160,7 @@ public class Searcher
         result.addAll(searchTemplatesByArea(templates, searchField));
         result.addAll(searchTemplatesByCost(templates, parseBigDecimal(searchField)));
 
-        return result;
+        return new ArrayList<>(result);
     }
 
     private BigDecimal parseBigDecimal(String value)

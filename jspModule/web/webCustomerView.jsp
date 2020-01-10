@@ -1,3 +1,4 @@
+<%@ page import="com.netcracker.students.o3.controller.sorters.sortParameters.SortType" %>
 <%@ page import="com.netcracker.students.o3.model.area.Area" %>
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="java.util.List" %>
@@ -127,31 +128,31 @@
 
 <body>
 <%!
-String resultSearch = "";
+    String resultSearch = "";
 
-    private void showSearchResult(String req){
+    private void showSearchResult(String req)
+    {
         resultSearch = webCustomerView.getSearchResult(req);
     }
 
-    private String selectArea(WebCustomerView webCustomerView)
+    private String selectArea()
     {
-        String resultHtml = "";
+        StringBuilder resultHtml = new StringBuilder();
         List<Area> availableAreas = webCustomerView.getAvailableAreas();
 
         for (Area area : availableAreas)
         {
             if (webCustomerView.getAreaName().equals(area.getName()))
             {
-                resultHtml += "<option selected value='" + area.getName() + "'>" + area.getName() + "</option>";
+                resultHtml.append("<option selected value='").append(area.getName()).append("'>").append(area.getName())
+                        .append("</option>");
             }
             else
             {
-                resultHtml +=
-                        "<option>" + area.getName() + "</option>"
-                ;
+                resultHtml.append("<option>").append(area.getName()).append("</option>");
             }
         }
-        return resultHtml;
+        return resultHtml.toString();
     }
 
     private void disconnect(String key)
@@ -188,7 +189,6 @@ String resultSearch = "";
     <%
         for (String key : request.getParameterMap().keySet())
         {
-
             if (request.getParameterMap().get(key) != null)
             {
                 if (key.startsWith("disconnect"))
@@ -227,8 +227,42 @@ String resultSearch = "";
                     webCustomerView.changePassword(password);
                     webCustomerView.changeArea(newArea);
 
-                }else if(key.equals("searchButton")){
+                }
+                else if (key.equals("searchButton"))
+                {
                     showSearchResult(request.getParameter("searchField"));
+                }
+                else if (key.equals("ServiceSortUpByName"))
+                {
+                    webCustomerView.defineServiceSortType(SortType.UpByName);
+                }
+                else if (key.equals("ServiceSortDownByName"))
+                {
+                    webCustomerView.defineServiceSortType(SortType.DownByName);
+                }
+                else if (key.equals("ServiceSortUpByCost"))
+                {
+                    webCustomerView.defineServiceSortType(SortType.UpByCost);
+                }
+                else if (key.equals("ServiceSortDownByCost"))
+                {
+                    webCustomerView.defineServiceSortType(SortType.DownByCost);
+                }
+                else if (key.equals("TemplateSortUpByName"))
+                {
+                    webCustomerView.defineTemplateSortType(SortType.UpByName);
+                }
+                else if (key.equals("TemplateSortDownByName"))
+                {
+                    webCustomerView.defineTemplateSortType(SortType.DownByName);
+                }
+                else if (key.equals("TemplateSortUpByCost"))
+                {
+                    webCustomerView.defineTemplateSortType(SortType.UpByCost);
+                }
+                else if (key.equals("TemplateSortDownByCost"))
+                {
+                    webCustomerView.defineTemplateSortType(SortType.DownByCost);
                 }
             }
         }
@@ -260,6 +294,10 @@ String resultSearch = "";
 
     <div id="txt_1" class="prokrutka">
         <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
+            <input type="submit" name="ServiceSortUpByName" value="ServiceSortUpByName">
+            <input type="submit" name="ServiceSortDownByName" value="ServiceSortDownByName">
+            <input type="submit" name="ServiceSortUpByCost" value="ServiceSortUpByCost">
+            <input type="submit" name="ServiceSortDownByCost" value="ServiceSortDownByCost">
             <table border="1" width="auto" cellpadding="20">
                 <%=webCustomerView.showEnteringActiveServices()%>
             </table>
@@ -268,6 +306,10 @@ String resultSearch = "";
 
     <div id="txt_2" class="prokrutka">
         <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
+            <input type="submit" name="TemplateSortUpByName" value="TemplateSortUpByName">
+            <input type="submit" name="TemplateSortDownByName" value="TemplateSortDownByName">
+            <input type="submit" name="TemplateSortUpByCost" value="TemplateSortUpByCost">
+            <input type="submit" name="TemplateSortDownByCost" value="TemplateSortDownByCost">
             <%=webCustomerView.showAllTemplates()%>
         </form>
     </div>
@@ -277,7 +319,7 @@ String resultSearch = "";
             Login: <input type="text" name="login" value="<%=webCustomerView.getLogin()%>"><br/>
             Password: <input type="password" name="password" value=""><br/>
             Area: <select name="area">
-            <%=selectArea(webCustomerView)%>
+            <%=selectArea()%>
         </select>
             <input type="submit" name="change">
         </form>
@@ -290,8 +332,6 @@ String resultSearch = "";
         </form>
     </div>
 </div>
-
-<script src="main.js"></script>
 
 <footer>
     <div align="center">

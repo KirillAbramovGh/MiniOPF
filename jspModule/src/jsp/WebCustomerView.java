@@ -6,28 +6,42 @@ import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.controller.searcher.Searcher;
+import com.netcracker.students.o3.controller.sorters.ServiceSorter;
+import com.netcracker.students.o3.controller.sorters.TemplatesSorter;
+import com.netcracker.students.o3.controller.sorters.sortParameters.SortType;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.List;
 
 public class WebCustomerView
 {
     private BigInteger customerId;
     private Controller controller;
+    private ServiceSorter serviceSorter;
+    private TemplatesSorter templatesSorter;
 
 
+    public void defineServiceSortType(SortType type){
+        serviceSorter.defineSortType(type);
+    }
+
+    public void defineTemplateSortType(SortType type){
+        templatesSorter.defineSortType(type);
+    }
+    public void defineTemplatesSortType(){
+
+    }
     public String getSearchResult(String req)
     {
         Searcher searcher = new Searcher();
 
-        Collection<Service> services = searcher.searchServices(
+        List<Service> services = searcher.searchServices(
                 controller.getCustomerServices(customerId), req);
-        Collection<Template> templates = searcher.searchTemplates(
+        List<Template> templates = searcher.searchTemplates(
                 controller.getCustomerAvailableTemplates(customerId), req);
 
         String result = "";
@@ -44,19 +58,21 @@ public class WebCustomerView
         return result;
     }
 
-    private String servicesToTable(Collection<Service> services)
+    private String servicesToTable(List<Service> services)
     {
         HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
 
+        serviceSorter.sort(services);
         tableBuilder.createServicesTable(services);
 
         return tableBuilder.built();
     }
 
-    private String templatesToTable(Collection<Template> templates)
+    private String templatesToTable(List<Template> templates)
     {
         HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
 
+        templatesSorter.sort(templates);
         tableBuilder.createTemplatesTable(templates);
 
         return tableBuilder.built();
@@ -67,6 +83,8 @@ public class WebCustomerView
     {
         controller = ControllerImpl.getInstance();
         customerId = id;
+        serviceSorter = new ServiceSorter();
+        templatesSorter = new TemplatesSorter();
     }
 
     public BigDecimal getBalance()
@@ -177,7 +195,10 @@ public class WebCustomerView
     {
         HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
 
-        tableBuilder.createServicesTable(getEnteringAndActiveServices());
+        List<Service> services = getEnteringAndActiveServices();
+        serviceSorter.sort(services);
+
+        tableBuilder.createServicesTable(services);
 
         return tableBuilder.built();
     }
@@ -187,7 +208,10 @@ public class WebCustomerView
     {
         HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
 
-        tableBuilder.createTemplatesTable(getAllTemplates());
+        List<Template> templates = getAllTemplates();
+        templatesSorter.sort(templates);
+
+        tableBuilder.createTemplatesTable(templates);
 
         return tableBuilder.built();
     }
