@@ -17,9 +17,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * class process start page
+ */
 @WebServlet("/start")
-public class startServlet extends HttpServlet
+public class StartServlet extends HttpServlet
 {
+    /**
+     * process post request
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException
@@ -61,6 +71,14 @@ public class startServlet extends HttpServlet
 
     }
 
+    /**
+     * forward to other servlet
+     * @param path
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     private void forward(String path, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
@@ -110,19 +128,15 @@ public class startServlet extends HttpServlet
         String name = req.getParameter("fio");
         String area = req.getParameter("area");
 
+        BigInteger areaId = getAreaId(area);
 
+        return getUserId(login, password, name, areaId);
+    }
+
+    private BigInteger getUserId(final String login, final String password, final String name,
+            final BigInteger areaId)
+    {
         Controller controller = ControllerImpl.getInstance();
-        BigInteger areaId = null;
-
-        for (Area a : controller.getAreas())
-        {
-            if (a.getName().equals(area))
-            {
-                areaId = a.getId();
-            }
-        }
-
-
         BigInteger userId = null;
         if (!login.isEmpty() && !password.isEmpty() && !name.isEmpty())
         {
@@ -135,7 +149,20 @@ public class startServlet extends HttpServlet
                 e.printStackTrace();
             }
         }
-
         return userId;
+    }
+
+    private BigInteger getAreaId(String area){
+        Controller controller = ControllerImpl.getInstance();
+
+        for (Area a : controller.getAreas())
+        {
+            if (a.getName().equals(area))
+            {
+                return a.getId();
+            }
+        }
+
+        return null;
     }
 }

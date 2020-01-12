@@ -33,6 +33,10 @@ public class HtmlTableBuilder
         columns = new ArrayList<>();
     }
 
+    /**
+     * add columns to table
+     * @param columnNames
+     */
     public void addColumns(String... columnNames)
     {
         columns.addAll(Arrays.asList(columnNames));
@@ -45,6 +49,10 @@ public class HtmlTableBuilder
         innerPart += rowEnd;
     }
 
+    /**
+     * add row to table
+     * @param cells
+     */
     public void addRow(String... cells)
     {
         innerPart += rowStart;
@@ -55,18 +63,34 @@ public class HtmlTableBuilder
         innerPart += rowEnd;
     }
 
+    /**
+     * add empty row in order to add cells after
+     * @return
+     */
     public HtmlTableBuilder addRow()
     {
         innerPart += rowStart;
         return this;
     }
 
+    /**
+     * add cell to row
+     * @param cell
+     * @return
+     */
     public HtmlTableBuilder addCell(String cell)
     {
         innerPart += cellStart + cell + cellEnd;
         return this;
     }
 
+    /**
+     * add button to table
+     * @param type
+     * @param value
+     * @param name
+     * @return
+     */
     public HtmlTableBuilder addButton(String type, String value, String name)
     {
         innerPart +=
@@ -81,18 +105,29 @@ public class HtmlTableBuilder
         return this;
     }
 
+    /**
+     * mean end of row
+     * @return
+     */
     public HtmlTableBuilder builtRow()
     {
         innerPart += rowEnd;
         return this;
     }
 
+    /**
+     * @return result html
+     */
     public String built()
     {
         String resultHtml = start + innerPart + end;
         return resultHtml;
     }
 
+    /**
+     * create table from list of services
+     * @param services
+     */
     public void createServicesTable(Collection<Service> services)
     {
 
@@ -133,6 +168,10 @@ public class HtmlTableBuilder
         }
     }
 
+    /**
+     * create table from templates
+     * @param templates
+     */
     public void createTemplatesTable(Collection<Template> templates){
         addColumns("id", "name", "cost", "description", "connect");
 

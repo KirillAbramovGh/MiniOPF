@@ -1,31 +1,59 @@
 package com.netcracker.students.o3.model.templates;
 
-import com.netcracker.students.o3.model.area.Area;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface Template
 {
-     BigInteger getId();
+    /**
+     * @return Template id
+     */
+    BigInteger getId();
 
-     void setId(final BigInteger id);
+    /**
+     * set template id
+     */
+    void setId(final BigInteger id);
 
-     String getName();
+    /**
+     * @return template name
+     */
+    String getName();
 
-     void setName(final String name);
+    /**
+     * set template name
+     */
+    void setName(final String name);
 
-     BigDecimal getCost();
+    /**
+     * @return template cost per month
+     */
+    BigDecimal getCost();
 
-     void setCost(final BigDecimal cost);
+    /**
+     * set template cost per month
+     */
+    void setCost(final BigDecimal cost);
 
-     String getDescription();
+    /**
+     * @return template description
+     */
+    String getDescription();
 
-     void setDescription(final String description);
+    /**
+     * set template description
+     */
+    void setDescription(final String description);
 
-     List<BigInteger> getPossibleAreasId();
+    /**
+     * @return possible area id by connected services
+     */
+    List<BigInteger> getPossibleAreasId();
 
-     void setPossibleAreasId(final List<BigInteger> possibleAreasId);
+     /**
+      * set possible area id
+      * @param possibleAreasId
+      */
+    void setPossibleAreasId(final List<BigInteger> possibleAreasId);
 }

@@ -8,7 +8,7 @@ import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.controller.searcher.Searcher;
 import com.netcracker.students.o3.controller.sorters.ServiceSorter;
 import com.netcracker.students.o3.controller.sorters.TemplatesSorter;
-import com.netcracker.students.o3.controller.sorters.sortParameters.SortType;
+import com.netcracker.students.o3.controller.sorters.SortType;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
@@ -25,16 +25,25 @@ public class WebCustomerView
     private TemplatesSorter templatesSorter;
 
 
-    public void defineServiceSortType(SortType type){
+    /**
+     * define services sort type
+     */
+    public void defineServiceSortType(SortType type)
+    {
         serviceSorter.defineSortType(type);
     }
 
-    public void defineTemplateSortType(SortType type){
+    /**
+     * define templates sort type
+     */
+    public void defineTemplateSortType(SortType type)
+    {
         templatesSorter.defineSortType(type);
     }
-    public void defineTemplatesSortType(){
 
-    }
+    /**
+     * @return search result by req
+     */
     public String getSearchResult(String req)
     {
         Searcher searcher = new Searcher();
@@ -46,39 +55,52 @@ public class WebCustomerView
 
         String result = "";
 
-        if (services.size() > 0)
-        {
-            result += servicesToTable(services);
-        }
-        if (templates.size() > 0)
-        {
-            result += templatesToTable(templates);
-        }
+        result += servicesToTable(services);
+        result += templatesToTable(templates);
 
         return result;
     }
 
+
+    /**
+     * create table from services
+     */
     private String servicesToTable(List<Service> services)
     {
-        HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
+        if (services.size() > 0)
+        {
+            HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
 
-        serviceSorter.sort(services);
-        tableBuilder.createServicesTable(services);
+            serviceSorter.sort(services);
+            tableBuilder.createServicesTable(services);
 
-        return tableBuilder.built();
+            return tableBuilder.built();
+        }
+
+        return "";
     }
 
+    /**
+     * create table from templates
+     */
     private String templatesToTable(List<Template> templates)
     {
-        HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
+        if (templates.size() > 0)
+        {
+            HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
 
-        templatesSorter.sort(templates);
-        tableBuilder.createTemplatesTable(templates);
+            templatesSorter.sort(templates);
+            tableBuilder.createTemplatesTable(templates);
 
-        return tableBuilder.built();
+            return tableBuilder.built();
+        }
+
+        return "";
     }
 
-
+    /**
+     * start method set customer id
+     */
     public void start(BigInteger id)
     {
         controller = ControllerImpl.getInstance();
@@ -87,28 +109,42 @@ public class WebCustomerView
         templatesSorter = new TemplatesSorter();
     }
 
+    /**
+     * @return customer balance
+     */
     public BigDecimal getBalance()
     {
         return controller.getBalance(customerId);
     }
 
+    /**
+     * @return customer name
+     */
     public String getFIO()
     {
         return controller.getCustomerFio(customerId);
     }
 
+    /**
+     * @return area name
+     */
     public String getAreaName()
     {
         return controller.getAreaName(customerId);
     }
 
-
+    /**
+     * @return entering and active customer services
+     */
     public List<Service> getEnteringAndActiveServices()
     {
         return controller.getEnteringAndActiveServices(customerId);
     }
 
-    public List<Template> getAllTemplates()
+    /**
+     * @return unconnected templates
+     */
+    public List<Template> getUnconnectedTemplates()
     {
         List<Template> templates = controller.getCustomerAvailableTemplates(customerId);
         for (Service service : getEnteringAndActiveServices())
@@ -118,6 +154,9 @@ public class WebCustomerView
         return templates;
     }
 
+    /**
+     * change customer name
+     */
     public void changeName(String newName) throws WrongInputException
     {
         if (newName != null && !newName.isEmpty())
@@ -126,6 +165,9 @@ public class WebCustomerView
         }
     }
 
+    /**
+     * change customer login
+     */
     public void changeLogin(String newLogin) throws WrongInputException, LoginOccupiedException
     {
         if (newLogin != null && !newLogin.isEmpty())
@@ -134,6 +176,9 @@ public class WebCustomerView
         }
     }
 
+    /**
+     * change customer password
+     */
     public void changePassword(String newPassword) throws WrongInputException
     {
         if (newPassword != null && !newPassword.isEmpty())
@@ -142,15 +187,20 @@ public class WebCustomerView
         }
     }
 
+    /**
+     * change customer area
+     */
     public void changeArea(Area area) throws UnpossibleChangeAreaException
     {
-        System.out.println(area);
         if (area != null)
         {
             controller.setCustomerArea(customerId, area.getId());
         }
     }
 
+    /**
+     * put money to customer balance
+     */
     public void addBalance(String value)
     {
         if (value != null && !value.isEmpty())
@@ -159,6 +209,9 @@ public class WebCustomerView
         }
     }
 
+    /**
+     * parse String to BigDecimal
+     */
     public BigDecimal parseBigDec(String value)
     {
         double d = Double.parseDouble(value);
@@ -166,31 +219,49 @@ public class WebCustomerView
     }
 
 
+    /**
+     * disconnect service
+     */
     public void disconnectService(BigInteger serviceId)
     {
         controller.disconnectService(customerId, serviceId);
     }
 
+    /**
+     * suspend or resume service
+     */
     public void suspendOrResumeService(BigInteger serviceId)
     {
         controller.suspendOrResumeService(customerId, serviceId);
     }
 
+    /**
+     * connect service
+     */
     public void connectService(BigInteger templateId)
     {
         controller.connectService(customerId, templateId);
     }
 
+    /**
+     * @return customer login
+     */
     public String getLogin()
     {
         return controller.getCustomer(customerId).getLogin();
     }
 
+    /**
+     * return available areas
+     */
     public List<Area> getAvailableAreas()
     {
         return controller.getAvailableAreas(customerId);
     }
 
+    /**
+     * @return table of services
+     */
     public String showEnteringActiveServices()
     {
         HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
@@ -203,12 +274,14 @@ public class WebCustomerView
         return tableBuilder.built();
     }
 
-
+    /**
+     * @return templates available to connect
+     */
     public String showAllTemplates()
     {
         HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
 
-        List<Template> templates = getAllTemplates();
+        List<Template> templates = getUnconnectedTemplates();
         templatesSorter.sort(templates);
 
         tableBuilder.createTemplatesTable(templates);

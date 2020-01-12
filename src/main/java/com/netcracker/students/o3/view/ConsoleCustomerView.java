@@ -19,6 +19,9 @@ import java.util.Scanner;
 
 import jdk.internal.joptsimple.internal.Strings;
 
+/**
+ * class show console for customer
+ */
 public class ConsoleCustomerView implements View
 {
     private final BigInteger customerId;
@@ -29,6 +32,9 @@ public class ConsoleCustomerView implements View
         this.customerId = id;
     }
 
+    /**
+     * start console
+     */
     @Override
     public void start()
     {
@@ -95,6 +101,9 @@ public class ConsoleCustomerView implements View
     }
 
 
+    /**
+     * change customer balance
+     */
     private void changeBalance()
     {
         Scanner scanner = new Scanner(System.in);
@@ -115,6 +124,12 @@ public class ConsoleCustomerView implements View
         controller.putOnBalance(customerId, balanceInc);
     }
 
+    /**
+     * parse string to BigDecimal
+     * @param money
+     * @return
+     * @throws WrongInputException
+     */
     private BigDecimal parseMoney(String money) throws WrongInputException
     {
         try
@@ -135,6 +150,9 @@ public class ConsoleCustomerView implements View
         }
     }
 
+    /**
+     * change login
+     */
     private void changeLogin()
     {
         Scanner scanner = new Scanner(System.in);
@@ -154,6 +172,9 @@ public class ConsoleCustomerView implements View
         }
     }
 
+    /**
+     * change name
+     */
     private void changeName()
     {
         Scanner scanner = new Scanner(System.in);
@@ -163,7 +184,7 @@ public class ConsoleCustomerView implements View
 
         try
         {
-            checkNull(name, "Имя");
+            checkNull(name, "Name");
         }
         catch (WrongInputException e)
         {
@@ -174,6 +195,9 @@ public class ConsoleCustomerView implements View
         controller.getCustomer(customerId).setName(name);
     }
 
+    /**
+     * change customer area
+     */
     private void changeArea()
     {
         List<Area> areas = controller.getAreas();
@@ -193,6 +217,9 @@ public class ConsoleCustomerView implements View
     }
 
 
+    /**
+     * clear screen
+     */
     public void clearScreen()
     {
         for (int i = 0; i < 100; i++)
@@ -201,11 +228,18 @@ public class ConsoleCustomerView implements View
         }
     }
 
+    /**
+     * show available templates
+     */
     private void availableTemplates()
     {
         showTemplates(0);
     }
 
+    /**
+     * show table of templates
+     * @param from
+     */
     private void showTemplates(int from)
     {
         Scanner scanner = new Scanner(System.in);
@@ -228,8 +262,9 @@ public class ConsoleCustomerView implements View
                 case "6":
                 case "7":
                 case "8":
-                    ControllerImpl.getInstance().createOrder(templates.get(from + Integer.parseInt(choice)).getId(),null,null,
-                            OrderStatus.Entering, OrderAction.New);
+                    ControllerImpl.getInstance()
+                            .createOrder(templates.get(from + Integer.parseInt(choice)).getId(), null, null,
+                                    OrderStatus.Entering, OrderAction.New);
                     break;
                 case "9":
                     if (from + 8 < templates.size())
@@ -249,6 +284,11 @@ public class ConsoleCustomerView implements View
         }
     }
 
+    /**
+     * print title of table
+     * @param from
+     * @param templates
+     */
     private void printTitleTemplates(int from, List<Template> templates)
     {
         System.out.printf("%-10s%-20s%-10s%n", "Name", "Description", "Cost");
@@ -271,6 +311,9 @@ public class ConsoleCustomerView implements View
         System.out.println("0)Предыдущая страница");
     }
 
+    /**
+     * change password
+     */
     private void changePassword()
     {
         Scanner scanner = new Scanner(System.in);
@@ -303,6 +346,11 @@ public class ConsoleCustomerView implements View
         }
     }
 
+    /**
+     * check password
+     * @param password
+     * @throws IncorrectPasswordException
+     */
     private void checkNewPassword(final String password) throws IncorrectPasswordException
     {
         if (Strings.isNullOrEmpty(password))
@@ -318,7 +366,9 @@ public class ConsoleCustomerView implements View
         }
     }
 
-
+    /**
+     * show title
+     */
     private void showTitle()
     {
         System.out.println(ControllerImpl.getInstance().getCustomer(customerId));
@@ -332,6 +382,9 @@ public class ConsoleCustomerView implements View
         }
     }
 
+    /**
+     * show table with inactive services
+     */
     private void showInactiveServices()
     {
         List<Service> suspendedServices = controller.getSuspendedServices(customerId);
@@ -365,6 +418,12 @@ public class ConsoleCustomerView implements View
 
     }
 
+    /**
+     * check value for null
+     * @param value
+     * @param nameOfField
+     * @throws WrongInputException
+     */
     private void checkNull(final String value, final String nameOfField) throws WrongInputException
     {
         if (Strings.isNullOrEmpty(value))

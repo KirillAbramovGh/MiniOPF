@@ -8,35 +8,47 @@ import java.util.Set;
 
 public interface Customer extends User
 {
-     BigInteger getId();
-
-     void setId(final BigInteger id);
-
-     String getName();
-
-     void setName(final String name);
-
-     String getLogin();
-
-     void setLogin(final String login);
-
-     String getPassword();
-
-     void setPassword(final String password);
-
+     /**
+      * @return customer money balance
+      * */
      BigDecimal getMoneyBalance();
 
+     /**
+      * set customer money balance
+      * */
      void setMoneyBalance(final BigDecimal moneyBalance);
 
+     /**
+      * @return set of connected customer services ids
+      */
      Set<BigInteger> getConnectedServicesIds();
 
+     /***
+      * set customer connected services
+      * @param connectedServicesIds
+      */
      void setConnectedServicesIds(final Set<BigInteger> connectedServicesIds);
 
+     /**
+      * @return customer area id
+      */
      BigInteger getAreaId();
 
+     /**
+      * set customer area id
+      * @param areaId
+      */
      void setAreaId(final BigInteger areaId);
 
+     /**
+      * add service to customer
+      * @param serviceId
+      */
      void addConnectedServiceId(BigInteger serviceId);
 
+     /**
+      * disconnect connected service
+      * @param serviceId
+      */
      void disconnectService(BigInteger serviceId);
 }

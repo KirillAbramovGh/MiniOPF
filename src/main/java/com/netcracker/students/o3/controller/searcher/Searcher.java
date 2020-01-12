@@ -12,9 +12,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * class search templates and services
+ */
 public class Searcher
 {
 
+    /**
+     * search templates by area name
+     */
     public List<Template> searchTemplatesByArea(List<Template> templates, String areaName)
     {
         List<Template> results = new ArrayList<>();
@@ -24,7 +30,7 @@ public class Searcher
             for (BigInteger id : template.getPossibleAreasId())
             {
                 Area area = ControllerImpl.getInstance().getArea(id);
-                if (area.getName().contains(areaName))
+                if (isTemplateAreaNameContainsString(area, areaName))
                 {
                     results.add(template);
                 }
@@ -33,13 +39,21 @@ public class Searcher
         return results;
     }
 
+    private boolean isTemplateAreaNameContainsString(Area area, String areaName)
+    {
+        return area.getName().toLowerCase().contains(areaName.toLowerCase());
+    }
+
+    /**
+     * search templates by cost
+     */
     public List<Template> searchTemplatesByCost(List<Template> templates, BigDecimal cost)
     {
         List<Template> result = new ArrayList<>();
 
         for (Template template : templates)
         {
-            if (Math.abs(template.getCost().doubleValue() - cost.doubleValue()) < 10)
+            if (isTemplateCostEqualsCost(template, cost))
             {
                 result.add(template);
             }
@@ -48,13 +62,21 @@ public class Searcher
         return result;
     }
 
+    private boolean isTemplateCostEqualsCost(Template template, BigDecimal cost)
+    {
+        return Math.abs(template.getCost().doubleValue() - cost.doubleValue()) < 10;
+    }
+
+    /**
+     * search templates by name
+     */
     public List<Template> searchTemplatesByName(List<Template> templates, String name)
     {
         List<Template> result = new ArrayList<>();
 
         for (Template template : templates)
         {
-            if (template.getName().toLowerCase().contains(name.toLowerCase()))
+            if (isTemplateNameContainsString(template, name))
             {
                 result.add(template);
             }
@@ -63,13 +85,21 @@ public class Searcher
         return result;
     }
 
+    private boolean isTemplateNameContainsString(Template template, String name)
+    {
+        return template.getName().toLowerCase().contains(name.toLowerCase());
+    }
+
+    /**
+     * search templates by description
+     */
     public List<Template> searchTemplatesByDescription(List<Template> templates, String description)
     {
         List<Template> result = new ArrayList<>();
 
         for (Template template : templates)
         {
-            if (template.getDescription().toLowerCase().contains(description.toLowerCase()))
+            if (isTemplateDescriptionContainsString(template, description))
             {
                 result.add(template);
             }
@@ -78,13 +108,22 @@ public class Searcher
         return result;
     }
 
+
+    private boolean isTemplateDescriptionContainsString(Template template, String description)
+    {
+        return template.getDescription().toLowerCase().contains(description.toLowerCase());
+    }
+
+    /**
+     * search services by cost
+     */
     public List<Service> searchServiceByCost(List<Service> services, BigDecimal cost)
     {
         List<Service> result = new ArrayList<>();
 
         for (Service service : services)
         {
-            if (Math.abs(service.getCost().doubleValue() - cost.doubleValue()) < 10)
+            if (isServiceCostEqualsCost(service, cost))
             {
                 result.add(service);
             }
@@ -93,13 +132,21 @@ public class Searcher
         return result;
     }
 
+    private boolean isServiceCostEqualsCost(Service service, BigDecimal cost)
+    {
+        return Math.abs(service.getCost().doubleValue() - cost.doubleValue()) < 10;
+    }
+
+    /**
+     * search services by name
+     */
     public List<Service> searchServiceByName(List<Service> services, String name)
     {
         List<Service> result = new ArrayList<>();
 
         for (Service service : services)
         {
-            if (service.getName().toLowerCase().contains(name.toLowerCase()))
+            if (isServiceNameContainsString(service, name))
             {
                 result.add(service);
             }
@@ -108,29 +155,23 @@ public class Searcher
         return result;
     }
 
-    public List<Service> searchServiceByDescription(List<Service> services, String description)
+    private boolean isServiceNameContainsString(Service service, String name)
     {
-        List<Service> result = new ArrayList<>();
+        String serviceName = service.getName().toLowerCase();
 
-        for (Service service : services)
-        {
-            if (service.getName().toLowerCase().contains(description.toLowerCase()))
-            {
-                result.add(service);
-            }
-        }
-
-        return result;
+        return serviceName.contains(name.toLowerCase());
     }
 
+    /**
+     * search services by status
+     */
     public List<Service> searchServiceByStatus(List<Service> services, String status)
     {
-
         List<Service> result = new ArrayList<>();
 
         for (Service service : services)
         {
-            if (service.getStatus().toString().toLowerCase().contains(status.toLowerCase()))
+            if (isServiceStatusNameContainsString(service, status))
             {
                 result.add(service);
             }
@@ -139,18 +180,29 @@ public class Searcher
         return result;
     }
 
+    private boolean isServiceStatusNameContainsString(Service service, String status)
+    {
+        String serviceStatusName = service.getStatus().toString();
+        return serviceStatusName.toLowerCase().contains(status.toLowerCase());
+    }
+
+    /**
+     * search services by all fields
+     */
     public List<Service> searchServices(List<Service> services, String searchField)
     {
         Set<Service> result = new HashSet<>();
 
         result.addAll(searchServiceByName(services, searchField));
-        result.addAll(searchServiceByDescription(services, searchField));
         result.addAll(searchServiceByStatus(services, searchField));
         result.addAll(searchServiceByCost(services, parseBigDecimal(searchField)));
 
         return new ArrayList<>(result);
     }
 
+    /**
+     * search templates by all fields
+     */
     public List<Template> searchTemplates(List<Template> templates, String searchField)
     {
         Set<Template> result = new HashSet<>();

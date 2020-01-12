@@ -1,4 +1,4 @@
-package com.netcracker.students.o3.controller.sorters.sortParameters;
+package com.netcracker.students.o3.controller.sorters;
 
 public enum SortType
 {

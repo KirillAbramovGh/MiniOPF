@@ -6,6 +6,9 @@ import java.util.Comparator;
 
 public class ComparatorServiceByCost implements Comparator<Service>
 {
+    /**
+     * define sort up or down
+     */
     private boolean isUp;
 
     public ComparatorServiceByCost(boolean isUp){

@@ -6,6 +6,9 @@ import java.util.Comparator;
 
 public class ComparatorTemplatesByName implements Comparator<Template>
 {
+    /**
+     * define sort up or down
+     */
     private boolean isUp;
 
     public ComparatorTemplatesByName(boolean isUp){

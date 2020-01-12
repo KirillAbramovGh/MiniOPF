@@ -26,6 +26,10 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * GRUD class for entities
+ * */
 public class Model
 {
     private static Model instance;
@@ -42,9 +46,30 @@ public class Model
     private Map<BigInteger, Employee> employers;
     @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = AreaImpl.class)
     private Map<BigInteger, Area> areas;
+
+    /**
+     * last entity id
+     * */
     private BigInteger lastId;
 
 
+    /**
+     * method initialize model
+     * */
+    private Model()
+    {
+        orders = new HashMap<>();
+        templates = new HashMap<>();
+        services = new HashMap<>();
+        customers = new HashMap<>();
+        employers = new HashMap<>();
+        areas = new HashMap<>();
+        lastId = BigInteger.ZERO;
+    }
+
+    /**
+     * Methods which set Map of entities
+     * */
     public void setOrders(final Map<BigInteger, Order> orders)
     {
         this.orders = orders;
@@ -77,6 +102,10 @@ public class Model
 
 
 
+    /**
+     * return set and return instance
+     * @return instance
+     * */
     public static Model getInstance()
     {
         if (instance == null)
@@ -86,18 +115,11 @@ public class Model
         return instance;
     }
 
-    private Model()
-    {
-        orders = new HashMap<>();
-        templates = new HashMap<>();
-        services = new HashMap<>();
-        customers = new HashMap<>();
-        employers = new HashMap<>();
-        areas = new HashMap<>();
-        lastId = BigInteger.ZERO;
-    }
 
 
+    /**
+     * @return lastId
+     * */
     public BigInteger getLastId()
     {
         return lastId;
@@ -109,6 +131,11 @@ public class Model
         this.lastId = lastId;
     }
 
+
+    /**
+     * method increment lastId and return
+     * @return lastId
+     * */
     @JsonIgnore
     public BigInteger getNextId(){
         synchronized (lastId)
@@ -119,7 +146,10 @@ public class Model
     }
 
 
-
+/**
+ *methods which create entities by credentials
+ * @return id of created entity
+ * */
     public BigInteger createCustomer(String name,String login,String password,BigInteger areaId){
         synchronized (customers)
         {
@@ -188,6 +218,10 @@ public class Model
     }
 
 
+    /**
+     * methods return map of entities
+     * @return map of entities
+     * */
     public Map<BigInteger, Order> getOrders()
     {
         return orders;
@@ -220,6 +254,10 @@ public class Model
 
 
 
+    /**
+     * methods which return entity by id
+     * @return entity
+     * */
     public Order getOrderById(BigInteger id)
     {
         return orders.get(id);
@@ -252,6 +290,9 @@ public class Model
 
 
 
+    /**
+     * methods which add entity to model
+     * */
     public void addOrder(Order order)
     {
         synchronized (orders)
@@ -319,6 +360,9 @@ public class Model
     }
 
 
+    /**
+     * delete entity by id
+     * */
     public void deleteOrderById(BigInteger id)
     {
         synchronized (orders)
@@ -374,6 +418,9 @@ public class Model
     }
 
 
+    /**
+     * methods update entities
+     * */
     public void setOrder(Order order)
     {
         synchronized (orders)
@@ -428,6 +475,9 @@ public class Model
     }
 
 
+    /**
+     * on data change save model
+     * */
     private void onDataChange(){
         synchronized (this)
         {

@@ -1,4 +1,4 @@
-<%@ page import="com.netcracker.students.o3.controller.sorters.sortParameters.SortType" %>
+<%@ page import="com.netcracker.students.o3.controller.sorters.SortType" %>
 <%@ page import="com.netcracker.students.o3.model.area.Area" %>
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="java.util.List" %>

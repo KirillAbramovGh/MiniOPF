@@ -6,9 +6,6 @@ import com.netcracker.students.o3.Exceptions.RegisterException;
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.model.area.Area;
-import com.netcracker.students.o3.model.users.Customer;
-import com.netcracker.students.o3.model.users.Employee;
-import com.netcracker.students.o3.model.users.User;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -22,6 +19,9 @@ public class StartConsoleView
 
     private Controller controller = ControllerImpl.getInstance();
 
+    /**
+     * start console
+     */
     public void start()
     {
         Scanner scanner = new Scanner(System.in);
@@ -61,6 +61,9 @@ public class StartConsoleView
         }
     }
 
+    /**
+     * clear screen
+     */
     private void clearScreen()
     {
         for (int i = 0; i < 100; i++)
@@ -69,6 +72,9 @@ public class StartConsoleView
         }
     }
 
+    /**
+     * login user
+     */
     private void login() throws IncorrectCredentialsException
     {
         String login = getInputLogin();
@@ -86,6 +92,9 @@ public class StartConsoleView
 
     }
 
+    /**
+     * register user
+     */
     private void register() throws LoginOccupiedException
     {
         String name = getInputName();
@@ -106,6 +115,9 @@ public class StartConsoleView
         }
     }
 
+    /**
+     * input name
+     */
     private String getInputName()
     {
         Scanner scanner = new Scanner(System.in);
@@ -115,7 +127,7 @@ public class StartConsoleView
 
         try
         {
-            checkNull(name, "Имя");
+            checkNull(name, "Name");
         }
         catch (RegisterException e)
         {
@@ -126,6 +138,9 @@ public class StartConsoleView
         return name;
     }
 
+    /**
+     * input login
+     */
     private String getInputLogin()
     {
         Scanner scanner = new Scanner(System.in);
@@ -147,6 +162,9 @@ public class StartConsoleView
         return login;
     }
 
+    /**
+     * check exists of login
+     */
     private void checkLoginExists(final String login) throws RegisterException
     {
         if (!controller.isLoginExists(login))
@@ -155,6 +173,9 @@ public class StartConsoleView
         }
     }
 
+    /**
+     * input password
+     */
     private String getInputPassword()
     {
         Scanner scanner = new Scanner(System.in);
@@ -175,6 +196,9 @@ public class StartConsoleView
         return password;
     }
 
+    /**
+     * check employee or employee
+     */
     private String getInputTypeOfUser()
     {
         Scanner scanner = new Scanner(System.in);
@@ -193,6 +217,7 @@ public class StartConsoleView
         return choiceTypeOfUser;
     }
 
+
     private void checkNull(final String value, final String nameOfField) throws RegisterException
     {
         if (Strings.isNullOrEmpty(value))
@@ -201,6 +226,9 @@ public class StartConsoleView
         }
     }
 
+    /**
+     * choose area
+     */
     private BigInteger chooseArea()
     {
         Scanner scanner = new Scanner(System.in);
