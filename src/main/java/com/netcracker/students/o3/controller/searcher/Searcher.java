@@ -201,14 +201,13 @@ public class Searcher
     }
 
     /**
-     * search templates by all fields
+     * search templates by name,area,cost fields
      */
     public List<Template> searchTemplates(List<Template> templates, String searchField)
     {
         Set<Template> result = new HashSet<>();
 
         result.addAll(searchTemplatesByName(templates, searchField));
-        result.addAll(searchTemplatesByDescription(templates, searchField));
         result.addAll(searchTemplatesByArea(templates, searchField));
         result.addAll(searchTemplatesByCost(templates, parseBigDecimal(searchField)));
 

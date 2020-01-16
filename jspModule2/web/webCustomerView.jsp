@@ -2,7 +2,7 @@
 <%@ page import="com.netcracker.students.o3.model.area.Area" %>
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="java.util.List" %>
-<%@ page import="jsp.WebCustomerView" %>
+<%@ page import="jsp.CustomerWebOperations" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <html lang="en">
 <head>
@@ -38,6 +38,7 @@
             text-align: center;
             margin: auto;
         }
+
     </style>
     <style type="text/css">
         .tabs {
@@ -100,7 +101,7 @@
             let sum = prompt("Введите сумму пополнения", "0");
             if (parseFloat(sum)) {
                 var body = "sum=" + sum;
-                request.open("POST", "http://localhost:8080/jspModule_war_exploded/webCustomerView.jsp?" + body);
+                request.open("POST", "${pageContext.request.contextPath}/webCustomerView.jsp?" + body);
                 request.onreadystatechange = reqReadyStateChange;
                 request.send();
             } else {
@@ -118,11 +119,11 @@
         }
     </script>
     <%!
-        WebCustomerView webCustomerView = new WebCustomerView();
+        CustomerWebOperations customerWebOperations = new CustomerWebOperations();
     %>
     <%
         BigInteger id = (BigInteger) request.getSession().getAttribute("id");
-        webCustomerView.start(id);
+        customerWebOperations.start(id);
     %>
 </head>
 
@@ -132,17 +133,17 @@
 
     private void showSearchResult(String req)
     {
-        resultSearch = webCustomerView.getSearchResult(req);
+        resultSearch = customerWebOperations.search(req);
     }
 
     private String selectArea()
     {
         StringBuilder resultHtml = new StringBuilder();
-        List<Area> availableAreas = webCustomerView.getAvailableAreas();
+        List<Area> availableAreas = customerWebOperations.getAvailableAreas();
 
         for (Area area : availableAreas)
         {
-            if (webCustomerView.getAreaName().equals(area.getName()))
+            if (customerWebOperations.getAreaName().equals(area.getName()))
             {
                 resultHtml.append("<option selected value='").append(area.getName()).append("'>").append(area.getName())
                         .append("</option>");
@@ -161,7 +162,7 @@
         if (!numb.equals(""))
         {
             int value = Integer.parseInt(numb);
-            webCustomerView.disconnectService(BigInteger.valueOf(value));
+            customerWebOperations.disconnectService(BigInteger.valueOf(value));
         }
     }
 
@@ -171,7 +172,7 @@
         if (!numb.equals(""))
         {
             int value = Integer.parseInt(numb);
-            webCustomerView.suspendOrResumeService(BigInteger.valueOf(value));
+            customerWebOperations.suspendOrResumeService(BigInteger.valueOf(value));
         }
     }
 
@@ -181,7 +182,7 @@
         if (!numb.equals(""))
         {
             int value = Integer.parseInt(numb);
-            webCustomerView.connectService(BigInteger.valueOf(value));
+            customerWebOperations.connectService(BigInteger.valueOf(value));
         }
     }
 %>
@@ -212,7 +213,7 @@
 
                     Area newArea = null;
 
-                    for (Area a : webCustomerView.getAvailableAreas())
+                    for (Area a : customerWebOperations.getAvailableAreas())
                     {
                         if (a.getName().equals(area))
                         {
@@ -222,10 +223,10 @@
                     }
 
 
-                    webCustomerView.changeName(name);
-                    webCustomerView.changeLogin(login);
-                    webCustomerView.changePassword(password);
-                    webCustomerView.changeArea(newArea);
+                    customerWebOperations.changeName(name);
+                    customerWebOperations.changeLogin(login);
+                    customerWebOperations.changePassword(password);
+                    customerWebOperations.changeArea(newArea);
 
                 }
                 else if (key.equals("searchButton"))
@@ -234,35 +235,40 @@
                 }
                 else if (key.equals("ServiceSortUpByName"))
                 {
-                    webCustomerView.defineServiceSortType(SortType.UpByName);
+                    customerWebOperations.defineServiceSortType(SortType.UpByName);
                 }
                 else if (key.equals("ServiceSortDownByName"))
                 {
-                    webCustomerView.defineServiceSortType(SortType.DownByName);
+                    customerWebOperations.defineServiceSortType(SortType.DownByName);
                 }
                 else if (key.equals("ServiceSortUpByCost"))
                 {
-                    webCustomerView.defineServiceSortType(SortType.UpByCost);
+                    customerWebOperations.defineServiceSortType(SortType.UpByCost);
                 }
                 else if (key.equals("ServiceSortDownByCost"))
                 {
-                    webCustomerView.defineServiceSortType(SortType.DownByCost);
+                    customerWebOperations.defineServiceSortType(SortType.DownByCost);
                 }
                 else if (key.equals("TemplateSortUpByName"))
                 {
-                    webCustomerView.defineTemplateSortType(SortType.UpByName);
+                    customerWebOperations.defineTemplateSortType(SortType.UpByName);
                 }
                 else if (key.equals("TemplateSortDownByName"))
                 {
-                    webCustomerView.defineTemplateSortType(SortType.DownByName);
+                    customerWebOperations.defineTemplateSortType(SortType.DownByName);
                 }
                 else if (key.equals("TemplateSortUpByCost"))
                 {
-                    webCustomerView.defineTemplateSortType(SortType.UpByCost);
+                    customerWebOperations.defineTemplateSortType(SortType.UpByCost);
                 }
                 else if (key.equals("TemplateSortDownByCost"))
                 {
-                    webCustomerView.defineTemplateSortType(SortType.DownByCost);
+                    customerWebOperations.defineTemplateSortType(SortType.DownByCost);
+                }else if (key.toLowerCase().equals("out")){
+                    ServletContext servletContext = pageContext.getServletContext();
+                    RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/startView.jsp");
+
+                    requestDispatcher.forward(request, response);
                 }
             }
         }
@@ -270,12 +276,16 @@
         String textValue = request.getParameter("sum");
         if (textValue != null && !textValue.isEmpty())
         {
-            webCustomerView.addBalance(textValue);
+            customerWebOperations.addBalance(textValue);
         }
     %>
-    Balance: <%=webCustomerView.getBalance()%>
-    <input type="button" name="putOnBalance" value="add" onclick="showBalanceForm()">
-    Fio:<%=webCustomerView.getFIO()%>
+
+    <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
+        Balance: <%=customerWebOperations.getBalance()%>
+        <input type="button" name="putOnBalance" value="+" onclick="showBalanceForm()">
+        You are logged in as:<%=customerWebOperations.getFIO()%>
+        <input type="submit" name="Out" value="Out">
+    </form>
 </h1>
 
 
@@ -294,30 +304,20 @@
 
     <div id="txt_1" class="prokrutka">
         <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
-            <input type="submit" name="ServiceSortUpByName" value="ServiceSortUpByName">
-            <input type="submit" name="ServiceSortDownByName" value="ServiceSortDownByName">
-            <input type="submit" name="ServiceSortUpByCost" value="ServiceSortUpByCost">
-            <input type="submit" name="ServiceSortDownByCost" value="ServiceSortDownByCost">
-            <table border="1" width="auto" cellpadding="20">
-                <%=webCustomerView.showEnteringActiveServices()%>
-            </table>
+                <%=customerWebOperations.showEnteringActiveServices()%>
         </form>
     </div>
 
     <div id="txt_2" class="prokrutka">
         <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
-            <input type="submit" name="TemplateSortUpByName" value="TemplateSortUpByName">
-            <input type="submit" name="TemplateSortDownByName" value="TemplateSortDownByName">
-            <input type="submit" name="TemplateSortUpByCost" value="TemplateSortUpByCost">
-            <input type="submit" name="TemplateSortDownByCost" value="TemplateSortDownByCost">
-            <%=webCustomerView.showAllTemplates()%>
+            <%=customerWebOperations.showAllTemplates()%>
         </form>
     </div>
     <div id="txt_3" class="settings">
         <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
-            Name: <input type="text" name="fio" value="<%=webCustomerView.getFIO()%>"><br/>
-            Login: <input type="text" name="login" value="<%=webCustomerView.getLogin()%>"><br/>
-            Password: <input type="password" name="password" value=""><br/>
+            Name: <input type="text" name="fio" value="<%=customerWebOperations.getFIO()%>"><br/>
+            Login: <%=customerWebOperations.getLogin()%><br/>
+            Password: <input type="text" name="password" value=<%=customerWebOperations.getPassword()%>><br/>
             Area: <select name="area">
             <%=selectArea()%>
         </select>

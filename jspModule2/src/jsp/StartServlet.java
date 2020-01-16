@@ -2,12 +2,10 @@ package jsp;
 
 import com.netcracker.students.o3.Exceptions.IncorrectCredentialsException;
 import com.netcracker.students.o3.Exceptions.LoginOccupiedException;
+import com.netcracker.students.o3.Exceptions.RegisterException;
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.model.area.Area;
-
-import java.io.IOException;
-import java.math.BigInteger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -16,15 +14,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.math.BigInteger;
 
 /**
  * class process start page
  */
 @WebServlet("/start")
-public class StartServlet extends HttpServlet
-{
+public class StartServlet extends HttpServlet {
     /**
      * process post request
+     *
      * @param req
      * @param resp
      * @throws ServletException
@@ -32,39 +32,32 @@ public class StartServlet extends HttpServlet
      */
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
-            throws ServletException, IOException
-    {
-        if (req.getParameter("loginUser") != null)
-        {
-            BigInteger id = login(req);
-            if (id != null)
-            {
+            throws ServletException, IOException {
+        if (req.getParameter("loginUser") != null) {
+            try {
+                BigInteger id = login(req);
                 req.getSession().setAttribute("id", id);
                 forward("/webCustomerView.jsp", req, resp);
-            }else {
-                forward("/startView.jsp",req,resp);
+            }catch (IncorrectCredentialsException e){
+                req.getSession().setAttribute("error",e.getMessage());
+                forward("/startView.jsp", req, resp);
             }
-        }
-        else if (req.getParameter("regCustomer") != null)
-        {
-            BigInteger id = regCustomer(req);
-            if (id != null)
-            {
-                req.getSession().setAttribute("id",id);
+        } else if (req.getParameter("regCustomer") != null) {
+            try {
+                BigInteger id = regCustomer(req);
+                req.getSession().setAttribute("id", id);
                 forward("/webCustomerView.jsp", req, resp);
-            }else {
-                forward("/startView.jsp",req,resp);
+            }catch (LoginOccupiedException | RegisterException e){
+                req.getSession().setAttribute("error",e.getMessage());
+                forward("/startView.jsp", req, resp);
             }
-        }
-        else if (req.getParameter("reqAdmin") != null)
-        {
-            BigInteger id = regEmployee(req);
-            if (id != null)
-            {
-                req.getSession().setAttribute("id",id);
-
-            }else {
-                forward("/startView.jsp",req,resp);
+        } else if (req.getParameter("regAdmin") != null) {
+            try {
+                BigInteger id = regEmployee(req);
+                req.getSession().setAttribute("id", id);
+            }catch (LoginOccupiedException | RegisterException e) {
+                req.getSession().setAttribute("error", e.getMessage());
+                forward("/startView.jsp", req, resp);
             }
         }
 
@@ -73,6 +66,7 @@ public class StartServlet extends HttpServlet
 
     /**
      * forward to other servlet
+     *
      * @param path
      * @param request
      * @param response
@@ -80,49 +74,46 @@ public class StartServlet extends HttpServlet
      * @throws IOException
      */
     private void forward(String path, HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         ServletContext servletContext = getServletContext();
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(path);
 
         requestDispatcher.forward(request, response);
     }
 
-    private BigInteger regEmployee(final HttpServletRequest req)
-    {
+    private BigInteger regEmployee(final HttpServletRequest req) throws RegisterException, LoginOccupiedException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String name = req.getParameter("fio");
 
-        BigInteger employeeId = null;
-        if (!login.isEmpty() && !password.isEmpty() && !name.isEmpty())
-        {
+        BigInteger employeeId;
+        if (isNotEmptyLoginPasswordName(login, password, name)) {
             employeeId = ControllerImpl.getInstance().registerEmployee(login, password, name);
+        }else{
+            throw new RegisterException("Login, Password and Name can not be empty");
         }
 
         return employeeId;
     }
 
-    private BigInteger login(HttpServletRequest req)
-    {
+    private boolean isNotEmptyLoginPasswordName(String login, String password, String name){
+        return !login.replaceAll(" ", "").isEmpty() &&
+                !password.replaceAll(" ", "").isEmpty() &&
+                !name.replaceAll(" ", "").isEmpty();
+    }
+
+    private BigInteger login(HttpServletRequest req) throws IncorrectCredentialsException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
 
-        BigInteger userId = null;
-        try
-        {
-            userId = ControllerImpl.getInstance().getUserIdByCredentials(login, password);
-        }
-        catch (IncorrectCredentialsException e)
-        {
-            e.printStackTrace();
+        if(isNotEmptyLoginPasswordName(login,password,"name")){
+            return ControllerImpl.getInstance().getUserIdByCredentials(login, password);
         }
 
-        return userId;
+        throw new IncorrectCredentialsException("Login and Password can not be empty");
     }
 
-    private BigInteger regCustomer(HttpServletRequest req)
-    {
+    private BigInteger regCustomer(HttpServletRequest req) throws LoginOccupiedException, RegisterException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String name = req.getParameter("fio");
@@ -134,31 +125,22 @@ public class StartServlet extends HttpServlet
     }
 
     private BigInteger getUserId(final String login, final String password, final String name,
-            final BigInteger areaId)
-    {
+                                 final BigInteger areaId) throws LoginOccupiedException, RegisterException {
         Controller controller = ControllerImpl.getInstance();
         BigInteger userId = null;
-        if (!login.isEmpty() && !password.isEmpty() && !name.isEmpty())
-        {
-            try
-            {
+        if (isNotEmptyLoginPasswordName(login, password, name)) {
                 userId = controller.registerCustomer(login, password, name, areaId);
-            }
-            catch (LoginOccupiedException e)
-            {
-                e.printStackTrace();
-            }
+        }else {
+            throw new RegisterException("Login,Password,Name can not be null");
         }
         return userId;
     }
 
-    private BigInteger getAreaId(String area){
+    private BigInteger getAreaId(String area) {
         Controller controller = ControllerImpl.getInstance();
 
-        for (Area a : controller.getAreas())
-        {
-            if (a.getName().equals(area))
-            {
+        for (Area a : controller.getAreas()) {
+            if (a.getName().equals(area)) {
                 return a.getId();
             }
         }

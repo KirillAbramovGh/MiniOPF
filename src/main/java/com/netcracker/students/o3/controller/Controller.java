@@ -25,6 +25,8 @@ public interface Controller
 {
     /**
      * disconnect service with serviceId
+     * @param customerId - owner of service
+     * @param serviceId - id of service to be disconnected
      */
     void disconnectService(BigInteger customerId, BigInteger serviceId);
 
@@ -115,7 +117,7 @@ public interface Controller
     /**
      * register new Employee
      */
-    BigInteger registerEmployee(String login, String password, String Name);
+    BigInteger registerEmployee(String login, String password, String Name) throws LoginOccupiedException;
 
     /**
      * check equals password and user password

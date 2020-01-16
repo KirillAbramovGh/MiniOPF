@@ -231,9 +231,12 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public BigInteger registerEmployee(final String login, final String password, final String Name)
-    {
-       return model.createEmployee(Name,login,password);
+    public BigInteger registerEmployee(final String login, final String password, final String Name) throws LoginOccupiedException {
+        if(!isLoginExists(login)) {
+            return model.createEmployee(Name, login, password);
+        }
+
+        throw new LoginOccupiedException("Login occupied");
     }
 
     @Override

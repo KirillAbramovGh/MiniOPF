@@ -1,8 +1,8 @@
 <%@ page import="com.netcracker.students.o3.controller.Controller" %>
 <%@ page import="com.netcracker.students.o3.controller.ControllerImpl" %>
 <%@ page import="com.netcracker.students.o3.model.area.Area" %>
-<%@ page import="java.util.List" %>
-<%@ page import="jsp.HtmlSelectBuilder" %><%--
+<%@ page import="jsp.HtmlSelectBuilder" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: Kirill
   Date: 26.12.2019
@@ -89,20 +89,20 @@
 
     </style>
     <%!
-        public String showArea()
-        {
+        public String showArea() {
             Controller controller = ControllerImpl.getInstance();
             List<Area> areas = controller.getAreas();
             HtmlSelectBuilder selectBuilder = new HtmlSelectBuilder();
             selectBuilder.setNameAttribute("area");
 
-            for(Area area : areas){
+            for (Area area : areas) {
                 selectBuilder.addElement(area.getName());
             }
 
             return selectBuilder.built();
         }
     %>
+
 </head>
 <body>
 <div class="tabs" align="center">
@@ -115,7 +115,7 @@
     <input type="radio" name="inset" value="" id="tab_3">
     <label for="tab_3">RegAdmin</label>
     <div id="txt_1">
-        <form action="http://localhost:8080/jspModule_war_exploded/start" method="post">
+        <form action="${pageContext.request.contextPath}/start" method="post">
             <input type="text" name="login"><br/>
             <input type="password" name="password" value="password"><br/>
             <input type="submit" name="loginUser" align="center">
@@ -123,16 +123,16 @@
     </div>
 
     <div id="txt_2">
-        <form action="http://localhost:8080/jspModule_war_exploded/start" method="post">
+        <form action="${pageContext.request.contextPath}/start" method="post">
             <input type="text" name="fio" value="FIO"><br/>
             <input type="text" name="login" value="login"><br/>
             <input type="password" name="password" value="password"><br/>
-                <%=showArea()%><br/>
+            <%=showArea()%><br/>
             <input type="submit" name="regCustomer" value="Register">
         </form>
     </div>
     <div id="txt_3">
-        <form action="http://localhost:8080/jspModule_war_exploded/start" method="post">
+        <form action="${pageContext.request.contextPath}/start" method="post">
             <input type="text" name="fio" value="FIO"><br/>
             <input type="text" name="login" value="login"><br/>
             <input type="password" name="password" value="password"><br/>
@@ -141,7 +141,13 @@
     </div>
 </div>
 </div>
+<%
+    String error = (String) session.getAttribute("error");
 
+    if (error != null && !error.isEmpty()) {
+        out.write("<h4 align='center'>"+error+"</h4>");
+    }
+%>
 <script src="main.js"></script>
 </body>
 <footer>
