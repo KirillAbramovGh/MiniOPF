@@ -22,6 +22,7 @@ public class CustomerWebOperations {
     private Controller controller;
     private ServiceSorter serviceSorter;
     private TemplatesSorter templatesSorter;
+    private HtmlTableBuilder tableBuilder = HtmlTableBuilder.getInstance();
 
 
     /**
@@ -43,7 +44,7 @@ public class CustomerWebOperations {
      */
     public String search(String req) {
         String result = "";
-        Searcher searcher = new Searcher();
+        Searcher searcher = Searcher.getInstance();
 
         List<Service> services = searcher.searchServices(
                 controller.getCustomerServices(customerId), req);
@@ -67,12 +68,10 @@ public class CustomerWebOperations {
 
         String result = "<h2>Services</h2>";
 
-        HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
-
         serviceSorter.sort(services);
-        tableBuilder.createServicesTable(services);
+        result += tableBuilder.createServicesTable(services);
 
-        result+=tableBuilder.build();
+        result += "<hr>";
         return result;
     }
 
@@ -80,16 +79,15 @@ public class CustomerWebOperations {
      * create table from templates
      */
     private String templatesToTable(List<Template> templates) {
-        if (templates.size() > 0) {
-            HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
-
-            templatesSorter.sort(templates);
-            tableBuilder.createTemplatesTable(templates);
-
-            return tableBuilder.build();
+        if (templates.size() == 0) {
+            return "";
         }
+        String result = "<h2>Templates</h2>";
 
-        return "";
+        templatesSorter.sort(templates);
+        result += tableBuilder.createTemplatesTable(templates);
+
+        return result;
     }
 
     /**
@@ -123,9 +121,10 @@ public class CustomerWebOperations {
         return controller.getAreaName(customerId);
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return controller.getCustomer(customerId).getPassword();
     }
+
     /**
      * @return entering and active customer services
      */
@@ -146,6 +145,7 @@ public class CustomerWebOperations {
 
     /**
      * change customer name
+     *
      * @throws WrongInputException when name is empty
      */
     public void changeName(String newName) throws WrongInputException {
@@ -179,6 +179,7 @@ public class CustomerWebOperations {
      */
     public void changeArea(Area area) throws UnpossibleChangeAreaException {
         if (area != null) {
+
             controller.setCustomerArea(customerId, area.getId());
         }
     }
@@ -236,32 +237,27 @@ public class CustomerWebOperations {
         return controller.getAvailableAreas(customerId);
     }
 
+    public List<Area> getAreas(){
+        return controller.getAreas();
+    }
     /**
      * @return table of services
      */
     public String showEnteringActiveServices() {
-        HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
-
         List<Service> services = getEnteringAndActiveServices();
         serviceSorter.sort(services);
 
-        tableBuilder.createServicesTable(services);
-
-        return tableBuilder.build();
+        return tableBuilder.createServicesTable(services);
     }
 
     /**
      * @return templates available to connect
      */
     public String showAllTemplates() {
-        HtmlTableBuilder tableBuilder = new HtmlTableBuilder();
-
         List<Template> templates = getUnconnectedTemplates();
         templatesSorter.sort(templates);
 
-        tableBuilder.createTemplatesTable(templates);
-
-        return tableBuilder.build();
+        return tableBuilder.createTemplatesTable(templates);
     }
 
 }

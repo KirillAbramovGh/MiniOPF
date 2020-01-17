@@ -78,12 +78,6 @@ public class CustomerImpl implements Customer
         connectedServicesIds.add(serviceId);
     }
 
-    @Override
-    public void disconnectService(final BigInteger serviceId)
-    {
-        connectedServicesIds.remove(serviceId);
-    }
-
     public BigInteger getId()
     {
         return id;

@@ -7,117 +7,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
     <title>MiniOPF</title>
-    <style>
-        html {
-            height: 100%;
-        }
-
-        body {
-            position: relative;
-            min-height: 95%;
-            background-color: #1d1c1d;
-            color: aliceblue;
-        }
-
-        h1 {
-            background-color: #343434;
-            color: white;
-        }
-
-        p {
-            background-color: #FFFFFF;
-        }
-
-        footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 30px;
-            background: #710215;
-            text-align: center;
-            margin: auto;
-        }
-
-    </style>
-    <style type="text/css">
-        .tabs {
-            padding: 0px;
-            margin: 0 auto;
-        }
-
-        .tabs > input {
-            display: none;
-        }
-
-        .tabs > div {
-            display: none;
-            padding: 12px;
-            border: 1px solid #343434;
-            background: #343434;
-        }
-
-        .tabs > label {
-            display: inline-block;
-            padding: 7px;
-            margin: 0 -5px -1px 0;
-            text-align: center;
-            color: #FFFFFF;
-            border: 1px solid #1d1c1d;
-            background: #1d1c1d;
-            cursor: pointer;
-
-        }
-
-        .tabs > input:checked + label {
-            color: #FFFFFF;
-            border: 1px solid #343434;
-            background: #343434;
-        }
-
-        #tab_1:checked ~ #txt_1,
-        #tab_2:checked ~ #txt_2,
-        #tab_3:checked ~ #txt_3,
-        #tab_4:checked ~ #txt_4 {
-            display: block;
-        }
-    </style>
-    <style>
-        .prokrutka {
-            height: 70%;
-            overflow-y: scroll; /* прокрутка по вертикали */
-        }
-
-        .settings {
-            height: 70%;
-            padding: 5px;
-            margin: 5px;
-        }
-    </style>
-    <script>
-        let request = new XMLHttpRequest();
-
-        function showBalanceForm() {
-            let sum = prompt("Введите сумму пополнения", "0");
-            if (parseFloat(sum)) {
-                var body = "sum=" + sum;
-                request.open("POST", "${pageContext.request.contextPath}/webCustomerView.jsp?" + body);
-                request.onreadystatechange = reqReadyStateChange;
-                request.send();
-            } else {
-                alert("Введите число");
-            }
-        }
-
-        function reqReadyStateChange() {
-            if (request.readyState == 4) {
-                let status = request.status;
-                if (status == 200) {
-                    document.getElementById("output").innerHTML = request.responseText;
-                }
-            }
-        }
-    </script>
     <%!
         CustomerWebOperations customerWebOperations = new CustomerWebOperations();
     %>
@@ -126,7 +17,6 @@
         customerWebOperations.start(id);
     %>
 </head>
-
 <body>
 <%!
     String resultSearch = "";
@@ -139,7 +29,7 @@
     private String selectArea()
     {
         StringBuilder resultHtml = new StringBuilder();
-        List<Area> availableAreas = customerWebOperations.getAvailableAreas();
+        List<Area> availableAreas = customerWebOperations.getAreas();
 
         for (Area area : availableAreas)
         {
@@ -207,13 +97,12 @@
                 else if (key.equals("change"))
                 {
                     String name = request.getParameter("fio");
-                    String login = request.getParameter("login");
                     String password = request.getParameter("password");
                     String area = request.getParameter("area");
 
                     Area newArea = null;
 
-                    for (Area a : customerWebOperations.getAvailableAreas())
+                    for (Area a : customerWebOperations.getAreas())
                     {
                         if (a.getName().equals(area))
                         {
@@ -224,7 +113,6 @@
 
 
                     customerWebOperations.changeName(name);
-                    customerWebOperations.changeLogin(login);
                     customerWebOperations.changePassword(password);
                     customerWebOperations.changeArea(newArea);
 
@@ -279,7 +167,6 @@
             customerWebOperations.addBalance(textValue);
         }
     %>
-
     <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
         Balance: <%=customerWebOperations.getBalance()%>
         <input type="button" name="putOnBalance" value="+" onclick="showBalanceForm()">
@@ -287,57 +174,51 @@
         <input type="submit" name="Out" value="Out">
     </form>
 </h1>
-
-
-<div class="tabs">
-    <input type="radio" name="inset" value="" id="tab_1" checked>
-    <label for="tab_1">Мои услуги</label>
-
-    <input type="radio" name="inset" value="" id="tab_2">
-    <label for="tab_2">Все услуги</label>
-
-    <input type="radio" name="inset" value="" id="tab_3">
-    <label for="tab_3">Настройки</label>
-
-    <input type="radio" name="inset" value="" id="tab_4">
-    <label for="tab_4">Поиск</label>
-
-    <div id="txt_1" class="prokrutka">
-        <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
-                <%=customerWebOperations.showEnteringActiveServices()%>
-        </form>
-    </div>
-
-    <div id="txt_2" class="prokrutka">
-        <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
-            <%=customerWebOperations.showAllTemplates()%>
-        </form>
-    </div>
-    <div id="txt_3" class="settings">
-        <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
-            Name: <input type="text" name="fio" value="<%=customerWebOperations.getFIO()%>"><br/>
-            Login: <%=customerWebOperations.getLogin()%><br/>
-            Password: <input type="text" name="password" value=<%=customerWebOperations.getPassword()%>><br/>
-            Area: <select name="area">
-            <%=selectArea()%>
-        </select>
-            <input type="submit" name="change">
-        </form>
-    </div>
-    <div id="txt_4" class="prokrutka">
-        <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
-            <input type="text" name="searchField" value="">
-            <input type="submit" name="searchButton" value="Search">
-            <%=resultSearch%>
-        </form>
+<div class="wrapper">
+    <div class="tabs">
+        <div class="tabs__nav tabs-nav">
+            <div class="tabs-nav__item is-active" data-tab-name="tab-1">My services</div>
+            <div class="tabs-nav__item" data-tab-name="tab-2">All services</div>
+            <div class="tabs-nav__item" data-tab-name="tab-3">Settings</div>
+            <div class="tabs-nav__item" data-tab-name="tab-4">Search</div>
+        </div>
+        <div class="tabs__content">
+            <div class="tab is-active tab-1">
+                <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
+                    <%=customerWebOperations.showEnteringActiveServices()%>
+                </form>
+            </div>
+            <div class="tab tab-2">
+                <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
+                    <%=customerWebOperations.showAllTemplates()%>
+                </form>
+            </div>
+            <div class="tab tab-3">
+                <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
+                    Name: <input type="text" name="fio" value="<%=customerWebOperations.getFIO()%>"><br/>
+                    Login: <%=customerWebOperations.getLogin()%><br/>
+                    Password: <input type="text" name="password" value=<%=customerWebOperations.getPassword()%>><br/>
+                    Area: <select name="area">
+                    <%=selectArea()%>
+                </select>
+                    <input type="submit" name="change">
+                </form>
+            </div>
+            <div class="tab tab-4">
+                <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
+                    <input type="text" name="searchField" value="">
+                    <input type="submit" name="searchButton" value="Search">
+                    <%=resultSearch%>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
-
 <footer>
     <div align="center">
         © NetCracker ERC
     </div>
 </footer>
-
+<script src="main.js"></script>
 </body>
 </html>

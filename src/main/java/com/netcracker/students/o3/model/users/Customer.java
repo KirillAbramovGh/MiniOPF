@@ -45,10 +45,4 @@ public interface Customer extends User
       * @param serviceId
       */
      void addConnectedServiceId(BigInteger serviceId);
-
-     /**
-      * disconnect connected service
-      * @param serviceId
-      */
-     void disconnectService(BigInteger serviceId);
 }

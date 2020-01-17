@@ -17,6 +17,9 @@ import java.util.Set;
  */
 public class Searcher
 {
+    private static Searcher instance;
+
+    private Searcher(){}
 
     /**
      * search templates by area name
@@ -225,5 +228,13 @@ public class Searcher
         {
             return BigDecimal.ZERO;
         }
+    }
+
+    public static Searcher getInstance(){
+        if(instance==null){
+            instance = new Searcher();
+        }
+
+        return instance;
     }
 }

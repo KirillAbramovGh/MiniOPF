@@ -1,51 +1,44 @@
 package jsp;
 
+import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
+import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceStatus;
 import com.netcracker.students.o3.model.templates.Template;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 
 public class HtmlTableBuilder {
-    private String start = "<table border='0' width='auto' cellpadding='20'>";
-    private String end = "</table>";
 
     private String cellStart = "<td align='center'>";
     private String cellEnd = "</td>";
 
     private String rowStart = "<tr>";
     private String rowEnd = "</tr>";
+    private String[] colors = new String[]{"#ff0000","#808080"};
 
-    private String buttonStart = "<input ";
-    private String buttonEnd = " />";
+    private static HtmlTableBuilder instance;
 
-    private String currentColor = "red";
-
-    private List<String> columns;
-
-    private String innerPart = "";
-
-    public HtmlTableBuilder() {
-        columns = new ArrayList<>();
+    private HtmlTableBuilder() {
     }
+
 
     /**
      * add columns to table
      *
      * @param columnNames
      */
-    public void addColumns(String... columnNames) {
-        columns.addAll(Arrays.asList(columnNames));
-
-        innerPart += rowStart;
+    private String addColumns(String... columnNames) {
+        String result = "";
+        result += rowStart;
         for (String columnName : columnNames) {
-            innerPart += "<th>" + columnName + "</th>";
+            result += "<th>" + columnName + "</th>";
         }
-        innerPart += rowEnd;
+        result += rowEnd;
+        return result;
     }
 
 
@@ -54,10 +47,7 @@ public class HtmlTableBuilder {
      *
      * @return
      */
-    public HtmlTableBuilder addRow() {
-        innerPart += rowStart;
-        return this;
-    }
+
 
     /**
      * add cell to row
@@ -65,9 +55,16 @@ public class HtmlTableBuilder {
      * @param cell
      * @return
      */
-    public HtmlTableBuilder addCell(String cell) {
-        innerPart += cellStart + cell + cellEnd;
-        return this;
+    private String addCell(String cell) {
+        String result = "";
+        result += cellStart + cell + cellEnd;
+        return result;
+    }
+
+    private String addCell(String cell, String color) {
+        String startFont = "<font color='" + color + "'>";
+        String endFont = "</font>";
+        return addCell(startFont + cell + endFont);
     }
 
     /**
@@ -76,36 +73,64 @@ public class HtmlTableBuilder {
      * @param type
      * @param value
      * @param name
-     * @return
      */
-    public HtmlTableBuilder addButton(String type, String value, String name) {
-        innerPart +=
-                cellStart + buttonStart + "type='" + type + "' value='" + value + "' name='" + name + "'" + buttonEnd +
-                        cellEnd;
-        return this;
+
+
+    private String createButton(String type, String value, String name) {
+        String buttonStart = "<input ";
+        String buttonEnd = " />";
+        return buttonStart + "type='" + type + "' value='" + value + "' name='" + name + "'" + buttonEnd;
     }
 
-    public HtmlTableBuilder addButton(String value, String name) {
-        addButton("submit", value, name);
-        return this;
+    private String createButton(String value, String name) {
+        return createButton("submit", value, name);
     }
 
-    /**
-     * mean end of row
-     *
-     * @return
-     */
-    public HtmlTableBuilder builtRow() {
-        innerPart += rowEnd;
-        return this;
+    private String addServiceToTable(Service service,String color) {
+        String result = "<tr bgcolor='"+color+"'>";
+
+        String name = service.getName();
+        String cost = service.getCost() + "";
+        String status = service.getStatus() + "";
+
+        result += addCell(name + getAreasByTemplateId(service.getTemplateId()));
+        result += addCell(cost);
+
+        if (service.getStatus() == ServiceStatus.Entering) {
+            result += addCell(status, "yellow");
+            result += addCell(createButton("cancel", "disconnect" + service.getId()));
+            result += addCell("");
+        } else if (service.getStatus() == ServiceStatus.Active) {
+            result += addCell(status, "green");
+            result += addCell(createButton("disconnect", "disconnect" + service.getId()));
+            result += addCell(createButton("suspend", "suspend" + service.getId()));
+        } else if (service.getStatus() == ServiceStatus.Suspended) {
+            result += addCell(status, "red");
+            result += addCell(createButton("disconnect", "disconnect" + service.getId()));
+            result += addCell(createButton("resume", "suspend" + service.getId()));
+        }
+        return result + rowEnd;
+    }
+
+
+    private String addTemplateToTable(Template template,String color) {
+        String result = "<tr bgcolor='"+color+"'>";
+
+        result += addCell(template.getName());
+        result += addCell(template.getCost() + "");
+        result += addCell(template.getDescription() + getAreasByTemplateId(template.getId()));
+        result += addCell(createButton("connect", "connect" + template.getId()));
+
+        return result + rowEnd;
     }
 
     /**
      * @return result html
      */
-    public String build() {
-        String resultHtml = start + innerPart + end;
-        return resultHtml;
+    private String build(String innerPart) {
+        String start = "<table border='0' width='auto' cellpadding='20'>";
+        String end = "</table>";
+        return start + innerPart + end;
     }
 
     /**
@@ -113,58 +138,79 @@ public class HtmlTableBuilder {
      *
      * @param services
      */
-    public void createServicesTable(Collection<Service> services) {
+    public String createServicesTable(Collection<Service> services) {
+        StringBuilder innerPart = new StringBuilder();
 
-        String btnUpName = "<input type='submit' name='ServiceSortUpByName' value='↑'>";
-        String btnDownName = "<input type='submit' name='ServiceSortDownByName' value='↓'>";
-        String btnUpCost = "<input type='submit' name='ServiceSortUpByCost' value='↑'>";
-        String btnDownCost = "<input type='submit' name='ServiceSortDownByCost' value='↓'>";
+        innerPart.append(
+                addColumns(
+                        "Name" + createButton("↑", "ServiceSortUpByName") +
+                                createButton("↓", "ServiceSortDownByName"),
+                        "Cost" + createButton("↑", "ServiceSortUpByCost") +
+                                createButton("↓", "ServiceSortDownByCost"), "Status", "", ""));
 
-        addColumns("Name"+btnUpName+btnDownName, "Cost"+btnUpCost+btnDownCost, "Status", "", "");
 
-        String name;
-        String cost;
-        String status;
 
+        int i = 1;
         for (Service service : services) {
-            name = ControllerImpl.getInstance().getService(service.getId()).getName();
-            cost = service.getCost() + "";
-            status = service.getStatus() + "";
+            i = getNextColorNumber(i);
+            innerPart.append(addServiceToTable(service,colors[i]));
 
-            addRow().addCell(name).addCell(cost).addCell(status);
-
-            if (service.getStatus() == ServiceStatus.Entering) {
-                addButton("cancel", "disconnect" + service.getId());
-                addCell("");
-            } else if (service.getStatus() == ServiceStatus.Active) {
-                addButton("disconnect", "disconnect" + service.getId());
-                addButton("suspend", "suspend" + service.getId());
-            } else if (service.getStatus() == ServiceStatus.Suspended) {
-                addButton("disconnect", "disconnect" + service.getId());
-                addButton("resume", "suspend" + service.getId());
-            }
-            builtRow();
         }
+
+        return build(innerPart.toString());
     }
 
+    private int getNextColorNumber(int i){
+        if(i==0){
+            return 1;
+        }
+        return 0;
+    }
     /**
      * create table from templates
      *
      * @param templates
      */
-    public void createTemplatesTable(Collection<Template> templates) {
-        String btnUpName = "<input type='submit' name='TemplateSortUpByName' value='↑'>";
-        String btnDownName = "<input type='submit' name='TemplateSortDownByName' value='↓'>";
-        String btnUpCost = "<input type='submit' name='TemplateSortUpByCost' value='↑'>";
-        String btnDownCost = "<input type='submit' name='TemplateSortDownByCost' value='↓'>";
+    public String createTemplatesTable(Collection<Template> templates) {
+        StringBuilder innerPart = new StringBuilder();
 
-        addColumns("Name"+btnUpName+btnDownName, "Cost"+btnUpCost+btnDownCost, "Description", "");
+        innerPart.append(addColumns("Name" +
+                        createButton("↑", "TemplateSortUpByName") +
+                        createButton("↓", "TemplateSortDownByName"),
+                "Cost" +
+                        createButton("↑", "TemplateSortUpByCost") +
+                        createButton("↓", "TemplateSortDownByCost"), "Description", ""));
 
+        int i = 1;
         for (Template t : templates) {
-            addRow().addCell(t.getName()).addCell(t.getCost() + "")
-                    .addCell(t.getDescription())
-                    .addButton("connect", "connect" + t.getId()).builtRow();
+            i = getNextColorNumber(i);
+            innerPart.append(addTemplateToTable(t,colors[i]));
         }
 
+        return build(innerPart.toString());
+    }
+
+    private String getAreasByTemplateId(BigInteger templateId) {
+        StringBuilder result = new StringBuilder();
+
+        Controller controller = ControllerImpl.getInstance();
+        Template template = controller.getTemplate(templateId);
+
+        List<BigInteger> areasId = template.getPossibleAreasId();
+        Area area;
+        for (BigInteger areaId : areasId) {
+            area = controller.getArea(areaId);
+            result.append(" ").append(area.getName());
+        }
+
+        return result.toString();
+    }
+
+    public static HtmlTableBuilder getInstance() {
+        if (instance == null) {
+            instance = new HtmlTableBuilder();
+        }
+
+        return instance;
     }
 }
