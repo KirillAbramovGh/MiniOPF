@@ -1,8 +1,8 @@
 <%@ page import="com.netcracker.students.o3.controller.sorters.SortType" %>
 <%@ page import="com.netcracker.students.o3.model.area.Area" %>
+<%@ page import="jsp.CustomerWebOperations" %>
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="java.util.List" %>
-<%@ page import="jsp.CustomerWebOperations" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <html lang="en">
 <head>
@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="style.css">
     <title>MiniOPF</title>
     <%!
-        CustomerWebOperations customerWebOperations = new CustomerWebOperations();
+        CustomerWebOperations customerWebOperations = CustomerWebOperations.getInstance();
     %>
     <%
         BigInteger id = (BigInteger) request.getSession().getAttribute("id");
@@ -21,56 +21,44 @@
 <%!
     String resultSearch = "";
 
-    private void showSearchResult(String req)
-    {
+    private void showSearchResult(String req) {
         resultSearch = customerWebOperations.search(req);
     }
 
-    private String selectArea()
-    {
+    private String selectArea() {
         StringBuilder resultHtml = new StringBuilder();
         List<Area> availableAreas = customerWebOperations.getAreas();
 
-        for (Area area : availableAreas)
-        {
-            if (customerWebOperations.getAreaName().equals(area.getName()))
-            {
+        for (Area area : availableAreas) {
+            if (customerWebOperations.getAreaName().equals(area.getName())) {
                 resultHtml.append("<option selected value='").append(area.getName()).append("'>").append(area.getName())
                         .append("</option>");
-            }
-            else
-            {
+            } else {
                 resultHtml.append("<option>").append(area.getName()).append("</option>");
             }
         }
         return resultHtml.toString();
     }
 
-    private void disconnect(String key)
-    {
+    private void disconnect(String key) {
         String numb = key.substring(10);
-        if (!numb.equals(""))
-        {
+        if (!numb.equals("")) {
             int value = Integer.parseInt(numb);
             customerWebOperations.disconnectService(BigInteger.valueOf(value));
         }
     }
 
-    private void suspendOrResume(String key)
-    {
+    private void suspendOrResume(String key) {
         String numb = key.substring(14);
-        if (!numb.equals(""))
-        {
+        if (!numb.equals("")) {
             int value = Integer.parseInt(numb);
             customerWebOperations.suspendOrResumeService(BigInteger.valueOf(value));
         }
     }
 
-    private void connect(String key)
-    {
+    private void connect(String key) {
         String numb = key.substring(7);
-        if (!numb.equals(""))
-        {
+        if (!numb.equals("")) {
             int value = Integer.parseInt(numb);
             customerWebOperations.connectService(BigInteger.valueOf(value));
         }
@@ -78,34 +66,23 @@
 %>
 <h1 align="right">
     <%
-        for (String key : request.getParameterMap().keySet())
-        {
-            if (request.getParameterMap().get(key) != null)
-            {
-                if (key.startsWith("disconnect"))
-                {
+        for (String key : request.getParameterMap().keySet()) {
+            if (request.getParameterMap().get(key) != null) {
+                if (key.startsWith("disconnect")) {
                     disconnect(key);
-                }
-                else if (key.startsWith("suspend/resume"))
-                {
+                } else if (key.startsWith("suspend/resume")) {
                     suspendOrResume(key);
-                }
-                else if (key.startsWith("connect"))
-                {
+                } else if (key.startsWith("connect")) {
                     connect(key);
-                }
-                else if (key.equals("change"))
-                {
+                } else if (key.equals("change")) {
                     String name = request.getParameter("fio");
                     String password = request.getParameter("password");
                     String area = request.getParameter("area");
 
                     Area newArea = null;
 
-                    for (Area a : customerWebOperations.getAreas())
-                    {
-                        if (a.getName().equals(area))
-                        {
+                    for (Area a : customerWebOperations.getAreas()) {
+                        if (a.getName().equals(area)) {
                             newArea = a;
                             break;
                         }
@@ -116,43 +93,25 @@
                     customerWebOperations.changePassword(password);
                     customerWebOperations.changeArea(newArea);
 
-                }
-                else if (key.equals("searchButton"))
-                {
+                } else if (key.equals("searchButton")) {
                     showSearchResult(request.getParameter("searchField"));
-                }
-                else if (key.equals("ServiceSortUpByName"))
-                {
-                    customerWebOperations.defineServiceSortType(SortType.UpByName);
-                }
-                else if (key.equals("ServiceSortDownByName"))
-                {
-                    customerWebOperations.defineServiceSortType(SortType.DownByName);
-                }
-                else if (key.equals("ServiceSortUpByCost"))
-                {
-                    customerWebOperations.defineServiceSortType(SortType.UpByCost);
-                }
-                else if (key.equals("ServiceSortDownByCost"))
-                {
-                    customerWebOperations.defineServiceSortType(SortType.DownByCost);
-                }
-                else if (key.equals("TemplateSortUpByName"))
-                {
-                    customerWebOperations.defineTemplateSortType(SortType.UpByName);
-                }
-                else if (key.equals("TemplateSortDownByName"))
-                {
-                    customerWebOperations.defineTemplateSortType(SortType.DownByName);
-                }
-                else if (key.equals("TemplateSortUpByCost"))
-                {
-                    customerWebOperations.defineTemplateSortType(SortType.UpByCost);
-                }
-                else if (key.equals("TemplateSortDownByCost"))
-                {
-                    customerWebOperations.defineTemplateSortType(SortType.DownByCost);
-                }else if (key.toLowerCase().equals("out")){
+                } else if (key.equals("ServiceSortUpByName")) {
+                    customerWebOperations.sortCustomerServiceByType(SortType.UpByName);
+                } else if (key.equals("ServiceSortDownByName")) {
+                    customerWebOperations.sortCustomerServiceByType(SortType.DownByName);
+                } else if (key.equals("ServiceSortUpByCost")) {
+                    customerWebOperations.sortCustomerServiceByType(SortType.UpByCost);
+                } else if (key.equals("ServiceSortDownByCost")) {
+                    customerWebOperations.sortCustomerServiceByType(SortType.DownByCost);
+                } else if (key.equals("TemplateSortUpByName")) {
+                    request.getSession().setAttribute("sortTemplates", SortType.UpByName);
+                } else if (key.equals("TemplateSortDownByName")) {
+                    request.getSession().setAttribute("sortTemplates", SortType.DownByName);
+                } else if (key.equals("TemplateSortUpByCost")) {
+                    request.getSession().setAttribute("sortTemplates", SortType.UpByCost);
+                } else if (key.equals("TemplateSortDownByCost")) {
+                    request.getSession().setAttribute("sortTemplates", SortType.DownByCost);
+                } else if (key.toLowerCase().equals("out")) {
                     ServletContext servletContext = pageContext.getServletContext();
                     RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/startView.jsp");
 
@@ -162,8 +121,7 @@
         }
 
         String textValue = request.getParameter("sum");
-        if (textValue != null && !textValue.isEmpty())
-        {
+        if (textValue != null && !textValue.isEmpty()) {
             customerWebOperations.addBalance(textValue);
         }
     %>
@@ -190,7 +148,7 @@
             </div>
             <div class="tab tab-2">
                 <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
-                    <%=customerWebOperations.showAllTemplates()%>
+                    <%=customerWebOperations.showAllTemplates((String) session.getAttribute("sortTemplates"))%>
                 </form>
             </div>
             <div class="tab tab-3">

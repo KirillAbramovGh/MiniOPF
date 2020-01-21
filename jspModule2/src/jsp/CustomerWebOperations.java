@@ -5,7 +5,8 @@ import com.netcracker.students.o3.Exceptions.UnpossibleChangeAreaException;
 import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
-import com.netcracker.students.o3.controller.searcher.Searcher;
+import com.netcracker.students.o3.controller.searcher.SearcherService;
+import com.netcracker.students.o3.controller.searcher.SearcherTemplates;
 import com.netcracker.students.o3.controller.sorters.ServiceSorter;
 import com.netcracker.students.o3.controller.sorters.SortType;
 import com.netcracker.students.o3.controller.sorters.TemplatesSorter;
@@ -22,21 +23,22 @@ public class CustomerWebOperations {
     private Controller controller;
     private ServiceSorter serviceSorter;
     private TemplatesSorter templatesSorter;
-    private HtmlTableBuilder tableBuilder = HtmlTableBuilder.getInstance();
+    private HtmlTableBuilder tableBuilder;
+
+    private static CustomerWebOperations instance;
 
 
+    private CustomerWebOperations(){
+        controller = ControllerImpl.getInstance();
+        serviceSorter = ServiceSorter.getInstance();
+        templatesSorter = TemplatesSorter.getInstance();
+        tableBuilder = HtmlTableBuilder.getInstance();
+    }
     /**
      * define services sort type
      */
-    public void defineServiceSortType(SortType type) {
-        serviceSorter.defineSortType(type);
-    }
-
-    /**
-     * define templates sort type
-     */
-    public void defineTemplateSortType(SortType type) {
-        templatesSorter.defineSortType(type);
+    public void sortCustomerServiceByType(SortType type) {
+        serviceSorter.sort(getEnteringAndActiveServices(), type);
     }
 
     /**
@@ -44,9 +46,10 @@ public class CustomerWebOperations {
      */
     public String search(String req) {
         String result = "";
-        Searcher searcher = Searcher.getInstance();
+        SearcherTemplates searcher = SearcherTemplates.getInstance();
+        SearcherService searcherService = SearcherService.getInstance();
 
-        List<Service> services = searcher.searchServices(
+        List<Service> services = searcherService.searchServices(
                 controller.getCustomerServices(customerId), req);
         List<Template> templates = searcher.searchTemplates(
                 controller.getCustomerAvailableTemplates(customerId), req);
@@ -68,8 +71,7 @@ public class CustomerWebOperations {
 
         String result = "<h2>Services</h2>";
 
-        serviceSorter.sort(services);
-        result += tableBuilder.createServicesTable(services);
+        result += tableBuilder.createCustomerServicesTable(services);
 
         result += "<hr>";
         return result;
@@ -84,8 +86,7 @@ public class CustomerWebOperations {
         }
         String result = "<h2>Templates</h2>";
 
-        templatesSorter.sort(templates);
-        result += tableBuilder.createTemplatesTable(templates);
+        result += tableBuilder.createCustomerTemplatesTable(templates);
 
         return result;
     }
@@ -96,8 +97,6 @@ public class CustomerWebOperations {
     public void start(BigInteger id) {
         controller = ControllerImpl.getInstance();
         customerId = id;
-        serviceSorter = new ServiceSorter();
-        templatesSorter = new TemplatesSorter();
     }
 
     /**
@@ -230,35 +229,44 @@ public class CustomerWebOperations {
         return controller.getCustomer(customerId).getLogin();
     }
 
-    /**
-     * return available areas
-     */
-    public List<Area> getAvailableAreas() {
-        return controller.getAvailableAreas(customerId);
-    }
-
-    public List<Area> getAreas(){
+    public List<Area> getAreas() {
         return controller.getAreas();
     }
+
     /**
      * @return table of services
      */
     public String showEnteringActiveServices() {
         List<Service> services = getEnteringAndActiveServices();
-        serviceSorter.sort(services);
 
-        return tableBuilder.createServicesTable(services);
+        return tableBuilder.createCustomerServicesTable(services);
     }
 
     /**
      * @return templates available to connect
      */
-    public String showAllTemplates() {
+    public String showAllTemplates(String sortType) {
         List<Template> templates = getUnconnectedTemplates();
-        templatesSorter.sort(templates);
 
-        return tableBuilder.createTemplatesTable(templates);
+        templatesSorter.sort(templates, parseSortType(sortType));
+
+        return tableBuilder.createCustomerTemplatesTable(templates);
     }
 
+    private SortType parseSortType(String type) {
+        if (type == null || type.isEmpty()) {
+            return null;
+        }
+
+        return SortType.valueOf(type);
+    }
+
+    public static CustomerWebOperations getInstance(){
+        if(instance == null){
+            instance = new CustomerWebOperations();
+        }
+
+        return instance;
+    }
 }
 

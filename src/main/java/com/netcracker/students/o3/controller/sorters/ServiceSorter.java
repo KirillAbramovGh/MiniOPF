@@ -10,46 +10,35 @@ import java.util.List;
 /**
  * class sort services
  */
-public class ServiceSorter
-{
-    /**
-     * comparator which compare service
-     */
-    private Comparator<Service> serviceComparator;
+public class ServiceSorter {
+    private static ServiceSorter instance;
 
-    public ServiceSorter()
-    {
-        serviceComparator = new ComparatorServiceByName(true);
-    }
+    private ServiceSorter(){}
 
-    /**
-     * define sort type
-     */
-    public void defineSortType(SortType type)
-    {
-        if (SortType.UpByCost.equals(type))
-        {
-            serviceComparator = new ComparatorServiceByCost(true);
+    private Comparator<Service> defineSortType(SortType type) {
+        if (SortType.UpByCost.equals(type)) {
+            return new ComparatorServiceByCost(true);
+        } else if (SortType.UpByName.equals(type)) {
+            return new ComparatorServiceByName(true);
+        } else if (SortType.DownByCost.equals(type)) {
+            return new ComparatorServiceByCost(false);
         }
-        else if (SortType.UpByName.equals(type))
-        {
-            serviceComparator = new ComparatorServiceByName(true);
-        }
-        else if (SortType.DownByCost.equals(type))
-        {
-            serviceComparator = new ComparatorServiceByCost(false);
-        }
-        else if (SortType.DownByName.equals(type))
-        {
-            serviceComparator = new ComparatorServiceByName(false);
-        }
+
+        return new ComparatorServiceByName(false);
     }
 
     /**
      * sort services
      */
-    public void sort(List<Service> services)
-    {
+    public void sort(List<Service> services, SortType type) {
+        Comparator<Service> serviceComparator = defineSortType(type);
         services.sort(serviceComparator);
+    }
+
+    public static ServiceSorter getInstance() {
+        if (instance == null) {
+            instance = new ServiceSorter();
+        }
+        return instance;
     }
 }

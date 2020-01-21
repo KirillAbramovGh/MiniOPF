@@ -29,6 +29,7 @@ public class SerializerImpl implements Serializer
         model.setTemplates(newModel.getTemplates());
         model.setAreas(newModel.getAreas());
         model.setServices(newModel.getServices());
+        model.setLastId(newModel.getLastId());
     }
 
 }

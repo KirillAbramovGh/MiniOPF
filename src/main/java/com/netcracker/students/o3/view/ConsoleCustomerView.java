@@ -263,7 +263,7 @@ public class ConsoleCustomerView implements View
                 case "7":
                 case "8":
                     ControllerImpl.getInstance()
-                            .createOrder(templates.get(from + Integer.parseInt(choice)).getId(), null, null,
+                            .createOrder(templates.get(from + Integer.parseInt(choice)).getId(), null,
                                     OrderStatus.Entering, OrderAction.New);
                     break;
                 case "9":

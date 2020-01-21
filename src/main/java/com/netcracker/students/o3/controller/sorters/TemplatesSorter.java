@@ -10,38 +10,50 @@ import java.util.List;
 /**
  * class sort templates
  */
-public class TemplatesSorter
-{
+public class TemplatesSorter {
     /**
      * comparator which compare templates
      */
-    private Comparator<Template> templateComparator;
+    private static TemplatesSorter instance;
 
-    public TemplatesSorter()
-    {
-        templateComparator = new ComparatorTemplatesByName(true);
+    private TemplatesSorter() {
     }
 
     /**
      * define type of sorting
+     *
      * @param type
      */
-    public void defineSortType(SortType type)
-    {
-        switch (type){
-            case DownByName:templateComparator = new ComparatorTemplatesByName(false);break;
-            case DownByCost:templateComparator = new ComparatorTemplatesByCost(false);break;
-            case UpByName:templateComparator = new ComparatorTemplatesByName(true);break;
-            case UpByCost:templateComparator = new ComparatorTemplatesByCost(true);break;
+    private Comparator<Template> defineSortType(SortType type) {
+        switch (type) {
+            case DownByName:
+                return new ComparatorTemplatesByName(false);
+            case DownByCost:
+                return new ComparatorTemplatesByCost(false);
+            case UpByName:
+                return new ComparatorTemplatesByName(true);
+            case UpByCost:
+                return new ComparatorTemplatesByCost(true);
         }
+        return new ComparatorTemplatesByName(false);
     }
 
     /**
      * sort services
+     *
      * @param services
      */
-    public void sort(List<Template> services)
-    {
-        services.sort(templateComparator);
+    public void sort(List<Template> services, SortType type) {
+        if(type!=null) {
+            Comparator<Template> templateComparator = defineSortType(type);
+            services.sort(templateComparator);
+        }
+    }
+
+    public static TemplatesSorter getInstance(){
+        if(instance==null){
+            instance = new TemplatesSorter();
+        }
+        return instance;
     }
 }

@@ -37,7 +37,11 @@ public class StartServlet extends HttpServlet {
             try {
                 BigInteger id = login(req);
                 req.getSession().setAttribute("id", id);
-                forward("/webCustomerView.jsp", req, resp);
+                if(ControllerImpl.getInstance().isCustomer(id)) {
+                    forward("/webCustomerView.jsp", req, resp);
+                }else{
+                    forward("/webEmployeeView.jsp", req, resp);
+                }
             }catch (IncorrectCredentialsException e){
                 req.getSession().setAttribute("error",e.getMessage());
                 forward("/startView.jsp", req, resp);
@@ -55,6 +59,7 @@ public class StartServlet extends HttpServlet {
             try {
                 BigInteger id = regEmployee(req);
                 req.getSession().setAttribute("id", id);
+                forward("/webEmployeeView.jsp", req, resp);
             }catch (LoginOccupiedException | RegisterException e) {
                 req.getSession().setAttribute("error", e.getMessage());
                 forward("/startView.jsp", req, resp);

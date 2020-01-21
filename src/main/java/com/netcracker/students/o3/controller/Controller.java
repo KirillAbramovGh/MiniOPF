@@ -30,8 +30,17 @@ public interface Controller
      */
     void disconnectService(BigInteger customerId, BigInteger serviceId);
 
+    void resumeService(BigInteger serviceId);
+
+    void suspendService(BigInteger serviceId);
+
+    void cancelService(BigInteger customerId,BigInteger serviceId);
+
+    void completeService(BigInteger serviceId);
+
     /**
      * start execution of order
+     * @return
      */
     void startOrder(BigInteger orderId, BigInteger employeeId);
 
@@ -93,7 +102,7 @@ public interface Controller
 
     BigInteger createEmployee(String name, String login, String password);
 
-    BigInteger createOrder(BigInteger templateId, BigInteger serviceId, BigInteger employeeId,
+    BigInteger createOrder(BigInteger templateId, BigInteger serviceId,
             OrderStatus status, OrderAction action);
 
     BigInteger createTemplate(String name, BigDecimal cost, String description);
@@ -293,4 +302,6 @@ public interface Controller
      * @return areas available to customer
      */
     List<Area> getAvailableAreas(BigInteger customerId);
+
+    void resumeOrder(BigInteger orderId);
 }

@@ -23,6 +23,7 @@ import com.netcracker.students.o3.model.users.EmployerImpl;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -172,13 +173,13 @@ public class Model
         }
     }
 
-    public BigInteger createOrder(BigInteger templateId,BigInteger serviceId,BigInteger employeeId,
+    public BigInteger createOrder(BigInteger templateId,BigInteger serviceId,
             OrderStatus status, OrderAction action){
         synchronized (orders)
         {
-            Order newOrder = new OrderImpl(getNextId(), templateId, serviceId, employeeId, status, action);
+            Order newOrder = new OrderImpl(getNextId(), templateId, serviceId, status, action);
             BigInteger orderId = newOrder.getId();
-
+            newOrder.setCreationDate(new Date());
             addOrder(newOrder);
             return orderId;
         }

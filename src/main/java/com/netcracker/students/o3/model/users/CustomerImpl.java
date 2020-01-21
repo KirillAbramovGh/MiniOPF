@@ -1,120 +1,99 @@
 package com.netcracker.students.o3.model.users;
 
-import com.netcracker.students.o3.model.Model;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-public class CustomerImpl implements Customer
-{
+public class CustomerImpl implements Customer {
     private BigInteger id;
     private String name;
     private String login;
     private String password;
     private BigDecimal moneyBalance;
-    private Set<BigInteger> connectedServicesIds;
+    private List<BigInteger> connectedServicesIds;
     private BigInteger areaId;
 
-    public CustomerImpl()
-    {
+    public CustomerImpl() {
         moneyBalance = BigDecimal.ZERO;
     }
 
     public CustomerImpl(final BigInteger id, final String name, final String login, final String password,
-            final BigInteger areaId )
-    {
+                        final BigInteger areaId) {
         this.id = id;
         this.name = name;
         this.login = login;
         this.password = password;
         this.areaId = areaId;
-        connectedServicesIds = new HashSet<>();
+        connectedServicesIds = new ArrayList<>();
         moneyBalance = BigDecimal.ZERO;
     }
 
     @Override
-    public String toString()
-    {
-        return name+" "+"Баланс: " + moneyBalance;
+    public String toString() {
+        return name + " " + "Баланс: " + moneyBalance;
     }
 
-    public BigDecimal getMoneyBalance()
-    {
+    public BigDecimal getMoneyBalance() {
         return moneyBalance;
     }
 
-    public void setMoneyBalance(final BigDecimal moneyBalance)
-    {
+    public void setMoneyBalance(final BigDecimal moneyBalance) {
         this.moneyBalance = moneyBalance;
     }
 
-    public Set<BigInteger> getConnectedServicesIds()
-    {
+    public List<BigInteger> getConnectedServicesIds() {
         return connectedServicesIds;
     }
 
-    public void setConnectedServicesIds(final Set<BigInteger> connectedServicesIds)
-    {
+    public void setConnectedServicesIds(final List<BigInteger> connectedServicesIds) {
         this.connectedServicesIds = connectedServicesIds;
     }
 
-    public BigInteger getAreaId()
-    {
+    public BigInteger getAreaId() {
         return areaId;
     }
 
-    public void setAreaId(final BigInteger areaId)
-    {
+    public void setAreaId(final BigInteger areaId) {
         this.areaId = areaId;
     }
 
     @Override
-    public void addConnectedServiceId(final BigInteger serviceId)
-    {
-        connectedServicesIds.add(serviceId);
+    public void addConnectedServiceId(final BigInteger serviceId) {
+        if (!connectedServicesIds.contains(serviceId)) {
+            connectedServicesIds.add(serviceId);
+        }
     }
 
-    public BigInteger getId()
-    {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(final BigInteger id)
-    {
+    public void setId(final BigInteger id) {
         this.id = id;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(final String name)
-    {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    public String getLogin()
-    {
+    public String getLogin() {
         return login;
     }
 
-    public void setLogin(final String login)
-    {
+    public void setLogin(final String login) {
         this.login = login;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(final String password)
-    {
+    public void setPassword(final String password) {
         this.password = password;
     }
 

@@ -1,9 +1,20 @@
-let tabName;
+
 
 function tab () {
     let tabNav = document.querySelectorAll('.tabs-nav__item'),
-        tabContent = document.querySelectorAll('.tab');
-
+        tabContent = document.querySelectorAll('.tab'),
+        tabName = getCookie("tabName");
+    tabNav.forEach(item =>{
+        if(item.getAttribute('data-tab-name') === tabName){
+            console.log('itemName: '+item.getAttribute('data-tab-name'));
+            console.log('tabName: '+tabName);
+            tabNav.forEach(item => {
+                item.classList.remove('is-active');
+            });
+            item.classList.add('is-active');
+        }
+    })
+    selectTabContent(tabName,tabContent);
     tabNav.forEach(item => {
         item.addEventListener('click', selectTabNav)
     });
@@ -14,17 +25,16 @@ function tab () {
         });
         this.classList.add('is-active');
         tabName = this.getAttribute('data-tab-name');
-        selectTabContent(tabName);
+        document.cookie = "tabName="+tabName;
+        selectTabContent(tabName,tabContent);
     }
-
-    function selectTabContent(tabName) {
-        tabContent.forEach(item => {
-            item.classList.contains(tabName) ? item.classList.add('is-active') : item.classList.remove('is-active');
-        })
-    }
-
 };
 
+function selectTabContent(tabName,tabContent) {
+    tabContent.forEach(item => {
+        item.classList.contains(tabName) ? item.classList.add('is-active') : item.classList.remove('is-active');
+    })
+}
 
 function showBalanceForm() {
     let request = new XMLHttpRequest();
@@ -37,6 +47,13 @@ function showBalanceForm() {
     } else {
         alert("Введите число");
     }
+}
+
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
 function reqReadyStateChange(request) {
