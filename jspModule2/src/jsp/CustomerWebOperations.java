@@ -8,8 +8,9 @@ import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.controller.searcher.SearcherService;
 import com.netcracker.students.o3.controller.searcher.SearcherTemplates;
 import com.netcracker.students.o3.controller.sorters.ServiceSorter;
-import com.netcracker.students.o3.controller.sorters.SortType;
-import com.netcracker.students.o3.controller.sorters.TemplatesSorter;
+import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
+import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
+import com.netcracker.students.o3.controller.sorters.TemplateSorter;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
@@ -22,7 +23,7 @@ public class CustomerWebOperations {
     private BigInteger customerId;
     private Controller controller;
     private ServiceSorter serviceSorter;
-    private TemplatesSorter templatesSorter;
+    private TemplateSorter templateSorter;
     private HtmlTableBuilder tableBuilder;
 
     private static CustomerWebOperations instance;
@@ -31,13 +32,13 @@ public class CustomerWebOperations {
     private CustomerWebOperations(){
         controller = ControllerImpl.getInstance();
         serviceSorter = ServiceSorter.getInstance();
-        templatesSorter = TemplatesSorter.getInstance();
+        templateSorter = TemplateSorter.getInstance();
         tableBuilder = HtmlTableBuilder.getInstance();
     }
     /**
      * define services sort type
      */
-    public void sortCustomerServiceByType(SortType type) {
+    public void sortCustomerServiceByType(ServiceSortType type) {
         serviceSorter.sort(getEnteringAndActiveServices(), type);
     }
 
@@ -49,9 +50,9 @@ public class CustomerWebOperations {
         SearcherTemplates searcher = SearcherTemplates.getInstance();
         SearcherService searcherService = SearcherService.getInstance();
 
-        List<Service> services = searcherService.searchServices(
+        List<Service> services = searcherService.searchServicesByAllEntities(
                 controller.getCustomerServices(customerId), req);
-        List<Template> templates = searcher.searchTemplates(
+        List<Template> templates = searcher.searchTemplatesByAllFields(
                 controller.getCustomerAvailableTemplates(customerId), req);
 
         result += servicesToTable(services);
@@ -248,17 +249,17 @@ public class CustomerWebOperations {
     public String showAllTemplates(String sortType) {
         List<Template> templates = getUnconnectedTemplates();
 
-        templatesSorter.sort(templates, parseSortType(sortType));
+        templateSorter.sort(templates, parseTemplateSortType(sortType));
 
         return tableBuilder.createCustomerTemplatesTable(templates);
     }
 
-    private SortType parseSortType(String type) {
+    private TemplateSortType parseTemplateSortType(String type) {
         if (type == null || type.isEmpty()) {
             return null;
         }
 
-        return SortType.valueOf(type);
+        return TemplateSortType.valueOf(type);
     }
 
     public static CustomerWebOperations getInstance(){

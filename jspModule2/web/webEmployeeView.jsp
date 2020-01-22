@@ -124,7 +124,7 @@
                     <input type="text" name="searchFieldEmployeeOrders" value="">
                     <input type="submit" name="searchButtonEmployeeOrders" value="Search">
                     <select name="employeeOrderSelectField">
-                        <option>id</option>
+                        <option selected="selected">Id</option>
                         <option>TemplateId</option>
                         <option>ServiceId</option>
                         <option>EmployeeId</option>
@@ -132,8 +132,8 @@
                         <option>Action</option>
                     </select>
                     <%=employeeWebOperations.showEmployeeOrders(
-                            request.getParameterMap().get("searchFieldEmployeeOrders")[0],
-                            request.getParameterMap().get("employeeOrderSelectField")[0]
+                            request.getParameter("searchFieldEmployeeOrders"),
+                            request.getParameter("employeeOrderSelectField")
                             )%>
                 </form>
             </div>
@@ -141,42 +141,103 @@
                 <form action="${pageContext.request.contextPath}/webEmployeeView.jsp" method="post">
                     <input type="text" name="searchFieldAllOrders" value="">
                     <input type="submit" name="searchButtonAllOrders" value="Search">
-                    <%=employeeWebOperations.showAllOrders()%>
+                    <select name="allOrderSelectField">
+                        <option selected="selected">Id</option>
+                        <option>TemplateId</option>
+                        <option>ServiceId</option>
+                        <option>EmployeeId</option>
+                        <option>Status</option>
+                        <option>Action</option>
+                    </select>
+                    <%=employeeWebOperations.showAllOrders(
+                            request.getParameter("searchFieldAllOrders"),
+                            request.getParameter("allOrderSelectField")
+                    )%>
                 </form>
             </div>
             <div class="tab tab-3">
                 <form action="${pageContext.request.contextPath}/webEmployeeView.jsp" method="post">
                     <input type="text" name="searchFieldAllServices" value="">
                     <input type="submit" name="searchButtonAllServices" value="Search">
-                    <%=employeeWebOperations.showAllServices()%>
+                    <select name="allServicesSelectField">
+                        <option selected="selected">Id</option>
+                        <option>Name</option>
+                        <option>Cost</option>
+                        <option>Status</option>
+                        <option>TemplateId</option>
+                        <option>UserId</option>
+                        <option>ActivationDate</option>
+                        <option>Areas</option>
+                    </select>
+                    <%=employeeWebOperations.showAllServices(
+                            request.getParameter("searchFieldAllServices"),
+                            request.getParameter("allServicesSelectField")
+                    )%>
                 </form>
             </div>
             <div class="tab tab-4">
                 <form action="${pageContext.request.contextPath}/webEmployeeView.jsp" method="post">
                     <input type="text" name="searchFieldAllTemplates" value="">
                     <input type="submit" name="searchButtonAllTemplates" value="Search">
-                    <%=employeeWebOperations.showAllTemplates()%>
+                    <select name="allTemplatesSelectField">
+                        <option selected="selected">Id</option>
+                        <option>Name</option>
+                        <option>Cost</option>
+                        <option>Description</option>
+                        <option>Areas</option>
+                    </select>
+                    <%=employeeWebOperations.showAllTemplates(
+                            request.getParameter("searchFieldAllTemplates"),
+                            request.getParameter("allTemplatesSelectField")
+                    )%>
                 </form>
             </div>
             <div class="tab tab-5">
                 <form action="${pageContext.request.contextPath}/webEmployeeView.jsp" method="post">
                     <input type="text" name="searchFieldAllCustomers" value="">
                     <input type="submit" name="searchButtonAllCustomers" value="Search">
-                    <%=employeeWebOperations.showAllCustomers()%>
+                    <select name="allCustomersSelectField">
+                        <option selected="selected">Id</option>
+                        <option>Name</option>
+                        <option>Login</option>
+                        <option>Area</option>
+                        <option>Balance</option>
+                        <option>ConnectedServices</option>
+                    </select>
+                    <%=employeeWebOperations.showAllCustomers(
+                            request.getParameter("searchFieldAllCustomers"),
+                            request.getParameter("allCustomersSelectField")
+                    )%>
                 </form>
             </div>
             <div class="tab tab-6">
                 <form action="${pageContext.request.contextPath}/webEmployeeView.jsp" method="post">
                     <input type="text" name="searchFieldAllEmployees" value="">
                     <input type="submit" name="searchButtonAllEmployees" value="Search">
-                    <%=employeeWebOperations.showAllEmployees()%>
+                    <select name="allEmployeesSelectField">
+                        <option selected="selected">Id</option>
+                        <option>Name</option>
+                        <option>Login</option>
+                    </select>
+                    <%=employeeWebOperations.showAllEmployees(
+                            request.getParameter("searchFieldAllEmployees"),
+                            request.getParameter("allEmployeesSelectField")
+                    )%>
                 </form>
             </div>
             <div class="tab tab-7">
                 <form action="${pageContext.request.contextPath}/webEmployeeView.jsp" method="post">
                     <input type="text" name="searchFieldAllAreas" value="">
                     <input type="submit" name="searchButtonAllAreas" value="Search">
-                    <%=employeeWebOperations.showAllAreas()%>
+                    <select name="allAreasSelectField">
+                        <option selected="selected">Id</option>
+                        <option>Name</option>
+                        <option>Description</option>
+                    </select>
+                    <%=employeeWebOperations.showAllAreas(
+                            request.getParameter("searchFieldAllAreas"),
+                            request.getParameter("allAreasSelectField")
+                    )%>
                 </form>
             </div>
             <div class="tab tab-8">

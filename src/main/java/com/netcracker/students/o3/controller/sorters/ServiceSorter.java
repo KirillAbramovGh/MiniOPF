@@ -1,7 +1,8 @@
 package com.netcracker.students.o3.controller.sorters;
 
-import com.netcracker.students.o3.controller.comparators.service.ComparatorServiceByCost;
-import com.netcracker.students.o3.controller.comparators.service.ComparatorServiceByName;
+import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesByCost;
+import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesByName;
+import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
 import com.netcracker.students.o3.model.services.Service;
 
 import java.util.Comparator;
@@ -15,22 +16,26 @@ public class ServiceSorter {
 
     private ServiceSorter(){}
 
-    private Comparator<Service> defineSortType(SortType type) {
-        if (SortType.UpByCost.equals(type)) {
-            return new ComparatorServiceByCost(true);
-        } else if (SortType.UpByName.equals(type)) {
-            return new ComparatorServiceByName(true);
-        } else if (SortType.DownByCost.equals(type)) {
-            return new ComparatorServiceByCost(false);
+    private Comparator<Service> defineSortType(ServiceSortType type) {
+        if (ServiceSortType.UpByCost.equals(type)) {
+            return new ComparatorServicesByCost(true);
+        } else if (ServiceSortType.UpByName.equals(type)) {
+            return new ComparatorServicesByName(true);
+        } else if (ServiceSortType.DownByCost.equals(type)) {
+            return new ComparatorServicesByCost(false);
+        }else if (ServiceSortType.UpById.equals(type)){
+            return new ComparatorServicesByCost(true);
+        }else if (ServiceSortType.DownById.equals(type)){
+            return new ComparatorServicesByCost(false);
         }
 
-        return new ComparatorServiceByName(false);
+        return new ComparatorServicesByName(false);
     }
 
     /**
      * sort services
      */
-    public void sort(List<Service> services, SortType type) {
+    public void sort(List<Service> services, ServiceSortType type) {
         Comparator<Service> serviceComparator = defineSortType(type);
         services.sort(serviceComparator);
     }

@@ -1,4 +1,4 @@
-<%@ page import="com.netcracker.students.o3.controller.sorters.SortType" %>
+<%@ page import="com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType" %>
 <%@ page import="com.netcracker.students.o3.model.area.Area" %>
 <%@ page import="jsp.CustomerWebOperations" %>
 <%@ page import="java.math.BigInteger" %>
@@ -96,21 +96,21 @@
                 } else if (key.equals("searchButton")) {
                     showSearchResult(request.getParameter("searchField"));
                 } else if (key.equals("ServiceSortUpByName")) {
-                    customerWebOperations.sortCustomerServiceByType(SortType.UpByName);
+                    customerWebOperations.sortCustomerServiceByType(ServiceSortType.UpByName);
                 } else if (key.equals("ServiceSortDownByName")) {
-                    customerWebOperations.sortCustomerServiceByType(SortType.DownByName);
+                    customerWebOperations.sortCustomerServiceByType(ServiceSortType.DownByName);
                 } else if (key.equals("ServiceSortUpByCost")) {
-                    customerWebOperations.sortCustomerServiceByType(SortType.UpByCost);
+                    customerWebOperations.sortCustomerServiceByType(ServiceSortType.UpByCost);
                 } else if (key.equals("ServiceSortDownByCost")) {
-                    customerWebOperations.sortCustomerServiceByType(SortType.DownByCost);
+                    customerWebOperations.sortCustomerServiceByType(ServiceSortType.DownByCost);
                 } else if (key.equals("TemplateSortUpByName")) {
-                    request.getSession().setAttribute("sortTemplates", SortType.UpByName);
+                    request.getSession().setAttribute("sortTemplates", ServiceSortType.UpByName);
                 } else if (key.equals("TemplateSortDownByName")) {
-                    request.getSession().setAttribute("sortTemplates", SortType.DownByName);
+                    request.getSession().setAttribute("sortTemplates", ServiceSortType.DownByName);
                 } else if (key.equals("TemplateSortUpByCost")) {
-                    request.getSession().setAttribute("sortTemplates", SortType.UpByCost);
+                    request.getSession().setAttribute("sortTemplates", ServiceSortType.UpByCost);
                 } else if (key.equals("TemplateSortDownByCost")) {
-                    request.getSession().setAttribute("sortTemplates", SortType.DownByCost);
+                    request.getSession().setAttribute("sortTemplates", ServiceSortType.DownByCost);
                 } else if (key.toLowerCase().equals("out")) {
                     ServletContext servletContext = pageContext.getServletContext();
                     RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/startView.jsp");

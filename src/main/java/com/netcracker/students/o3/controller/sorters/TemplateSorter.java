@@ -1,7 +1,9 @@
 package com.netcracker.students.o3.controller.sorters;
 
 import com.netcracker.students.o3.controller.comparators.template.ComparatorTemplatesByCost;
+import com.netcracker.students.o3.controller.comparators.template.ComparatorTemplatesById;
 import com.netcracker.students.o3.controller.comparators.template.ComparatorTemplatesByName;
+import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
 import com.netcracker.students.o3.model.templates.Template;
 
 import java.util.Comparator;
@@ -10,13 +12,13 @@ import java.util.List;
 /**
  * class sort templates
  */
-public class TemplatesSorter {
+public class TemplateSorter {
     /**
      * comparator which compare templates
      */
-    private static TemplatesSorter instance;
+    private static TemplateSorter instance;
 
-    private TemplatesSorter() {
+    private TemplateSorter() {
     }
 
     /**
@@ -24,7 +26,7 @@ public class TemplatesSorter {
      *
      * @param type
      */
-    private Comparator<Template> defineSortType(SortType type) {
+    private Comparator<Template> defineSortType(TemplateSortType type) {
         switch (type) {
             case DownByName:
                 return new ComparatorTemplatesByName(false);
@@ -34,6 +36,10 @@ public class TemplatesSorter {
                 return new ComparatorTemplatesByName(true);
             case UpByCost:
                 return new ComparatorTemplatesByCost(true);
+            case UpById:
+                return new ComparatorTemplatesById(true);
+            case DownById:
+                return new ComparatorTemplatesById(false);
         }
         return new ComparatorTemplatesByName(false);
     }
@@ -43,16 +49,16 @@ public class TemplatesSorter {
      *
      * @param services
      */
-    public void sort(List<Template> services, SortType type) {
+    public void sort(List<Template> services, TemplateSortType type) {
         if(type!=null) {
             Comparator<Template> templateComparator = defineSortType(type);
             services.sort(templateComparator);
         }
     }
 
-    public static TemplatesSorter getInstance(){
+    public static TemplateSorter getInstance(){
         if(instance==null){
-            instance = new TemplatesSorter();
+            instance = new TemplateSorter();
         }
         return instance;
     }

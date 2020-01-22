@@ -2,16 +2,12 @@ package com.netcracker.students.o3.controller.searcher;
 
 import com.netcracker.students.o3.model.services.Service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * class search templates and services
  */
-public class SearcherService {
+public class SearcherService extends Searcher<Service> {
     private static SearcherService instance;
 
     private SearcherService() {
@@ -20,11 +16,13 @@ public class SearcherService {
     /**
      * search services by cost
      */
-    public List<Service> searchServiceByCost(List<Service> services, BigDecimal cost) {
+    public List<Service> searchServiceByCost(Collection<Service> services, String cost) {
         List<Service> result = new ArrayList<>();
 
         for (Service service : services) {
-            if (isServiceCostEqualsCost(service, cost)) {
+            if (isCostInDiapason(service.getCost(), cost, 60)
+                    || checkRegExp(cost, service.getCost().toString())
+            ) {
                 result.add(service);
             }
         }
@@ -32,39 +30,34 @@ public class SearcherService {
         return result;
     }
 
-    private boolean isServiceCostEqualsCost(Service service, BigDecimal cost) {
-        return Math.abs(service.getCost().doubleValue() - cost.doubleValue()) < 10;
-    }
 
     /**
      * search services by name
      */
-    public List<Service> searchServiceByName(List<Service> services, String name) {
+    public List<Service> searchServiceByName(Collection<Service> services, String search) {
         List<Service> result = new ArrayList<>();
 
+        String name;
         for (Service service : services) {
-            if (isServiceNameContainsString(service, name)) {
+            name = service.getName();
+            if (name.contains(search) || checkRegExp(search, name)) {
                 result.add(service);
             }
         }
 
         return result;
-    }
-
-    private boolean isServiceNameContainsString(Service service, String name) {
-        String serviceName = service.getName().toLowerCase();
-
-        return serviceName.contains(name.toLowerCase());
     }
 
     /**
      * search services by status
      */
-    public List<Service> searchServiceByStatus(List<Service> services, String status) {
+    public List<Service> searchServiceByStatus(Collection<Service> services, String search) {
         List<Service> result = new ArrayList<>();
 
+        String status;
         for (Service service : services) {
-            if (isServiceStatusNameContainsString(service, status)) {
+            status = service.getStatus().toString().toLowerCase();
+            if (status.contains(search) || checkRegExp(search, status)) {
                 result.add(service);
             }
         }
@@ -72,32 +65,18 @@ public class SearcherService {
         return result;
     }
 
-    private boolean isServiceStatusNameContainsString(Service service, String status) {
-        String serviceStatusName = service.getStatus().toString();
-        return serviceStatusName.toLowerCase().contains(status.toLowerCase());
-    }
 
     /**
      * search services by all fields
      */
-    public List<Service> searchServices(List<Service> services, String searchField) {
+    public List<Service> searchServicesByAllEntities(List<Service> services, String searchField) {
         Set<Service> result = new HashSet<>();
 
         result.addAll(searchServiceByName(services, searchField));
         result.addAll(searchServiceByStatus(services, searchField));
-        result.addAll(searchServiceByCost(services, parseBigDecimal(searchField)));
+        result.addAll(searchServiceByCost(services, searchField));
 
         return new ArrayList<>(result);
-    }
-
-
-    private BigDecimal parseBigDecimal(String value) {
-        try {
-            double doubleValue = Double.parseDouble(value);
-            return BigDecimal.valueOf(doubleValue);
-        } catch (NumberFormatException e) {
-            return BigDecimal.ZERO;
-        }
     }
 
     public static SearcherService getInstance() {
@@ -106,5 +85,81 @@ public class SearcherService {
         }
 
         return instance;
+    }
+
+    public List<Service> search(String search, String field, Collection<Service> services) {
+        switch (field) {
+            case "Id":
+                return searchServiceById(search, services);
+            case "Name":
+                return searchServiceByName(services, search);
+            case "Cost":
+                return searchServiceByCost(services, search);
+            case "Status":
+                return searchServiceByStatus(services, search);
+            case "TemplateId":
+                return searchServiceByTemplateId(search, services);
+            case "UserId":
+                return searchServiceByUserId(search, services);
+            case "Areas":
+                return searchServiceByArea(search, services);
+        }
+
+        return new ArrayList<>();
+    }
+
+    private List<Service> searchServiceByArea(String search, Collection<Service> services) {
+        List<Service> result = new ArrayList<>();
+
+        for (Service service : services) {
+            if (checkArea(search, getServiceArea(service))) {
+                result.add(service);
+            }
+        }
+
+        return result;
+    }
+
+
+    private List<Service> searchServiceByUserId(String search, Collection<Service> services) {
+        List<Service> result = new ArrayList<>();
+
+        String userId;
+        for (Service service : services) {
+            userId = service.getUserId().toString();
+            if (userId.contains(search) || checkRegExp(search, userId)) {
+                result.add(service);
+            }
+        }
+
+        return result;
+    }
+
+    private List<Service> searchServiceByTemplateId(String search, Collection<Service> services) {
+        List<Service> result = new ArrayList<>();
+
+        String templateId;
+        for (Service service : services) {
+            templateId = service.getTemplateId().toString();
+            if (templateId.contains(search) || checkRegExp(search, templateId)) {
+                result.add(service);
+            }
+        }
+
+        return result;
+    }
+
+    private List<Service> searchServiceById(String search, Collection<Service> services) {
+        List<Service> result = new ArrayList<>();
+
+        String id;
+        for (Service service : services) {
+            id = service.getId().toString();
+            if (id.contains(search) || checkRegExp(search, id)) {
+                result.add(service);
+            }
+        }
+
+        return result;
     }
 }

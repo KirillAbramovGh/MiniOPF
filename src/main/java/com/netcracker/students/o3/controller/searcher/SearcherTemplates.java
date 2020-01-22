@@ -2,39 +2,31 @@ package com.netcracker.students.o3.controller.searcher;
 
 import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.model.area.Area;
-import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * class search templates and services
  */
-public class SearcherTemplates
-{
+public class SearcherTemplates extends Searcher<Template> {
     private static SearcherTemplates instance;
 
-    private SearcherTemplates(){}
+    private SearcherTemplates() {
+    }
 
     /**
      * search templates by area name
      */
-    public List<Template> searchTemplatesByArea(List<Template> templates, String areaName)
-    {
+    public List<Template> searchTemplatesByArea(Collection<Template> templates, String areaName) {
         List<Template> results = new ArrayList<>();
 
-        for (Template template : templates)
-        {
-            for (BigInteger id : template.getPossibleAreasId())
-            {
+        for (Template template : templates) {
+            for (BigInteger id : template.getPossibleAreasId()) {
                 Area area = ControllerImpl.getInstance().getArea(id);
-                if (isTemplateAreaNameContainsString(area, areaName))
-                {
+                if (area.getName().contains(areaName) || checkRegExp(areaName, area.getName())) {
                     results.add(template);
                 }
             }
@@ -42,22 +34,16 @@ public class SearcherTemplates
         return results;
     }
 
-    private boolean isTemplateAreaNameContainsString(Area area, String areaName)
-    {
-        return area.getName().toLowerCase().contains(areaName.toLowerCase());
-    }
-
     /**
      * search templates by cost
      */
-    public List<Template> searchTemplatesByCost(List<Template> templates, BigDecimal cost)
-    {
+    public List<Template> searchTemplatesByCost(Collection<Template> templates, String search) {
         List<Template> result = new ArrayList<>();
 
-        for (Template template : templates)
-        {
-            if (isTemplateCostEqualsCost(template, cost))
-            {
+        BigDecimal cost;
+        for (Template template : templates) {
+            cost = template.getCost();
+            if (isCostInDiapason(cost, search, 50) || checkRegExp(search, cost.toString())) {
                 result.add(template);
             }
         }
@@ -65,22 +51,17 @@ public class SearcherTemplates
         return result;
     }
 
-    private boolean isTemplateCostEqualsCost(Template template, BigDecimal cost)
-    {
-        return Math.abs(template.getCost().doubleValue() - cost.doubleValue()) < 10;
-    }
 
     /**
      * search templates by name
      */
-    public List<Template> searchTemplatesByName(List<Template> templates, String name)
-    {
+    public List<Template> searchTemplatesByName(Collection<Template> templates, String search) {
         List<Template> result = new ArrayList<>();
 
-        for (Template template : templates)
-        {
-            if (isTemplateNameContainsString(template, name))
-            {
+        String name;
+        for (Template template : templates) {
+            name = template.getName();
+            if (name.contains(search) || checkRegExp(search, name)) {
                 result.add(template);
             }
         }
@@ -88,22 +69,17 @@ public class SearcherTemplates
         return result;
     }
 
-    private boolean isTemplateNameContainsString(Template template, String name)
-    {
-        return template.getName().toLowerCase().contains(name.toLowerCase());
-    }
 
     /**
      * search templates by description
      */
-    public List<Template> searchTemplatesByDescription(List<Template> templates, String description)
-    {
+    public List<Template> searchTemplatesByDescription(Collection<Template> templates, String search) {
         List<Template> result = new ArrayList<>();
 
-        for (Template template : templates)
-        {
-            if (isTemplateDescriptionContainsString(template, description))
-            {
+        String description;
+        for (Template template : templates) {
+            description = template.getDescription().toLowerCase();
+            if (description.contains(search) || checkRegExp(search, description)) {
                 result.add(template);
             }
         }
@@ -112,45 +88,52 @@ public class SearcherTemplates
     }
 
 
-    private boolean isTemplateDescriptionContainsString(Template template, String description)
-    {
-        return template.getDescription().toLowerCase().contains(description.toLowerCase());
-    }
-
-
-
-    /**
-     * search templates by name,area,cost fields
-     */
-    public List<Template> searchTemplates(List<Template> templates, String searchField)
-    {
-        Set<Template> result = new HashSet<>();
-
-        result.addAll(searchTemplatesByName(templates, searchField));
-        result.addAll(searchTemplatesByArea(templates, searchField));
-        result.addAll(searchTemplatesByCost(templates, parseBigDecimal(searchField)));
-
-        return new ArrayList<>(result);
-    }
-
-    private BigDecimal parseBigDecimal(String value)
-    {
-        try
-        {
-            double doubleValue = Double.parseDouble(value);
-            return BigDecimal.valueOf(doubleValue);
-        }
-        catch (NumberFormatException e)
-        {
-            return BigDecimal.ZERO;
-        }
-    }
-
-    public static SearcherTemplates getInstance(){
-        if(instance==null){
+    public static SearcherTemplates getInstance() {
+        if (instance == null) {
             instance = new SearcherTemplates();
         }
 
         return instance;
+    }
+
+    public List<Template> search(String search, String field, Collection<Template> templates) {
+        switch (field) {
+            case "Id":
+                return searchTemplatesById(search, templates);
+            case "Name":
+                return searchTemplatesByName(templates, search);
+            case "Description":
+                return searchTemplatesByDescription(templates, search);
+            case "Cost":
+                return searchTemplatesByCost(templates, search);
+            case "Area":
+                return searchTemplatesByArea(templates, search);
+        }
+        return new ArrayList<>();
+    }
+
+    private List<Template> searchTemplatesById(String search, Collection<Template> templates) {
+        List<Template> result = new ArrayList<>();
+
+        String id;
+        for (Template template : templates) {
+            id = template.getId().toString();
+            if (id.equals(search) || checkRegExp(search, id)) {
+                result.add(template);
+            }
+        }
+
+        return result;
+    }
+
+    public List<Template> searchTemplatesByAllFields(Collection<Template> templates, String req) {
+        Set<Template> result = new HashSet<>();
+
+        templates.addAll(searchTemplatesByArea(templates, req));
+        templates.addAll(searchTemplatesByName(templates, req));
+        templates.addAll(searchTemplatesByDescription(templates, req));
+        templates.addAll(searchTemplatesByCost(templates, req));
+
+        return new ArrayList<>(result);
     }
 }
