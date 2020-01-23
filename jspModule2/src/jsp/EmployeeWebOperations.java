@@ -3,6 +3,8 @@ package jsp;
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.controller.searcher.*;
+import com.netcracker.students.o3.controller.sorters.*;
+import com.netcracker.students.o3.controller.sorters.SortType.*;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.services.Service;
@@ -74,72 +76,102 @@ public class EmployeeWebOperations {
         }
     }
 
-    public String showEmployeeOrders(String search,String field) {
-        Collection<Order> orders;
+    public String showEmployeeOrders(String search, String field, OrderSortType sortOrders) {
+        List<Order> orders;
         if(isNotNullOrEmpty(search)){
             orders = searcherOrders.search(search,field,getEmployeeOrders());
         }else {
             orders = getEmployeeOrders();
         }
+
+        if(sortOrders!=null) {
+            OrderSorter.getInstance().sort(orders, sortOrders);
+        }
+
         return tableBuilder.createOrdersTable(orders);
     }
 
-    public String showAllOrders(String search,String field) {
-        Collection<Order> orders;
+    public String showAllOrders(String search,String field,OrderSortType sortOrders) {
+        List<Order> orders;
         if(isNotNullOrEmpty(search)){
             orders = searcherOrders.search(search,field,controller.getOrders());
         }else {
             orders = controller.getOrders();
         }
+
+        if(sortOrders!=null){
+            OrderSorter.getInstance().sort(orders,sortOrders);
+        }
+
         return tableBuilder.createOrdersTable(orders);
     }
 
-    public String showAllServices(String search,String field) {
-        Collection<Service> services;
+    public String showAllServices(String search, String field, ServiceSortType sortService) {
+        List<Service> services;
         if(isNotNullOrEmpty(search)){
             services = searcherService.search(search,field,controller.getServices());
         }else {
             services = controller.getServices();
         }
+
+        if(sortService!=null){
+            ServiceSorter.getInstance().sort(services,sortService);
+        }
         return tableBuilder.createEmployeeServicesTable(services);
     }
 
-    public String showAllTemplates(String search,String field) {
-        Collection<Template> templates;
+    public String showAllTemplates(String search, String field, TemplateSortType sortTemplates) {
+        List<Template> templates;
         if(isNotNullOrEmpty(search)){
             templates = searcherTemplates.search(search,field,controller.getTemplates());
         }else {
             templates = controller.getTemplates();
         }
+
+        if(sortTemplates!=null){
+            TemplateSorter.getInstance().sort(templates,sortTemplates);
+        }
         return tableBuilder.createEmployeeTemplatesTable(templates);
     }
 
-    public String showAllCustomers(String search,String field) {
-        Collection<Customer> customers ;
+    public String showAllCustomers(String search, String field, CustomerSortType sortCustomers) {
+        List<Customer> customers ;
         if(isNotNullOrEmpty(search)){
             customers = searcherCustomer.search(search,field,controller.getCustomers());
         }else {
             customers = controller.getCustomers();
         }
+
+        if(sortCustomers!=null){
+            CustomerSorter.getInstance().sort(customers,sortCustomers);
+        }
         return tableBuilder.createCustomersTable(customers);
     }
 
-    public String showAllEmployees(String search,String field) {
-        Collection<Employee> employees  ;
+    public String showAllEmployees(String search, String field, EmployeeSortType sortEmployees) {
+        List<Employee> employees  ;
         if(isNotNullOrEmpty(search)){
             employees = searcherEmployee.search(search,field,controller.getEmployers());
         }else {
             employees = controller.getEmployers();
         }
+
+        if(sortEmployees!=null){
+            EmployeeSorter.getInstance().sort(employees,sortEmployees);
+        }
         return tableBuilder.createEmployeesTable(employees);
     }
 
-    public String showAllAreas(String search,String field) {
-        Collection<Area> areas ;
+    public String showAllAreas(String search,String field, AreaSortType sortAreas) {
+        List<Area> areas ;
         if(isNotNullOrEmpty(search)){
             areas = searcherArea.search(search,field,controller.getAreas());
         }else {
             areas = controller.getAreas();
+        }
+
+        if(sortAreas!=null){
+            AreaSorter.getInstance().sort(areas,sortAreas);
         }
         return tableBuilder.createAreasTable(areas);
     }
@@ -149,7 +181,7 @@ public class EmployeeWebOperations {
          controller.startOrder(orderId,employeeId);
     }
 
-    private Collection<Order> getEmployeeOrders() {
+    private List<Order> getEmployeeOrders() {
         return controller.getOrdersByEmployeeId(employeeId);
     }
 

@@ -71,7 +71,13 @@ public class HtmlTableBuilder {
         String innerPart = "";
 
         innerPart +=
-                addColumns("id", "Name", "Cost",
+                addColumns(
+                        "id"+createButton("↑","ServiceSortUpById")+
+                                createButton("↓","ServiceSortDownById"),
+                        "Name"+createButton("↑","ServiceSortUpByName")+
+                                createButton("↓","ServiceSortDownByName"),
+                        "Cost"+createButton("↑","ServiceSortUpByCost")+
+                                createButton("↓","ServiceSortDownByCost"),
                         "Status", "TemplateId", "UserId",
                         "ActivationDate", "Areas");
 
@@ -80,21 +86,17 @@ public class HtmlTableBuilder {
         return build(innerPart);
     }
 
-    private String addEmployeeServicesToTable(Collection<Service> services) {
-        StringBuilder innerPart = new StringBuilder();
-        int i = 1;
-        for (Service service : services) {
-            i = getNextColorNumber(i);
-            innerPart.append(addEmployeeServiceToTable(service, colors[i]));
-        }
-        return innerPart.toString();
-    }
-
     public String createEmployeeTemplatesTable(Collection<Template> templates) {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
-                addColumns("Id", "Name", "Cost", "Description", "Areas","")
+                addColumns("Id"+createButton("↑","TemplateSortUpById")
+                                +createButton("↓","TemplateSortDownById")
+                        , "Name"+createButton("↑","TemplateSortUpByName")
+                                +createButton("↓","TemplateSortDownByName")
+                        , "Cost"+createButton("↑","TemplateSortUpByCost")
+                                +createButton("↓","TemplateSortDownByCost")
+                        , "Description", "Areas","")
         );
 
         int i = 1;
@@ -109,8 +111,10 @@ public class HtmlTableBuilder {
     public String createOrdersTable(Collection<Order> orders) {
         StringBuilder innerPart = new StringBuilder();
 
-        innerPart.append(addColumns("id",
-                "TemplateId", "ServiceId", "EmployeeId", "Status", "Action", "CreationDate",""));
+        innerPart.append(addColumns(
+                        "id"+createButton("↑","OrderSortUpById")
+                +createButton("↓","OrderSortDownById")
+                ,"TemplateId", "ServiceId", "EmployeeId", "Status", "Action", "CreationDate",""));
         int i = 1;
         for (Order order : orders) {
             i = getNextColorNumber(i);
@@ -124,7 +128,17 @@ public class HtmlTableBuilder {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
-                addColumns("Id", "Name", "Login", "Password", "Area", "Balance", "ConnectedServices","")
+                addColumns(
+                        "Id"+createButton("↑","CustomerSortUpById")+
+                                createButton("↓","CustomerSortDownById")
+                        , "Name"+createButton("↑","CustomerSortUpByName")+
+                                createButton("↓","CustomerSortDownByName")
+                        , "Login"+createButton("↑","CustomerSortUpByLogin")+
+                                createButton("↓","CustomerSortDownByLogin")
+                        , "Password", "Area",
+                        "Balance"+createButton("↑","CustomerSortUpByBalance")+
+                                createButton("↓","CustomerSortDownByBalance")
+                        , "ConnectedServices","")
         );
 
         int i = 1;
@@ -140,7 +154,14 @@ public class HtmlTableBuilder {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
-                addColumns("Id", "Name", "Login", "Password","")
+                addColumns(
+                        "Id"+createButton("↑","EmployeeSortUpById")+
+                                createButton("↓","EmployeeSortDownById")
+                        , "Name"+createButton("↑","EmployeeSortUpByName")+
+                                createButton("↓","EmployeeSortDownByName")
+                        , "Login"+createButton("↑","EmployeeSortUpByLogin")+
+                                createButton("↓","EmployeeSortDownByLogin")
+                        , "Password","")
         );
 
         int i = 1;
@@ -156,7 +177,13 @@ public class HtmlTableBuilder {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
-                addColumns("Id", "Name", "Description","")
+                addColumns("Id"+createButton("↑","AreaSortUpById")+
+                                createButton("↓","AreaSortDownById")
+                        , "Name"+createButton("↑","AreaSortUpByName")+
+                                createButton("↓","AreaSortDownByName")
+                        , "Description"+createButton("↑","AreaSortUpByDescription")+
+                                createButton("↓","AreaSortDownByDescription")
+                        ,"")
         );
 
         int i = 1;
@@ -170,6 +197,16 @@ public class HtmlTableBuilder {
 
 
 
+
+    private String addEmployeeServicesToTable(Collection<Service> services) {
+        StringBuilder innerPart = new StringBuilder();
+        int i = 1;
+        for (Service service : services) {
+            i = getNextColorNumber(i);
+            innerPart.append(addEmployeeServiceToTable(service, colors[i]));
+        }
+        return innerPart.toString();
+    }
 
     private String addCustomerServiceToTable(Service service, String color) {
         String result = "<tr bgcolor='" + color + "'>";

@@ -1,6 +1,7 @@
+<%@ page import="com.netcracker.students.o3.controller.sorters.SortType.*" %>
 <%@ page import="jsp.EmployeeWebOperations" %>
-<%@ page import="java.math.BigInteger" %>
 <%@ page import="java.io.IOException" %>
+<%@ page import="java.math.BigInteger" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <html lang="en">
 <head>
@@ -18,45 +19,194 @@
 <body>
 <h1 align="right">
     <%
+        cleanSession(request.getSession());
         for (String key : request.getParameterMap().keySet()) {
             if (request.getParameterMap().get(key) != null) {
-                if(key.equals("out")){
-                    out(pageContext,request,response);
-                }else if(key.equals("save")){
+                if (key.equals("out")) {
+                    out(pageContext, request, response);
+                } else if (key.equals("save")) {
                     String name = request.getParameter("fio");
                     String password = request.getParameter("password");
 
-                    employeeWebOperations.changeNameAndPassword(name,password);
-                }else if(key.contains("startOrder")){
+                    employeeWebOperations.changeNameAndPassword(name, password);
+                } else if (key.contains("startOrder")) {
                     startOrder(key);
-                }else if(key.contains("resumeOrder")){
+                } else if (key.contains("resumeOrder")) {
                     resumeOrder(key);
-                }else if(key.contains("completeOrder")){
+                } else if (key.contains("completeOrder")) {
                     completeOrder(key);
-                }else if(key.contains("deleteTemplate")){
+                } else if (key.contains("deleteTemplate")) {
                     deleteTemplate(key);
-                }else if(key.contains("deleteCustomer")){
+                } else if (key.contains("deleteCustomer")) {
                     deleteCustomer(key);
-                }else if(key.contains("deleteEmployee")){
+                } else if (key.contains("deleteEmployee")) {
                     deleteEmployee(key);
-                }else if(key.contains("deleteArea")){
+                } else if (key.contains("deleteArea")) {
                     deleteArea(key);
-                }else if (key.startsWith("searchButton")){
-                    String type = key.substring(11);
-                    switch (type){
-                        case "EmployeeOrders":;break;
-                        case "AllOrders": break;
-                        case "AllServices":break;
-                        case "AllTemplates":break;
-                        case "AllCustomers":break;
-                        case "AllEmployees":break;
-                        case "AllAreas":break;
-                    }
+                } else if (key.toLowerCase().contains("startorder")) {
+                    startOrder(key);
+                } else if (key.toLowerCase().contains("completeorder")) {
+                    completeOrder(key);
+                } else if (key.toLowerCase().contains("resumeorder")) {
+                    resumeOrder(key);
+                } else if (key.startsWith("ServiceSort")) {
+                    serviceSort(key, request);
+                } else if (key.startsWith("TemplateSort")) {
+                    templateSort(key, request);
+                } else if (key.startsWith("AreaSort")) {
+                    areaSort(key, request);
+                } else if (key.startsWith("CustomerSort")) {
+                    customerSort(key, request);
+                } else if (key.startsWith("EmployeeSort")) {
+                    employeeSort(key, request);
+                } else if (key.startsWith("OrderSort")) {
+                    orderSort(key, request);
                 }
             }
         }
     %>
     <%!
+        private void cleanSession(HttpSession session) {
+            session.setAttribute("sortOrders", null);
+            session.setAttribute("sortEmployees", null);
+            session.setAttribute("sortCustomers", null);
+            session.setAttribute("sortAreas", null);
+            session.setAttribute("sortTemplates", null);
+            session.setAttribute("sortServices", null);
+        }
+
+        private void orderSort(String key, HttpServletRequest request) {
+            switch (key) {
+                case "OrderSortUpById":
+                    request.getSession().setAttribute("sortOrders", OrderSortType.UpById);
+                    break;
+                case "OrderSortDownById":
+                    request.getSession().setAttribute("sortOrders", OrderSortType.DownById);
+                    break;
+            }
+        }
+
+        private void employeeSort(String key, HttpServletRequest request) {
+            switch (key) {
+                case "EmployeeSortUpById":
+                    request.getSession().setAttribute("sortEmployees", EmployeeSortType.UpById);
+                    break;
+                case "EmployeeSortDownById":
+                    request.getSession().setAttribute("sortEmployees", EmployeeSortType.DownById);
+                    break;
+                case "EmployeeSortUpByLogin":
+                    request.getSession().setAttribute("sortEmployees", EmployeeSortType.UpByLogin);
+                    break;
+                case "EmployeeSortDownByLogin":
+                    request.getSession().setAttribute("sortEmployees", EmployeeSortType.DownByLogin);
+                    break;
+                case "EmployeeSortUpByName":
+                    request.getSession().setAttribute("sortEmployees", EmployeeSortType.UpByName);
+                    break;
+                case "EmployeeSortDownByName":
+                    request.getSession().setAttribute("sortEmployees", EmployeeSortType.DownByName);
+                    break;
+            }
+        }
+
+        private void customerSort(String key, HttpServletRequest request) {
+            switch (key) {
+                case "CustomerSortUpByBalance":
+                    request.getSession().setAttribute("sortCustomers", CustomerSortType.UpByBalance);
+                    break;
+                case "CustomerSortDownByBalance":
+                    request.getSession().setAttribute("sortCustomers", CustomerSortType.DownByBalance);
+                    break;
+                case "CustomerSortUpById":
+                    request.getSession().setAttribute("sortCustomers", CustomerSortType.UpById);
+                    break;
+                case "CustomerSortDownById":
+                    request.getSession().setAttribute("sortCustomers", CustomerSortType.DownById);
+                    break;
+                case "CustomerSortUpByLogin":
+                    request.getSession().setAttribute("sortCustomers", CustomerSortType.UpByLogin);
+                    break;
+                case "CustomerSortDownByLogin":
+                    request.getSession().setAttribute("sortCustomers", CustomerSortType.DownByLogin);
+                    break;
+                case "CustomerSortUpByName":
+                    request.getSession().setAttribute("sortCustomers", CustomerSortType.UpByName);
+                    break;
+                case "CustomerSortDownByName":
+                    request.getSession().setAttribute("sortCustomers", CustomerSortType.DownByName);
+                    break;
+            }
+        }
+
+        private void areaSort(String key, HttpServletRequest request) {
+            switch (key) {
+                case "AreaSortUpByDescription":
+                    request.getSession().setAttribute("sortAreas", AreaSortType.UpByDescription);
+                    break;
+                case "AreaSortDownByDescription":
+                    request.getSession().setAttribute("sortAreas", AreaSortType.DownByDescription);
+                    break;
+                case "AreaSortUpById":
+                    request.getSession().setAttribute("sortAreas", AreaSortType.UpById);
+                    break;
+                case "AreaSortDownById":
+                    request.getSession().setAttribute("sortAreas", AreaSortType.DownById);
+                    break;
+                case "AreaSortUpByName":
+                    request.getSession().setAttribute("sortAreas", AreaSortType.UpByName);
+                    break;
+                case "AreaSortDownByName":
+                    request.getSession().setAttribute("sortAreas", AreaSortType.DownByName);
+                    break;
+            }
+        }
+
+        private void templateSort(String key, HttpServletRequest request) {
+            switch (key) {
+                case "TemplateSortUpByName":
+                    request.getSession().setAttribute("sortTemplates", TemplateSortType.UpByName);
+                    break;
+                case "TemplateSortDownByName":
+                    request.getSession().setAttribute("sortTemplates", TemplateSortType.DownByName);
+                    break;
+                case "TemplateSortUpByCost":
+                    request.getSession().setAttribute("sortTemplates", TemplateSortType.UpByCost);
+                    break;
+                case "TemplateSortDownByCost":
+                    request.getSession().setAttribute("sortTemplates", TemplateSortType.DownByCost);
+                    break;
+                case "TemplateSortUpById":
+                    request.getSession().setAttribute("sortTemplates", TemplateSortType.UpById);
+                    break;
+                case "TemplateSortDownById":
+                    request.getSession().setAttribute("sortTemplates", TemplateSortType.DownById);
+                    break;
+            }
+        }
+
+        private void serviceSort(String key, HttpServletRequest request) {
+            switch (key) {
+                case "ServiceSortUpByName":
+                    request.getSession().setAttribute("sortServices", ServiceSortType.UpByName);
+                    break;
+                case "ServiceSortDownByName":
+                    request.getSession().setAttribute("sortServices", ServiceSortType.DownByName);
+                    break;
+                case "ServiceSortUpByCost":
+                    request.getSession().setAttribute("sortServices", ServiceSortType.UpByCost);
+                    break;
+                case "ServiceSortDownByCost":
+                    request.getSession().setAttribute("sortServices", ServiceSortType.DownByCost);
+                    break;
+                case "ServiceSortUpById":
+                    request.getSession().setAttribute("sortServices", ServiceSortType.UpById);
+                    break;
+                case "ServiceSortDownById":
+                    request.getSession().setAttribute("sortServices", ServiceSortType.DownById);
+                    break;
+            }
+        }
+
         private void deleteArea(String key) {
             BigInteger areaId = BigInteger.valueOf(Long.parseLong(key.substring(9)));
             employeeWebOperations.deleteArea(areaId);
@@ -133,8 +283,9 @@
                     </select>
                     <%=employeeWebOperations.showEmployeeOrders(
                             request.getParameter("searchFieldEmployeeOrders"),
-                            request.getParameter("employeeOrderSelectField")
-                            )%>
+                            request.getParameter("employeeOrderSelectField"),
+                            (OrderSortType) request.getSession().getAttribute("sortOrders")
+                    )%>
                 </form>
             </div>
             <div class="tab tab-2">
@@ -151,7 +302,8 @@
                     </select>
                     <%=employeeWebOperations.showAllOrders(
                             request.getParameter("searchFieldAllOrders"),
-                            request.getParameter("allOrderSelectField")
+                            request.getParameter("allOrderSelectField"),
+                            (OrderSortType) request.getSession().getAttribute("sortOrders")
                     )%>
                 </form>
             </div>
@@ -171,7 +323,8 @@
                     </select>
                     <%=employeeWebOperations.showAllServices(
                             request.getParameter("searchFieldAllServices"),
-                            request.getParameter("allServicesSelectField")
+                            request.getParameter("allServicesSelectField"),
+                            (ServiceSortType) request.getSession().getAttribute("sortServices")
                     )%>
                 </form>
             </div>
@@ -188,7 +341,8 @@
                     </select>
                     <%=employeeWebOperations.showAllTemplates(
                             request.getParameter("searchFieldAllTemplates"),
-                            request.getParameter("allTemplatesSelectField")
+                            request.getParameter("allTemplatesSelectField"),
+                            (TemplateSortType) request.getSession().getAttribute("sortTemplates")
                     )%>
                 </form>
             </div>
@@ -206,7 +360,8 @@
                     </select>
                     <%=employeeWebOperations.showAllCustomers(
                             request.getParameter("searchFieldAllCustomers"),
-                            request.getParameter("allCustomersSelectField")
+                            request.getParameter("allCustomersSelectField"),
+                            (CustomerSortType) request.getSession().getAttribute("sortCustomers")
                     )%>
                 </form>
             </div>
@@ -221,7 +376,8 @@
                     </select>
                     <%=employeeWebOperations.showAllEmployees(
                             request.getParameter("searchFieldAllEmployees"),
-                            request.getParameter("allEmployeesSelectField")
+                            request.getParameter("allEmployeesSelectField"),
+                            (EmployeeSortType) request.getSession().getAttribute("sortEmployees")
                     )%>
                 </form>
             </div>
@@ -236,7 +392,8 @@
                     </select>
                     <%=employeeWebOperations.showAllAreas(
                             request.getParameter("searchFieldAllAreas"),
-                            request.getParameter("allAreasSelectField")
+                            request.getParameter("allAreasSelectField"),
+                            (AreaSortType) request.getSession().getAttribute("sortAreas")
                     )%>
                 </form>
             </div>
