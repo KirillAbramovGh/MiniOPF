@@ -13,10 +13,11 @@ import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.Employee;
 
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.List;
 
 public class EmployeeWebOperations {
+    private static EmployeeWebOperations instance;
+
     private BigInteger employeeId;
     private Controller controller;
     private HtmlTableBuilder tableBuilder;
@@ -28,7 +29,7 @@ public class EmployeeWebOperations {
     private SearcherEmployee searcherEmployee;
 
 
-    public EmployeeWebOperations() {
+    private EmployeeWebOperations() {
         controller = ControllerImpl.getInstance();
         tableBuilder = HtmlTableBuilder.getInstance();
         searcherService = SearcherService.getInstance();
@@ -37,6 +38,13 @@ public class EmployeeWebOperations {
         searcherTemplates = SearcherTemplates.getInstance();
         searcherCustomer = SearcherCustomer.getInstance();
         searcherEmployee = SearcherEmployee.getInstance();
+    }
+
+    public static EmployeeWebOperations getInstance() {
+        if(instance==null){
+            instance = new EmployeeWebOperations();
+        }
+        return instance;
     }
 
     public void start(BigInteger employeeId) {
@@ -78,29 +86,37 @@ public class EmployeeWebOperations {
 
     public String showEmployeeOrders(String search, String field, OrderSortType sortOrders) {
         List<Order> orders;
-        if(isNotNullOrEmpty(search)){
-            orders = searcherOrders.search(search,field,getEmployeeOrders());
-        }else {
+        if (isNotNullOrEmpty(search)) {
+            orders = searcherOrders.search(search, field, getEmployeeOrders());
+        } else {
             orders = getEmployeeOrders();
         }
 
-        if(sortOrders!=null) {
+        if(orders.isEmpty()){
+            return "</br>There are no orders";
+        }
+
+        if (sortOrders != null) {
             OrderSorter.getInstance().sort(orders, sortOrders);
         }
 
         return tableBuilder.createOrdersTable(orders);
     }
 
-    public String showAllOrders(String search,String field,OrderSortType sortOrders) {
+    public String showAllOrders(String search, String field, OrderSortType sortOrders) {
         List<Order> orders;
-        if(isNotNullOrEmpty(search)){
-            orders = searcherOrders.search(search,field,controller.getOrders());
-        }else {
+        if (isNotNullOrEmpty(search)) {
+            orders = searcherOrders.search(search, field, controller.getOrders());
+        } else {
             orders = controller.getOrders();
         }
 
-        if(sortOrders!=null){
-            OrderSorter.getInstance().sort(orders,sortOrders);
+        if(orders.isEmpty()){
+            return "</br>There are no orders";
+        }
+
+        if (sortOrders != null) {
+            OrderSorter.getInstance().sort(orders, sortOrders);
         }
 
         return tableBuilder.createOrdersTable(orders);
@@ -108,77 +124,97 @@ public class EmployeeWebOperations {
 
     public String showAllServices(String search, String field, ServiceSortType sortService) {
         List<Service> services;
-        if(isNotNullOrEmpty(search)){
-            services = searcherService.search(search,field,controller.getServices());
-        }else {
+        if (isNotNullOrEmpty(search)) {
+            services = searcherService.search(search, field, controller.getServices());
+        } else {
             services = controller.getServices();
         }
 
-        if(sortService!=null){
-            ServiceSorter.getInstance().sort(services,sortService);
+        if(services.isEmpty()){
+            return "</br>There are no services";
+        }
+
+        if (sortService != null) {
+            ServiceSorter.getInstance().sort(services, sortService);
         }
         return tableBuilder.createEmployeeServicesTable(services);
     }
 
     public String showAllTemplates(String search, String field, TemplateSortType sortTemplates) {
         List<Template> templates;
-        if(isNotNullOrEmpty(search)){
-            templates = searcherTemplates.search(search,field,controller.getTemplates());
-        }else {
+        if (isNotNullOrEmpty(search)) {
+            templates = searcherTemplates.search(search, field, controller.getTemplates());
+        } else {
             templates = controller.getTemplates();
         }
 
-        if(sortTemplates!=null){
-            TemplateSorter.getInstance().sort(templates,sortTemplates);
+        if(templates.isEmpty()){
+            return "</br>There are no templates";
+        }
+
+        if (sortTemplates != null) {
+            TemplateSorter.getInstance().sort(templates, sortTemplates);
         }
         return tableBuilder.createEmployeeTemplatesTable(templates);
     }
 
     public String showAllCustomers(String search, String field, CustomerSortType sortCustomers) {
-        List<Customer> customers ;
-        if(isNotNullOrEmpty(search)){
-            customers = searcherCustomer.search(search,field,controller.getCustomers());
-        }else {
+        List<Customer> customers;
+        if (isNotNullOrEmpty(search)) {
+            customers = searcherCustomer.search(search, field, controller.getCustomers());
+        } else {
             customers = controller.getCustomers();
         }
 
-        if(sortCustomers!=null){
-            CustomerSorter.getInstance().sort(customers,sortCustomers);
+        if(customers.isEmpty()){
+            return "</br>There are no customers";
+        }
+
+        if (sortCustomers != null) {
+            CustomerSorter.getInstance().sort(customers, sortCustomers);
         }
         return tableBuilder.createCustomersTable(customers);
     }
 
     public String showAllEmployees(String search, String field, EmployeeSortType sortEmployees) {
-        List<Employee> employees  ;
-        if(isNotNullOrEmpty(search)){
-            employees = searcherEmployee.search(search,field,controller.getEmployers());
-        }else {
+        List<Employee> employees;
+        if (isNotNullOrEmpty(search)) {
+            employees = searcherEmployee.search(search, field, controller.getEmployers());
+        } else {
             employees = controller.getEmployers();
         }
 
-        if(sortEmployees!=null){
-            EmployeeSorter.getInstance().sort(employees,sortEmployees);
+        if(employees.isEmpty()){
+            return "</br>There are no employees";
+        }
+
+        if (sortEmployees != null) {
+            EmployeeSorter.getInstance().sort(employees, sortEmployees);
         }
         return tableBuilder.createEmployeesTable(employees);
     }
 
-    public String showAllAreas(String search,String field, AreaSortType sortAreas) {
-        List<Area> areas ;
-        if(isNotNullOrEmpty(search)){
-            areas = searcherArea.search(search,field,controller.getAreas());
-        }else {
+    public String showAllAreas(String search, String field, AreaSortType sortAreas) {
+        List<Area> areas;
+        if (isNotNullOrEmpty(search)) {
+            areas = searcherArea.search(search, field, controller.getAreas());
+        } else {
             areas = controller.getAreas();
         }
 
-        if(sortAreas!=null){
-            AreaSorter.getInstance().sort(areas,sortAreas);
+        if(areas.isEmpty()){
+            return "</br>There are no areas";
+        }
+
+        if (sortAreas != null) {
+            AreaSorter.getInstance().sort(areas, sortAreas);
         }
         return tableBuilder.createAreasTable(areas);
     }
 
 
-    public void startOrder(BigInteger orderId){
-         controller.startOrder(orderId,employeeId);
+    public void startOrder(BigInteger orderId) {
+        controller.startOrder(orderId, employeeId);
     }
 
     private List<Order> getEmployeeOrders() {

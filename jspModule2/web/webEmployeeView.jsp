@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <title>MiniOPF</title>
     <%!
-        EmployeeWebOperations employeeWebOperations = new EmployeeWebOperations();
+        EmployeeWebOperations employeeWebOperations = EmployeeWebOperations.getInstance();
     %>
     <%
         BigInteger id = (BigInteger) request.getSession().getAttribute("id");
@@ -238,7 +238,7 @@
         }
 
         private void startOrder(String key) {
-            BigInteger orderId = BigInteger.valueOf(Long.parseLong(key.substring(9)));
+            BigInteger orderId = BigInteger.valueOf(Long.parseLong(key.substring(10)));
             employeeWebOperations.startOrder(orderId);
         }
 
@@ -408,11 +408,13 @@
         </div>
     </div>
 </div>
+
 <footer>
     <div align="center">
         © NetCracker ERC
     </div>
 </footer>
+
 <script src="main.js"></script>
 </body>
 </html>

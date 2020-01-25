@@ -25,18 +25,15 @@ public interface Controller
 {
     /**
      * disconnect service with serviceId
-     * @param customerId - owner of service
      * @param serviceId - id of service to be disconnected
      */
-    void disconnectService(BigInteger customerId, BigInteger serviceId);
+    void disconnectService(BigInteger serviceId);
 
     void resumeService(BigInteger serviceId);
 
     void suspendService(BigInteger serviceId);
 
-    void cancelService(BigInteger customerId,BigInteger serviceId);
 
-    void completeService(BigInteger serviceId);
 
     /**
      * start execution of order
@@ -278,15 +275,6 @@ public interface Controller
      */
     void suspendOrResumeService(BigInteger customerId, BigInteger serviceId);
 
-    /**
-     * suspend service
-     */
-    void suspendService(BigInteger customerId, BigInteger serviceId);
-
-    /**
-     * resume service
-     */
-    void resumeService(BigInteger customerId, BigInteger serviceId);
 
     /**
      * connect service

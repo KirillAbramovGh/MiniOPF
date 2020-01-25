@@ -12,11 +12,13 @@ public interface Serializer
 {
     /**
      * serialise model to json and write to file
+     * @param model we need to serialize
      */
     void serializeModel(Model model) throws IOException;
 
     /**
      * read json from file, deserialize to model and set it to param
+     * @param model we need deserialize to it
      */
     void deserializeModel(Model model) throws IOException;
 }

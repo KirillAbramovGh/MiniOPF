@@ -14,7 +14,7 @@ public interface Area
 
     /**
      * set area id
-     * @param id
+     * @param id of Area
      */
     void setId(BigInteger id);
 
@@ -25,7 +25,7 @@ public interface Area
 
     /**
      * set area name
-     * @param name
+     * @param name of Area
      */
     void setName(String name);
 
@@ -36,7 +36,7 @@ public interface Area
 
     /**
      * set area description
-     * @param description
+     * @param description of Area
      */
     void setDescription(String description);
 }

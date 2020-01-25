@@ -155,7 +155,7 @@ public class SearcherService extends Searcher<Service> {
         String id;
         for (Service service : services) {
             id = service.getId().toString();
-            if (id.contains(search) || checkRegExp(search, id)) {
+            if (id.equals(search) || checkRegExp(search, id)) {
                 result.add(service);
             }
         }

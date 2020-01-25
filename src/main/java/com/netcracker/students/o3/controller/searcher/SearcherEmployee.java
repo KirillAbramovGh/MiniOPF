@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class SearcherEmployee {
+public class SearcherEmployee extends Searcher<Employee>{
     private static SearcherEmployee instance;
 
     private SearcherEmployee(){
@@ -34,7 +34,7 @@ public class SearcherEmployee {
         List<Employee> result = new ArrayList<>();
 
         for(Employee employee : employees){
-            if(employee.getId().toString().equals(search)){
+            if(employee.getLogin().contains(search) || checkRegExp(search,employee.getLogin())){
                 result.add(employee);
             }
         }
@@ -46,7 +46,7 @@ public class SearcherEmployee {
         List<Employee> result = new ArrayList<>();
 
         for(Employee employee : employees){
-            if(employee.getName().contains(search)){
+            if(employee.getName().contains(search) || checkRegExp(search,employee.getName())){
                 result.add(employee);
             }
         }
@@ -58,7 +58,7 @@ public class SearcherEmployee {
         List<Employee> result = new ArrayList<>();
 
         for(Employee employee : employees){
-            if(employee.getLogin().contains(search)){
+            if(employee.getId().toString().equals(search)){
                 result.add(employee);
             }
         }

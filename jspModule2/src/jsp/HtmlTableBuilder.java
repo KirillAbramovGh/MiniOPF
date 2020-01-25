@@ -29,11 +29,11 @@ public class HtmlTableBuilder {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(addColumns("Name" +
-                        createButton("↑", "TemplateSortUpByName") +
-                        createButton("↓", "TemplateSortDownByName"),
+                        createButton("↑", "TemplateSortDownByName") +
+                        createButton("↓", "TemplateSortUpByName"),
                 "Cost" +
-                        createButton("↑", "TemplateSortUpByCost") +
-                        createButton("↓", "TemplateSortDownByCost"), "Description", ""));
+                        createButton("↑", "TemplateSortDownByCost") +
+                        createButton("↓", "TemplateSortUpByCost"), "Description", ""));
 
         int i = 1;
         for (Template t : templates) {
@@ -49,10 +49,10 @@ public class HtmlTableBuilder {
 
         innerPart.append(
                 addColumns(
-                        "Name" + createButton("↑", "ServiceSortUpByName") +
-                                createButton("↓", "ServiceSortDownByName"),
-                        "Cost" + createButton("↑", "ServiceSortUpByCost") +
-                                createButton("↓", "ServiceSortDownByCost"), "Status", "", ""));
+                        "Name" + createButton("↑", "ServiceSortDownByName") +
+                                createButton("↓", "ServiceSortUpByName"),
+                        "Cost" + createButton("↑", "ServiceSortDownByCost") +
+                                createButton("↓", "ServiceSortUpByCost"), "Status", "", ""));
 
 
         int i = 1;
@@ -74,10 +74,10 @@ public class HtmlTableBuilder {
                 addColumns(
                         "id"+createButton("↑","ServiceSortUpById")+
                                 createButton("↓","ServiceSortDownById"),
-                        "Name"+createButton("↑","ServiceSortUpByName")+
-                                createButton("↓","ServiceSortDownByName"),
-                        "Cost"+createButton("↑","ServiceSortUpByCost")+
-                                createButton("↓","ServiceSortDownByCost"),
+                        "Name"+createButton("↑","ServiceSortDownByName")+
+                                createButton("↓","ServiceSortUpByName"),
+                        "Cost"+createButton("↑","ServiceSortDownByCost")+
+                                createButton("↓","ServiceSortUpByCost"),
                         "Status", "TemplateId", "UserId",
                         "ActivationDate", "Areas");
 
@@ -90,12 +90,12 @@ public class HtmlTableBuilder {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
-                addColumns("Id"+createButton("↑","TemplateSortUpById")
-                                +createButton("↓","TemplateSortDownById")
-                        , "Name"+createButton("↑","TemplateSortUpByName")
-                                +createButton("↓","TemplateSortDownByName")
-                        , "Cost"+createButton("↑","TemplateSortUpByCost")
-                                +createButton("↓","TemplateSortDownByCost")
+                addColumns("Id"+createButton("↑","TemplateSortDownById")
+                                +createButton("↓","TemplateSortUpById")
+                        , "Name"+createButton("↑","TemplateSortDownByName")
+                                +createButton("↓","TemplateSortUpByName")
+                        , "Cost"+createButton("↑","TemplateSortDownByCost")
+                                +createButton("↓","TemplateSortUpByCost")
                         , "Description", "Areas","")
         );
 
@@ -112,8 +112,8 @@ public class HtmlTableBuilder {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(addColumns(
-                        "id"+createButton("↑","OrderSortUpById")
-                +createButton("↓","OrderSortDownById")
+                        "id"+createButton("↑","OrderSortDownById")
+                +createButton("↓","OrderSortUpById")
                 ,"TemplateId", "ServiceId", "EmployeeId", "Status", "Action", "CreationDate",""));
         int i = 1;
         for (Order order : orders) {
@@ -129,15 +129,15 @@ public class HtmlTableBuilder {
 
         innerPart.append(
                 addColumns(
-                        "Id"+createButton("↑","CustomerSortUpById")+
-                                createButton("↓","CustomerSortDownById")
-                        , "Name"+createButton("↑","CustomerSortUpByName")+
-                                createButton("↓","CustomerSortDownByName")
-                        , "Login"+createButton("↑","CustomerSortUpByLogin")+
-                                createButton("↓","CustomerSortDownByLogin")
+                        "Id"+createButton("↑","CustomerSortDownById")+
+                                createButton("↓","CustomerSortUpById")
+                        , "Name"+createButton("↑","CustomerSortDownByName")+
+                                createButton("↓","CustomerSortUpByName")
+                        , "Login"+createButton("↑","CustomerSortDownByLogin")+
+                                createButton("↓","CustomerSortUpByLogin")
                         , "Password", "Area",
-                        "Balance"+createButton("↑","CustomerSortUpByBalance")+
-                                createButton("↓","CustomerSortDownByBalance")
+                        "Balance"+createButton("↑","CustomerSortDownByBalance")+
+                                createButton("↓","CustomerSortUpByBalance")
                         , "ConnectedServices","")
         );
 
@@ -155,12 +155,12 @@ public class HtmlTableBuilder {
 
         innerPart.append(
                 addColumns(
-                        "Id"+createButton("↑","EmployeeSortUpById")+
-                                createButton("↓","EmployeeSortDownById")
-                        , "Name"+createButton("↑","EmployeeSortUpByName")+
-                                createButton("↓","EmployeeSortDownByName")
-                        , "Login"+createButton("↑","EmployeeSortUpByLogin")+
-                                createButton("↓","EmployeeSortDownByLogin")
+                        "Id"+createButton("↑","EmployeeSortDownById")+
+                                createButton("↓","EmployeeSortUpById")
+                        , "Name"+createButton("↑","EmployeeSortDownByName")+
+                                createButton("↓","EmployeeSortUpByName")
+                        , "Login"+createButton("↑","EmployeeSortDownByLogin")+
+                                createButton("↓","EmployeeSortUpByLogin")
                         , "Password","")
         );
 
@@ -177,12 +177,12 @@ public class HtmlTableBuilder {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
-                addColumns("Id"+createButton("↑","AreaSortUpById")+
-                                createButton("↓","AreaSortDownById")
-                        , "Name"+createButton("↑","AreaSortUpByName")+
-                                createButton("↓","AreaSortDownByName")
-                        , "Description"+createButton("↑","AreaSortUpByDescription")+
-                                createButton("↓","AreaSortDownByDescription")
+                addColumns("Id"+createButton("↑","AreaSortDownById")+
+                                createButton("↓","AreaSortUpById")
+                        , "Name"+createButton("↑","AreaSortDownByName")+
+                                createButton("↓","AreaSortUpByName")
+                        , "Description"+createButton("↑","AreaSortDownByDescription")+
+                                createButton("↓","AreaSortUpByDescription")
                         ,"")
         );
 
@@ -220,16 +220,16 @@ public class HtmlTableBuilder {
 
         if (service.getStatus() == ServiceStatus.Entering) {
             result += addCell(status, "yellow");
-            result += addCell(createButton("cancel", "disconnect" + service.getId()));
+            result += addCell(createButton("cancel", "disconnect" , service.getId().toString()));
             result += addCell("");
         } else if (service.getStatus() == ServiceStatus.Active) {
             result += addCell(status, "green");
-            result += addCell(createButton("disconnect", "disconnect" + service.getId()));
-            result += addCell(createButton("suspend", "suspend" + service.getId()));
+            result += addCell(createButton("disconnect", "disconnect" , service.getId().toString()));
+            result += addCell(createButton("suspend", "suspend" , service.getId().toString()));
         } else if (service.getStatus() == ServiceStatus.Suspended) {
             result += addCell(status, "red");
-            result += addCell(createButton("disconnect", "disconnect" + service.getId()));
-            result += addCell(createButton("resume", "suspend" + service.getId()));
+            result += addCell(createButton("disconnect", "disconnect" , service.getId().toString()));
+            result += addCell(createButton("resume", "suspend" , service.getId().toString()));
         }
         return result + "</tr>";
     }
@@ -240,7 +240,7 @@ public class HtmlTableBuilder {
         result += addCell(template.getName());
         result += addCell(template.getCost() + "");
         result += addCell(template.getDescription() + getAreasByTemplateId(template.getId()));
-        result += addCell(createButton("connect", "connect" + template.getId()));
+        result += addCell(createButton("connect", "connect" , template.getId().toString()));
 
         return result + "</tr>";
     }
@@ -257,10 +257,10 @@ public class HtmlTableBuilder {
         result += addCell(order.getCreationDate() + "");
 
         switch (order.getStatus()){
-            case Entering:result+=addCell(createButton("Start","startOrder"+order.getId()));break;
-            case Suspended:result+=addCell(createButton("Resume","resumeOrder"+order.getId()));break;
+            case Entering:result+=addCell(createButton("Start","startOrder",order.getId().toString()));break;
+            case Suspended:result+=addCell(createButton("Resume","resumeOrder",order.getId().toString()));break;
             case Completed:result+=addCell("");break;
-            case Processing:result+=addCell(createButton("Complete","completeOrder"+order.getId()));break;
+            case Processing:result+=addCell(createButton("Complete","completeOrder",order.getId().toString()));break;
         }
 
         return result + "</tr>";
@@ -289,7 +289,7 @@ public class HtmlTableBuilder {
         result += addCell(template.getCost() + "");
         result += addCell(template.getDescription() + "");
         result += addCell(getAreasByTemplateId(template.getId()));
-        result +=addCell(createButton("Delete","deleteTemplate"+template.getId()));
+        result +=addCell(createButton("Delete","deleteTemplate",template.getId().toString()));
 
         return result + "</tr>";
     }
@@ -306,7 +306,7 @@ public class HtmlTableBuilder {
         result += addCell(
                 getCustomerConnectedServiceIds(customer)
         );
-        result+=addCell(createButton("Delete","deleteCustomer"+customer.getId()));
+        result+=addCell(createButton("Delete","deleteCustomer",customer.getId().toString()));
 
         return result + "</tr>";
     }
@@ -318,7 +318,7 @@ public class HtmlTableBuilder {
         result += addCell(employee.getName() + "");
         result += addCell(employee.getLogin());
         result += addCell(employee.getPassword());
-        result+=addCell(createButton("Delete","deleteEmployee"+employee.getId()));
+        result+=addCell(createButton("Delete","deleteEmployee",employee.getId().toString()));
 
         return result + "</tr>";
     }
@@ -329,7 +329,7 @@ public class HtmlTableBuilder {
         result += addCell(area.getId() + "");
         result += addCell(area.getName() + "");
         result += addCell(area.getDescription());
-        result += addCell(createButton("Delete","deleteArea"+area.getId()));
+        result += addCell(createButton("Delete","deleteArea",area.getId().toString()));
 
         return result + "</tr>";
     }
@@ -365,6 +365,10 @@ public class HtmlTableBuilder {
         String buttonStart = "<input ";
         String buttonEnd = " />";
         return buttonStart + "type='" + "submit" + "' value='" + value + "' name='" + name + "'" + buttonEnd;
+    }
+
+    private String createButton(String value, String name,String id) {
+        return createButton(value,name+" "+id);
     }
 
 

@@ -108,7 +108,7 @@ public class SearcherOrders extends Searcher<Order> {
         String id;
         for(Order order : orders){
             id = order.getId().toString();
-            if(id.contains(search) || checkRegExp(search,id)){
+            if(id.equals(search) || checkRegExp(search,id)){
                 result.add(order);
             }
         }

@@ -26,7 +26,7 @@ public class SearcherArea extends Searcher<Area> {
         String id;
         for (Area area : areas) {
             id = area.getId().toString();
-            if (id.equals(search) || checkRegExp(search, id)) {
+            if (id.equals(search)) {
                 result.add(area);
             }
         }

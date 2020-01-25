@@ -3,6 +3,9 @@ package com.netcracker.students.o3.model.orders;
 import java.math.BigInteger;
 import java.util.Date;
 
+/**
+ * class order for employee. Create to do action for service
+ */
 public interface Order
 {
     /**
@@ -11,7 +14,7 @@ public interface Order
     BigInteger getId();
 
     /**
-     * set order id
+     * set order id of order
      */
     void setId(final BigInteger id);
 
@@ -22,6 +25,7 @@ public interface Order
 
     /**
      * set template id
+     * @param  templateId of template
      */
     void setTemplateId(final BigInteger templateId);
 
@@ -32,16 +36,17 @@ public interface Order
 
     /**
      * set service id
+     * @param serviceId of service which
      */
     void setServiceId(final BigInteger serviceId);
 
     /**
-     * @return employee id who
+     * @return employee id who response for order
      */
     BigInteger getEmployeeId();
 
     /**
-     * set empl
+     * @param employeeId who response for order
      */
     void setEmployeeId(final BigInteger employeeId);
 
@@ -52,11 +57,12 @@ public interface Order
 
     /**
      * set order status
+     * @param status - order status define stage
      */
     void setStatus(final OrderStatus status);
 
     /**
-     * @return order action
+     * @return order action define action
      */
     OrderAction getAction();
 
@@ -72,6 +78,7 @@ public interface Order
 
     /**
      * set date of creation
+     * @param creationDate date of creation
      */
     void setCreationDate(final Date creationDate);
 }

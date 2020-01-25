@@ -5,8 +5,20 @@ package com.netcracker.students.o3.model.orders;
  */
 public enum OrderStatus
 {
+    /**
+     * don't has employee
+     */
     Entering,
+    /**
+     * employee take order to tasks
+     */
     Processing,
+    /**
+     * employee stop executing order
+     */
     Suspended,
+    /**
+     * employee complete order
+     */
     Completed
 }

@@ -35,12 +35,6 @@ public class CustomerWebOperations {
         templateSorter = TemplateSorter.getInstance();
         tableBuilder = HtmlTableBuilder.getInstance();
     }
-    /**
-     * define services sort type
-     */
-    public void sortCustomerServiceByType(ServiceSortType type) {
-        serviceSorter.sort(getEnteringAndActiveServices(), type);
-    }
 
     /**
      * @return search result by req
@@ -128,8 +122,10 @@ public class CustomerWebOperations {
     /**
      * @return entering and active customer services
      */
-    public List<Service> getEnteringAndActiveServices() {
-        return controller.getEnteringAndActiveServices(customerId);
+    public List<Service> getConnectedServices() {
+        List<Service> result = controller.getEnteringAndActiveServices(customerId);
+        result.addAll(controller.getSuspendedServices(customerId));
+        return result;
     }
 
     /**
@@ -137,9 +133,10 @@ public class CustomerWebOperations {
      */
     public List<Template> getUnconnectedTemplates() {
         List<Template> templates = controller.getCustomerAvailableTemplates(customerId);
-        for (Service service : getEnteringAndActiveServices()) {
+        for (Service service : getConnectedServices()) {
             templates.remove(controller.getTemplate(service.getTemplateId()));
         }
+
         return templates;
     }
 
@@ -206,7 +203,7 @@ public class CustomerWebOperations {
      * disconnect service
      */
     public void disconnectService(BigInteger serviceId) {
-        controller.disconnectService(customerId, serviceId);
+        controller.disconnectService(serviceId);
     }
 
     /**
@@ -236,31 +233,32 @@ public class CustomerWebOperations {
 
     /**
      * @return table of services
+     *
      */
-    public String showEnteringActiveServices() {
-        List<Service> services = getEnteringAndActiveServices();
+    public String showConnectedServices(ServiceSortType sortServices) {
+        List<Service> services = getConnectedServices();
+        if(services.isEmpty()){
+            return "There are no connected service";
+        }
 
+        serviceSorter.sort(services,sortServices);
         return tableBuilder.createCustomerServicesTable(services);
     }
 
     /**
      * @return templates available to connect
      */
-    public String showAllTemplates(String sortType) {
+    public String showAllTemplates(TemplateSortType sortType) {
         List<Template> templates = getUnconnectedTemplates();
 
-        templateSorter.sort(templates, parseTemplateSortType(sortType));
+        if(templates.isEmpty()){
+            return "There are no templates";
+        }
+        templateSorter.sort(templates, sortType);
 
         return tableBuilder.createCustomerTemplatesTable(templates);
     }
 
-    private TemplateSortType parseTemplateSortType(String type) {
-        if (type == null || type.isEmpty()) {
-            return null;
-        }
-
-        return TemplateSortType.valueOf(type);
-    }
 
     public static CustomerWebOperations getInstance(){
         if(instance == null){
@@ -268,6 +266,21 @@ public class CustomerWebOperations {
         }
 
         return instance;
+    }
+
+    public String selectArea() {
+        StringBuilder resultHtml = new StringBuilder();
+        List<Area> availableAreas = getAreas();
+
+        for (Area area : availableAreas) {
+            if (getAreaName().equals(area.getName())) {
+                resultHtml.append("<option selected value='").append(area.getName()).append("'>").append(area.getName())
+                        .append("</option>");
+            } else {
+                resultHtml.append("<option>").append(area.getName()).append("</option>");
+            }
+        }
+        return resultHtml.toString();
     }
 }
 

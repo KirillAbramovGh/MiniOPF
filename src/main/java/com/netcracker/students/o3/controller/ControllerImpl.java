@@ -20,7 +20,6 @@ import com.netcracker.students.o3.model.users.User;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ControllerImpl implements Controller {
@@ -38,42 +37,6 @@ public class ControllerImpl implements Controller {
         }
     }
 
-
-    @Override
-    public void disconnectService(final BigInteger customerId, final BigInteger serviceId) {
-        Service service = getService(serviceId);
-
-        BigInteger orderId = createOrder(service.getTemplateId(), serviceId, OrderStatus.Entering, OrderAction.Disconnect);
-        startOrder(orderId, null);
-        completeOrder(orderId);
-
-        model.setService(model.getServiceById(serviceId));
-    }
-
-    @Override
-    public void resumeService(BigInteger serviceId) {
-        Service service = getService(serviceId);
-        service.setStatus(ServiceStatus.Active);
-        service.setActivationDate(new Date());
-    }
-
-    @Override
-    public void suspendService(BigInteger serviceId) {
-        Service service = getService(serviceId);
-        service.setStatus(ServiceStatus.Suspended);
-    }
-
-    @Override
-    public void cancelService(BigInteger customerId, BigInteger serviceId) {
-        disconnectService(customerId, serviceId);
-    }
-
-    @Override
-    public void completeService(BigInteger serviceId) {
-        Service service = getService(serviceId);
-        service.setStatus(ServiceStatus.Active);
-        service.setActivationDate(new Date());
-    }
 
     @Override
     public void startOrder(final BigInteger orderId, final BigInteger employeeId) {
@@ -101,13 +64,13 @@ public class ControllerImpl implements Controller {
         switch (order.getAction()) {
             case New:
             case Resume:
-                completeService(service.getId());
+                service.setStatus(ServiceStatus.Active);
                 break;
             case Suspend:
-                suspendService(service.getId());
+                service.setStatus(ServiceStatus.Suspended);
                 break;
             case Disconnect:
-                disconnectService(service.getUserId(), service.getId());
+                service.setStatus(ServiceStatus.Disconnected);
                 break;
         }
 
@@ -203,9 +166,7 @@ public class ControllerImpl implements Controller {
 
     @Override
     public BigInteger createService(final BigInteger userId, final BigInteger templateId, final ServiceStatus status) {
-        BigInteger serviceId = model.createService(userId, templateId, status);
-        model.createOrder(templateId, serviceId, OrderStatus.Entering, OrderAction.New);
-        return serviceId;
+        return model.createService(userId, templateId, status);
     }
 
     @Override
@@ -542,64 +503,75 @@ public class ControllerImpl implements Controller {
     }
 
     public void setCustomerArea(BigInteger customerId, BigInteger areaId) {
-        cancelOrSuspendImpossibleServices(customerId, areaId);
+        disconnectImpossibleServices(customerId, areaId);
         getCustomer(customerId).setAreaId(areaId);
         model.setCustomer(model.getCustomerById(customerId));
     }
 
-    private void cancelOrSuspendImpossibleServices(BigInteger customerId, BigInteger areaId) {
+    private void disconnectImpossibleServices(BigInteger customerId, BigInteger areaId) {
         Template template;
         for (Service service : getCustomerServices(customerId)) {
             template = getTemplate(service.getTemplateId());
             if (!template.getPossibleAreasId().contains(areaId)) {
-                disconnectEnteringOrSuspendActiveService(service.getId(), customerId);
+                disconnectService(service.getId());
             }
         }
     }
 
-    private void disconnectEnteringOrSuspendActiveService(BigInteger serviceId, BigInteger customerId) {
+    private void disconnectEnteringOrSuspendActiveService(BigInteger serviceId) {
         Service service = getService(serviceId);
 
         if (service.getStatus().equals(ServiceStatus.Active)) {
-            suspendService(customerId, service.getId());
+            suspendService(service.getId());
         } else if (service.getStatus().equals(ServiceStatus.Entering)) {
-            disconnectService(customerId, service.getId());
+            disconnectService(service.getId());
         }
     }
 
     @Override
     public void suspendOrResumeService(final BigInteger customerId, final BigInteger serviceId) {
         if (getService(serviceId).getStatus() == ServiceStatus.Active) {
-            suspendService(customerId, serviceId);
+            suspendService(serviceId);
         } else if (getService(serviceId).getStatus() == ServiceStatus.Suspended) {
-            resumeService(customerId, serviceId);
+            resumeService(serviceId);
         }
     }
 
+
     @Override
-    public void suspendService(final BigInteger customerId, final BigInteger serviceId) {
+    public void suspendService(final BigInteger serviceId) {
         Service service = getService(serviceId);
         BigInteger orderId = createOrder(service.getTemplateId(), serviceId, OrderStatus.Entering, OrderAction.Suspend);
-
         completeOrder(orderId);
 
         model.setService(model.getServiceById(serviceId));
     }
 
     @Override
-    public void resumeService(final BigInteger customerId, final BigInteger serviceId) {
+    public void resumeService(final BigInteger serviceId) {
         Service service = getService(serviceId);
         BigInteger orderId = createOrder(service.getTemplateId(), serviceId, OrderStatus.Entering, OrderAction.Resume);
+        completeOrder(orderId);
         model.setService(model.getServiceById(serviceId));
     }
 
     @Override
     public void connectService(final BigInteger customerId, final BigInteger templateId) {
         BigInteger serviceId = createService(customerId, templateId, ServiceStatus.Entering);
+        BigInteger orderId = createOrder(templateId, serviceId, OrderStatus.Entering, OrderAction.New);
         getCustomer(customerId).getConnectedServicesIds().add(serviceId);
+        completeOrder(orderId);
         model.setService(model.getServiceById(serviceId));
-        model.setCustomer(model.getCustomerById(customerId));
     }
+
+    @Override
+    public void disconnectService(final BigInteger serviceId) {
+        Service service = getService(serviceId);
+        BigInteger orderId = createOrder(service.getTemplateId(), serviceId, OrderStatus.Entering, OrderAction.Disconnect);
+        completeOrder(orderId);
+        model.setService(service);
+    }
+
 
     @Override
     public List<Service> getCustomerServices(final BigInteger customerId) {

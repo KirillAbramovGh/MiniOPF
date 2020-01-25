@@ -16,7 +16,7 @@ public interface Service
 
     /**
      * set service id
-     * @param id
+     * @param id - new service id
      */
     void setId(final BigInteger id);
 
@@ -27,7 +27,7 @@ public interface Service
 
     /**
      * set user id
-     * @param userId
+     * @param userId who use service
      */
     void setUserId(final BigInteger userId);
 
@@ -38,7 +38,7 @@ public interface Service
 
     /**
      * set template id
-     * @param templateId
+     * @param templateId - template of service
      */
     void setTemplateId(final BigInteger templateId);
 
@@ -49,7 +49,7 @@ public interface Service
 
     /**
      * set service status
-     * @param status
+     * @param status - new status of service
      */
     void setStatus(final ServiceStatus status);
 
@@ -65,7 +65,7 @@ public interface Service
 
     /**
      * set activation date
-     * @param activationDate
+     * @param activationDate - date when service was activate
      */
     void setActivationDate(final Date activationDate);
 

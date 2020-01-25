@@ -1,8 +1,8 @@
 <%@ page import="com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType" %>
+<%@ page import="com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType" %>
 <%@ page import="com.netcracker.students.o3.model.area.Area" %>
 <%@ page import="jsp.CustomerWebOperations" %>
 <%@ page import="java.math.BigInteger" %>
-<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <html lang="en">
 <head>
@@ -19,29 +19,9 @@
 </head>
 <body>
 <%!
-    String resultSearch = "";
-
-    private void showSearchResult(String req) {
-        resultSearch = customerWebOperations.search(req);
-    }
-
-    private String selectArea() {
-        StringBuilder resultHtml = new StringBuilder();
-        List<Area> availableAreas = customerWebOperations.getAreas();
-
-        for (Area area : availableAreas) {
-            if (customerWebOperations.getAreaName().equals(area.getName())) {
-                resultHtml.append("<option selected value='").append(area.getName()).append("'>").append(area.getName())
-                        .append("</option>");
-            } else {
-                resultHtml.append("<option>").append(area.getName()).append("</option>");
-            }
-        }
-        return resultHtml.toString();
-    }
-
     private void disconnect(String key) {
-        String numb = key.substring(10);
+        String[] res = key.split(" ");
+        String numb = res[1];
         if (!numb.equals("")) {
             int value = Integer.parseInt(numb);
             customerWebOperations.disconnectService(BigInteger.valueOf(value));
@@ -49,7 +29,8 @@
     }
 
     private void suspendOrResume(String key) {
-        String numb = key.substring(14);
+        String[] res = key.split(" ");
+        String numb = res[1];
         if (!numb.equals("")) {
             int value = Integer.parseInt(numb);
             customerWebOperations.suspendOrResumeService(BigInteger.valueOf(value));
@@ -57,7 +38,8 @@
     }
 
     private void connect(String key) {
-        String numb = key.substring(7);
+        String[] res = key.split(" ");
+        String numb = res[1];
         if (!numb.equals("")) {
             int value = Integer.parseInt(numb);
             customerWebOperations.connectService(BigInteger.valueOf(value));
@@ -70,7 +52,7 @@
             if (request.getParameterMap().get(key) != null) {
                 if (key.startsWith("disconnect")) {
                     disconnect(key);
-                } else if (key.startsWith("suspend/resume")) {
+                } else if (key.contains("suspend") || key.contains("resume")) {
                     suspendOrResume(key);
                 } else if (key.startsWith("connect")) {
                     connect(key);
@@ -94,23 +76,23 @@
                     customerWebOperations.changeArea(newArea);
 
                 } else if (key.equals("searchButton")) {
-                    showSearchResult(request.getParameter("searchField"));
+                    request.getSession().setAttribute("searchField", request.getParameter("searchField"));
                 } else if (key.equals("ServiceSortUpByName")) {
-                    customerWebOperations.sortCustomerServiceByType(ServiceSortType.UpByName);
+                    request.getSession().setAttribute("sortServices", ServiceSortType.UpByName);
                 } else if (key.equals("ServiceSortDownByName")) {
-                    customerWebOperations.sortCustomerServiceByType(ServiceSortType.DownByName);
+                    request.getSession().setAttribute("sortServices", ServiceSortType.DownByName);
                 } else if (key.equals("ServiceSortUpByCost")) {
-                    customerWebOperations.sortCustomerServiceByType(ServiceSortType.UpByCost);
+                    request.getSession().setAttribute("sortServices", ServiceSortType.UpByCost);
                 } else if (key.equals("ServiceSortDownByCost")) {
-                    customerWebOperations.sortCustomerServiceByType(ServiceSortType.DownByCost);
+                    request.getSession().setAttribute("sortServices", ServiceSortType.DownByCost);
                 } else if (key.equals("TemplateSortUpByName")) {
-                    request.getSession().setAttribute("sortTemplates", ServiceSortType.UpByName);
+                    request.getSession().setAttribute("sortTemplates", TemplateSortType.UpByName);
                 } else if (key.equals("TemplateSortDownByName")) {
-                    request.getSession().setAttribute("sortTemplates", ServiceSortType.DownByName);
+                    request.getSession().setAttribute("sortTemplates", TemplateSortType.DownByName);
                 } else if (key.equals("TemplateSortUpByCost")) {
-                    request.getSession().setAttribute("sortTemplates", ServiceSortType.UpByCost);
+                    request.getSession().setAttribute("sortTemplates", TemplateSortType.UpByCost);
                 } else if (key.equals("TemplateSortDownByCost")) {
-                    request.getSession().setAttribute("sortTemplates", ServiceSortType.DownByCost);
+                    request.getSession().setAttribute("sortTemplates", TemplateSortType.DownByCost);
                 } else if (key.toLowerCase().equals("out")) {
                     ServletContext servletContext = pageContext.getServletContext();
                     RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/startView.jsp");
@@ -143,12 +125,12 @@
         <div class="tabs__content">
             <div class="tab is-active tab-1">
                 <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
-                    <%=customerWebOperations.showEnteringActiveServices()%>
+                    <%=customerWebOperations.showConnectedServices((ServiceSortType) session.getAttribute("sortServices"))%>
                 </form>
             </div>
             <div class="tab tab-2">
                 <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
-                    <%=customerWebOperations.showAllTemplates((String) session.getAttribute("sortTemplates"))%>
+                    <%=customerWebOperations.showAllTemplates((TemplateSortType) session.getAttribute("sortTemplates"))%>
                 </form>
             </div>
             <div class="tab tab-3">
@@ -157,7 +139,7 @@
                     Login: <%=customerWebOperations.getLogin()%><br/>
                     Password: <input type="text" name="password" value=<%=customerWebOperations.getPassword()%>><br/>
                     Area: <select name="area">
-                    <%=selectArea()%>
+                    <%=customerWebOperations.selectArea()%>
                 </select>
                     <input type="submit" name="change">
                 </form>
@@ -166,7 +148,7 @@
                 <form action="${pageContext.request.contextPath}/webCustomerView.jsp" method="post">
                     <input type="text" name="searchField" value="">
                     <input type="submit" name="searchButton" value="Search">
-                    <%=resultSearch%>
+                    <%=customerWebOperations.search((String) request.getSession().getAttribute("searchField"))%>
                 </form>
             </div>
         </div>

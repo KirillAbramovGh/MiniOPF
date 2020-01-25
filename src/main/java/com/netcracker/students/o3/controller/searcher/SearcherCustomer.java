@@ -124,7 +124,7 @@ public class SearcherCustomer extends Searcher<Customer> {
         String id;
         for (Customer customer : customers) {
             id = customer.getId().toString();
-            if (id.equals(search) || checkRegExp(id, search)) {
+            if (id.equals(search)) {
                 result.add(customer);
             }
         }
