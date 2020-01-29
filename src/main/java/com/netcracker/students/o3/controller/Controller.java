@@ -292,4 +292,6 @@ public interface Controller
     List<Area> getAvailableAreas(BigInteger customerId);
 
     void resumeOrder(BigInteger orderId);
+
+    List<Service> getEnteringActiveSuspendedService(BigInteger customerId);
 }

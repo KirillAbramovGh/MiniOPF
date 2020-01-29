@@ -108,6 +108,15 @@ public class SearcherTemplates extends Searcher<Template> {
                 return searchTemplatesByCost(templates, search);
             case "Area":
                 return searchTemplatesByArea(templates, search);
+            case "all":
+                Set<Template> res = new HashSet<>(searchTemplatesById(search, templates));
+
+                res.addAll(searchTemplatesByName(templates, search));
+                res.addAll(searchTemplatesByDescription(templates, search));
+                res.addAll(searchTemplatesByCost(templates, search));
+                res.addAll(searchTemplatesByArea(templates, search));
+
+                return new ArrayList<>(res);
         }
         return new ArrayList<>();
     }

@@ -1,14 +1,11 @@
 package com.netcracker.students.o3.controller.searcher;
 
 import com.netcracker.students.o3.controller.ControllerImpl;
-import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.users.Customer;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class SearcherCustomer extends Searcher<Customer> {
     private static SearcherCustomer instance;
@@ -38,6 +35,16 @@ public class SearcherCustomer extends Searcher<Customer> {
                 return searchByArea(search, customers);
             case "ConnectedServices":
                 return searchByConnectedServices(search, customers);
+            case "all":
+                Set<Customer> res = new HashSet<>(searchById(search, customers));
+
+                res.addAll(searchByName(search, customers));
+                res.addAll(searchByLogin(search, customers));
+                res.addAll(searchByBalance(search, customers));
+                res.addAll(searchByArea(search, customers));
+                res.addAll(searchByConnectedServices(search, customers));
+
+                return new ArrayList<>(res);
         }
 
         return new ArrayList<>();
@@ -48,7 +55,7 @@ public class SearcherCustomer extends Searcher<Customer> {
 
         for (Customer customer : customers) {
             for (BigInteger serviceId : customer.getConnectedServicesIds()) {
-                if (checkService(search,serviceId)) {
+                if (checkService(search, serviceId)) {
                     result.add(customer);
                 }
             }
@@ -57,9 +64,9 @@ public class SearcherCustomer extends Searcher<Customer> {
         return result;
     }
 
-    private boolean checkService(String search, BigInteger serviceId){
+    private boolean checkService(String search, BigInteger serviceId) {
         return serviceId.toString().equals(search) ||
-                checkRegExp(search,serviceId.toString()) ||
+                checkRegExp(search, serviceId.toString()) ||
                 ControllerImpl.getInstance().getService(serviceId).getName().contains(search);
     }
 
@@ -67,7 +74,7 @@ public class SearcherCustomer extends Searcher<Customer> {
         List<Customer> result = new ArrayList<>();
 
         for (Customer customer : customers) {
-            if (checkArea(search,customer.getAreaId())) {
+            if (checkArea(search, customer.getAreaId())) {
                 result.add(customer);
             }
         }
@@ -82,7 +89,7 @@ public class SearcherCustomer extends Searcher<Customer> {
         BigDecimal balance;
         for (Customer customer : customers) {
             balance = customer.getMoneyBalance();
-            if (isCostInDiapason(balance,search,50) || checkRegExp(search,balance.toString())) {
+            if (isCostInDiapason(balance, search, 50) || checkRegExp(search, balance.toString())) {
                 result.add(customer);
             }
         }

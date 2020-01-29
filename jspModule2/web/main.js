@@ -1,20 +1,18 @@
-
-
-function tab () {
+function tab() {
     let tabNav = document.querySelectorAll('.tabs-nav__item'),
         tabContent = document.querySelectorAll('.tab'),
         tabName = getCookie("tabName");
-    tabNav.forEach(item =>{
-        if(item.getAttribute('data-tab-name') === tabName){
-            console.log('itemName: '+item.getAttribute('data-tab-name'));
-            console.log('tabName: '+tabName);
+    tabNav.forEach(item => {
+        if (item.getAttribute('data-tab-name') === tabName) {
+            console.log('itemName: ' + item.getAttribute('data-tab-name'));
+            console.log('tabName: ' + tabName);
             tabNav.forEach(item => {
                 item.classList.remove('is-active');
             });
             item.classList.add('is-active');
         }
     })
-    selectTabContent(tabName,tabContent);
+    selectTabContent(tabName, tabContent);
     tabNav.forEach(item => {
         item.addEventListener('click', selectTabNav)
     });
@@ -25,12 +23,12 @@ function tab () {
         });
         this.classList.add('is-active');
         tabName = this.getAttribute('data-tab-name');
-        document.cookie = "tabName="+tabName;
-        selectTabContent(tabName,tabContent);
+        document.cookie = "tabName=" + tabName;
+        selectTabContent(tabName, tabContent);
     }
 };
 
-function selectTabContent(tabName,tabContent) {
+function selectTabContent(tabName, tabContent) {
     tabContent.forEach(item => {
         item.classList.contains(tabName) ? item.classList.add('is-active') : item.classList.remove('is-active');
     })
@@ -44,6 +42,7 @@ function showBalanceForm() {
         request.open("POST", "http://localhost:8080/jspModule2_war_exploded2/webCustomerView.jsp?" + body);
         request.onreadystatechange = reqReadyStateChange(request);
         request.send();
+
     } else {
         alert("Введите число");
     }

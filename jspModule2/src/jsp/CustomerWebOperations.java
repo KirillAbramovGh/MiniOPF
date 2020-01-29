@@ -14,10 +14,14 @@ import com.netcracker.students.o3.controller.sorters.TemplateSorter;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
+import jsp.builders.CardBuilder;
+import jsp.builders.HtmlTableBuilder;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CustomerWebOperations {
     private BigInteger customerId;
@@ -25,6 +29,7 @@ public class CustomerWebOperations {
     private ServiceSorter serviceSorter;
     private TemplateSorter templateSorter;
     private HtmlTableBuilder tableBuilder;
+    private CardBuilder cardBuilder;
 
     private static CustomerWebOperations instance;
 
@@ -34,6 +39,7 @@ public class CustomerWebOperations {
         serviceSorter = ServiceSorter.getInstance();
         templateSorter = TemplateSorter.getInstance();
         tableBuilder = HtmlTableBuilder.getInstance();
+        cardBuilder = CardBuilder.getInstance();
     }
 
     /**
@@ -43,15 +49,15 @@ public class CustomerWebOperations {
         String result = "";
         SearcherTemplates searcher = SearcherTemplates.getInstance();
         SearcherService searcherService = SearcherService.getInstance();
+        if(req!=null) {
+            List<Service> services =searcherService.searchServicesByAllEntities(
+                    controller.getEnteringActiveSuspendedService(customerId), req);
+            List<Template> templates = searcher.searchTemplatesByAllFields(
+                    controller.getCustomerAvailableTemplates(customerId), req);
 
-        List<Service> services = searcherService.searchServicesByAllEntities(
-                controller.getCustomerServices(customerId), req);
-        List<Template> templates = searcher.searchTemplatesByAllFields(
-                controller.getCustomerAvailableTemplates(customerId), req);
-
-        result += servicesToTable(services);
-        result += templatesToTable(templates);
-
+            result += cardBuilder.makeCardsFromServices(services);
+            result += cardBuilder.makeCardsFromTemplates(templates);
+        }
         return result;
     }
 
@@ -242,7 +248,7 @@ public class CustomerWebOperations {
         }
 
         serviceSorter.sort(services,sortServices);
-        return tableBuilder.createCustomerServicesTable(services);
+        return cardBuilder.makeCardsFromServices(services);
     }
 
     /**
@@ -252,11 +258,11 @@ public class CustomerWebOperations {
         List<Template> templates = getUnconnectedTemplates();
 
         if(templates.isEmpty()){
-            return "There are no templates";
+            return "There are no services";
         }
         templateSorter.sort(templates, sortType);
 
-        return tableBuilder.createCustomerTemplatesTable(templates);
+        return cardBuilder.makeCardsFromTemplates(templates);
     }
 
 
@@ -281,6 +287,15 @@ public class CustomerWebOperations {
             }
         }
         return resultHtml.toString();
+    }
+
+    public void suspendService(final BigInteger serviceId)
+    {
+        controller.suspendService(serviceId);
+    }
+
+    public void resumeService(final BigInteger serviceId){
+        controller.resumeService(serviceId);
     }
 }
 

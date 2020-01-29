@@ -2,9 +2,7 @@ package com.netcracker.students.o3.controller.searcher;
 
 import com.netcracker.students.o3.model.area.Area;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class SearcherArea extends Searcher<Area> {
     private static SearcherArea instance;
@@ -71,6 +69,13 @@ public class SearcherArea extends Searcher<Area> {
                 return searchByName(search, areas);
             case "Description":
                 return searchByDescription(search, areas);
+            case "all":
+                Set<Area> res = new HashSet<>(searchById(search, areas));
+
+                res.addAll(searchByName(search, areas));
+                res.addAll(searchByDescription(search, areas));
+
+                return new ArrayList<>(res);
         }
 
         return new ArrayList<>();

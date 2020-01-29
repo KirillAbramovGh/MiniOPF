@@ -1,4 +1,4 @@
-package jsp;
+package jsp.builders;
 
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
@@ -229,7 +229,7 @@ public class HtmlTableBuilder {
         } else if (service.getStatus() == ServiceStatus.Suspended) {
             result += addCell(status, "red");
             result += addCell(createButton("disconnect", "disconnect" , service.getId().toString()));
-            result += addCell(createButton("resume", "suspend" , service.getId().toString()));
+            result += addCell(createButton("resume", "resume" , service.getId().toString()));
         }
         return result + "</tr>";
     }

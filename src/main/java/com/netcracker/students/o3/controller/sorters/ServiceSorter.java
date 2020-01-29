@@ -1,6 +1,7 @@
 package com.netcracker.students.o3.controller.sorters;
 
 import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesByCost;
+import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesById;
 import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesByName;
 import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
 import com.netcracker.students.o3.model.services.Service;
@@ -24,9 +25,9 @@ public class ServiceSorter {
         } else if (ServiceSortType.DownByCost.equals(type)) {
             return new ComparatorServicesByCost(false);
         }else if (ServiceSortType.UpById.equals(type)){
-            return new ComparatorServicesByCost(true);
+            return new ComparatorServicesById(true);
         }else if (ServiceSortType.DownById.equals(type)){
-            return new ComparatorServicesByCost(false);
+            return new ComparatorServicesById(false);
         }
 
         return new ComparatorServicesByName(false);
@@ -37,6 +38,7 @@ public class ServiceSorter {
      */
     public void sort(List<Service> services, ServiceSortType type) {
         Comparator<Service> serviceComparator = defineSortType(type);
+        System.out.println(serviceComparator);
         services.sort(serviceComparator);
     }
 

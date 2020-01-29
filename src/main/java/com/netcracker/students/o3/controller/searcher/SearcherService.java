@@ -72,9 +72,11 @@ public class SearcherService extends Searcher<Service> {
     public List<Service> searchServicesByAllEntities(List<Service> services, String searchField) {
         Set<Service> result = new HashSet<>();
 
-        result.addAll(searchServiceByName(services, searchField));
-        result.addAll(searchServiceByStatus(services, searchField));
-        result.addAll(searchServiceByCost(services, searchField));
+
+            result.addAll(searchServiceByName(services, searchField));
+            result.addAll(searchServiceByStatus(services, searchField));
+            result.addAll(searchServiceByCost(services, searchField));
+
 
         return new ArrayList<>(result);
     }
@@ -103,6 +105,17 @@ public class SearcherService extends Searcher<Service> {
                 return searchServiceByUserId(search, services);
             case "Areas":
                 return searchServiceByArea(search, services);
+            case "all":
+                Set<Service> result = new HashSet<>(searchServiceById(search, services));
+
+                result.addAll(searchServiceByName(services, search));
+                result.addAll(searchServiceByCost(services, search));
+                result.addAll(searchServiceByStatus(services, search));
+                result.addAll(searchServiceByTemplateId(search, services));
+                result.addAll(searchServiceByUserId(search, services));
+                result.addAll(searchServiceByArea(search, services));
+
+                return new ArrayList<>(result);
         }
 
         return new ArrayList<>();

@@ -11,6 +11,7 @@ import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.Employee;
+import jsp.builders.HtmlTableBuilder;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -247,5 +248,23 @@ public class EmployeeWebOperations {
 
     public void deleteArea(BigInteger areaId) {
         controller.deleteArea(areaId);
+    }
+
+    public String showAll(String search, String... entities) {
+        String result = "";
+
+        for(String entity : entities){
+            if(entity!=null)
+            switch (entity){
+                case "Services": result+=showAllServices(search,"all",null);break;
+                case "Templates": result+=showAllTemplates(search,"all",null);break;
+                case "Orders": result+=showAllOrders(search,"all",null);break;
+                case "Customers": result+=showAllCustomers(search,"all",null);break;
+                case "Areas": result+=showAllAreas(search,"all",null);break;
+                case "Employees": result+=showAllEmployees(search,"all",null);break;
+            }
+        }
+
+        return result;
     }
 }

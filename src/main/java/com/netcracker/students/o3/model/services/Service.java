@@ -1,5 +1,7 @@
 package com.netcracker.students.o3.model.services;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -74,4 +76,6 @@ public interface Service
      */
     String getName();
 
+    @JsonIgnore
+    String getDescription();
 }

@@ -1,4 +1,4 @@
-package jsp;
+package jsp.servlets;
 
 import com.netcracker.students.o3.Exceptions.IncorrectCredentialsException;
 import com.netcracker.students.o3.Exceptions.LoginOccupiedException;
@@ -37,13 +37,13 @@ public class StartServlet extends HttpServlet {
             try {
                 BigInteger id = login(req);
                 req.getSession().setAttribute("id", id);
-                if(ControllerImpl.getInstance().isCustomer(id)) {
+                if (ControllerImpl.getInstance().isCustomer(id)) {
                     forward("/webCustomerView.jsp", req, resp);
-                }else{
+                } else {
                     forward("/webEmployeeView.jsp", req, resp);
                 }
-            }catch (IncorrectCredentialsException e){
-                req.getSession().setAttribute("error",e.getMessage());
+            } catch (IncorrectCredentialsException e) {
+                req.getSession().setAttribute("error", e.getMessage());
                 forward("/startView.jsp", req, resp);
             }
         } else if (req.getParameter("regCustomer") != null) {
@@ -51,8 +51,8 @@ public class StartServlet extends HttpServlet {
                 BigInteger id = regCustomer(req);
                 req.getSession().setAttribute("id", id);
                 forward("/webCustomerView.jsp", req, resp);
-            }catch (LoginOccupiedException | RegisterException e){
-                req.getSession().setAttribute("error",e.getMessage());
+            } catch (LoginOccupiedException | RegisterException e) {
+                req.getSession().setAttribute("error", e.getMessage());
                 forward("/startView.jsp", req, resp);
             }
         } else if (req.getParameter("regAdmin") != null) {
@@ -60,7 +60,7 @@ public class StartServlet extends HttpServlet {
                 BigInteger id = regEmployee(req);
                 req.getSession().setAttribute("id", id);
                 forward("/webEmployeeView.jsp", req, resp);
-            }catch (LoginOccupiedException | RegisterException e) {
+            } catch (LoginOccupiedException | RegisterException e) {
                 req.getSession().setAttribute("error", e.getMessage());
                 forward("/startView.jsp", req, resp);
             }
@@ -94,14 +94,14 @@ public class StartServlet extends HttpServlet {
         BigInteger employeeId;
         if (isNotEmptyLoginPasswordName(login, password, name)) {
             employeeId = ControllerImpl.getInstance().registerEmployee(login, password, name);
-        }else{
+        } else {
             throw new RegisterException("Login, Password and Name can not be empty");
         }
 
         return employeeId;
     }
 
-    private boolean isNotEmptyLoginPasswordName(String login, String password, String name){
+    private boolean isNotEmptyLoginPasswordName(String login, String password, String name) {
         return !login.replaceAll(" ", "").isEmpty() &&
                 !password.replaceAll(" ", "").isEmpty() &&
                 !name.replaceAll(" ", "").isEmpty();
@@ -111,7 +111,7 @@ public class StartServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
 
-        if(isNotEmptyLoginPasswordName(login,password,"name")){
+        if (isNotEmptyLoginPasswordName(login, password, "name")) {
             return ControllerImpl.getInstance().getUserIdByCredentials(login, password);
         }
 
@@ -134,8 +134,8 @@ public class StartServlet extends HttpServlet {
         Controller controller = ControllerImpl.getInstance();
         BigInteger userId = null;
         if (isNotEmptyLoginPasswordName(login, password, name)) {
-                userId = controller.registerCustomer(login, password, name, areaId);
-        }else {
+            userId = controller.registerCustomer(login, password, name, areaId);
+        } else {
             throw new RegisterException("Login,Password,Name can not be null");
         }
         return userId;

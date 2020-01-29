@@ -179,13 +179,13 @@ public class ControllerImpl implements Controller {
             throws IncorrectCredentialsException {
         for (Customer customer : model.getCustomers().values()) {
             if (customer.getLogin().equals(login) && customer.getPassword().equals(password)) {
+                System.out.println(customer);
                 return customer.getId();
             }
         }
 
         for (Employee employee : model.getEmployers().values()) {
             if (employee.getLogin().equals(login) && employee.getPassword().equals(password)) {
-                System.out.println(employee);
                 return employee.getId();
             }
         }
@@ -518,16 +518,6 @@ public class ControllerImpl implements Controller {
         }
     }
 
-    private void disconnectEnteringOrSuspendActiveService(BigInteger serviceId) {
-        Service service = getService(serviceId);
-
-        if (service.getStatus().equals(ServiceStatus.Active)) {
-            suspendService(service.getId());
-        } else if (service.getStatus().equals(ServiceStatus.Entering)) {
-            disconnectService(service.getId());
-        }
-    }
-
     @Override
     public void suspendOrResumeService(final BigInteger customerId, final BigInteger serviceId) {
         if (getService(serviceId).getStatus() == ServiceStatus.Active) {
@@ -611,6 +601,13 @@ public class ControllerImpl implements Controller {
     public void resumeOrder(BigInteger orderId) {
         Order order = getOrder(orderId);
         order.setStatus(OrderStatus.Processing);
+    }
+
+    @Override
+    public List<Service> getEnteringActiveSuspendedService(BigInteger customerId) {
+        List<Service> services = getEnteringAndActiveServices(customerId);
+        services.addAll(getSuspendedServices(customerId));
+        return services;
     }
 
 

@@ -104,4 +104,9 @@ public class ServiceImpl implements Service
     {
         return Model.getInstance().getTemplateById(templateId).getName();
     }
+
+    @JsonIgnore
+    public String getDescription() {
+        return Model.getInstance().getTemplateById(templateId).getDescription();
+    }
 }

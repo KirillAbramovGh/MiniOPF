@@ -21,13 +21,13 @@ public interface Customer extends User
      /**
       * @return set of connected customer services ids
       */
-     List<BigInteger> getConnectedServicesIds();
+     Set<BigInteger> getConnectedServicesIds();
 
      /***
       * set customer connected services
       * @param connectedServicesIds
       */
-     void setConnectedServicesIds(final List<BigInteger> connectedServicesIds);
+     void setConnectedServicesIds(final Set<BigInteger> connectedServicesIds);
 
      /**
       * @return customer area id

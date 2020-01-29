@@ -1,10 +1,9 @@
 package com.netcracker.students.o3.controller.searcher;
 
+import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.users.Employee;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class SearcherEmployee extends Searcher<Employee>{
     private static SearcherEmployee instance;
@@ -25,6 +24,13 @@ public class SearcherEmployee extends Searcher<Employee>{
             case "Id": return searchById(search,employees);
             case "Name": return searchByName(search,employees);
             case "Login": return searchByLogin(search,employees);
+            case "all":
+                Set<Employee> res = new HashSet<>(searchById(search,employees));
+
+                res.addAll(searchByName(search,employees));
+                res.addAll(searchByLogin(search,employees));
+
+                return new ArrayList<>(res);
         }
 
         return new ArrayList<>();
