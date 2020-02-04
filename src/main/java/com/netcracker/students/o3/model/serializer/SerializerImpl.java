@@ -1,35 +1,34 @@
 package com.netcracker.students.o3.model.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netcracker.students.o3.model.Model;
+import com.netcracker.students.o3.model.model.ModelJson;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class SerializerImpl implements Serializer
 {
 
-    public void serializeModel(Model model) throws IOException
+    public void serializeModel(ModelJson modelJson) throws IOException
     {
         ObjectMapper objectMapper = new ObjectMapper();
         File file = new File("C:\\Users\\Kirill\\IdeaProjects\\MiniOPF\\entities.json");
-        objectMapper.writeValue(file, model);
+        objectMapper.writeValue(file, modelJson);
     }
 
-    public void deserializeModel(Model model) throws IOException
+    public void deserializeModel(ModelJson modelJson) throws IOException
     {
         ObjectMapper objectMapper = new ObjectMapper();
         File file = new File("C:\\Users\\Kirill\\IdeaProjects\\MiniOPF\\entities.json");
-        Model newModel = objectMapper.readValue(file, Model.class);
+        ModelJson newModelJson = objectMapper.readValue(file, ModelJson.class);
 
-        model.setCustomers(newModel.getCustomers());
-        model.setEmployers(newModel.getEmployers());
-        model.setOrders(newModel.getOrders());
-        model.setTemplates(newModel.getTemplates());
-        model.setAreas(newModel.getAreas());
-        model.setServices(newModel.getServices());
-        model.setLastId(newModel.getLastId());
+        modelJson.setCustomers(newModelJson.getCustomers());
+        modelJson.setEmployers(newModelJson.getEmployees());
+        modelJson.setOrders(newModelJson.getOrders());
+        modelJson.setTemplates(newModelJson.getTemplates());
+        modelJson.setAreas(newModelJson.getAreas());
+        modelJson.setServices(newModelJson.getServices());
+        modelJson.setLastId(newModelJson.getLastId());
     }
 
 }

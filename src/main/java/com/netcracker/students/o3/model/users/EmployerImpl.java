@@ -1,8 +1,5 @@
 package com.netcracker.students.o3.model.users;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.netcracker.students.o3.model.Model;
-
 import java.math.BigInteger;
 
 public class EmployerImpl implements Employee

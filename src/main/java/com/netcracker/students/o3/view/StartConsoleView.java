@@ -11,7 +11,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Scanner;
 
-import jdk.internal.joptsimple.internal.Strings;
+
 
 
 public class StartConsoleView
@@ -220,7 +220,7 @@ public class StartConsoleView
 
     private void checkNull(final String value, final String nameOfField) throws RegisterException
     {
-        if (Strings.isNullOrEmpty(value))
+        if (value!=null && !"".equals(value))
         {
             throw new RegisterException(nameOfField + " не может быть пустым");
         }

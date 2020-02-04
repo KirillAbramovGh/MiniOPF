@@ -211,14 +211,7 @@ public class CustomerWebOperations {
     public void disconnectService(BigInteger serviceId) {
         controller.disconnectService(serviceId);
     }
-
-    /**
-     * suspend or resume service
-     */
-    public void suspendOrResumeService(BigInteger serviceId) {
-        controller.suspendOrResumeService(customerId, serviceId);
-    }
-
+    
     /**
      * connect service
      */

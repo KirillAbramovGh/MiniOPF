@@ -3,7 +3,7 @@ package com.netcracker.students.o3.controller;
 import com.netcracker.students.o3.Exceptions.IncorrectCredentialsException;
 import com.netcracker.students.o3.Exceptions.LoginOccupiedException;
 import com.netcracker.students.o3.Exceptions.WrongInputException;
-import com.netcracker.students.o3.model.Model;
+import com.netcracker.students.o3.model.model.ModelJson;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderAction;
@@ -23,15 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ControllerImpl implements Controller {
-    private final Model model;
+    private final ModelJson modelJson;
     private static Controller instance;
 
     private ControllerImpl() {
-        model = Model.getInstance();
+        modelJson = ModelJson.getInstance();
         Serializer serializer = new SerializerImpl();
 
         try {
-            serializer.deserializeModel(model);
+            serializer.deserializeModel(modelJson);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,7 +84,7 @@ public class ControllerImpl implements Controller {
 
     @Override
     public void deleteArea(final BigInteger areaId) {
-        model.deleteAreaById(areaId);
+        modelJson.deleteAreaById(areaId);
     }
 
     @Override
@@ -99,17 +99,17 @@ public class ControllerImpl implements Controller {
 
     @Override
     public void deleteTemplate(final BigInteger templateId) {
-        model.deleteTemplateById(templateId);
+        modelJson.deleteTemplateById(templateId);
     }
 
     @Override
     public void deleteCustomer(final BigInteger customerId) {
-        model.deleteCustomerById(customerId);
+        modelJson.deleteCustomerById(customerId);
     }
 
     @Override
     public void deleteEmployee(final BigInteger employeeId) {
-        model.deleteEmployeeById(employeeId);
+        modelJson.deleteEmployeeById(employeeId);
     }
 
     @Override
@@ -145,46 +145,46 @@ public class ControllerImpl implements Controller {
     @Override
     public BigInteger createCustomer(final String name, final String login, final String password,
                                      final BigInteger areaId) {
-        return model.createCustomer(name, login, password, areaId);
+        return modelJson.createCustomer(name, login, password, areaId);
     }
 
     @Override
     public BigInteger createEmployee(final String name, final String login, final String password) {
-        return model.createEmployee(name, login, password);
+        return modelJson.createEmployee(name, login, password);
     }
 
     @Override
     public BigInteger createOrder(final BigInteger templateId, final BigInteger serviceId,
                                   final OrderStatus status, final OrderAction action) {
-        return model.createOrder(templateId, serviceId, status, action);
+        return modelJson.createOrder(templateId, serviceId, status, action);
     }
 
     @Override
     public BigInteger createTemplate(final String name, final BigDecimal cost, final String description) {
-        return model.createTemplate(name, cost, description);
+        return modelJson.createTemplate(name, cost, description);
     }
 
     @Override
     public BigInteger createService(final BigInteger userId, final BigInteger templateId, final ServiceStatus status) {
-        return model.createService(userId, templateId, status);
+        return modelJson.createService(userId, templateId, status);
     }
 
     @Override
     public BigInteger createArea(final String name, final String description) {
-        return model.createArea(name, description);
+        return modelJson.createArea(name, description);
     }
 
     @Override
     public BigInteger getUserIdByCredentials(final String login, final String password)
             throws IncorrectCredentialsException {
-        for (Customer customer : model.getCustomers().values()) {
+        for (Customer customer : modelJson.getCustomers().values()) {
             if (customer.getLogin().equals(login) && customer.getPassword().equals(password)) {
                 System.out.println(customer);
                 return customer.getId();
             }
         }
 
-        for (Employee employee : model.getEmployers().values()) {
+        for (Employee employee : modelJson.getEmployees().values()) {
             if (employee.getLogin().equals(login) && employee.getPassword().equals(password)) {
                 return employee.getId();
             }
@@ -206,7 +206,7 @@ public class ControllerImpl implements Controller {
     @Override
     public BigInteger registerEmployee(final String login, final String password, final String Name) throws LoginOccupiedException {
         if (!isLoginExists(login)) {
-            return model.createEmployee(Name, login, password);
+            return modelJson.createEmployee(Name, login, password);
         }
 
         throw new LoginOccupiedException("Login occupied");
@@ -214,7 +214,7 @@ public class ControllerImpl implements Controller {
 
     @Override
     public boolean checkPassword(final BigInteger id, final String password) {
-        return model.getCustomerById(id).getPassword().equals(password);
+        return modelJson.getCustomerById(id).getPassword().equals(password);
     }
 
     @Override
@@ -226,9 +226,9 @@ public class ControllerImpl implements Controller {
     @Override
     public List<Service> getSuspendedServices(final BigInteger customerId) {
         ArrayList<Service> services = new ArrayList<>();
-        for (BigInteger v : model.getCustomerById(customerId).getConnectedServicesIds()) {
-            if (model.getServiceById(v).getStatus().equals(ServiceStatus.Suspended)) {
-                services.add(model.getServiceById(v));
+        for (BigInteger v : modelJson.getCustomerById(customerId).getConnectedServicesIds()) {
+            if (modelJson.getServiceById(v).getStatus().equals(ServiceStatus.Suspended)) {
+                services.add(modelJson.getServiceById(v));
             }
         }
         return services;
@@ -237,10 +237,10 @@ public class ControllerImpl implements Controller {
     @Override
     public List<Service> getEnteringServices(final BigInteger customerId) {
         ArrayList<Service> services = new ArrayList<>();
-        for (BigInteger v : model.getCustomerById(customerId).getConnectedServicesIds()) {
+        for (BigInteger v : modelJson.getCustomerById(customerId).getConnectedServicesIds()) {
 
-            if (model.getServiceById(v).getStatus().equals(ServiceStatus.Entering)) {
-                services.add(model.getServiceById(v));
+            if (modelJson.getServiceById(v).getStatus().equals(ServiceStatus.Entering)) {
+                services.add(modelJson.getServiceById(v));
             }
         }
         return services;
@@ -250,9 +250,9 @@ public class ControllerImpl implements Controller {
     @Override
     public List<Service> getActiveServices(final BigInteger customerId) {
         ArrayList<Service> services = new ArrayList<>();
-        for (BigInteger serviceId : model.getCustomerById(customerId).getConnectedServicesIds()) {
-            if (model.getServiceById(serviceId).getStatus() == ServiceStatus.Active) {
-                services.add(model.getServiceById(serviceId));
+        for (BigInteger serviceId : modelJson.getCustomerById(customerId).getConnectedServicesIds()) {
+            if (modelJson.getServiceById(serviceId).getStatus() == ServiceStatus.Active) {
+                services.add(modelJson.getServiceById(serviceId));
             }
         }
 
@@ -270,7 +270,7 @@ public class ControllerImpl implements Controller {
     @Override
     public List<Template> getTemplatesByAreaId(final BigInteger areaId) {
         ArrayList<Template> templates = new ArrayList<>();
-        for (Template template : model.getTemplates().values()) {
+        for (Template template : modelJson.getTemplates().values()) {
             if (template.getPossibleAreasId().contains(areaId)) {
                 templates.add(template);
             }
@@ -282,7 +282,7 @@ public class ControllerImpl implements Controller {
     @Override
     public List<Template> getAllTemplates() {
 
-        return new ArrayList<>(model.getTemplates().values());
+        return new ArrayList<>(modelJson.getTemplates().values());
     }
 
     @Override
@@ -304,86 +304,86 @@ public class ControllerImpl implements Controller {
 
     @Override
     public BigInteger getCustomerAreaId(final BigInteger customerId) {
-        return model.getCustomerById(customerId).getAreaId();
+        return modelJson.getCustomerById(customerId).getAreaId();
     }
 
     @Override
     public boolean isCustomer(final BigInteger userId) {
-        return model.getCustomerById(userId) != null;
+        return modelJson.getCustomerById(userId) != null;
     }
 
     @Override
     public boolean isEmployee(final BigInteger userId) {
-        return model.getEmployeeById(userId) != null;
+        return modelJson.getEmployeeById(userId) != null;
     }
 
     @Override
     public Customer getCustomer(final BigInteger id) {
-        return model.getCustomerById(id);
+        return modelJson.getCustomerById(id);
     }
 
     @Override
     public Employee getEmployee(final BigInteger userId) {
-        return model.getEmployeeById(userId);
+        return modelJson.getEmployeeById(userId);
     }
 
     @Override
     public List<Area> getAreas() {
-        return new ArrayList<>(model.getAreas().values());
+        return new ArrayList<>(modelJson.getAreas().values());
     }
 
     @Override
     public List<Template> getTemplates() {
-        return new ArrayList<>(model.getTemplates().values());
+        return new ArrayList<>(modelJson.getTemplates().values());
     }
 
     @Override
     public List<Service> getServices() {
-        return new ArrayList<>(model.getServices().values());
+        return new ArrayList<>(modelJson.getServices().values());
     }
 
     @Override
     public List<Customer> getCustomers() {
-        return new ArrayList<>(model.getCustomers().values());
+        return new ArrayList<>(modelJson.getCustomers().values());
     }
 
     @Override
     public List<Order> getOrders() {
-        return new ArrayList<>(model.getOrders().values());
+        return new ArrayList<>(modelJson.getOrders().values());
     }
 
     @Override
     public List<Employee> getEmployers() {
-        return new ArrayList<>(model.getEmployers().values());
+        return new ArrayList<>(modelJson.getEmployees().values());
     }
 
     @Override
     public Area getArea(final BigInteger areaId) {
-        return model.getAreaById(areaId);
+        return modelJson.getAreaById(areaId);
     }
 
     @Override
     public Template getTemplate(final BigInteger templateId) {
-        return model.getTemplateById(templateId);
+        return modelJson.getTemplateById(templateId);
     }
 
     @Override
     public Service getService(final BigInteger serviceId) {
-        return model.getServiceById(serviceId);
+        return modelJson.getServiceById(serviceId);
     }
 
     @Override
     public Order getOrder(final BigInteger orderId) {
-        return model.getOrderById(orderId);
+        return modelJson.getOrderById(orderId);
     }
 
     @Override
     public void putOnBalance(final BigInteger customerId, final BigDecimal money) {
-        Customer customer = model.getCustomerById(customerId);
+        Customer customer = modelJson.getCustomerById(customerId);
         BigDecimal currentMoney = customer.getMoneyBalance();
         customer.setMoneyBalance(currentMoney.add(money));
 
-        model.setCustomer(customer);
+        modelJson.setCustomer(customer);
     }
 
     @Override
@@ -454,7 +454,7 @@ public class ControllerImpl implements Controller {
     public void setCustomerName(BigInteger customerId, String name) throws WrongInputException {
         if (!name.isEmpty()) {
             getCustomer(customerId).setName(name);
-            model.setCustomer(model.getCustomerById(customerId));
+            modelJson.setCustomer(modelJson.getCustomerById(customerId));
         } else {
             throw new WrongInputException("Имя не может быть пустым!");
         }
@@ -465,9 +465,9 @@ public class ControllerImpl implements Controller {
             if (!isLoginExists(login)) {
                 getUser(userId).setLogin(login);
                 if (isCustomer(userId)) {
-                    model.setCustomer(model.getCustomerById(userId));
+                    modelJson.setCustomer(modelJson.getCustomerById(userId));
                 } else if (isEmployee(userId)) {
-                    model.setEmployee(model.getEmployeeById(userId));
+                    modelJson.setEmployee(modelJson.getEmployeeById(userId));
                 }
             } else {
                 if (!getUser(userId).getLogin().equals(login)) {
@@ -493,9 +493,9 @@ public class ControllerImpl implements Controller {
         if (!password.isEmpty()) {
             getUser(userId).setPassword(password);
             if (isCustomer(userId)) {
-                model.setCustomer(model.getCustomerById(userId));
+                modelJson.setCustomer(modelJson.getCustomerById(userId));
             } else if (isEmployee(userId)) {
-                model.setEmployee(model.getEmployeeById(userId));
+                modelJson.setEmployee(modelJson.getEmployeeById(userId));
             }
         } else {
             throw new WrongInputException("Пароль не может быть пустым");
@@ -505,7 +505,7 @@ public class ControllerImpl implements Controller {
     public void setCustomerArea(BigInteger customerId, BigInteger areaId) {
         disconnectImpossibleServices(customerId, areaId);
         getCustomer(customerId).setAreaId(areaId);
-        model.setCustomer(model.getCustomerById(customerId));
+        modelJson.setCustomer(modelJson.getCustomerById(customerId));
     }
 
     private void disconnectImpossibleServices(BigInteger customerId, BigInteger areaId) {
@@ -534,7 +534,7 @@ public class ControllerImpl implements Controller {
         BigInteger orderId = createOrder(service.getTemplateId(), serviceId, OrderStatus.Entering, OrderAction.Suspend);
         completeOrder(orderId);
 
-        model.setService(model.getServiceById(serviceId));
+        modelJson.setService(modelJson.getServiceById(serviceId));
     }
 
     @Override
@@ -542,7 +542,7 @@ public class ControllerImpl implements Controller {
         Service service = getService(serviceId);
         BigInteger orderId = createOrder(service.getTemplateId(), serviceId, OrderStatus.Entering, OrderAction.Resume);
         completeOrder(orderId);
-        model.setService(model.getServiceById(serviceId));
+        modelJson.setService(modelJson.getServiceById(serviceId));
     }
 
     @Override
@@ -551,7 +551,7 @@ public class ControllerImpl implements Controller {
         BigInteger orderId = createOrder(templateId, serviceId, OrderStatus.Entering, OrderAction.New);
         getCustomer(customerId).getConnectedServicesIds().add(serviceId);
         completeOrder(orderId);
-        model.setService(model.getServiceById(serviceId));
+        modelJson.setService(modelJson.getServiceById(serviceId));
     }
 
     @Override
@@ -559,17 +559,17 @@ public class ControllerImpl implements Controller {
         Service service = getService(serviceId);
         BigInteger orderId = createOrder(service.getTemplateId(), serviceId, OrderStatus.Entering, OrderAction.Disconnect);
         completeOrder(orderId);
-        model.setService(service);
+        modelJson.setService(service);
     }
 
 
     @Override
     public List<Service> getCustomerServices(final BigInteger customerId) {
-        Customer customer = model.getCustomerById(customerId);
+        Customer customer = modelJson.getCustomerById(customerId);
         List<Service> result = new ArrayList<>();
 
         for (BigInteger serviceId : customer.getConnectedServicesIds()) {
-            result.add(model.getServiceById(serviceId));
+            result.add(modelJson.getServiceById(serviceId));
         }
 
         return result;

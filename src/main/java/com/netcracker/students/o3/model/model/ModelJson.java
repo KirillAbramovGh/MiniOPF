@@ -1,4 +1,4 @@
-package com.netcracker.students.o3.model;
+package com.netcracker.students.o3.model.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -31,9 +31,9 @@ import java.util.Map;
 /**
  * GRUD class for entities
  * */
-public class Model
+public class ModelJson implements Model
 {
-    private static Model instance;
+    private static ModelJson instance;
 
     @JsonDeserialize(as = HashMap.class,keyAs = BigInteger.class,contentAs = OrderImpl.class)
     private Map<BigInteger, Order> orders;
@@ -57,7 +57,7 @@ public class Model
     /**
      * method initialize model
      * */
-    private Model()
+    private ModelJson()
     {
         orders = new HashMap<>();
         templates = new HashMap<>();
@@ -107,11 +107,11 @@ public class Model
      * return set and return instance
      * @return instance
      * */
-    public static Model getInstance()
+    public static ModelJson getInstance()
     {
         if (instance == null)
         {
-            instance = new Model();
+            instance = new ModelJson();
         }
         return instance;
     }
@@ -243,7 +243,7 @@ public class Model
         return customers;
     }
 
-    public Map<BigInteger, Employee> getEmployers()
+    public Map<BigInteger, Employee> getEmployees()
     {
         return employers;
     }

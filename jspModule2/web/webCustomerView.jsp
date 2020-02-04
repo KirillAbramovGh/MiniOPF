@@ -17,8 +17,8 @@
     %>
     <form action="${pageContext.request.contextPath}/customerServlet" method="post" class="header">
         <div class="balance">
-            Balance: <%=customerWebOperations.getBalance()%>
-            <input type="button" name="putOnBalance" value="+" onclick="showBalanceForm()" class="button">
+            Balance: <%=customerWebOperations.getBalance()+"$"%>
+            <input type="submit" name="putOnBalance" value="+" onclick="showBalanceForm()" class="button">
         </div>
         <div class="login">
             You are logged in as:<%=customerWebOperations.getFIO()%>

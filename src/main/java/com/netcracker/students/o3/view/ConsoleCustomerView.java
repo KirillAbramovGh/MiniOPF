@@ -17,7 +17,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Scanner;
 
-import jdk.internal.joptsimple.internal.Strings;
+
 
 /**
  * class show console for customer
@@ -353,7 +353,7 @@ public class ConsoleCustomerView implements View
      */
     private void checkNewPassword(final String password) throws IncorrectPasswordException
     {
-        if (Strings.isNullOrEmpty(password))
+        if (password!=null && !"".equals(password))
         {
             throw new IncorrectPasswordException("Пароль не может быть пустым!");
         }
@@ -426,7 +426,7 @@ public class ConsoleCustomerView implements View
      */
     private void checkNull(final String value, final String nameOfField) throws WrongInputException
     {
-        if (Strings.isNullOrEmpty(value))
+        if (value!=null && !"".equals(value))
         {
             throw new WrongInputException(nameOfField + " не может быть пустым");
         }

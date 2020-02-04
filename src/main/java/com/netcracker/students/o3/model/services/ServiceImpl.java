@@ -1,7 +1,7 @@
 package com.netcracker.students.o3.model.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.netcracker.students.o3.model.Model;
+import com.netcracker.students.o3.model.model.ModelJson;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -85,7 +85,7 @@ public class ServiceImpl implements Service
     @JsonIgnore
     public BigDecimal getCost()
     {
-        return Model.getInstance()
+        return ModelJson.getInstance()
                 .getTemplateById(templateId).getCost();
     }
 
@@ -102,11 +102,11 @@ public class ServiceImpl implements Service
     @JsonIgnore
     public String getName()
     {
-        return Model.getInstance().getTemplateById(templateId).getName();
+        return ModelJson.getInstance().getTemplateById(templateId).getName();
     }
 
     @JsonIgnore
     public String getDescription() {
-        return Model.getInstance().getTemplateById(templateId).getDescription();
+        return ModelJson.getInstance().getTemplateById(templateId).getDescription();
     }
 }
