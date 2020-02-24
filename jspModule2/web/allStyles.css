@@ -1,6 +1,6 @@
 
 html{
-    background-color: #1a8c68;
+    background-color: #868383;
     color: black;
     font-family: 'Helvetica Neue', sans-serif;
     font-size: 14px;
@@ -43,6 +43,8 @@ header > div{
     grid-template-columns: 1fr 1fr;
     background-color: #555555;
     font-size: 15px;
+    font-weight: bold;
+    color: white;
     height: 40px;
     padding-top: 13px;
 }
@@ -85,6 +87,22 @@ header > div{
     padding: 3px;
 }
 
+.cardred{
+    border-radius: 9px;
+    background-color: #8c5454;
+    width: 170px;
+    height: 170px;
+    padding: 3px;
+}
+.cardyellow{
+    border-radius: 9px;
+    background-color: #5c5959;
+    width: 170px;
+    height: 170px;
+    padding: 3px;
+}
+
+
 .customerSettings > div {
     display: grid;
     grid-auto-columns: 1fr 1fr;
@@ -96,12 +114,22 @@ header > div{
 }.customerSettings {
      display: grid;
      grid-auto-columns: 1fr 1fr;
-    width: 100%;
-    align-self: center;
-    align-content: center;
-    align-items: center;
-    text-align: center;
-}
+     width: 100%;
+     align-self: center;
+     align-content: center;
+     align-items: center;
+     text-align: center;
+ }
+ .table{
+     width: 1000px;
+     height: 500px;
+     overflow-y: auto;
+     overflow-x: hidden;
+ }
 .searchWrapper{
 
+}
+.whiteText{
+    color: white;
+    font-weight: bold;
 }

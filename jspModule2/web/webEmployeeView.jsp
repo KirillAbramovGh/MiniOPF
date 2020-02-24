@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="allStyles.css">
     <link rel="stylesheet" href="tab.css">
     <title>MiniOPF</title>
     <%!

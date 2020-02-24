@@ -1,11 +1,10 @@
 package com.netcracker.students.o3.model.dao;
 
-import com.netcracker.students.o3.model.orders.Order;
-
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public abstract class AbstractDao<T>
@@ -14,16 +13,34 @@ public abstract class AbstractDao<T>
     private static final String PASSWORD = "postgres";
     private static final String CONNECTION_URL = "jdbc:postgresql://localhost:5432/entities";
     private static final String DRIVER_NAME = "org.postgresql.Driver";
+    private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 
-    public abstract List<T> getAll();
-    public abstract T getEntityById(BigInteger id);
-    public abstract void update(T entity);
-    public abstract void delete(BigInteger id);
-    public abstract void create(T entity) throws ClassNotFoundException;
-    protected Connection getDbConnection() throws ClassNotFoundException, SQLException
+
+    public abstract List<T> getAll() throws SQLException, ClassNotFoundException;
+
+    public abstract T getEntityById(BigInteger id) throws SQLException, ClassNotFoundException;
+
+    public abstract void update(T entity) throws SQLException, ClassNotFoundException;
+
+    protected abstract String getTableName();
+
+    public void delete(BigInteger id) throws SQLException, ClassNotFoundException
     {
-        Class.forName(DRIVER_NAME);
-        return DriverManager.getConnection(CONNECTION_URL,USER_NAME,PASSWORD);
+        try (Connection connection = getConnection();Statement statement = connection.createStatement())
+        {
+            String sqlReq = "delete from " + getTableName() + " where id=" + id;
+            statement.executeUpdate(sqlReq);
+        }
+
+    }
+
+    public abstract void create(T entity) throws ClassNotFoundException, SQLException;
+
+    protected Connection getConnection() throws ClassNotFoundException, SQLException
+    {
+        //return DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
+
+        return connectionPool.getConnection();
     }
 }

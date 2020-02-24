@@ -1,6 +1,7 @@
 package com.netcracker.students.o3.model.area;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 public class AreaImpl implements Area {
     private BigInteger id;
@@ -43,5 +44,26 @@ public class AreaImpl implements Area {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        final AreaImpl area = (AreaImpl) o;
+        return Objects.equals(id, area.id);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id);
     }
 }

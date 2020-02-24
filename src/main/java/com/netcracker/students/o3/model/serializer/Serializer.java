@@ -21,4 +21,6 @@ public interface Serializer
      * @param modelJson we need deserialize to it
      */
     void deserializeModel(ModelJson modelJson) throws IOException;
+
+    String serializeToString(Object object) throws IOException;
 }

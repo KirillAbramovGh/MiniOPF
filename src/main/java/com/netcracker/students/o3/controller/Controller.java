@@ -16,6 +16,7 @@ import com.netcracker.students.o3.model.users.Employee;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -56,10 +57,7 @@ public interface Controller
      */
     void completeOrder(BigInteger orderId);
 
-    /**
-     * change customer balance with customerId on value
-     */
-    void changeBalance(BigInteger customerId, BigDecimal value);
+
 
     /**
      * delete of entities
@@ -95,16 +93,19 @@ public interface Controller
     /**
      * create entities
      */
-    BigInteger createCustomer(String name, String login, String password, BigInteger areaId);
+    BigInteger createCustomer(String name, String login, String password, BigInteger areaId)
+          ;
 
-    BigInteger createEmployee(String name, String login, String password);
+    BigInteger createEmployee(String name, String login, String password) ;
 
     BigInteger createOrder(BigInteger templateId, BigInteger serviceId,
-            OrderStatus status, OrderAction action);
+            OrderStatus status, OrderAction action) ;
 
-    BigInteger createTemplate(String name, BigDecimal cost, String description);
+    BigInteger createTemplate(String name, BigDecimal cost, String description)
+            ;
 
-    BigInteger createService(BigInteger userId, BigInteger templateId, ServiceStatus status);
+    BigInteger createService(BigInteger userId, BigInteger templateId, ServiceStatus status)
+            ;
 
     BigInteger createArea(String name, String description);
 
@@ -112,7 +113,8 @@ public interface Controller
     /**
      * @return userId by login and password
      */
-    BigInteger getUserIdByCredentials(String login, String password) throws IncorrectCredentialsException;
+    BigInteger getUserIdByCredentials(String login, String password)
+            throws IncorrectCredentialsException;
 
     /**
      * register new Customer
@@ -123,12 +125,13 @@ public interface Controller
     /**
      * register new Employee
      */
-    BigInteger registerEmployee(String login, String password, String Name) throws LoginOccupiedException;
+    BigInteger registerEmployee(String login, String password, String Name)
+            throws LoginOccupiedException;
 
     /**
      * check equals password and user password
      */
-    boolean checkPassword(BigInteger id, String password);
+    boolean checkPassword(BigInteger id, String password) ;
 
     /**
      * check existing of login
@@ -138,12 +141,12 @@ public interface Controller
     /**
      * @return suspended services of customer
      */
-    List<Service> getSuspendedServices(BigInteger customerId);
+    List<Service> getSuspendedServices(BigInteger customerId) ;
 
     /**
      * @return entering services of customer
      */
-    List<Service> getEnteringServices(BigInteger customerId);
+    List<Service> getEnteringServices(BigInteger customerId) ;
 
     /**
      * @return active services of customer
@@ -163,7 +166,7 @@ public interface Controller
     /**
      * @return templates
      */
-    List<Template> getAllTemplates();
+    List<Template> getAllTemplates() ;
 
     /**
      * @return customer orders
@@ -183,7 +186,7 @@ public interface Controller
     /**
      * check user on customer
      */
-    boolean isCustomer(BigInteger userId);
+    boolean isCustomer(BigInteger userId) ;
 
     /**
      * check user on employee
@@ -294,4 +297,7 @@ public interface Controller
     void resumeOrder(BigInteger orderId);
 
     List<Service> getEnteringActiveSuspendedService(BigInteger customerId);
+
+    String getServiceName(final BigInteger serviceId);
+    String getServiceDescription(final BigInteger serviceId);
 }

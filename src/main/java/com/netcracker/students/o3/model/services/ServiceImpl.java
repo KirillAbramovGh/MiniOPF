@@ -1,11 +1,13 @@
 package com.netcracker.students.o3.model.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.netcracker.students.o3.model.model.ModelBD;
 import com.netcracker.students.o3.model.model.ModelJson;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Objects;
 
 public class ServiceImpl implements Service
 {
@@ -30,7 +32,7 @@ public class ServiceImpl implements Service
 
     public ServiceImpl()
     {
-
+        this.activationDate = new Date();
     }
 
     public ServiceImpl(final BigInteger id, final BigInteger userId, final BigInteger templateId,
@@ -40,6 +42,7 @@ public class ServiceImpl implements Service
         this.userId = userId;
         this.templateId = templateId;
         this.status = status;
+        this.activationDate = new Date();
     }
 
     public BigInteger getId()
@@ -85,7 +88,7 @@ public class ServiceImpl implements Service
     @JsonIgnore
     public BigDecimal getCost()
     {
-        return ModelJson.getInstance()
+        return ModelBD.getInstance()
                 .getTemplateById(templateId).getCost();
     }
 
@@ -99,14 +102,24 @@ public class ServiceImpl implements Service
         this.activationDate = activationDate;
     }
 
-    @JsonIgnore
-    public String getName()
+    @Override
+    public boolean equals(final Object o)
     {
-        return ModelJson.getInstance().getTemplateById(templateId).getName();
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        final ServiceImpl service = (ServiceImpl) o;
+        return Objects.equals(id, service.id);
     }
 
-    @JsonIgnore
-    public String getDescription() {
-        return ModelJson.getInstance().getTemplateById(templateId).getDescription();
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id);
     }
 }

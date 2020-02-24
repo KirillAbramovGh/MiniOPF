@@ -47,11 +47,9 @@ public class EmployeeServlet extends HttpServlet
             EmployeeCommand.valueOf(command).execute(req, resp, getServletContext(),
                     employeeWebOperations, key);
         }
-        finally
-        {
-            forward("/webEmployeeView", req, resp);
-        }
+        catch (Exception e){
 
+        }
     }
 
     private void forward(String path, HttpServletRequest request, HttpServletResponse response)

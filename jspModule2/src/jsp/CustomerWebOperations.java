@@ -14,13 +14,19 @@ import com.netcracker.students.o3.controller.sorters.TemplateSorter;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.templates.TemplateImpl;
+
 import jsp.builders.CardBuilder;
 import jsp.builders.HtmlTableBuilder;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class CustomerWebOperations {
@@ -134,12 +140,24 @@ public class CustomerWebOperations {
         return result;
     }
 
+    public Map<BigInteger,Template> getConnectedTemplates(){
+        List<Service> connectedServices = getConnectedServices();
+        Map<BigInteger,Template> templates = new HashMap<>();
+
+        for(Service service : connectedServices){
+            templates.put(service.getId(),controller.getTemplate(service.getTemplateId()));
+        }
+
+        return templates;
+    }
+
     /**
      * @return unconnected templates
      */
     public List<Template> getUnconnectedTemplates() {
         List<Template> templates = controller.getCustomerAvailableTemplates(customerId);
         for (Service service : getConnectedServices()) {
+            System.out.println(controller.getTemplate(service.getTemplateId()));
             templates.remove(controller.getTemplate(service.getTemplateId()));
         }
 
@@ -273,10 +291,10 @@ public class CustomerWebOperations {
 
         for (Area area : availableAreas) {
             if (getAreaName().equals(area.getName())) {
-                resultHtml.append("<option selected value='").append(area.getName()).append("'>").append(area.getName())
+                resultHtml.append("<option selected value='").append(area.getId()).append("'>").append(area.getName())
                         .append("</option>");
             } else {
-                resultHtml.append("<option>").append(area.getName()).append("</option>");
+                resultHtml.append("<option value='").append(area.getId()).append("'>").append(area.getName()).append("</option>");
             }
         }
         return resultHtml.toString();

@@ -1,5 +1,7 @@
 package com.netcracker.students.o3.controller.searcher;
 
+import com.netcracker.students.o3.controller.Controller;
+import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.model.services.Service;
 
 import java.util.*;
@@ -39,7 +41,7 @@ public class SearcherService extends Searcher<Service> {
 
         String name;
         for (Service service : services) {
-            name = service.getName();
+            name = ControllerImpl.getInstance().getServiceName(service.getId());
             if (name.contains(search) || checkRegExp(search, name)) {
                 result.add(service);
             }

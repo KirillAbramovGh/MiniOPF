@@ -2,6 +2,7 @@ package jsp.servlets;
 
 import com.netcracker.students.o3.Exceptions.UnpossibleChangeAreaException;
 import com.netcracker.students.o3.Exceptions.WrongInputException;
+import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
 import com.netcracker.students.o3.model.area.Area;
@@ -191,18 +192,10 @@ public enum CustomerCommand
     {
         String name = req.getParameter("fio");
         String password = req.getParameter("password");
-        String area = req.getParameter("area");
+        BigInteger area = BigInteger.valueOf(Long.parseLong(req.getParameter("area")));
 
-        Area newArea = null;
+        Area newArea = ControllerImpl.getInstance().getArea(area);
 
-        for (Area a : customerWebOperations.getAreas())
-        {
-            if (a.getName().equals(area))
-            {
-                newArea = a;
-                break;
-            }
-        }
 
         customerWebOperations.changeName(name);
         customerWebOperations.changePassword(password);

@@ -4,8 +4,7 @@ function tab() {
         tabName = getCookie("tabName");
     tabNav.forEach(item => {
         if (item.getAttribute('data-tab-name') === tabName) {
-            console.log('itemName: ' + item.getAttribute('data-tab-name'));
-            console.log('tabName: ' + tabName);
+
             tabNav.forEach(item => {
                 item.classList.remove('is-active');
             });
@@ -36,7 +35,6 @@ function selectTabContent(tabName, tabContent) {
 
 function showBalanceForm() {
 
-
     let request = new XMLHttpRequest();
     let sum = prompt("Введите сумму пополнения", "0");
     if (parseFloat(sum)) {
@@ -48,7 +46,6 @@ function showBalanceForm() {
         alert("Введите число");
     }
 }
-
 
 function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
@@ -64,6 +61,27 @@ function reqReadyStateChange(request) {
             document.getElementById("output").innerHTML = request.responseText;
         }
     }
+}
+
+function changeArea(services, templates) {
+    let select = document.getElementById('areaChange');
+    let areaId = select.options[select.selectedIndex].value;
+
+
+    let disServices = services.filter(function (item,i,arr){
+        let res = true;
+       templates[item['id']]['possibleAreasId'].forEach(function (item1) {
+           if(item1 == areaId){
+               res = false;
+           }
+       });
+       return res;
+    });
+
+    let res='Will disconnect:\n';
+
+    disServices.forEach(item=>res+=templates[item['id']]['name']+' '+item['status']+' ');
+    alert(res);
 }
 
 tab();

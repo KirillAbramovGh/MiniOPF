@@ -71,11 +71,4 @@ public interface Service
      */
     void setActivationDate(final Date activationDate);
 
-    /**
-     * @return service name
-     */
-    String getName();
-
-    @JsonIgnore
-    String getDescription();
 }

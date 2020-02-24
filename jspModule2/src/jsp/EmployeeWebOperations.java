@@ -256,12 +256,12 @@ public class EmployeeWebOperations {
         for(String entity : entities){
             if(entity!=null)
             switch (entity){
-                case "Services": result+=showAllServices(search,"all",null);break;
-                case "Templates": result+=showAllTemplates(search,"all",null);break;
-                case "Orders": result+=showAllOrders(search,"all",null);break;
-                case "Customers": result+=showAllCustomers(search,"all",null);break;
-                case "Areas": result+=showAllAreas(search,"all",null);break;
-                case "Employees": result+=showAllEmployees(search,"all",null);break;
+                case "Services": result+="<h2>Services</h2><div class='table'>"+showAllServices(search,"all",null)+"</div>";break;
+                case "Templates": result+="<h2>Templates</h2><div class='table'>"+showAllTemplates(search,"all",null)+"</div>";break;
+                case "Orders": result+="<h2>Orders</h2><div class='table'>"+showAllOrders(search,"all",null)+"</div>";break;
+                case "Customers": result+="<h2>Customers</h2><div class='table'>"+showAllCustomers(search,"all",null)+"</div>";break;
+                case "Areas": result+="<h2>Areas</h2><div class='table'>"+showAllAreas(search,"all",null)+"</div>";break;
+                case "Employees": result+="<h2>Employees</h2><div class='table'>"+showAllEmployees(search,"all",null)+"</div>";break;
             }
         }
 

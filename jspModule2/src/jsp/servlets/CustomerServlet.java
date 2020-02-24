@@ -36,20 +36,19 @@ public class CustomerServlet extends HttpServlet
     }
 
 
-    private void execute(String key, HttpServletRequest req, HttpServletResponse resp)
+    private void execute(String command, HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException
     {
-        String[] res = key.split(" ");
-        String command = res[0];
+        String[] splitCommand = command.split(" ");
+        String commandName = splitCommand[0];
 
         ServletContext context = getServletContext();
         try
         {
-            CustomerCommand.valueOf(command).execute(req, resp, context, customerWebOperations, key);
-        }
-        finally
-        {
-            forward("/webCustomerView.jsp",req,resp);
+            CustomerCommand.valueOf(commandName).execute(req, resp, context, customerWebOperations, command);
+        }catch (IllegalArgumentException ignore){ }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

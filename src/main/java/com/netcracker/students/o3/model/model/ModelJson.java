@@ -44,7 +44,7 @@ public class ModelJson implements Model
     @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = CustomerImpl.class)
     private Map<BigInteger, Customer> customers;
     @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = EmployerImpl.class)
-    private Map<BigInteger, Employee> employers;
+    private Map<BigInteger, Employee> employees;
     @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = AreaImpl.class)
     private Map<BigInteger, Area> areas;
 
@@ -63,7 +63,7 @@ public class ModelJson implements Model
         templates = new HashMap<>();
         services = new HashMap<>();
         customers = new HashMap<>();
-        employers = new HashMap<>();
+        employees = new HashMap<>();
         areas = new HashMap<>();
         lastId = BigInteger.ZERO;
     }
@@ -91,9 +91,9 @@ public class ModelJson implements Model
         this.customers = customers;
     }
 
-    public void setEmployers(final Map<BigInteger, Employee> employers)
+    public void setEmployees(final Map<BigInteger, Employee> employees)
     {
-        this.employers = employers;
+        this.employees = employees;
     }
 
     public void setAreas(final Map<BigInteger, Area> areas)
@@ -163,7 +163,7 @@ public class ModelJson implements Model
     }
 
     public BigInteger createEmployee(String name,String login,String password){
-        synchronized (employers)
+        synchronized (employees)
         {
             Employee newEmployee = new EmployerImpl(getNextId(), name, login, password);
             BigInteger employeeId = newEmployee.getId();
@@ -245,7 +245,7 @@ public class ModelJson implements Model
 
     public Map<BigInteger, Employee> getEmployees()
     {
-        return employers;
+        return employees;
     }
 
     public Map<BigInteger, Area> getAreas()
@@ -281,7 +281,7 @@ public class ModelJson implements Model
 
     public Employee getEmployeeById(BigInteger id)
     {
-        return employers.get(id);
+        return employees.get(id);
     }
 
     public Area getAreaById(BigInteger id)
@@ -340,9 +340,9 @@ public class ModelJson implements Model
 
     public void addEmployee(Employee employee)
     {
-        synchronized (employers)
+        synchronized (employees)
         {
-            employers.put(employee.getId(), employee);
+            employees.put(employee.getId(), employee);
         }
         synchronized (this){
             onDataChange();
@@ -402,9 +402,9 @@ public class ModelJson implements Model
 
     public void deleteEmployeeById(BigInteger id)
     {
-        synchronized (employers)
+        synchronized (employees)
         {
-            employers.remove(id);
+            employees.remove(id);
         }
             onDataChange();
     }
@@ -460,9 +460,9 @@ public class ModelJson implements Model
 
     public void setEmployee(Employee employee)
     {
-        synchronized (employers)
+        synchronized (employees)
         {
-            employers.put(employee.getId(), employee);
+            employees.put(employee.getId(), employee);
         }
             onDataChange();
     }

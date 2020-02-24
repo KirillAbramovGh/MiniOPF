@@ -23,12 +23,18 @@ public class SerializerImpl implements Serializer
         ModelJson newModelJson = objectMapper.readValue(file, ModelJson.class);
 
         modelJson.setCustomers(newModelJson.getCustomers());
-        modelJson.setEmployers(newModelJson.getEmployees());
+        modelJson.setEmployees(newModelJson.getEmployees());
         modelJson.setOrders(newModelJson.getOrders());
         modelJson.setTemplates(newModelJson.getTemplates());
         modelJson.setAreas(newModelJson.getAreas());
         modelJson.setServices(newModelJson.getServices());
         modelJson.setLastId(newModelJson.getLastId());
     }
+
+    public String serializeToString(Object object) throws IOException
+    {
+        return new ObjectMapper().writeValueAsString(object);
+    }
+
 
 }

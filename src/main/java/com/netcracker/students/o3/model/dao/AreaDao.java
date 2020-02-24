@@ -4,6 +4,7 @@ import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
 
 import java.math.BigInteger;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,71 +13,72 @@ import java.util.List;
 
 public class AreaDao extends AbstractDao<Area>
 {
+    private static final String tableName = "areas";
+
     @Override
-    public List<Area> getAll()
+    public List<Area> getAll() throws SQLException, ClassNotFoundException
     {
         List<Area> areas = new ArrayList<>();
 
 
-        try (Statement statement = getDbConnection().createStatement())
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            String sqlReq = "select * from areas";
-            ResultSet resultSet = statement.executeQuery(sqlReq);
+            String sqlReq = "select * from " + getTableName();
+           try(ResultSet resultSet = statement.executeQuery(sqlReq))
+           {
 
-            for (Area area; resultSet.next(); )
-            {
-                area = new AreaImpl();
-                area.setId(BigInteger.valueOf(resultSet.getInt("id")));
-                area.setName(resultSet.getString("name"));
-                area.setDescription(resultSet.getString("description"));
-                areas.add(area);
-            }
-            resultSet.close();
-        }
-        catch (SQLException | ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+               for (Area area; resultSet.next(); )
+               {
+                   area = new AreaImpl();
+                   area.setId(BigInteger.valueOf(resultSet.getInt("id")));
+                   area.setName(resultSet.getString("name"));
+                   area.setDescription(resultSet.getString("description"));
 
+                   if(area.getName()==null){
+                       continue;
+                   }
+
+                   areas.add(area);
+               }
+           }
+        }
         return areas;
     }
 
     @Override
-    public Area getEntityById(final BigInteger id)
+    public Area getEntityById(final BigInteger id) throws SQLException, ClassNotFoundException
     {
         Area area = new AreaImpl();
-        try (Statement statement = getDbConnection().createStatement())
+        try (Connection connection = getConnection();Statement statement = connection.createStatement())
         {
-            String sqlReq = "select * from areas where id=" + id;
-            ResultSet resultSet = statement.executeQuery(sqlReq);
-
-            area.setId(id);
-            if (resultSet.next())
+            String sqlReq = "select * from " + getTableName() + " where id=" + id;
+            try (ResultSet resultSet = statement.executeQuery(sqlReq))
             {
-                area.setName(resultSet.getString("name"));
-                area.setDescription(resultSet.getString("description"));
+                if (resultSet.next())
+                {
+                    area.setId(id);
+                    area.setName(resultSet.getString("name"));
+                    area.setDescription(resultSet.getString("description"));
+                    if(area.getName() == null){
+                        return null;
+                    }
+                }
             }
-            resultSet.close();
         }
-        catch (SQLException | ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-
         return area;
     }
 
     @Override
     public void update(final Area entity)
     {
-        try (Statement statement = getDbConnection().createStatement())
+        try (Connection connection = getConnection();Statement statement = connection.createStatement())
         {
             String name = "'" + entity.getName() + "'";
             String description = "'" + entity.getDescription() + "'";
 
             String sqlReq =
-                    "update areas set name=" + name + ", description=" + description + " where id=" + entity.getId();
-            System.out.println(sqlReq);
+                    "update " + getTableName() + " set name=" + name + ", description=" + description + " where id=" +
+                            entity.getId();
             statement.executeUpdate(sqlReq);
         }
         catch (SQLException | ClassNotFoundException e)
@@ -86,26 +88,18 @@ public class AreaDao extends AbstractDao<Area>
     }
 
     @Override
-    public void delete(final BigInteger id)
+    protected String getTableName()
     {
-        try (Statement statement = getDbConnection().createStatement())
-        {
-            String sqlReq = "delete from areas where id=" + id;
-            statement.executeUpdate(sqlReq);
-        }
-        catch (SQLException | ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+        return tableName;
     }
 
     @Override
     public void create(final Area entity) throws ClassNotFoundException
     {
-        try (Statement statement = getDbConnection().createStatement())
+        try (Connection connection = getConnection();Statement statement = connection.createStatement())
         {
             String values = entity.getId() + ",'" + entity.getName() + "','" + entity.getDescription() + "'";
-            String sqlReq = "INSERT INTO areas VALUES (" + values + ")";
+            String sqlReq = "INSERT INTO " + getTableName() + " VALUES (" + values + ")";
             statement.executeUpdate(sqlReq);
         }
         catch (SQLException e)

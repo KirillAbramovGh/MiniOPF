@@ -67,7 +67,7 @@ public class SearcherCustomer extends Searcher<Customer> {
     private boolean checkService(String search, BigInteger serviceId) {
         return serviceId.toString().equals(search) ||
                 checkRegExp(search, serviceId.toString()) ||
-                ControllerImpl.getInstance().getService(serviceId).getName().contains(search);
+                ControllerImpl.getInstance().getServiceName(serviceId).contains(search);
     }
 
     private List<Customer> searchByArea(String search, Collection<Customer> customers) {

@@ -15,6 +15,7 @@ public class CustomerImpl implements Customer {
 
     public CustomerImpl() {
         moneyBalance = BigDecimal.ZERO;
+        connectedServicesIds = new HashSet<>();
     }
 
     public CustomerImpl(final BigInteger id, final String name, final String login, final String password,
@@ -29,8 +30,17 @@ public class CustomerImpl implements Customer {
     }
 
     @Override
-    public String toString() {
-        return name + " " + "Баланс: " + moneyBalance;
+    public String toString()
+    {
+        return "CustomerImpl{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", moneyBalance=" + moneyBalance +
+                ", connectedServicesIds=" + connectedServicesIds +
+                ", areaId=" + areaId +
+                '}';
     }
 
     public BigDecimal getMoneyBalance() {
@@ -59,9 +69,7 @@ public class CustomerImpl implements Customer {
 
     @Override
     public void addConnectedServiceId(final BigInteger serviceId) {
-        if (!connectedServicesIds.contains(serviceId)) {
             connectedServicesIds.add(serviceId);
-        }
     }
 
     public BigInteger getId() {
@@ -96,4 +104,24 @@ public class CustomerImpl implements Customer {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        final CustomerImpl customer = (CustomerImpl) o;
+        return Objects.equals(id, customer.id);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id);
+    }
 }

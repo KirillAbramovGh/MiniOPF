@@ -2,6 +2,7 @@ package com.netcracker.students.o3.model.orders;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Objects;
 
 public class OrderImpl implements Order
 {
@@ -26,6 +27,7 @@ public class OrderImpl implements Order
         this.status = status;
         this.action = action;
         this.creationDate = new Date();
+
     }
 
     @Override
@@ -108,5 +110,26 @@ public class OrderImpl implements Order
     public void setCreationDate(final Date creationDate)
     {
         this.creationDate = creationDate;
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        final OrderImpl order = (OrderImpl) o;
+        return Objects.equals(id, order.id);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id);
     }
 }

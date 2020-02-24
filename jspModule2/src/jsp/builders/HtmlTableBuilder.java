@@ -19,9 +19,10 @@ public class HtmlTableBuilder {
     private String[] colors;
 
     private static HtmlTableBuilder instance;
+    private Controller controller = ControllerImpl.getInstance();
 
     private HtmlTableBuilder() {
-        colors = new String[]{"#ff0000", "#808080"};
+        colors = new String[]{"#8c8888", "#5c5959"};
     }
 
 
@@ -211,7 +212,7 @@ public class HtmlTableBuilder {
     private String addCustomerServiceToTable(Service service, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
-        String name = service.getName();
+        String name = controller.getServiceName(service.getId());
         String cost = service.getCost() + "";
         String status = service.getStatus() + "";
 
@@ -270,7 +271,7 @@ public class HtmlTableBuilder {
         String result = "<tr bgcolor='" + color + "'>";
 
         result += addCell(service.getId() + "");
-        result += addCell(service.getName());
+        result += addCell(controller.getServiceName(service.getId()));
         result += addCell(service.getCost() + "");
         result += addCell(service.getStatus() + "");
         result += addCell(service.getTemplateId() + "");
@@ -373,7 +374,7 @@ public class HtmlTableBuilder {
 
 
     private String build(String innerPart) {
-        String start = "<table border='0' width='auto' cellpadding='20'>";
+        String start = "<table border='0' width='auto' cellpadding='20' class='table'>";
         String end = "</table>";
         return start + innerPart + end;
     }

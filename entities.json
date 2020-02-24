@@ -1,102 +1,12 @@
 {
   "orders": {
-    "32": {
-      "id": 32,
-      "templateId": 10,
-      "serviceId": 23,
-      "employeeId": null,
-      "status": "Completed",
-      "action": "Disconnect",
-      "creationDate": 1580731824369
-    },
-    "33": {
-      "id": 33,
-      "templateId": 1,
-      "serviceId": 19,
-      "employeeId": null,
-      "status": "Completed",
-      "action": "Disconnect",
-      "creationDate": 1580731825021
-    },
-    "20": {
-      "id": 20,
-      "templateId": 1,
-      "serviceId": 19,
-      "employeeId": null,
-      "status": "Completed",
-      "action": "New",
-      "creationDate": 1580731796746
-    },
-    "22": {
-      "id": 22,
-      "templateId": 3,
-      "serviceId": 21,
-      "employeeId": null,
-      "status": "Completed",
-      "action": "New",
-      "creationDate": 1580731798507
-    },
-    "24": {
-      "id": 24,
-      "templateId": 10,
-      "serviceId": 23,
-      "employeeId": null,
-      "status": "Completed",
-      "action": "New",
-      "creationDate": 1580731799352
-    },
-    "26": {
-      "id": 26,
-      "templateId": 11,
-      "serviceId": 25,
-      "employeeId": null,
-      "status": "Completed",
-      "action": "New",
-      "creationDate": 1580731799887
-    },
-    "28": {
-      "id": 28,
-      "templateId": 12,
-      "serviceId": 27,
-      "employeeId": null,
-      "status": "Completed",
-      "action": "New",
-      "creationDate": 1580731803602
-    },
-    "29": {
-      "id": 29,
-      "templateId": 3,
-      "serviceId": 21,
-      "employeeId": null,
-      "status": "Completed",
-      "action": "Disconnect",
-      "creationDate": 1580731822242
-    },
-    "30": {
-      "id": 30,
-      "templateId": 12,
-      "serviceId": 27,
-      "employeeId": null,
-      "status": "Completed",
-      "action": "Disconnect",
-      "creationDate": 1580731823028
-    },
-    "31": {
-      "id": 31,
-      "templateId": 11,
-      "serviceId": 25,
-      "employeeId": null,
-      "status": "Completed",
-      "action": "Disconnect",
-      "creationDate": 1580731823748
-    }
   },
   "templates": {
     "1": {
       "id": 1,
       "name": "Internet2.0",
       "cost": 500,
-      "description": "Internet 100 Mb/s",
+      "description": "Internet 100Mb/s",
       "possibleAreasId": [
         13,
         14,
@@ -108,7 +18,7 @@
       "id": 2,
       "name": "Internet1.0",
       "cost": 300,
-      "description": "Internet 50 Mb/s",
+      "description": "Internet 50Mb/s",
       "possibleAreasId": [
         14,
         15
@@ -118,7 +28,7 @@
       "id": 3,
       "name": "Tv100",
       "cost": 200,
-      "description": "100 channels for 2 TV",
+      "description": "100 ch,2 TV",
       "possibleAreasId": [
         13,
         14,
@@ -148,7 +58,7 @@
       "id": 6,
       "name": "TV200",
       "cost": 100,
-      "description": "200 channels for 3 TV",
+      "description": "200 ch,3 TV",
       "possibleAreasId": [
         14,
         15
@@ -158,7 +68,7 @@
       "id": 7,
       "name": "FullFamily",
       "cost": 1000,
-      "description": "100Mb/s + 200TV channels",
+      "description": "100Mb/s+200 channels",
       "possibleAreasId": [
         15
       ]
@@ -167,7 +77,7 @@
       "id": 8,
       "name": "TV300",
       "cost": 500,
-      "description": "do not watch TV too much",
+      "description": "do not watch TV so much",
       "possibleAreasId": [
         16,
         14,
@@ -178,7 +88,7 @@
       "id": 9,
       "name": "MobilePacUnlimited",
       "cost": 1000,
-      "description": "Unlimited phone calls, internet and sms",
+      "description": "Unlimited",
       "possibleAreasId": [
         16,
         14,
@@ -220,41 +130,6 @@
     }
   },
   "services": {
-    "19": {
-      "id": 19,
-      "userId": 17,
-      "templateId": 1,
-      "status": "Disconnected",
-      "activationDate": null
-    },
-    "21": {
-      "id": 21,
-      "userId": 17,
-      "templateId": 3,
-      "status": "Disconnected",
-      "activationDate": null
-    },
-    "23": {
-      "id": 23,
-      "userId": 17,
-      "templateId": 10,
-      "status": "Disconnected",
-      "activationDate": null
-    },
-    "25": {
-      "id": 25,
-      "userId": 17,
-      "templateId": 11,
-      "status": "Disconnected",
-      "activationDate": null
-    },
-    "27": {
-      "id": 27,
-      "userId": 17,
-      "templateId": 12,
-      "status": "Disconnected",
-      "activationDate": null
-    }
   },
   "customers": {
     "17": {
@@ -262,15 +137,21 @@
       "name": "kirill",
       "login": "kirill",
       "password": "1234",
-      "moneyBalance": 1000.0,
+      "moneyBalance": 900.0,
       "connectedServicesIds": [
         19,
         21,
-        23,
-        25,
-        27
+        23
       ],
       "areaId": 13
+    }
+  },
+  "employees": {
+    "18": {
+      "id": 18,
+      "name": "ivan",
+      "login": "ivan",
+      "password": "1234"
     }
   },
   "areas": {
@@ -295,13 +176,5 @@
       "description": "Peace Labor May"
     }
   },
-  "lastId": 33,
-  "employees": {
-    "18": {
-      "id": 18,
-      "name": "ivan",
-      "login": "ivan",
-      "password": "1234"
-    }
-  }
+  "lastId": 18
 }

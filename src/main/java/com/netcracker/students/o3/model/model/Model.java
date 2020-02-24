@@ -12,19 +12,20 @@ import com.netcracker.students.o3.model.users.Employee;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.Map;
 
 public interface Model
 {
     void setOrders(final Map<BigInteger, Order> orders);
 
-    void setTemplates(final Map<BigInteger, Template> templates);
+    void setTemplates(final Map<BigInteger, Template> templates) ;
 
     void setServices(final Map<BigInteger, Service> services);
 
     void setCustomers(final Map<BigInteger, Customer> customers);
 
-    void setEmployers(final Map<BigInteger, Employee> employers);
+    void setEmployees(final Map<BigInteger, Employee> employees);
 
     void setAreas(final Map<BigInteger, Area> areas);
 
@@ -43,7 +44,7 @@ public interface Model
     BigInteger createEmployee(String name, String login, String password);
 
     BigInteger createOrder(BigInteger templateId, BigInteger serviceId,
-            OrderStatus status, OrderAction action);
+            OrderStatus status, OrderAction action) ;
 
     BigInteger createTemplate(String name, BigDecimal cost, String description);
 
@@ -83,9 +84,9 @@ public interface Model
 
     void addOrder(Order order);
 
-    void addService(Service service);
+    void addService(Service service) ;
 
-    void addTemplate(Template template);
+    void addTemplate(Template template) ;
 
     void addCustomer(Customer customer);
 
