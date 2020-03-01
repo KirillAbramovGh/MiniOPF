@@ -482,7 +482,7 @@ public class ConsoleCustomerView implements View
             }
         }
 
-        for (User user : controller.getEmployers())
+        for (User user : controller.getEmployees())
         {
             if (user.getLogin().equals(login) && !user.getId().equals(customerId))
             {

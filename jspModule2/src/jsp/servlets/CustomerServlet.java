@@ -37,7 +37,6 @@ public class CustomerServlet extends HttpServlet
 
 
     private void execute(String command, HttpServletRequest req, HttpServletResponse resp)
-            throws IOException, ServletException
     {
         String[] splitCommand = command.split(" ");
         String commandName = splitCommand[0];

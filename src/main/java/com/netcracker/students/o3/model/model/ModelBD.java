@@ -28,8 +28,10 @@ import com.netcracker.students.o3.model.users.EmployerImpl;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ModelBD implements Model
@@ -62,10 +64,6 @@ public class ModelBD implements Model
             {
                 orderDao.create(order);
             }
-            catch (ClassNotFoundException e)
-            {
-                e.printStackTrace();
-            }
             catch (SQLException e)
             {
                 e.printStackTrace();
@@ -81,7 +79,7 @@ public class ModelBD implements Model
             {
                 templateDao.create(template);
             }
-            catch (ClassNotFoundException | SQLException e)
+            catch (SQLException e)
             {
                 e.printStackTrace();
             }
@@ -96,7 +94,7 @@ public class ModelBD implements Model
             {
                 serviceDao.create(service);
             }
-            catch (ClassNotFoundException | SQLException e)
+            catch (SQLException e)
             {
                 e.printStackTrace();
             }
@@ -110,10 +108,6 @@ public class ModelBD implements Model
             try
             {
                 customerDao.create(customer);
-            }
-            catch (ClassNotFoundException e)
-            {
-                e.printStackTrace();
             }
             catch (SQLException e)
             {
@@ -130,10 +124,6 @@ public class ModelBD implements Model
             {
                 employeeDao.create(employee);
             }
-            catch (ClassNotFoundException e)
-            {
-                e.printStackTrace();
-            }
             catch (SQLException e)
             {
                 e.printStackTrace();
@@ -148,10 +138,6 @@ public class ModelBD implements Model
             try
             {
                 areaDao.create(area);
-            }
-            catch (ClassNotFoundException e)
-            {
-                e.printStackTrace();
             }
             catch (SQLException e)
             {
@@ -171,10 +157,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
         return null;
     }
 
@@ -189,10 +172,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -209,77 +189,69 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
         return null;
     }
 
     @Override
-    public BigInteger createCustomer(final String name, final String login, final String password,
+    public Customer createCustomer(final String name, final String login, final String password,
             final BigInteger areaId)
     {
         Customer newCustomer = new CustomerImpl(getNextId(), name, login, password, areaId);
-        BigInteger customerId = newCustomer.getId();
-
         addCustomer(newCustomer);
-        return customerId;
+
+        return newCustomer;
     }
 
     @Override
-    public BigInteger createEmployee(final String name, final String login, final String password)
+    public Employee createEmployee(final String name, final String login, final String password)
 
     {
         Employee newEmployee = new EmployerImpl(getNextId(), name, login, password);
-        BigInteger employeeId = newEmployee.getId();
         addEmployee(newEmployee);
 
-        return employeeId;
+        return newEmployee;
     }
 
     @Override
-    public BigInteger createOrder(final BigInteger templateId, final BigInteger serviceId, final OrderStatus status,
+    public Order createOrder(final BigInteger templateId, final BigInteger serviceId, final OrderStatus status,
             final OrderAction action)
     {
         Order newOrder = new OrderImpl(getNextId(), templateId, serviceId, status, action);
-        BigInteger orderId = newOrder.getId();
         newOrder.setCreationDate(new Date());
         addOrder(newOrder);
-        return orderId;
+
+        return newOrder;
     }
 
     @Override
-    public BigInteger createTemplate(final String name, final BigDecimal cost, final String description)
+    public Template createTemplate(final String name, final BigDecimal cost, final String description)
 
     {
         Template newTemplate = new TemplateImpl(getNextId(), name, cost, description);
-        BigInteger templateId = newTemplate.getId();
-
         addTemplate(newTemplate);
-        return templateId;
+
+        return newTemplate;
     }
 
     @Override
-    public BigInteger createService(final BigInteger userId, final BigInteger templateId, final ServiceStatus status)
+    public Service createService(final BigInteger userId, final BigInteger templateId, final ServiceStatus status)
 
     {
         Service newService = new ServiceImpl(getNextId(), userId, templateId, status);
-        BigInteger serviceId = newService.getId();
-
         addService(newService);
-        return serviceId;
+
+        return newService;
     }
 
     @Override
-    public BigInteger createArea(final String name, final String description)
+    public Area createArea(final String name, final String description)
 
     {
         Area newArea = new AreaImpl(getNextId(), name, description);
-        BigInteger areaId = newArea.getId();
-
         addArea(newArea);
-        return areaId;
+
+        return newArea;
     }
 
     @Override
@@ -296,10 +268,6 @@ public class ModelBD implements Model
             }
         }
         catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e)
         {
             e.printStackTrace();
         }
@@ -323,10 +291,6 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
         return templateMap;
     }
 
@@ -347,10 +311,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
         return serviceMap;
     }
 
@@ -368,10 +329,6 @@ public class ModelBD implements Model
             }
         }
         catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e)
         {
             e.printStackTrace();
         }
@@ -395,10 +352,6 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
         return employeeMap;
     }
 
@@ -416,10 +369,6 @@ public class ModelBD implements Model
             }
         }
         catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e)
         {
             e.printStackTrace();
         }
@@ -441,10 +390,6 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
         return null;
     }
 
@@ -463,10 +408,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
         return null;
     }
 
@@ -485,10 +427,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
         return null;
     }
 
@@ -507,10 +446,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
         return null;
     }
 
@@ -530,10 +466,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
         return null;
     }
 
@@ -552,10 +485,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
         return null;
     }
 
@@ -565,10 +495,6 @@ public class ModelBD implements Model
         try
         {
             orderDao.create(order);
-        }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
         }
         catch (SQLException e)
         {
@@ -583,10 +509,6 @@ public class ModelBD implements Model
         {
             serviceDao.create(service);
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
         catch (SQLException e)
         {
             e.printStackTrace();
@@ -600,10 +522,7 @@ public class ModelBD implements Model
         {
             templateDao.create(template);
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
         catch (SQLException e)
         {
             e.printStackTrace();
@@ -617,10 +536,7 @@ public class ModelBD implements Model
         {
             customerDao.create(customer);
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
         catch (SQLException e)
         {
             e.printStackTrace();
@@ -634,10 +550,7 @@ public class ModelBD implements Model
         {
             employeeDao.create(employee);
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
         catch (SQLException e)
         {
             e.printStackTrace();
@@ -650,10 +563,6 @@ public class ModelBD implements Model
         try
         {
             areaDao.create(area);
-        }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
         }
         catch (SQLException e)
         {
@@ -672,10 +581,6 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -689,10 +594,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -703,10 +605,6 @@ public class ModelBD implements Model
             serviceDao.delete(id);
         }
         catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e)
         {
             e.printStackTrace();
         }
@@ -723,10 +621,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -737,10 +632,6 @@ public class ModelBD implements Model
             employeeDao.delete(id);
         }
         catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e)
         {
             e.printStackTrace();
         }
@@ -757,10 +648,6 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -774,10 +661,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -791,10 +675,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -808,10 +689,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -825,10 +703,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -842,10 +717,7 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -859,11 +731,178 @@ public class ModelBD implements Model
         {
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
+
+    }
+
+    public Area getAreaByName(final String name){
+        try
+        {
+            return ((AreaDao)areaDao).getAreaByName(name);
+        }
+        catch (SQLException e)
         {
             e.printStackTrace();
         }
+
+        return null;
     }
+
+    public Customer getCustomerByLogin(final String login){
+        try
+        {
+            return ((CustomerDao)customerDao).getCustomerByLogin(login);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Employee getEmployeeByLogin(final String login){
+        try
+        {
+            return ((EmployeeDao)employeeDao).getEmployeeByLogin(login);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Order> getOrdersByTemplateId(final BigInteger templateId){
+        try
+        {
+            return ((OrderDao)orderDao).getOrdersByTemplateId(templateId);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Order> getOrdersByServiceId(final BigInteger serviceId){
+        try
+        {
+            return ((OrderDao)orderDao).getOrdersByServiceId(serviceId);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Order> getOrdersByEmployeeId(final BigInteger employeeId){
+        try
+        {
+            return ((OrderDao)orderDao).getOrdersByEmployeeId(employeeId);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Order> getOrdersByStatus(final OrderStatus status){
+        try
+        {
+            return ((OrderDao)orderDao).getOrdersByStatus(status);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Order> getOrdersByAction(final OrderAction action){
+        try
+        {
+            return ((OrderDao)orderDao).getOrdersByAction(action);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Service> getServicesByUserId(BigInteger userId){
+        try
+        {
+            return ((ServiceDao)serviceDao).getServicesByUserId(userId);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Service> getServicesByTemplateId(BigInteger templateId){
+        try
+        {
+            return ((ServiceDao)serviceDao).getServicesByTemplateId(templateId);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Service> getServicesByStatus(ServiceStatus status){
+        try
+        {
+            return ((ServiceDao)serviceDao).getServicesByStatus(status);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Service> getServicesByStatusAndCustomerId(BigInteger userId,ServiceStatus status){
+        try
+        {
+            return ((ServiceDao)serviceDao).getServicesByStatusAndCustomerId(userId,status);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Template> getTemplatesByAreaId(BigInteger areaId){
+        try
+        {
+            return ((TemplateDao)templateDao).getTemplatesByAreaId(areaId);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Template getTemplateByName(String name){
+        try
+        {
+            return ((TemplateDao)templateDao).getTemplateByName(name);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public static ModelBD getInstance(){
         if(instance == null){

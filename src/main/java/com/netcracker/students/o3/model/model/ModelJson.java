@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -151,70 +152,62 @@ public class ModelJson implements Model
  *methods which create entities by credentials
  * @return id of created entity
  * */
-    public BigInteger createCustomer(String name,String login,String password,BigInteger areaId){
+    public Customer createCustomer(String name,String login,String password,BigInteger areaId){
         synchronized (customers)
         {
             Customer newCustomer = new CustomerImpl(getNextId(), name, login, password, areaId);
-            BigInteger customerId = newCustomer.getId();
-
             addCustomer(newCustomer);
-            return customerId;
+            return newCustomer;
         }
     }
 
-    public BigInteger createEmployee(String name,String login,String password){
+    public Employee createEmployee(String name,String login,String password){
         synchronized (employees)
         {
             Employee newEmployee = new EmployerImpl(getNextId(), name, login, password);
-            BigInteger employeeId = newEmployee.getId();
             addEmployee(newEmployee);
 
-            return employeeId;
+            return newEmployee;
         }
     }
 
-    public BigInteger createOrder(BigInteger templateId,BigInteger serviceId,
+    public Order createOrder(BigInteger templateId,BigInteger serviceId,
             OrderStatus status, OrderAction action){
         synchronized (orders)
         {
             Order newOrder = new OrderImpl(getNextId(), templateId, serviceId, status, action);
-            BigInteger orderId = newOrder.getId();
             newOrder.setCreationDate(new Date());
             addOrder(newOrder);
-            return orderId;
+            return newOrder;
         }
     }
 
-    public BigInteger createTemplate(String name, BigDecimal cost,String description){
+    public Template createTemplate(String name, BigDecimal cost,String description){
         synchronized (templates)
         {
             Template newTemplate = new TemplateImpl(getNextId(), name, cost, description);
             BigInteger templateId = newTemplate.getId();
 
             addTemplate(newTemplate);
-            return templateId;
+            return newTemplate;
         }
     }
 
-    public BigInteger createService(BigInteger userId,BigInteger templateId, ServiceStatus status){
+    public Service createService(BigInteger userId,BigInteger templateId, ServiceStatus status){
         synchronized (services)
         {
             Service newService = new ServiceImpl(getNextId(), userId, templateId, status);
-            BigInteger serviceId = newService.getId();
-
             addService(newService);
-            return serviceId;
+            return newService;
         }
     }
 
-    public BigInteger createArea(String name,String description){
+    public Area createArea(String name,String description){
         synchronized (areas)
         {
             Area newArea = new AreaImpl(getNextId(), name, description);
-            BigInteger areaId = newArea.getId();
-
             addArea(newArea);
-            return areaId;
+            return newArea;
         }
     }
 
@@ -473,6 +466,90 @@ public class ModelJson implements Model
         areas.put(area.getId(), area);
         }
             onDataChange();
+    }
+
+    @Override
+    public Area getAreaByName(final String name)
+    {
+        return null;
+    }
+
+    @Override
+    public Customer getCustomerByLogin(final String login)
+    {
+        return null;
+    }
+
+    @Override
+    public Employee getEmployeeByLogin(final String login)
+    {
+        return null;
+    }
+
+    @Override
+    public List<Order> getOrdersByTemplateId(final BigInteger templateId)
+    {
+        return null;
+    }
+
+    @Override
+    public List<Order> getOrdersByServiceId(final BigInteger serviceId)
+    {
+        return null;
+    }
+
+    @Override
+    public List<Order> getOrdersByEmployeeId(final BigInteger employeeId)
+    {
+        return null;
+    }
+
+    @Override
+    public List<Order> getOrdersByStatus(final OrderStatus status)
+    {
+        return null;
+    }
+
+    @Override
+    public List<Order> getOrdersByAction(final OrderAction action)
+    {
+        return null;
+    }
+
+    @Override
+    public List<Service> getServicesByUserId(final BigInteger userId)
+    {
+        return null;
+    }
+
+    @Override
+    public List<Service> getServicesByTemplateId(final BigInteger templateId)
+    {
+        return null;
+    }
+
+    @Override
+    public List<Service> getServicesByStatus(final ServiceStatus status)
+    {
+        return null;
+    }
+
+    @Override
+    public List<Service> getServicesByStatusAndCustomerId(final BigInteger userId, final ServiceStatus status)
+    {
+        return null;
+    }
+
+    @Override
+    public List<Template> getTemplatesByAreaId(final BigInteger areaId)
+    {
+        return null;
+    }
+
+    @Override
+    public Template getTemplateByName(final String name)
+    {
+        return null;
     }
 
 

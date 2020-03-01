@@ -26,6 +26,7 @@ public class HtmlTableBuilder {
     }
 
 
+    @Deprecated
     public String createCustomerTemplatesTable(Collection<Template> templates) {
         StringBuilder innerPart = new StringBuilder();
 
@@ -45,6 +46,7 @@ public class HtmlTableBuilder {
         return build(innerPart.toString());
     }
 
+    @Deprecated
     public String createCustomerServicesTable(Collection<Service> services) {
         StringBuilder innerPart = new StringBuilder();
 
@@ -80,7 +82,7 @@ public class HtmlTableBuilder {
                         "Cost"+createButton("↑","ServiceSortDownByCost")+
                                 createButton("↓","ServiceSortUpByCost"),
                         "Status", "TemplateId", "UserId",
-                        "ActivationDate", "Areas");
+                        "ActivationDate", "Areas","","");
 
         innerPart += addEmployeeServicesToTable(services);
 
@@ -97,7 +99,7 @@ public class HtmlTableBuilder {
                                 +createButton("↓","TemplateSortUpByName")
                         , "Cost"+createButton("↑","TemplateSortDownByCost")
                                 +createButton("↓","TemplateSortUpByCost")
-                        , "Description", "Areas","")
+                        , "Description", "Areas","","")
         );
 
         int i = 1;
@@ -115,7 +117,7 @@ public class HtmlTableBuilder {
         innerPart.append(addColumns(
                         "id"+createButton("↑","OrderSortDownById")
                 +createButton("↓","OrderSortUpById")
-                ,"TemplateId", "ServiceId", "EmployeeId", "Status", "Action", "CreationDate",""));
+                ,"TemplateId", "ServiceId", "EmployeeId", "Status", "Action", "CreationDate","",""));
         int i = 1;
         for (Order order : orders) {
             i = getNextColorNumber(i);
@@ -139,7 +141,7 @@ public class HtmlTableBuilder {
                         , "Password", "Area",
                         "Balance"+createButton("↑","CustomerSortDownByBalance")+
                                 createButton("↓","CustomerSortUpByBalance")
-                        , "ConnectedServices","")
+                        , "ConnectedServices","","")
         );
 
         int i = 1;
@@ -162,7 +164,7 @@ public class HtmlTableBuilder {
                                 createButton("↓","EmployeeSortUpByName")
                         , "Login"+createButton("↑","EmployeeSortDownByLogin")+
                                 createButton("↓","EmployeeSortUpByLogin")
-                        , "Password","")
+                        , "Password","","")
         );
 
         int i = 1;
@@ -184,7 +186,7 @@ public class HtmlTableBuilder {
                                 createButton("↓","AreaSortUpByName")
                         , "Description"+createButton("↑","AreaSortDownByDescription")+
                                 createButton("↓","AreaSortUpByDescription")
-                        ,"")
+                        ,"","")
         );
 
         int i = 1;
@@ -209,6 +211,7 @@ public class HtmlTableBuilder {
         return innerPart.toString();
     }
 
+    @Deprecated
     private String addCustomerServiceToTable(Service service, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
@@ -235,6 +238,7 @@ public class HtmlTableBuilder {
         return result + "</tr>";
     }
 
+    @Deprecated
     private String addCustomerTemplateToTable(Template template, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
@@ -263,6 +267,8 @@ public class HtmlTableBuilder {
             case Completed:result+=addCell("");break;
             case Processing:result+=addCell(createButton("Complete","completeOrder",order.getId().toString()));break;
         }
+        result += addCell(createButton("Delete","deleteOrder",order.getId().toString()));
+        result += addCell(createButton("Update","updateOrder",order.getId().toString()));
 
         return result + "</tr>";
     }
@@ -278,6 +284,9 @@ public class HtmlTableBuilder {
         result += addCell(service.getUserId() + "");
         result += addCell(service.getActivationDate() + "");
         result += addCell(getAreasByTemplateId(service.getTemplateId()));
+        result += addCell(createButton("Delete","deleteService",service.getId().toString()));
+        result += addCell(createButton("Update","updateService",service.getId().toString()));
+
 
         return result + "</tr>";
     }
@@ -291,6 +300,7 @@ public class HtmlTableBuilder {
         result += addCell(template.getDescription() + "");
         result += addCell(getAreasByTemplateId(template.getId()));
         result +=addCell(createButton("Delete","deleteTemplate",template.getId().toString()));
+        result += addCell(createButton("Update","updateTemplate",template.getId().toString()));
 
         return result + "</tr>";
     }
@@ -308,6 +318,8 @@ public class HtmlTableBuilder {
                 getCustomerConnectedServiceIds(customer)
         );
         result+=addCell(createButton("Delete","deleteCustomer",customer.getId().toString()));
+        result+=addCell(createButton("Update","updateCustomer",customer.getId().toString()));
+
 
         return result + "</tr>";
     }
@@ -320,6 +332,7 @@ public class HtmlTableBuilder {
         result += addCell(employee.getLogin());
         result += addCell(employee.getPassword());
         result+=addCell(createButton("Delete","deleteEmployee",employee.getId().toString()));
+        result+=addCell(createButton("Update","updateEmployee",employee.getId().toString()));
 
         return result + "</tr>";
     }
@@ -331,6 +344,7 @@ public class HtmlTableBuilder {
         result += addCell(area.getName() + "");
         result += addCell(area.getDescription());
         result += addCell(createButton("Delete","deleteArea",area.getId().toString()));
+        result += addCell(createButton("Update","updateArea",area.getId().toString()));
 
         return result + "</tr>";
     }

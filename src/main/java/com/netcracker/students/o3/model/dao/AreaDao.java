@@ -5,6 +5,7 @@ import com.netcracker.students.o3.model.area.AreaImpl;
 
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,50 +17,52 @@ public class AreaDao extends AbstractDao<Area>
     private static final String tableName = "areas";
 
     @Override
-    public List<Area> getAll() throws SQLException, ClassNotFoundException
+    public List<Area> getAll() throws SQLException
     {
         List<Area> areas = new ArrayList<>();
-
 
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
             String sqlReq = "select * from " + getTableName();
-           try(ResultSet resultSet = statement.executeQuery(sqlReq))
-           {
+            try (ResultSet resultSet = statement.executeQuery(sqlReq))
+            {
 
-               for (Area area; resultSet.next(); )
-               {
-                   area = new AreaImpl();
-                   area.setId(BigInteger.valueOf(resultSet.getInt("id")));
-                   area.setName(resultSet.getString("name"));
-                   area.setDescription(resultSet.getString("description"));
+                for (Area area; resultSet.next(); )
+                {
+                    area = new AreaImpl();
+                    area.setId(BigInteger.valueOf(resultSet.getInt("id")));
+                    area.setName(resultSet.getString("area_name"));
+                    area.setDescription(resultSet.getString("description"));
 
-                   if(area.getName()==null){
-                       continue;
-                   }
+                    if (area.getName() == null)
+                    {
+                        continue;
+                    }
 
-                   areas.add(area);
-               }
-           }
+                    areas.add(area);
+                }
+            }
         }
         return areas;
     }
 
     @Override
-    public Area getEntityById(final BigInteger id) throws SQLException, ClassNotFoundException
+    public Area getEntityById(final BigInteger id) throws SQLException
     {
         Area area = new AreaImpl();
-        try (Connection connection = getConnection();Statement statement = connection.createStatement())
+        String sqlReq = "select * from " + getTableName() + " where id=?";
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            String sqlReq = "select * from " + getTableName() + " where id=" + id;
-            try (ResultSet resultSet = statement.executeQuery(sqlReq))
+            statement.setLong(1, id.longValue());
+            try (ResultSet resultSet = statement.executeQuery())
             {
                 if (resultSet.next())
                 {
                     area.setId(id);
-                    area.setName(resultSet.getString("name"));
+                    area.setName(resultSet.getString("area_name"));
                     area.setDescription(resultSet.getString("description"));
-                    if(area.getName() == null){
+                    if (area.getName() == null)
+                    {
                         return null;
                     }
                 }
@@ -69,22 +72,18 @@ public class AreaDao extends AbstractDao<Area>
     }
 
     @Override
-    public void update(final Area entity)
+    public void update(final Area entity) throws SQLException
     {
-        try (Connection connection = getConnection();Statement statement = connection.createStatement())
+        String sqlReq =
+                "update " + getTableName() + " set area_name=?, description=? where id=?";
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            String name = "'" + entity.getName() + "'";
-            String description = "'" + entity.getDescription() + "'";
-
-            String sqlReq =
-                    "update " + getTableName() + " set name=" + name + ", description=" + description + " where id=" +
-                            entity.getId();
+            statement.setString(1,entity.getName());
+            statement.setString(2,entity.getDescription());
+            statement.setLong(3,entity.getId().longValue());
             statement.executeUpdate(sqlReq);
         }
-        catch (SQLException | ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -94,17 +93,40 @@ public class AreaDao extends AbstractDao<Area>
     }
 
     @Override
-    public void create(final Area entity) throws ClassNotFoundException
+    public void create(final Area entity) throws SQLException
     {
-        try (Connection connection = getConnection();Statement statement = connection.createStatement())
+        String sqlReq = "INSERT INTO " + getTableName() + " VALUES (?,?,?)";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlReq))
         {
-            String values = entity.getId() + ",'" + entity.getName() + "','" + entity.getDescription() + "'";
-            String sqlReq = "INSERT INTO " + getTableName() + " VALUES (" + values + ")";
-            statement.executeUpdate(sqlReq);
+            preparedStatement.setLong(1, entity.getId().longValue());
+            preparedStatement.setString(2, entity.getName());
+            preparedStatement.setString(3, entity.getDescription());
+            preparedStatement.executeUpdate();
         }
-        catch (SQLException e)
+    }
+
+    public Area getAreaByName(String areaName) throws SQLException
+    {
+        System.out.println("AreaDao.getEntityByName(" + areaName + ") ");
+        Area area = new AreaImpl();
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            e.printStackTrace();
+            String sqlReq = "select * from " + getTableName() + " where area_name='" + areaName + "'";
+            try (ResultSet resultSet = statement.executeQuery(sqlReq))
+            {
+                if (resultSet.next())
+                {
+                    area.setId(resultSet.getBigDecimal("id").toBigInteger());
+                    area.setName(resultSet.getString("name"));
+                    area.setDescription(resultSet.getString("description"));
+                    if (area.getName() == null)
+                    {
+                        return null;
+                    }
+                }
+            }
         }
+        return area;
     }
 }

@@ -5,6 +5,7 @@ import com.netcracker.students.o3.model.templates.TemplateImpl;
 
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,8 +18,10 @@ public class TemplateDao extends AbstractDao<Template>
     private static final String templateAreaLinkTable = "template_area_link";
 
     @Override
-    public List<Template> getAll() throws SQLException, ClassNotFoundException
+    public List<Template> getAll() throws SQLException
     {
+        System.out.println("TemplateDao.getAll()");
+
         List<Template> templates = new ArrayList<>();
 
 
@@ -28,21 +31,22 @@ public class TemplateDao extends AbstractDao<Template>
             try (ResultSet resultSet = statement.executeQuery(sqlReq))
             {
                 ResultSet areaSet;
-                String areaReq = "select * from "+templateAreaLinkTable + " where templateid=";
+                String areaReq = "select * from " + templateAreaLinkTable + " where templateid=";
 
 
                 for (Template template; resultSet.next(); )
                 {
                     template = new TemplateImpl();
                     template.setId(BigInteger.valueOf(resultSet.getInt("id")));
-                    template.setName(resultSet.getString("name"));
+                    template.setName(resultSet.getString("template_name"));
                     template.setCost(resultSet.getBigDecimal("cost"));
                     template.setDescription(resultSet.getString("description"));
 
-                    areaSet = getConnection().createStatement().executeQuery(areaReq+template.getId());
+                    areaSet = getConnection().createStatement().executeQuery(areaReq + template.getId());
 
                     List<BigInteger> areaIds = new ArrayList<>();
-                    for(BigInteger areaId;areaSet.next();){
+                    for (BigInteger areaId; areaSet.next(); )
+                    {
                         areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
                     }
                     template.setPossibleAreasId(areaIds);
@@ -57,60 +61,34 @@ public class TemplateDao extends AbstractDao<Template>
     }
 
     @Override
-    public Template getEntityById(final BigInteger id)
+    public Template getEntityById(final BigInteger id) throws SQLException
     {
-        Template template = new TemplateImpl();
-        try (Connection connection = getConnection();Statement statement = connection.createStatement())
+        Template template;
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
             String sqlReq = "select * from " + getTableName() + " where id=" + id;
-            String areaReq = "select * from "+templateAreaLinkTable + " where templateid=";
-            ResultSet resultSet = statement.executeQuery(sqlReq);
-            ResultSet areaSet;
+            String areaReq = "select * from " + templateAreaLinkTable + " where templateid=";
 
-            template.setId(id);
-            if (resultSet.next())
-            {
-                template.setName(resultSet.getString("name"));
-                template.setCost(resultSet.getBigDecimal("cost"));
-                template.setDescription(resultSet.getString("description"));
-
-                areaSet = statement.executeQuery(areaReq+template.getId());
-
-                List<BigInteger> areaIds = new ArrayList<>();
-                for(BigInteger areaId;areaSet.next();){
-                    areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
-                }
-                template.setPossibleAreasId(areaIds);
-            }
-            resultSet.close();
+            template = getTemplateFromResultSet(statement, sqlReq, areaReq + id);
         }
-        catch (SQLException | ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-
         return template;
     }
 
     @Override
-    public void update(final Template entity)
+    public void update(final Template entity) throws SQLException
     {
-        try (Connection connection = getConnection();Statement statement = connection.createStatement())
+        String sqlReq =
+                "update " + getTableName() + " set template_name=?, cost=?, description=? where id=?";
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            String name = "'" + entity.getName() + "'";
-            String cost = entity.getCost().toString();
-            String description = "'" + entity.getDescription() + "'";
+            statement.setString(1,entity.getName());
+            statement.setBigDecimal(2,entity.getCost());
+            statement.setString(3,entity.getDescription());
+            statement.setLong(4,entity.getId().longValue());
 
+            statement.executeUpdate();
+        }
 
-            String sqlReq =
-                    "update " + getTableName() + " set name=" + name + ", cost=" + cost + ", description=" +
-                            description + " where id=" + entity.getId();
-            statement.executeUpdate(sqlReq);
-        }
-        catch (SQLException | ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -120,11 +98,13 @@ public class TemplateDao extends AbstractDao<Template>
     }
 
     @Override
-    public void delete(final BigInteger id) throws SQLException, ClassNotFoundException
+    public void delete(final BigInteger id) throws SQLException
     {
-        try(Connection connection = getConnection();Statement statement = connection.createStatement())
+        System.out.println("TemplateDao.delete(" + id + ") ");
+
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            String areasReq = "delete from template_area_link where templateid="+id;
+            String areasReq = "delete from template_area_link where templateid=" + id;
             statement.executeUpdate(areasReq);
             String sqlReq = "delete from " + getTableName() + " where id=" + id;
             statement.executeUpdate(sqlReq);
@@ -132,9 +112,11 @@ public class TemplateDao extends AbstractDao<Template>
     }
 
     @Override
-    public void create(final Template entity)
+    public void create(final Template entity) throws SQLException
     {
-        try (Connection connection = getConnection();Statement statement = connection.createStatement())
+        System.out.println("TemplateDao.create(" + entity + ") ");
+
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
             String values = entity.getId() + ",'" + entity.getName() + "'," + entity.getCost() + ",'" +
                     entity.getDescription() + "'";
@@ -143,16 +125,138 @@ public class TemplateDao extends AbstractDao<Template>
 
             statement.executeUpdate(sqlReq);
 
-            for(BigInteger areaId : entity.getPossibleAreasId())
+            for (BigInteger areaId : entity.getPossibleAreasId())
             {
                 String templateAreaLink =
-                        "INSERT INTO " + "template_area_link" + " VALUES (" + entity.getId() + ", " + areaId +")";
+                        "INSERT INTO " + "template_area_link" + " VALUES (" + entity.getId() + ", " + areaId + ")";
                 statement.executeUpdate(templateAreaLink);
             }
         }
-        catch (SQLException | ClassNotFoundException e)
+
+    }
+
+    public Template getTemplateByName(String templateName) throws SQLException
+    {
+        System.out.println("TemplateDao.getEntityById(" + templateName + ") ");
+
+        Template template = new TemplateImpl();
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            e.printStackTrace();
+            String sqlReq = "select * from " + getTableName() + " where template_name='" + templateName + "'";
+            String areaReq = "select * from " + templateAreaLinkTable + " where templateid=";
+            ResultSet resultSet = statement.executeQuery(sqlReq);
+            ResultSet areaSet;
+
+            if (resultSet.next())
+            {
+                template.setId(resultSet.getBigDecimal("id").toBigInteger());
+                template.setName(resultSet.getString("template_name"));
+                template.setCost(resultSet.getBigDecimal("cost"));
+                template.setDescription(resultSet.getString("description"));
+
+                areaSet = statement.executeQuery(areaReq + template.getId());
+
+                List<BigInteger> areaIds = new ArrayList<>();
+                for (BigInteger areaId; areaSet.next(); )
+                {
+                    areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
+                }
+                template.setPossibleAreasId(areaIds);
+            }
+            resultSet.close();
         }
+
+
+        return template;
+    }
+
+    public List<Template> getTemplatesByAreaId(BigInteger areaId) throws SQLException
+    {
+        List<Template> templates = new ArrayList<>();
+
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement())
+        {
+            String sqlReq = "select * from " + templateAreaLinkTable + " where areaid=" + areaId;
+            try (ResultSet resultSet = statement.executeQuery(sqlReq))
+            {
+                List<BigInteger> templateIds = new ArrayList<>();
+                for (; resultSet.next(); )
+                {
+                    templateIds.add(resultSet.getBigDecimal("templateid").toBigInteger());
+                }
+                for (BigInteger id : templateIds)
+                {
+                    templates.add(getEntityById(id));
+                }
+            }
+        }
+
+        return templates;
+    }
+
+    private Template getTemplateFromResultSet(Statement statement, String temSql, String areaSql) throws SQLException
+    {
+        ResultSet resultSet = statement.executeQuery(temSql);
+        if (!resultSet.next() || resultSet.getString("template_name") == null)
+        {
+            return null;
+        }
+        Template template = new TemplateImpl();
+        template.setId(resultSet.getBigDecimal("id").toBigInteger());
+        template.setName(resultSet.getString("template_name"));
+        template.setCost(resultSet.getBigDecimal("cost"));
+        template.setDescription(resultSet.getString("description"));
+
+        ResultSet areaSet = statement.executeQuery(areaSql);
+        List<BigInteger> areaIds = new ArrayList<>();
+        for (; areaSet.next(); )
+        {
+            areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
+        }
+        template.setPossibleAreasId(areaIds);
+        resultSet.close();
+        areaSet.close();
+        return template;
+    }
+
+    private List<Template> getTemplates(String sqlReq) throws SQLException
+    {
+        System.out.println("TemplateDao.getAll()");
+
+        List<Template> templates = new ArrayList<>();
+
+
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement())
+        {
+            try (ResultSet resultSet = statement.executeQuery(sqlReq))
+            {
+                ResultSet areaSet;
+                String areaReq = "select * from " + templateAreaLinkTable + " where templateid=";
+
+
+                for (Template template; resultSet.next(); )
+                {
+                    template = new TemplateImpl();
+                    template.setId(BigInteger.valueOf(resultSet.getInt("id")));
+                    template.setName(resultSet.getString("template_name"));
+                    template.setCost(resultSet.getBigDecimal("cost"));
+                    template.setDescription(resultSet.getString("description"));
+
+                    areaSet = getConnection().createStatement().executeQuery(areaReq + template.getId());
+
+                    List<BigInteger> areaIds = new ArrayList<>();
+                    for (BigInteger areaId; areaSet.next(); )
+                    {
+                        areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
+                    }
+                    template.setPossibleAreasId(areaIds);
+
+                    templates.add(template);
+                }
+            }
+        }
+
+
+        return templates;
     }
 }

@@ -93,7 +93,7 @@ public class StartServlet extends HttpServlet {
 
         BigInteger employeeId;
         if (isNotEmptyLoginPasswordName(login, password, name)) {
-            employeeId = ControllerImpl.getInstance().registerEmployee(login, password, name);
+            employeeId = ControllerImpl.getInstance().registerEmployee(login, password, name).getId();
         } else {
             throw new RegisterException("Login, Password and Name can not be empty");
         }
@@ -134,7 +134,7 @@ public class StartServlet extends HttpServlet {
         Controller controller = ControllerImpl.getInstance();
         BigInteger userId = null;
         if (isNotEmptyLoginPasswordName(login, password, name)) {
-            userId = controller.registerCustomer(login, password, name, areaId);
+            userId = controller.registerCustomer(login, password, name, areaId).getId();
         } else {
             throw new RegisterException("Login,Password,Name can not be null");
         }

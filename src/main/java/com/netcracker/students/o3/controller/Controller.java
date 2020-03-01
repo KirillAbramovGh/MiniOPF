@@ -57,7 +57,9 @@ public interface Controller
      */
     void completeOrder(BigInteger orderId);
 
+    void completeOrder(BigInteger orderId,Service service);
 
+    void completeOrder(Order order,Service service);
 
     /**
      * delete of entities
@@ -93,21 +95,21 @@ public interface Controller
     /**
      * create entities
      */
-    BigInteger createCustomer(String name, String login, String password, BigInteger areaId)
+    Customer createCustomer(String name, String login, String password, BigInteger areaId)
           ;
 
-    BigInteger createEmployee(String name, String login, String password) ;
+    Employee createEmployee(String name, String login, String password) ;
 
-    BigInteger createOrder(BigInteger templateId, BigInteger serviceId,
+    Order createOrder(BigInteger templateId, BigInteger serviceId,
             OrderStatus status, OrderAction action) ;
 
-    BigInteger createTemplate(String name, BigDecimal cost, String description)
+    Template createTemplate(String name, BigDecimal cost, String description)
             ;
 
-    BigInteger createService(BigInteger userId, BigInteger templateId, ServiceStatus status)
+    Service createService(BigInteger userId, BigInteger templateId, ServiceStatus status)
             ;
 
-    BigInteger createArea(String name, String description);
+    Area createArea(String name, String description);
 
 
     /**
@@ -119,13 +121,13 @@ public interface Controller
     /**
      * register new Customer
      */
-    BigInteger registerCustomer(String login, String password, String Name, BigInteger areaId)
+    Customer registerCustomer(String login, String password, String Name, BigInteger areaId)
             throws LoginOccupiedException;
 
     /**
      * register new Employee
      */
-    BigInteger registerEmployee(String login, String password, String Name)
+    Employee registerEmployee(String login, String password, String Name)
             throws LoginOccupiedException;
 
     /**
@@ -163,15 +165,7 @@ public interface Controller
      */
     List<Template> getTemplatesByAreaId(BigInteger areaId);
 
-    /**
-     * @return templates
-     */
-    List<Template> getAllTemplates() ;
 
-    /**
-     * @return customer orders
-     */
-    List<Order> getOrdersByCustomerId(BigInteger customerId);
 
     /**
      * @return employee orders
@@ -207,7 +201,6 @@ public interface Controller
 
     List<Order> getOrders();
 
-    List<Employee> getEmployers();
 
     /**
      * get entity by id
@@ -229,10 +222,6 @@ public interface Controller
      */
     void putOnBalance(BigInteger customerId, BigDecimal money);
 
-    /**
-     * @return services available on area id
-     */
-    List<Service> getServicesByAreaId(BigInteger areaId);
 
     /**
      * check user by login
@@ -273,10 +262,6 @@ public interface Controller
     void setCustomerArea(BigInteger customerId, BigInteger areaId) throws UnpossibleChangeAreaException;
 
 
-    /**
-     * suspend or resume service
-     */
-    void suspendOrResumeService(BigInteger customerId, BigInteger serviceId);
 
 
     /**
@@ -300,4 +285,6 @@ public interface Controller
 
     String getServiceName(final BigInteger serviceId);
     String getServiceDescription(final BigInteger serviceId);
+
+    List<Employee> getEmployees();
 }

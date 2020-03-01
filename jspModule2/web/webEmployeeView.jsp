@@ -49,6 +49,7 @@
                         <option>Status</option>
                         <option>Action</option>
                     </select>
+                    <input type="submit" name="createOrder" value="Create">
                     <%=employeeWebOperations.showEmployeeOrders(
                             request.getParameter("searchFieldEmployeeOrders"),
                             request.getParameter("employeeOrderSelectField"),
@@ -68,6 +69,7 @@
                         <option>Status</option>
                         <option>Action</option>
                     </select>
+                    <input type="submit" name="createOrder" value="Create">
                     <%=employeeWebOperations.showAllOrders(
                             request.getParameter("searchFieldAllOrders"),
                             request.getParameter("allOrderSelectField"),
@@ -89,6 +91,7 @@
                         <option>ActivationDate</option>
                         <option>Areas</option>
                     </select>
+                    <input type="submit" name="createService" value="Create">
                     <%=employeeWebOperations.showAllServices(
                             request.getParameter("searchFieldAllServices"),
                             request.getParameter("allServicesSelectField"),
@@ -107,6 +110,7 @@
                         <option>Description</option>
                         <option>Areas</option>
                     </select>
+                    <input type="submit" name="createTemplate" value="Create">
                     <%=employeeWebOperations.showAllTemplates(
                             request.getParameter("searchFieldAllTemplates"),
                             request.getParameter("allTemplatesSelectField"),
@@ -126,6 +130,7 @@
                         <option>Balance</option>
                         <option>ConnectedServices</option>
                     </select>
+                    <input type="submit" name="createCustomer" value="Create">
                     <%=employeeWebOperations.showAllCustomers(
                             request.getParameter("searchFieldAllCustomers"),
                             request.getParameter("allCustomersSelectField"),
@@ -142,6 +147,7 @@
                         <option>Name</option>
                         <option>Login</option>
                     </select>
+                    <input type="submit" name="createEmployee" value="Create">
                     <%=employeeWebOperations.showAllEmployees(
                             request.getParameter("searchFieldAllEmployees"),
                             request.getParameter("allEmployeesSelectField"),
@@ -158,6 +164,7 @@
                         <option>Name</option>
                         <option>Description</option>
                     </select>
+                    <input type="submit" name="createArea" value="Create">
                     <%=employeeWebOperations.showAllAreas(
                             request.getParameter("searchFieldAllAreas"),
                             request.getParameter("allAreasSelectField"),

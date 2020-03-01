@@ -5,6 +5,7 @@ import com.netcracker.students.o3.model.users.CustomerImpl;
 
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,17 +18,17 @@ public class CustomerDao extends AbstractDao<Customer>
     private static final String tableName = "customers";
 
     @Override
-    public List<Customer> getAll() throws SQLException, ClassNotFoundException
+    public List<Customer> getAll() throws SQLException
     {
         List<Customer> customers = new ArrayList<>();
 
-
+        System.out.println("CustomerDao.getAll() ");
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
             String sqlReq = "select * from " + getTableName();
             try (ResultSet resultSet = statement.executeQuery(sqlReq))
             {
-                String sqlServiceReq = "select id from services where userid=";
+                String sqlServiceReq = "select id from services where userid=?";
                 ResultSet serviceSet;
                 for (Customer customer; resultSet.next(); )
                 {
@@ -42,11 +43,16 @@ public class CustomerDao extends AbstractDao<Customer>
                     customer.setMoneyBalance(resultSet.getBigDecimal("moneybalance"));
                     customer.setAreaId(BigInteger.valueOf(resultSet.getLong("areaid")));
 
-                    serviceSet = getConnection().createStatement().executeQuery(sqlServiceReq+customer.getId());
-                    for(BigInteger serviceId;serviceSet.next();){
-                        serviceId = serviceSet.getBigDecimal("id").toBigInteger();
-                        customer.addConnectedServiceId(serviceId);
+                    try(PreparedStatement serviceStatement = connection.prepareStatement(sqlServiceReq))
+                    {
+                        serviceStatement.setLong(1,customer.getId().longValue());
+                        serviceSet = serviceStatement.executeQuery();
+                        for(BigInteger serviceId;serviceSet.next();){
+                            serviceId = serviceSet.getBigDecimal("id").toBigInteger();
+                            customer.addConnectedServiceId(serviceId);
+                        }
                     }
+
 
                     customers.add(customer);
                 }
@@ -58,13 +64,14 @@ public class CustomerDao extends AbstractDao<Customer>
     }
 
     @Override
-    public Customer getEntityById(final BigInteger id) throws SQLException, ClassNotFoundException
+    public Customer getEntityById(final BigInteger id) throws SQLException
     {
         Customer customer = new CustomerImpl();
-        try (Connection connection = getConnection();Statement statement = connection.createStatement())
+        String sqlReq = "select * from " + getTableName() + " where id=?";
+        try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            String sqlReq = "select * from " + getTableName() + " where id=" + id;
-            try (ResultSet resultSet = statement.executeQuery(sqlReq))
+            statement.setLong(1,id.longValue());
+            try (ResultSet resultSet = statement.executeQuery())
             {
 
                 customer.setId(id);
@@ -79,8 +86,92 @@ public class CustomerDao extends AbstractDao<Customer>
                     customer.setPassword(resultSet.getString("password"));
                     customer.setMoneyBalance(resultSet.getBigDecimal("moneybalance"));
                     customer.setAreaId(BigInteger.valueOf(resultSet.getLong("areaid")));
-                    String sqlServiceReq = "select id from services where userid="+id;
-                    ResultSet serviceSet = statement.executeQuery(sqlServiceReq);
+                    String sqlServiceReq = "select id from services where userid=?";
+
+                    PreparedStatement preparedStatement = connection.prepareStatement(sqlServiceReq);
+                    preparedStatement.setLong(1,id.longValue());
+                    ResultSet serviceSet = preparedStatement.executeQuery();
+
+                    for(BigInteger serviceId;serviceSet.next();){
+                        serviceId = serviceSet.getBigDecimal("id").toBigInteger();
+                        customer.addConnectedServiceId(serviceId);
+                    }
+                    preparedStatement.close();
+                    serviceSet.close();
+                }
+            }
+        }
+
+        return customer;
+    }
+
+    @Override
+    public void update(final Customer entity) throws SQLException
+    {
+        String sqlReq =
+                "update " + getTableName() + " set name=?, login=?, password=?, moneybalance=?, areaid=? where id=?";
+        try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
+        {
+            statement.setString(1,entity.getName());
+            statement.setString(2,entity.getLogin());
+            statement.setString(3,entity.getPassword());
+            statement.setBigDecimal(4,entity.getMoneyBalance());
+            statement.setLong(5,entity.getAreaId().longValue());
+            statement.setLong(6,entity.getId().longValue());
+            statement.executeUpdate();
+        }
+
+    }
+
+    @Override
+    protected String getTableName()
+    {
+        return tableName;
+    }
+
+    @Override
+    public void create(final Customer entity) throws SQLException
+    {
+
+        String sqlReq = "INSERT INTO " + getTableName() + " VALUES (?,?,?,?,?,?)";
+        try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
+        {
+            statement.setLong(1,entity.getId().longValue());
+            statement.setString(2,entity.getName());
+            statement.setString(3,entity.getLogin());
+            statement.setString(4,entity.getPassword());
+            statement.setBigDecimal(5,entity.getMoneyBalance());
+            statement.setLong(6,entity.getAreaId().longValue());
+            statement.executeUpdate();
+        }
+    }
+
+    public Customer getCustomerByLogin(String login) throws SQLException
+    {
+        Customer customer = new CustomerImpl();
+        String sqlReq = "select * from " + getTableName() + " where login=?";
+        try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
+        {
+            statement.setString(1,login);
+            try (ResultSet resultSet = statement.executeQuery())
+            {
+                if (resultSet.next())
+                {
+                    customer.setId(resultSet.getBigDecimal("id").toBigInteger());
+                    customer.setName(resultSet.getString("name"));
+
+                    if(customer.getName() == null){
+                        return null;
+                    }
+                    customer.setLogin(resultSet.getString("login"));
+                    customer.setPassword(resultSet.getString("password"));
+                    customer.setMoneyBalance(resultSet.getBigDecimal("moneybalance"));
+                    customer.setAreaId(BigInteger.valueOf(resultSet.getLong("areaid")));
+                    String sqlServiceReq = "select id from services where userid=?";
+                    PreparedStatement serviceStatement = connection.prepareStatement(sqlServiceReq);
+
+                    serviceStatement.setLong(1,customer.getId().longValue());
+                    ResultSet serviceSet = serviceStatement.executeQuery();
 
                     for(BigInteger serviceId;serviceSet.next();){
                         serviceId = serviceSet.getBigDecimal("id").toBigInteger();
@@ -94,48 +185,5 @@ public class CustomerDao extends AbstractDao<Customer>
         return customer;
     }
 
-    @Override
-    public void update(final Customer entity)
-    {
-        try (Connection connection = getConnection();Statement statement = connection.createStatement())
-        {
-            String name = "'" + entity.getName() + "'";
-            String login = "'" + entity.getLogin() + "'";
-            String password = "'" + entity.getPassword() + "'";
-            String moneyBalance = entity.getMoneyBalance().toString();
-            String areaId = entity.getAreaId().toString();
 
-            String sqlReq =
-                    "update " + getTableName() + " set name=" + name + ", login=" + login + ", password=" + password +
-                            ", moneybalance=" + moneyBalance + ", areaid=" + areaId
-                            + " where id=" + entity.getId();
-            statement.executeUpdate(sqlReq);
-        }
-        catch (SQLException | ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected String getTableName()
-    {
-        return tableName;
-    }
-
-    @Override
-    public void create(final Customer entity) throws ClassNotFoundException
-    {
-        try (Connection connection = getConnection();Statement statement = connection.createStatement())
-        {
-            String values = entity.getId() + ",'" + entity.getName() + "','" + entity.getLogin()
-                    + "','" + entity.getPassword() + "'," + entity.getMoneyBalance() + "," + entity.getAreaId();
-            String sqlReq = "INSERT INTO " + getTableName() + " VALUES (" + values + ")";
-            statement.executeUpdate(sqlReq);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-    }
 }

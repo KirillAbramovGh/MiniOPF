@@ -5,6 +5,7 @@ import com.netcracker.students.o3.model.users.EmployerImpl;
 
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,10 +17,9 @@ public class EmployeeDao extends AbstractDao<Employee>
     private static final String tableName = "employees";
 
     @Override
-    public List<Employee> getAll() throws SQLException, ClassNotFoundException
+    public List<Employee> getAll() throws SQLException
     {
         List<Employee> employees = new ArrayList<>();
-
 
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
@@ -48,13 +48,15 @@ public class EmployeeDao extends AbstractDao<Employee>
     }
 
     @Override
-    public Employee getEntityById(final BigInteger id) throws SQLException, ClassNotFoundException
+    public Employee getEntityById(final BigInteger id) throws SQLException
     {
+
+        String sqlReq = "select * from " + getTableName() + " where id=?";
         Employee employee = new EmployerImpl();
-        try (Connection connection = getConnection();Statement statement = connection.createStatement())
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            String sqlReq = "select * from " + getTableName() + " where id=" + id;
-            try(ResultSet resultSet = statement.executeQuery(sqlReq))
+           statement.setLong(1,id.longValue());
+            try(ResultSet resultSet = statement.executeQuery())
             {
 
                 employee.setId(id);
@@ -74,23 +76,20 @@ public class EmployeeDao extends AbstractDao<Employee>
     }
 
     @Override
-    public void update(final Employee entity)
+    public void update(final Employee entity) throws SQLException
     {
-        try (Connection connection = getConnection();Statement statement = connection.createStatement())
+        String sqlReq =
+                "update " + getTableName() + " set name=?, login=?, password=? where id=?";
+        try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            String name = "'" + entity.getName() + "'";
-            String login = "'" + entity.getLogin() + "'";
-            String password = "'" + entity.getPassword() + "'";
+            statement.setString(1,entity.getName());
+            statement.setString(2,entity.getLogin());
+            statement.setString(3,entity.getPassword());
+            statement.setLong(4,entity.getId().longValue());
 
-            String sqlReq =
-                    "update " + getTableName() + " set name=" + name + ", login=" + login + ", password=" + password +
-                            " where id=" + entity.getId();
-            statement.executeUpdate(sqlReq);
+            statement.executeUpdate();
         }
-        catch (SQLException | ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -100,18 +99,43 @@ public class EmployeeDao extends AbstractDao<Employee>
     }
 
     @Override
-    public void create(final Employee entity)
+    public void create(final Employee entity) throws SQLException
     {
-        try (Connection connection = getConnection();Statement statement = connection.createStatement())
+        String sqlReq = "INSERT INTO " + getTableName() + " VALUES (?,?,?,?)";
+        try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            String values = entity.getId() + ",'" + entity.getName() + "','" + entity.getLogin() + "','" +
-                    entity.getPassword() + "'";
-            String sqlReq = "INSERT INTO " + getTableName() + " VALUES (" + values + ")";
-            statement.executeUpdate(sqlReq);
+            statement.setLong(1,entity.getId().longValue());
+            statement.setString(2,entity.getName());
+            statement.setString(3,entity.getLogin());
+            statement.setString(4,entity.getPassword());
+
+            statement.executeUpdate();
         }
-        catch (SQLException | ClassNotFoundException e)
+
+    }
+
+    public Employee getEmployeeByLogin(final String login) throws SQLException
+    {
+        Employee employee = new EmployerImpl();
+        String sqlReq = "select * from " + getTableName() + " where login=?";
+        try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            e.printStackTrace();
+            statement.setString(1,login);
+            try(ResultSet resultSet = statement.executeQuery())
+            {
+                if (resultSet.next())
+                {
+                    employee.setId(resultSet.getBigDecimal("id").toBigInteger());
+                    employee.setName(resultSet.getString("name"));
+                    if(employee.getName()==null){
+                        return null;
+                    }
+                    employee.setLogin(resultSet.getString("login"));
+                    employee.setPassword(resultSet.getString("password"));
+                }
+            }
         }
+
+        return employee;
     }
 }

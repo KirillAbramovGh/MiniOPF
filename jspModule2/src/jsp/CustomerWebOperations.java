@@ -68,35 +68,6 @@ public class CustomerWebOperations {
     }
 
 
-    /**
-     * create table from services
-     */
-    private String servicesToTable(List<Service> services) {
-        if (services.size() == 0) {
-            return "";
-        }
-
-        String result = "<h2>Services</h2>";
-
-        result += tableBuilder.createCustomerServicesTable(services);
-
-        result += "<hr>";
-        return result;
-    }
-
-    /**
-     * create table from templates
-     */
-    private String templatesToTable(List<Template> templates) {
-        if (templates.size() == 0) {
-            return "";
-        }
-        String result = "<h2>Templates</h2>";
-
-        result += tableBuilder.createCustomerTemplatesTable(templates);
-
-        return result;
-    }
 
     /**
      * start method set customer id
@@ -157,7 +128,6 @@ public class CustomerWebOperations {
     public List<Template> getUnconnectedTemplates() {
         List<Template> templates = controller.getCustomerAvailableTemplates(customerId);
         for (Service service : getConnectedServices()) {
-            System.out.println(controller.getTemplate(service.getTemplateId()));
             templates.remove(controller.getTemplate(service.getTemplateId()));
         }
 

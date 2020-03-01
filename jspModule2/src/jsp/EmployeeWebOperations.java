@@ -180,9 +180,9 @@ public class EmployeeWebOperations {
     public String showAllEmployees(String search, String field, EmployeeSortType sortEmployees) {
         List<Employee> employees;
         if (isNotNullOrEmpty(search)) {
-            employees = searcherEmployee.search(search, field, controller.getEmployers());
+            employees = searcherEmployee.search(search, field, controller.getEmployees());
         } else {
-            employees = controller.getEmployers();
+            employees = controller.getEmployees();
         }
 
         if(employees.isEmpty()){
