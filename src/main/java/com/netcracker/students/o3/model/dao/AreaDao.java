@@ -19,6 +19,7 @@ public class AreaDao extends AbstractDao<Area>
     @Override
     public List<Area> getAll() throws SQLException
     {
+        System.out.println("area getAll");
         List<Area> areas = new ArrayList<>();
 
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
@@ -49,6 +50,7 @@ public class AreaDao extends AbstractDao<Area>
     @Override
     public Area getEntityById(final BigInteger id) throws SQLException
     {
+        System.out.println("area getEntityById");
         Area area = new AreaImpl();
         String sqlReq = "select * from " + getTableName() + " where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -74,6 +76,7 @@ public class AreaDao extends AbstractDao<Area>
     @Override
     public void update(final Area entity) throws SQLException
     {
+        System.out.println("area update");
         String sqlReq =
                 "update " + getTableName() + " set area_name=?, description=? where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -81,7 +84,7 @@ public class AreaDao extends AbstractDao<Area>
             statement.setString(1,entity.getName());
             statement.setString(2,entity.getDescription());
             statement.setLong(3,entity.getId().longValue());
-            statement.executeUpdate(sqlReq);
+            statement.executeUpdate();
         }
 
     }

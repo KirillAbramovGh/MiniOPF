@@ -25,6 +25,66 @@ import jsp.EmployeeWebOperations;
 public enum EmployeeCommand
 {
 
+    updateCustomer{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            req.getSession().setAttribute("updateCustomerId",id);
+            req.getSession().setAttribute("nextPage","/UpdateJSP/updateCustomer.jsp");
+        }
+    },
+    updateService{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            req.getSession().setAttribute("updateServiceId",id);
+            req.getSession().setAttribute("nextPage","/UpdateJSP/updateService.jsp");
+        }
+    },
+    updateTemplate{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            req.getSession().setAttribute("updateTemplateId",id);
+            req.getSession().setAttribute("nextPage","/UpdateJSP/updateTemplate.jsp");
+        }
+    },
+    updateOrder{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            req.getSession().setAttribute("updateOrderId",id);
+            req.getSession().setAttribute("nextPage","/UpdateJSP/updateOrder.jsp");
+        }
+    },
+    updateArea{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            req.getSession().setAttribute("updateAreaId",id);
+            req.getSession().setAttribute("nextPage","/UpdateJSP/updateArea.jsp");
+        }
+    },
+    updateEmployee{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            req.getSession().setAttribute("updateEmployeeId",id);
+            req.getSession().setAttribute("nextPage","/UpdateJSP/updateEmployee.jsp");
+        }
+    },
     save
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
@@ -75,13 +135,32 @@ public enum EmployeeCommand
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
                         final ServletContext context, EmployeeWebOperations employeeWebOperations,
-                        final String key) throws WrongInputException, UnpossibleChangeAreaException
+                        final String key)
                 {
                     BigInteger id = getIdFromKey(key);
                     employeeWebOperations.deleteTemplate(id);
                 }
             },
-
+    deleteOrder
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                        final String key)
+                {
+                    BigInteger id = getIdFromKey(key);
+                    employeeWebOperations.deleteOrder(id);
+                }
+            },
+    deleteService
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                        final String key)
+                {
+                    BigInteger id = getIdFromKey(key);
+                    employeeWebOperations.deleteService(id);
+                }
+            },
     deleteCustomer
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,

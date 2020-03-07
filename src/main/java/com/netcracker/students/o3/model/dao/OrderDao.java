@@ -5,8 +5,6 @@ import com.netcracker.students.o3.model.orders.OrderAction;
 import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.orders.OrderStatus;
 
-import java.io.PipedReader;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,6 +22,7 @@ public class OrderDao extends AbstractDao<Order>
     @Override
     public List<Order> getAll() throws SQLException
     {
+        System.out.println("Orders getAll");
         String sqlReq = "select * from " + getTableName();
         return getOrders(sqlReq);
     }
@@ -31,11 +30,12 @@ public class OrderDao extends AbstractDao<Order>
     @Override
     public Order getEntityById(final BigInteger id) throws SQLException
     {
+        System.out.println("orders getEntityByID");
         Order order = null;
         String sqlReq = "select * from " + getTableName() + " where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            statement.setLong(1,id.longValue());
+            statement.setLong(1, id.longValue());
             try (ResultSet resultSet = statement.executeQuery())
             {
                 if (resultSet.next())
@@ -52,22 +52,27 @@ public class OrderDao extends AbstractDao<Order>
     @Override
     public void update(final Order entity) throws SQLException
     {
+        System.out.println("order update");
         String sqlReq =
-                "update " + getTableName() + " set templateid=?, serviceid=?, status=?, creationdate=?,employeeid=?, orderaction=? where id=?";
+                "update " + getTableName() +
+                        " set templateid=?, serviceid=?, status=?, creationdate=?,employeeid=?, orderaction=? where " +
+                        "id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            statement.setLong(1,entity.getTemplateId().longValue());
-            statement.setLong(2,entity.getServiceId().longValue());
-            statement.setString(3,entity.getStatus().toString());
-            statement.setDate(4,new java.sql.Date(entity.getCreationDate().getTime()));
-            if(entity.getEmployeeId()!=null)
+            statement.setLong(1, entity.getTemplateId().longValue());
+            statement.setLong(2, entity.getServiceId().longValue());
+            statement.setString(3, entity.getStatus().toString());
+            statement.setDate(4, new java.sql.Date(entity.getCreationDate().getTime()));
+            if (entity.getEmployeeId() != null)
             {
                 statement.setLong(5, entity.getEmployeeId().longValue());
-            }else {
-                statement.setBigDecimal(5,null);
             }
-            statement.setString(6,entity.getAction()+"");
-            statement.setLong(7,entity.getId().longValue());
+            else
+            {
+                statement.setBigDecimal(5, null);
+            }
+            statement.setString(6, entity.getAction() + "");
+            statement.setLong(7, entity.getId().longValue());
 
             statement.executeUpdate();
         }
@@ -82,22 +87,24 @@ public class OrderDao extends AbstractDao<Order>
     @Override
     public void create(final Order entity) throws SQLException
     {
+        System.out.println("order create");
         String sqlReq = "INSERT INTO " + getTableName() + " VALUES (?,?,?,?,?,?,?)";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            statement.setLong(1,entity.getId().longValue());
-            statement.setLong(2,entity.getTemplateId().longValue());
-            statement.setLong(3,entity.getServiceId().longValue());
+            statement.setLong(1, entity.getId().longValue());
+            statement.setLong(2, entity.getTemplateId().longValue());
+            statement.setLong(3, entity.getServiceId().longValue());
 
-            if(entity.getEmployeeId()!=null)
+            if (entity.getEmployeeId() != null)
             {
-                statement.setLong(4,entity.getEmployeeId().longValue());
-            }else
+                statement.setLong(4, entity.getEmployeeId().longValue());
+            }
+            else
             {
                 statement.setBigDecimal(4, null);
             }
-            statement.setString(5,entity.getStatus().toString());
-            statement.setString(6,entity.getAction().toString());
+            statement.setString(5, entity.getStatus().toString());
+            statement.setString(6, entity.getAction().toString());
             statement.setDate(7, new java.sql.Date(entity.getCreationDate().getTime()));
 
 
@@ -130,14 +137,14 @@ public class OrderDao extends AbstractDao<Order>
     public List<Order> getOrdersByStatus(final OrderStatus status) throws SQLException
     {
         System.out.println("OrderDao.getEntityByStatus(" + status + ")");
-        String sqlReq = "select * from " + getTableName() + " where status='" + status+"'";
+        String sqlReq = "select * from " + getTableName() + " where status='" + status + "'";
         return getOrders(sqlReq);
     }
 
     public List<Order> getOrdersByAction(final OrderAction action) throws SQLException
     {
         System.out.println("OrderDao.getEntityByAction(" + action + ")");
-        String sqlReq = "select * from " + getTableName() + " where orderaction='" + action+"'";
+        String sqlReq = "select * from " + getTableName() + " where orderaction='" + action + "'";
         return getOrders(sqlReq);
     }
 

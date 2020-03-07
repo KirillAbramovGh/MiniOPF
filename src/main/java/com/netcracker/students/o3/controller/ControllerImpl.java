@@ -100,13 +100,13 @@ public class ControllerImpl implements Controller
     @Override
     public void deleteOrder(final BigInteger orderId)
     {
-
+        model.deleteOrderById(orderId);
     }
 
     @Override
     public void deleteService(final BigInteger serviceId)
     {
-
+        model.deleteServiceById(serviceId);
     }
 
     @Override
@@ -218,12 +218,43 @@ public class ControllerImpl implements Controller
         if(employee != null && employee.getPassword().equals(password)){
             return employee.getId();
         }
+
         throw new IncorrectCredentialsException("Неправильный логин или пароль!");
     }
 
     public List<Employee> getEmployees()
     {
         return new ArrayList<>(model.getEmployees().values());
+    }
+
+    @Override
+    public void setCustomer(final Customer customer)
+    {
+        model.setCustomer(customer);
+    }
+
+    @Override
+    public void setOrder(final Order order)
+    {
+        model.setOrder(order);
+    }
+
+    @Override
+    public void setTemplate(final Template template)
+    {
+        model.setTemplate(template);
+    }
+
+    @Override
+    public void setService(final Service service)
+    {
+        model.setService(service);
+    }
+
+    @Override
+    public void setArea(final Area area)
+    {
+        model.setArea(area);
     }
 
 
@@ -532,6 +563,12 @@ public class ControllerImpl implements Controller
         Customer customer = getCustomer(customerId);
         customer.setAreaId(areaId);
         model.setCustomer(customer);
+    }
+
+    @Override
+    public void setEmployee(final Employee employee)
+    {
+        model.setEmployee(employee);
     }
 
     private void disconnectImpossibleServices(BigInteger customerId, BigInteger areaId)

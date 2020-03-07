@@ -19,6 +19,7 @@ public class EmployeeDao extends AbstractDao<Employee>
     @Override
     public List<Employee> getAll() throws SQLException
     {
+        System.out.println("employee getAll");
         List<Employee> employees = new ArrayList<>();
 
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
@@ -50,7 +51,10 @@ public class EmployeeDao extends AbstractDao<Employee>
     @Override
     public Employee getEntityById(final BigInteger id) throws SQLException
     {
-
+        System.out.println("employee getEntityById");
+        if(id== null){
+            return null;
+        }
         String sqlReq = "select * from " + getTableName() + " where id=?";
         Employee employee = new EmployerImpl();
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -78,6 +82,7 @@ public class EmployeeDao extends AbstractDao<Employee>
     @Override
     public void update(final Employee entity) throws SQLException
     {
+        System.out.println("employee update");
         String sqlReq =
                 "update " + getTableName() + " set name=?, login=?, password=? where id=?";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -101,6 +106,7 @@ public class EmployeeDao extends AbstractDao<Employee>
     @Override
     public void create(final Employee entity) throws SQLException
     {
+        System.out.println("employee create");
         String sqlReq = "INSERT INTO " + getTableName() + " VALUES (?,?,?,?)";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
@@ -116,6 +122,7 @@ public class EmployeeDao extends AbstractDao<Employee>
 
     public Employee getEmployeeByLogin(final String login) throws SQLException
     {
+        System.out.println("employee getByLogin");
         Employee employee = new EmployerImpl();
         String sqlReq = "select * from " + getTableName() + " where login=?";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))

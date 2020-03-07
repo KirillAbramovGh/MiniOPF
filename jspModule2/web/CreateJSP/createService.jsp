@@ -1,0 +1,53 @@
+<%@ page import="com.netcracker.students.o3.controller.ControllerImpl" %>
+<%@ page import="com.netcracker.students.o3.model.services.Service" %>
+<%@ page import="com.netcracker.students.o3.model.services.ServiceStatus" %>
+<%@ page import="java.math.BigInteger" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/tab.css">
+    <title>CreateService</title>
+</head>
+<body>
+<form action="${pageContext.request.contextPath}/CreateJSP/createService.jsp" method="post">
+    <div style="size: 200px">
+        <div class="">
+            TemplateId: <input type="text" name="templateId">
+        </div>
+
+        <div class="">
+            UserId: <input type="text" name="userId">
+        </div>
+        <div class="">
+            Status: <input type="text" name="status">
+        </div>
+        <input type="submit" name="save" class="button">
+    </div>
+</form>
+<%
+    try
+    {
+        if (request.getParameter("save") != null)
+        {
+            String templateId = request.getParameter("templateId");
+            String userId = request.getParameter("userId");
+            String status = request.getParameter("status");
+
+            ControllerImpl.getInstance().createService(
+                    BigInteger.valueOf(Long.parseLong(userId)),
+                    BigInteger.valueOf(Long.parseLong(templateId)),
+                    ServiceStatus.valueOf(status)
+            );
+%>
+<jsp:forward page="/webEmployeeView.jsp"/>
+<%
+        }
+    }
+    catch (Exception e)
+    {
+        response.getWriter().println("Wrong input!");
+    }
+%>
+</body>
+</html>

@@ -16,7 +16,6 @@ import com.netcracker.students.o3.model.users.Employee;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -26,6 +25,7 @@ public interface Controller
 {
     /**
      * disconnect service with serviceId
+     *
      * @param serviceId - id of service to be disconnected
      */
     void disconnectService(BigInteger serviceId);
@@ -35,10 +35,8 @@ public interface Controller
     void suspendService(BigInteger serviceId);
 
 
-
     /**
      * start execution of order
-     * @return
      */
     void startOrder(BigInteger orderId, BigInteger employeeId);
 
@@ -57,9 +55,9 @@ public interface Controller
      */
     void completeOrder(BigInteger orderId);
 
-    void completeOrder(BigInteger orderId,Service service);
+    void completeOrder(BigInteger orderId, Service service);
 
-    void completeOrder(Order order,Service service);
+    void completeOrder(Order order, Service service);
 
     /**
      * delete of entities
@@ -96,12 +94,12 @@ public interface Controller
      * create entities
      */
     Customer createCustomer(String name, String login, String password, BigInteger areaId)
-          ;
+    ;
 
-    Employee createEmployee(String name, String login, String password) ;
+    Employee createEmployee(String name, String login, String password);
 
     Order createOrder(BigInteger templateId, BigInteger serviceId,
-            OrderStatus status, OrderAction action) ;
+            OrderStatus status, OrderAction action);
 
     Template createTemplate(String name, BigDecimal cost, String description)
             ;
@@ -133,7 +131,7 @@ public interface Controller
     /**
      * check equals password and user password
      */
-    boolean checkPassword(BigInteger id, String password) ;
+    boolean checkPassword(BigInteger id, String password);
 
     /**
      * check existing of login
@@ -143,12 +141,12 @@ public interface Controller
     /**
      * @return suspended services of customer
      */
-    List<Service> getSuspendedServices(BigInteger customerId) ;
+    List<Service> getSuspendedServices(BigInteger customerId);
 
     /**
      * @return entering services of customer
      */
-    List<Service> getEnteringServices(BigInteger customerId) ;
+    List<Service> getEnteringServices(BigInteger customerId);
 
     /**
      * @return active services of customer
@@ -166,7 +164,6 @@ public interface Controller
     List<Template> getTemplatesByAreaId(BigInteger areaId);
 
 
-
     /**
      * @return employee orders
      */
@@ -180,7 +177,7 @@ public interface Controller
     /**
      * check user on customer
      */
-    boolean isCustomer(BigInteger userId) ;
+    boolean isCustomer(BigInteger userId);
 
     /**
      * check user on employee
@@ -261,7 +258,7 @@ public interface Controller
 
     void setCustomerArea(BigInteger customerId, BigInteger areaId) throws UnpossibleChangeAreaException;
 
-
+    void setEmployee(Employee employee);
 
 
     /**
@@ -284,7 +281,21 @@ public interface Controller
     List<Service> getEnteringActiveSuspendedService(BigInteger customerId);
 
     String getServiceName(final BigInteger serviceId);
+
     String getServiceDescription(final BigInteger serviceId);
 
     List<Employee> getEmployees();
+
+
+    void setCustomer(Customer customer);
+
+    void setOrder(Order order);
+
+    void setTemplate(Template template);
+
+    void setService(Service service);
+
+    void setArea(Area area);
+
+
 }

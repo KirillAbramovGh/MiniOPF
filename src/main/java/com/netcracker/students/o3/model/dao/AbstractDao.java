@@ -14,7 +14,6 @@ public abstract class AbstractDao<T>
     private static final String PASSWORD = "postgres";
     private static final String CONNECTION_URL = "jdbc:postgresql://localhost:5432/entities";
     private static final String DRIVER_NAME = "org.postgresql.Driver";
-    private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 
     public abstract List<T> getAll() throws SQLException;
@@ -27,11 +26,10 @@ public abstract class AbstractDao<T>
 
     public void delete(BigInteger id) throws SQLException
     {
-        String sqlReq = "delete from " + getTableName() + " where id=?";
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
+        String sqlReq = "delete from " + getTableName() + " where id="+id;
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            statement.setLong(1,id.longValue());
-            statement.executeUpdate();
+            statement.executeUpdate(sqlReq);
         }
 
     }
@@ -40,7 +38,7 @@ public abstract class AbstractDao<T>
 
     protected Connection getConnection() throws SQLException
     {
-//                try
+//        try
 //                {
 //                    Class.forName(DRIVER_NAME);
 //                }
@@ -50,6 +48,6 @@ public abstract class AbstractDao<T>
 //                }
 //                return DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
 
-        return connectionPool.getConnection();
+          return ConnectionPool.getInstance().getConnection();
     }
 }

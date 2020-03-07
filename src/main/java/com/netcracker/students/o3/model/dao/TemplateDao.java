@@ -42,16 +42,20 @@ public class TemplateDao extends AbstractDao<Template>
                     template.setCost(resultSet.getBigDecimal("cost"));
                     template.setDescription(resultSet.getString("description"));
 
-                    areaSet = getConnection().createStatement().executeQuery(areaReq + template.getId());
-
-                    List<BigInteger> areaIds = new ArrayList<>();
-                    for (BigInteger areaId; areaSet.next(); )
+                    try (Statement areaStatement = connection.createStatement())
                     {
-                        areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
-                    }
-                    template.setPossibleAreasId(areaIds);
+                        areaSet = areaStatement.executeQuery(areaReq + template.getId());
 
-                    templates.add(template);
+                        List<BigInteger> areaIds = new ArrayList<>();
+                        for (; areaSet.next(); )
+                        {
+                            areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
+                        }
+                        template.setPossibleAreasId(areaIds);
+
+                        templates.add(template);
+                        areaSet.close();
+                    }
                 }
             }
         }
@@ -63,6 +67,7 @@ public class TemplateDao extends AbstractDao<Template>
     @Override
     public Template getEntityById(final BigInteger id) throws SQLException
     {
+        System.out.println("templateById");
         Template template;
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
@@ -77,14 +82,15 @@ public class TemplateDao extends AbstractDao<Template>
     @Override
     public void update(final Template entity) throws SQLException
     {
+        System.out.println("update");
         String sqlReq =
                 "update " + getTableName() + " set template_name=?, cost=?, description=? where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            statement.setString(1,entity.getName());
-            statement.setBigDecimal(2,entity.getCost());
-            statement.setString(3,entity.getDescription());
-            statement.setLong(4,entity.getId().longValue());
+            statement.setString(1, entity.getName());
+            statement.setBigDecimal(2, entity.getCost());
+            statement.setString(3, entity.getDescription());
+            statement.setLong(4, entity.getId().longValue());
 
             statement.executeUpdate();
         }
@@ -114,8 +120,7 @@ public class TemplateDao extends AbstractDao<Template>
     @Override
     public void create(final Template entity) throws SQLException
     {
-        System.out.println("TemplateDao.create(" + entity + ") ");
-
+        System.out.println("template create");
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
             String values = entity.getId() + ",'" + entity.getName() + "'," + entity.getCost() + ",'" +
@@ -137,9 +142,8 @@ public class TemplateDao extends AbstractDao<Template>
 
     public Template getTemplateByName(String templateName) throws SQLException
     {
-        System.out.println("TemplateDao.getEntityById(" + templateName + ") ");
-
-        Template template = new TemplateImpl();
+        System.out.println("template by name");
+        Template template = null;
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
             String sqlReq = "select * from " + getTableName() + " where template_name='" + templateName + "'";
@@ -149,6 +153,7 @@ public class TemplateDao extends AbstractDao<Template>
 
             if (resultSet.next())
             {
+                template = new TemplateImpl();
                 template.setId(resultSet.getBigDecimal("id").toBigInteger());
                 template.setName(resultSet.getString("template_name"));
                 template.setCost(resultSet.getBigDecimal("cost"));
@@ -157,11 +162,12 @@ public class TemplateDao extends AbstractDao<Template>
                 areaSet = statement.executeQuery(areaReq + template.getId());
 
                 List<BigInteger> areaIds = new ArrayList<>();
-                for (BigInteger areaId; areaSet.next(); )
+                for (; areaSet.next(); )
                 {
                     areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
                 }
                 template.setPossibleAreasId(areaIds);
+                areaSet.close();
             }
             resultSet.close();
         }
@@ -172,6 +178,7 @@ public class TemplateDao extends AbstractDao<Template>
 
     public List<Template> getTemplatesByAreaId(BigInteger areaId) throws SQLException
     {
+        System.out.println("template by area");
         List<Template> templates = new ArrayList<>();
 
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
@@ -230,7 +237,7 @@ public class TemplateDao extends AbstractDao<Template>
         {
             try (ResultSet resultSet = statement.executeQuery(sqlReq))
             {
-                ResultSet areaSet;
+
                 String areaReq = "select * from " + templateAreaLinkTable + " where templateid=";
 
 
@@ -242,16 +249,18 @@ public class TemplateDao extends AbstractDao<Template>
                     template.setCost(resultSet.getBigDecimal("cost"));
                     template.setDescription(resultSet.getString("description"));
 
-                    areaSet = getConnection().createStatement().executeQuery(areaReq + template.getId());
-
-                    List<BigInteger> areaIds = new ArrayList<>();
-                    for (BigInteger areaId; areaSet.next(); )
+                    try (ResultSet areaSet = getConnection().createStatement().executeQuery(areaReq + template.getId()))
                     {
-                        areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
-                    }
-                    template.setPossibleAreasId(areaIds);
 
-                    templates.add(template);
+                        List<BigInteger> areaIds = new ArrayList<>();
+                        for (BigInteger areaId; areaSet.next(); )
+                        {
+                            areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
+                        }
+                        template.setPossibleAreasId(areaIds);
+
+                        templates.add(template);
+                    }
                 }
             }
         }

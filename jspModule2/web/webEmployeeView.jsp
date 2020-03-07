@@ -1,12 +1,13 @@
 <%@ page import="com.netcracker.students.o3.controller.sorters.SortType.*" %>
 <%@ page import="jsp.EmployeeWebOperations" %>
 <%@ page import="java.math.BigInteger" %>
+<%@ page import="com.netcracker.students.o3.model.users.Employee" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="allStyles.css">
-    <link rel="stylesheet" href="tab.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/tab.css">
     <title>MiniOPF</title>
     <%!
         private EmployeeWebOperations employeeWebOperations = EmployeeWebOperations.getInstance();
@@ -14,12 +15,23 @@
     <%
         BigInteger id = (BigInteger) request.getSession().getAttribute("id");
         employeeWebOperations.start(id);
+        Employee employee;
+        String name = "";
+        String login = "";
+        String password = "";
+        if(id!=null)
+        {
+            employee = employeeWebOperations.getEmployee();
+            name = employee.getName();
+            login = employee.getLogin();
+            password = employee.getPassword();
+        }
     %>
 </head>
 <body>
 <h1 align="right">
     <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
-        You are logged in as:<%=employeeWebOperations.getFIO()%>
+        You are logged in as:<%=name%>
         <input type="submit" name="out" value="Out">
     </form>
 </h1>
@@ -174,9 +186,9 @@
             </div>
             <div class="tab tab-8">
                 <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    Name: <input type="text" name="fio" value="<%=employeeWebOperations.getFIO()%>"><br/>
-                    Login: <%=employeeWebOperations.getLogin()%><br/>
-                    Password: <input type="text" name="password" value=<%=employeeWebOperations.getPassword()%>><br/>
+                    Name: <input type="text" name="fio" value="<%=name%>"><br/>
+                    Login: <%=login%><br/>
+                    Password: <input type="text" name="password" value=<%=password%>><br/>
                     <input type="submit" name="save" value="Save">
                 </form>
             </div>
@@ -210,6 +222,6 @@
     </div>
 </footer>
 
-<script src="main.js"></script>
+<script src="${pageContext.request.contextPath}/main1.js"></script>
 </body>
 </html>

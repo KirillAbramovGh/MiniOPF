@@ -66,7 +66,8 @@ public class CustomerDao extends AbstractDao<Customer>
     @Override
     public Customer getEntityById(final BigInteger id) throws SQLException
     {
-        Customer customer = new CustomerImpl();
+        System.out.println("customer getEntityByID");
+        Customer customer = null;
         String sqlReq = "select * from " + getTableName() + " where id=?";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
@@ -74,9 +75,11 @@ public class CustomerDao extends AbstractDao<Customer>
             try (ResultSet resultSet = statement.executeQuery())
             {
 
-                customer.setId(id);
+
                 if (resultSet.next())
                 {
+                    customer = new CustomerImpl();
+                    customer.setId(resultSet.getBigDecimal("id").toBigInteger());
                     customer.setName(resultSet.getString("name"));
 
                     if(customer.getName() == null){
@@ -108,6 +111,7 @@ public class CustomerDao extends AbstractDao<Customer>
     @Override
     public void update(final Customer entity) throws SQLException
     {
+        System.out.println("customer update");
         String sqlReq =
                 "update " + getTableName() + " set name=?, login=?, password=?, moneybalance=?, areaid=? where id=?";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -132,7 +136,7 @@ public class CustomerDao extends AbstractDao<Customer>
     @Override
     public void create(final Customer entity) throws SQLException
     {
-
+        System.out.println("customer create");
         String sqlReq = "INSERT INTO " + getTableName() + " VALUES (?,?,?,?,?,?)";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
@@ -148,7 +152,8 @@ public class CustomerDao extends AbstractDao<Customer>
 
     public Customer getCustomerByLogin(String login) throws SQLException
     {
-        Customer customer = new CustomerImpl();
+        System.out.println("customer getByLogin");
+        Customer customer = null;
         String sqlReq = "select * from " + getTableName() + " where login=?";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
@@ -157,10 +162,11 @@ public class CustomerDao extends AbstractDao<Customer>
             {
                 if (resultSet.next())
                 {
+                    customer = new CustomerImpl();
                     customer.setId(resultSet.getBigDecimal("id").toBigInteger());
                     customer.setName(resultSet.getString("name"));
 
-                    if(customer.getName() == null){
+                    if(customer.getId() == null){
                         return null;
                     }
                     customer.setLogin(resultSet.getString("login"));

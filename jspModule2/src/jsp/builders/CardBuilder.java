@@ -6,13 +6,14 @@ import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceStatus;
 import com.netcracker.students.o3.model.templates.Template;
 
+import java.math.BigInteger;
 import java.util.Collection;
 
 public class CardBuilder
 {
 
     private static CardBuilder instance;
-    private Controller controller = ControllerImpl.getInstance();
+    private Controller cntrl = ControllerImpl.getInstance();
 
     private CardBuilder()
     {
@@ -34,9 +35,9 @@ public class CardBuilder
         String result = "";
         String start = "";
 
-        result += "<h3>" + controller.getServiceName(service.getId()) + "</h3>";
-        result += "<p>"+ service.getStatus() +"</br>"
-                + controller.getServiceDescription(service.getId())+"</br>"+service.getCost() + "$" + "</p>";
+        result += "</br>"+"<l style=\"font-size: 15px;margin:3px\">" + cntrl.getServiceName(service.getId()) + "</l>"+"</br>";
+        result +=  service.getStatus() +"</br>" + "<k style=\"font-size: 6px\">"+getServiceAreaName(service)+"</k>"+"</br>"
+                + cntrl.getServiceDescription(service.getId())+"</br>"+service.getCost() + "$"+"</br>";
 
         switch (service.getStatus())
         {
@@ -125,4 +126,11 @@ public class CardBuilder
         return result.toString();
     }
 
+    private String getServiceAreaName(Service service){
+        String res = "";
+        for(BigInteger id : cntrl.getTemplate(service.getTemplateId()).getPossibleAreasId()){
+            res += cntrl.getArea(id).getName()+",";
+        }
+        return res;
+    }
 }

@@ -60,7 +60,7 @@
 
 <%=startWebOperations.showErrorMessage(session)%>
 
-<script src="main.js"></script>
+<script src="main1.js"></script>
 
 </body>
 

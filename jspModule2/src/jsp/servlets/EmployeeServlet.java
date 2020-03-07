@@ -23,8 +23,12 @@ public class EmployeeServlet extends HttpServlet
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         BigInteger id = (BigInteger) req.getSession().getAttribute("id");
-        employeeWebOperations.start(id);
+        if(!employeeWebOperations.getEmployeeId().equals(id))
+        {
+            employeeWebOperations.start(id);
+        }
         cleanSession(req.getSession());
+        req.getSession().setAttribute("nextPage","/webEmployeeView.jsp");
         for (String key : req.getParameterMap().keySet())
         {
             if (req.getParameterMap().get(key) != null)
@@ -33,11 +37,10 @@ public class EmployeeServlet extends HttpServlet
             }
         }
 
-        forward("/webEmployeeView.jsp", req, resp);
+        forward((String) req.getSession().getAttribute("nextPage"), req, resp);
     }
 
     private void parse(String key, HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException
     {
         String[] res = key.split(" ");
         String command = res[0];
@@ -59,6 +62,7 @@ public class EmployeeServlet extends HttpServlet
         RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(path);
 
         requestDispatcher.forward(request, response);
+
     }
 
     private void cleanSession(HttpSession session)
@@ -71,8 +75,4 @@ public class EmployeeServlet extends HttpServlet
         session.setAttribute("sortServices", null);
     }
 
-    private void setAttribute(String key, Object value, HttpServletRequest request)
-    {
-        request.getSession().setAttribute(key, value);
-    }
 }

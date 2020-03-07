@@ -70,17 +70,17 @@ function changeArea(services, templates) {
 
     let disServices = services.filter(function (item,i,arr){
         let res = true;
-       templates[item['id']]['possibleAreasId'].forEach(function (item1) {
-           if(item1 == areaId){
-               res = false;
-           }
-       });
-       return res;
+        templates[item['id']]['possibleAreasId'].forEach(function (item1) {
+            if(item1 == areaId){
+                res = false;
+            }
+        });
+        return res;
     });
 
     let res='Will disconnect:\n';
+    disServices.forEach(item=>res+=templates[item['id']]['name']+' '+item['status']+'\n');
 
-    disServices.forEach(item=>res+=templates[item['id']]['name']+' '+item['status']+' ');
     alert(res);
 }
 

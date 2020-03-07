@@ -575,7 +575,7 @@ public class ModelBD implements Model
     {
         try
         {
-            areaDao.delete(id);
+            orderDao.delete(id);
         }
         catch (SQLException e)
         {

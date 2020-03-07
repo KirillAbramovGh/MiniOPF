@@ -29,6 +29,7 @@ public class ServiceDao extends AbstractDao<Service>
     @Override
     public Service getEntityById(final BigInteger id) throws SQLException
     {
+        System.out.println("service getById");
         Service service = null;
         String sqlReq = "select * from " + getTableName() + " where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -50,6 +51,7 @@ public class ServiceDao extends AbstractDao<Service>
     @Override
     public void update(final Service entity) throws SQLException
     {
+        System.out.println("service update");
         String sqlReq =
                 "update " + getTableName() + " set userid=?, templateid=?, status=?, activationdate=? where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -74,6 +76,7 @@ public class ServiceDao extends AbstractDao<Service>
     @Override
     public void create(final Service entity) throws SQLException
     {
+        System.out.println("service create");
         String sqlReq = "INSERT INTO " + getTableName() + " VALUES (?,?,?,?,?)";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
@@ -92,24 +95,28 @@ public class ServiceDao extends AbstractDao<Service>
 
     public List<Service> getServicesByUserId(BigInteger userId) throws SQLException
     {
+        System.out.println("service getUserId");
         String sqlReq = "select * from " + getTableName() + " where userid=" + userId;
         return getServices(sqlReq);
     }
 
     public List<Service> getServicesByTemplateId(BigInteger templateId) throws SQLException
     {
+        System.out.println("service getTemplId");
         String sqlReq = "select * from " + getTableName() + " where templateid=" + templateId;
         return getServices(sqlReq);
     }
 
     public List<Service> getServicesByStatus(ServiceStatus status) throws SQLException
     {
+        System.out.println("ServiceByStatus");
         String sqlReq = "select * from " + getTableName() + " where status='" + status+"'";
         return getServices(sqlReq);
     }
 
     public List<Service> getServicesByStatusAndCustomerId(BigInteger userId,ServiceStatus status) throws SQLException
     {
+        System.out.println("service by status and cus");
         String sqlReq = "select * from " + getTableName() + " where status='" + status+"' and userid="+userId;
         return getServices(sqlReq);
     }

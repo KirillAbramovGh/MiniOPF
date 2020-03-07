@@ -2,7 +2,7 @@
 <Context>
     <Resource
     driverClassName="org.postgresql.Driver"
-    maxActive="5"
+    maxActive="1"
     maxIdle="2"
     maxWait="5000"
     name="jdbc/entities"

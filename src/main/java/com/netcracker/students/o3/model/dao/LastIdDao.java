@@ -17,6 +17,7 @@ public class LastIdDao
 
     public BigInteger getLastId() throws SQLException
     {
+        System.out.println("getLastId");
         BigInteger lastId = null;
         String sqlReq = "select * from " + TABLE_NAME + " where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -38,6 +39,7 @@ public class LastIdDao
 
     public void setLastId(final BigInteger entity) throws SQLException
     {
+        System.out.println("SetLastId");
         String sqlReq =
                 "update " + TABLE_NAME + " set lastid=? where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -51,6 +53,7 @@ public class LastIdDao
 
     public void createLastId(final BigInteger entity) throws SQLException
     {
+        System.out.println("createLastId");
         String sqlReq = "INSERT INTO " + TABLE_NAME + " VALUES (?,?)";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
@@ -62,6 +65,7 @@ public class LastIdDao
 
     public void deleteLastId() throws SQLException
     {
+        System.out.println("deleteLastID");
         String sqlReq = "delete from " + TABLE_NAME + " where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
@@ -72,15 +76,15 @@ public class LastIdDao
 
     protected Connection getConnection() throws SQLException
     {
-//        try
-//        {
-//            Class.forName(DRIVER_NAME);
-//        }
-//        catch (ClassNotFoundException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        return DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
+//                try
+//                {
+//                    Class.forName(DRIVER_NAME);
+//                }
+//                catch (ClassNotFoundException e)
+//                {
+//                    e.printStackTrace();
+//                }
+//                return DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
         return ConnectionPool.getInstance().getConnection();
     }
 }
