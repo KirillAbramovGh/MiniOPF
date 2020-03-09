@@ -146,17 +146,10 @@ public class ModelBD implements Model
         }
     }
 
-    @Override
+    @Deprecated
     public BigInteger getLastId()
     {
-        try
-        {
-            return lastIdDao.getLastId();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+
 
         return null;
     }
@@ -180,10 +173,7 @@ public class ModelBD implements Model
     {
         try
         {
-            BigInteger lastId = lastIdDao.getLastId();
-            BigInteger newValue = lastId.add(BigInteger.ONE);
-            lastIdDao.setLastId(newValue);
-            return lastIdDao.getLastId();
+            return lastIdDao.getNextId();
         }
         catch (SQLException e)
         {

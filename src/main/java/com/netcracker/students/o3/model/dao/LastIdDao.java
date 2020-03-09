@@ -6,6 +6,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.swing.plaf.nimbus.State;
 
 public class LastIdDao
 {
@@ -15,19 +18,18 @@ public class LastIdDao
     private static final String DRIVER_NAME = "org.postgresql.Driver";
     private static final String TABLE_NAME = "last_id";
 
-    public BigInteger getLastId() throws SQLException
+    public BigInteger getNextId() throws SQLException
     {
-        System.out.println("getLastId");
+        System.out.println("getNextId");
         BigInteger lastId = null;
-        String sqlReq = "select * from " + TABLE_NAME + " where id=?";
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
+        String sqlReq = "select nextval('lastid')";
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            statement.setLong(1, 1);
-            ResultSet resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery(sqlReq);
 
             if (resultSet.next())
             {
-                lastId = resultSet.getBigDecimal("lastid").toBigInteger();
+                lastId = resultSet.getBigDecimal("nextval").toBigInteger();
             }
             resultSet.close();
         }
@@ -37,15 +39,13 @@ public class LastIdDao
     }
 
 
-    public void setLastId(final BigInteger entity) throws SQLException
+
+    public void setLastId(final BigInteger id) throws SQLException
     {
-        System.out.println("SetLastId");
-        String sqlReq =
-                "update " + TABLE_NAME + " set lastid=? where id=?";
+        String sqlReq = "ALTER SEQUENCE serial RESTART WITH ?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            statement.setLong(1, entity.longValue());
-            statement.setLong(2, 1);
+            statement.setLong(1, id.longValue());
             statement.executeUpdate();
         }
     }
@@ -54,11 +54,10 @@ public class LastIdDao
     public void createLastId(final BigInteger entity) throws SQLException
     {
         System.out.println("createLastId");
-        String sqlReq = "INSERT INTO " + TABLE_NAME + " VALUES (?,?)";
+        String sqlReq = "create sequence lastid START ?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            statement.setLong(1, 1);
-            statement.setLong(2, entity.longValue());
+            statement.setLong(1, entity.longValue());
             statement.executeUpdate();
         }
     }
@@ -66,11 +65,10 @@ public class LastIdDao
     public void deleteLastId() throws SQLException
     {
         System.out.println("deleteLastID");
-        String sqlReq = "delete from " + TABLE_NAME + " where id=?";
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
+        String sqlReq = "delete sequence lastid";
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            statement.setLong(1, 1);
-            statement.executeUpdate();
+            statement.executeUpdate(sqlReq);
         }
     }
 
