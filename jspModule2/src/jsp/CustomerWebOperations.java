@@ -14,20 +14,15 @@ import com.netcracker.students.o3.controller.sorters.TemplateSorter;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
-import com.netcracker.students.o3.model.templates.TemplateImpl;
 
 import jsp.builders.CardBuilder;
 import jsp.builders.HtmlTableBuilder;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class CustomerWebOperations {
     private BigInteger customerId;
@@ -57,7 +52,7 @@ public class CustomerWebOperations {
         SearcherService searcherService = SearcherService.getInstance();
         if(req!=null) {
             List<Service> services =searcherService.searchServicesByAllEntities(
-                    controller.getEnteringActiveSuspendedService(customerId), req);
+                    controller.getEnteringActiveSuspendedProcessingService(customerId), req);
             List<Template> templates = searcher.searchTemplatesByAllFields(
                     controller.getCustomerAvailableTemplates(customerId), req);
 
@@ -106,8 +101,7 @@ public class CustomerWebOperations {
      * @return entering and active customer services
      */
     public List<Service> getConnectedServices() {
-        List<Service> result = controller.getEnteringAndActiveServices(customerId);
-        result.addAll(controller.getSuspendedServices(customerId));
+        List<Service> result = controller.getEnteringActiveSuspendedProcessingService(customerId);
         return result;
     }
 

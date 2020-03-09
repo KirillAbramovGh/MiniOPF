@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/tab.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/tabs.css">
     <title>MiniOPF</title>
     <%!
         private EmployeeWebOperations employeeWebOperations = EmployeeWebOperations.getInstance();
@@ -65,7 +65,10 @@
                     <%=employeeWebOperations.showEmployeeOrders(
                             request.getParameter("searchFieldEmployeeOrders"),
                             request.getParameter("employeeOrderSelectField"),
-                            (OrderSortType) request.getSession().getAttribute("sortOrders")
+                            (OrderSortType) request.getSession().getAttribute("sortOrders"),
+                            request.getParameter("filterOrderTemplateId"),
+                            request.getParameter("filterOrderServiceId"),
+                            request.getParameter("filterOrderEmployeeId")
                     )%>
                 </form>
             </div>
@@ -85,7 +88,10 @@
                     <%=employeeWebOperations.showAllOrders(
                             request.getParameter("searchFieldAllOrders"),
                             request.getParameter("allOrderSelectField"),
-                            (OrderSortType) request.getSession().getAttribute("sortOrders")
+                            (OrderSortType) request.getSession().getAttribute("sortOrders"),
+                            request.getParameter("filterOrderTemplateId"),
+                            request.getParameter("filterOrderServiceId"),
+                            request.getParameter("filterOrderEmployeeId")
                     )%>
                 </form>
             </div>
@@ -107,7 +113,9 @@
                     <%=employeeWebOperations.showAllServices(
                             request.getParameter("searchFieldAllServices"),
                             request.getParameter("allServicesSelectField"),
-                            (ServiceSortType) request.getSession().getAttribute("sortServices")
+                            (ServiceSortType) request.getSession().getAttribute("sortServices"),
+                            request.getParameter("filterServiceName"),
+                            request.getParameter("filterServiceCost")
                     )%>
                 </form>
             </div>
@@ -126,7 +134,9 @@
                     <%=employeeWebOperations.showAllTemplates(
                             request.getParameter("searchFieldAllTemplates"),
                             request.getParameter("allTemplatesSelectField"),
-                            (TemplateSortType) request.getSession().getAttribute("sortTemplates")
+                            (TemplateSortType) request.getSession().getAttribute("sortTemplates"),
+                            request.getParameter("filterTemplateName"),
+                            request.getParameter("filterTemplateCost")
                     )%>
                 </form>
             </div>
@@ -146,7 +156,9 @@
                     <%=employeeWebOperations.showAllCustomers(
                             request.getParameter("searchFieldAllCustomers"),
                             request.getParameter("allCustomersSelectField"),
-                            (CustomerSortType) request.getSession().getAttribute("sortCustomers")
+                            (CustomerSortType) request.getSession().getAttribute("sortCustomers"),
+                            request.getParameter("filterCustomerName"),
+                            request.getParameter("filterCustomerArea")
                     )%>
                 </form>
             </div>
@@ -163,7 +175,8 @@
                     <%=employeeWebOperations.showAllEmployees(
                             request.getParameter("searchFieldAllEmployees"),
                             request.getParameter("allEmployeesSelectField"),
-                            (EmployeeSortType) request.getSession().getAttribute("sortEmployees")
+                            (EmployeeSortType) request.getSession().getAttribute("sortEmployees"),
+                            request.getParameter("filterEmployeeName")
                     )%>
                 </form>
             </div>
@@ -177,10 +190,12 @@
                         <option>Description</option>
                     </select>
                     <input type="submit" name="createArea" value="Create">
+                    <input type="submit" name="filterArea" value="Filter">
                     <%=employeeWebOperations.showAllAreas(
                             request.getParameter("searchFieldAllAreas"),
                             request.getParameter("allAreasSelectField"),
-                            (AreaSortType) request.getSession().getAttribute("sortAreas")
+                            (AreaSortType) request.getSession().getAttribute("sortAreas"),
+                            request.getParameter("filterAreaName")
                     )%>
                 </form>
             </div>

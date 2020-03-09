@@ -54,7 +54,6 @@ public class EmployeeWebOperations
     private List<Employee> allEmployees;
 
     public BigInteger getEmployeeId(){
-        System.out.println("get EmployeeID in EmployeeWO");
         return employeeId;
     }
 
@@ -131,14 +130,23 @@ public class EmployeeWebOperations
         }
     }
 
-    public String showEmployeeOrders(String search, String field, OrderSortType sortOrders)
+    public String showEmployeeOrders(String search, String field, OrderSortType sortOrders,
+            String templateId,String serviceId,String employeeId)
     {
         List<Order> orders = getEmployeeOrders();
         if (isNotNullOrEmpty(search))
         {
             orders = searcherOrders.search(search, field, orders);
         }
-
+        if(isNotNullOrEmpty(templateId)){
+            orders = searcherOrders.search(templateId,"TemplateId",orders);
+        }
+        if(isNotNullOrEmpty(serviceId)){
+            orders = searcherOrders.search(serviceId,"ServiceId",orders);
+        }
+        if(isNotNullOrEmpty(employeeId)){
+            orders = searcherOrders.search(employeeId,"EmployeeId",orders);
+        }
         if (orders.isEmpty())
         {
             return "</br>There are no orders";
@@ -152,13 +160,23 @@ public class EmployeeWebOperations
         return tableBuilder.createOrdersTable(orders);
     }
 
-    public String showAllOrders(String search, String field, OrderSortType sortOrders)
+    public String showAllOrders(String search, String field, OrderSortType sortOrders,
+            String templateId,String serviceId,String employeeId)
     {
         List<Order> orders = allOrders;
         if (isNotNullOrEmpty(search))
         {
             orders = searcherOrders.search(search, field, orders);
         }
+        if(isNotNullOrEmpty(templateId)){
+            orders = searcherOrders.search(templateId,"TemplateId",orders);
+        }
+        if(isNotNullOrEmpty(serviceId)){
+            orders = searcherOrders.search(serviceId,"ServiceId",orders);
+        }
+        if(isNotNullOrEmpty(employeeId)){
+            orders = searcherOrders.search(employeeId,"EmployeeId",orders);
+        }
         if (orders.isEmpty())
         {
             return "</br>There are no orders";
@@ -172,7 +190,8 @@ public class EmployeeWebOperations
         return tableBuilder.createOrdersTable(orders);
     }
 
-    public String showAllServices(String search, String field, ServiceSortType sortService)
+    public String showAllServices(String search, String field, ServiceSortType sortService,
+            String name,String cost)
     {
         List<Service> services = allServices;
         if (isNotNullOrEmpty(search))
@@ -180,6 +199,12 @@ public class EmployeeWebOperations
             services = searcherService.search(search, field, services);
         }
 
+        if(isNotNullOrEmpty(name)){
+            services = searcherService.search(name,"Name",services);
+        }
+        if(isNotNullOrEmpty(cost)){
+            services = searcherService.search(cost,"Cost",services);
+        }
         if (services.isEmpty())
         {
             return "</br>There are no services";
@@ -192,14 +217,20 @@ public class EmployeeWebOperations
         return tableBuilder.createEmployeeServicesTable(services);
     }
 
-    public String showAllTemplates(String search, String field, TemplateSortType sortTemplates)
+    public String showAllTemplates(String search, String field, TemplateSortType sortTemplates,
+            String name,String cost)
     {
         List<Template> templates = allTemplates;
         if (isNotNullOrEmpty(search))
         {
             templates = searcherTemplates.search(search, field, templates);
         }
-
+        if(isNotNullOrEmpty(name)){
+            templates = searcherTemplates.search(name,"Name",templates);
+        }
+        if(isNotNullOrEmpty(cost)){
+            templates = searcherTemplates.search(cost,"Cost",templates);
+        }
         if (templates.isEmpty())
         {
             return "</br>There are no templates";
@@ -212,12 +243,19 @@ public class EmployeeWebOperations
         return tableBuilder.createEmployeeTemplatesTable(templates);
     }
 
-    public String showAllCustomers(String search, String field, CustomerSortType sortCustomers)
+    public String showAllCustomers(String search, String field, CustomerSortType sortCustomers,
+            String name,String area)
     {
         List<Customer> customers = allCustomers;
         if (isNotNullOrEmpty(search))
         {
             customers = searcherCustomer.search(search, field, customers);
+        }
+        if(isNotNullOrEmpty(name)){
+            customers = searcherCustomer.search(name,"Name",customers);
+        }
+        if(isNotNullOrEmpty(area)){
+            customers = searcherCustomer.search(area,"Area",customers);
         }
 
         if (customers.isEmpty())
@@ -232,14 +270,17 @@ public class EmployeeWebOperations
         return tableBuilder.createCustomersTable(customers);
     }
 
-    public String showAllEmployees(String search, String field, EmployeeSortType sortEmployees)
+    public String showAllEmployees(String search, String field, EmployeeSortType sortEmployees,
+            String name)
     {
         List<Employee> employees = allEmployees;
         if (isNotNullOrEmpty(search))
         {
             employees = searcherEmployee.search(search, field, employees);
         }
-
+        if(isNotNullOrEmpty(name)){
+            employees = searcherEmployee.search(name,"Name",employees);
+        }
         if (employees.isEmpty())
         {
             return "</br>There are no employees";
@@ -252,14 +293,17 @@ public class EmployeeWebOperations
         return tableBuilder.createEmployeesTable(employees);
     }
 
-    public String showAllAreas(String search, String field, AreaSortType sortAreas)
+    public String showAllAreas(String search, String field, AreaSortType sortAreas,
+            String name)
     {
         List<Area> areas = allAreas;
         if (isNotNullOrEmpty(search))
         {
             areas = searcherArea.search(search, field, areas);
         }
-
+        if(isNotNullOrEmpty(name)){
+            areas = searcherArea.search(name, "Name",areas);
+        }
         if (areas.isEmpty())
         {
             return "</br>There are no areas";
@@ -329,22 +373,22 @@ public class EmployeeWebOperations
                 switch (entity)
                 {
                     case "Services":
-                        result += "<h2>Services</h2><div class='table'>" + showAllServices(search, "all", null) +
+                        result += "<h2>Services</h2><div class='table'>" + showAllServices(search, "all", null,"","") +
                                 "</div>"; break;
                     case "Templates":
-                        result += "<h2>Templates</h2><div class='table'>" + showAllTemplates(search, "all", null) +
+                        result += "<h2>Templates</h2><div class='table'>" + showAllTemplates(search, "all", null,null,null) +
                                 "</div>"; break;
                     case "Orders":
-                        result += "<h2>Orders</h2><div class='table'>" + showAllOrders(search, "all", null) +
+                        result += "<h2>Orders</h2><div class='table'>" + showAllOrders(search, "all", null,"","","") +
                                 "</div>"; break;
                     case "Customers":
-                        result += "<h2>Customers</h2><div class='table'>" + showAllCustomers(search, "all", null) +
+                        result += "<h2>Customers</h2><div class='table'>" + showAllCustomers(search, "all", null,"","") +
                                 "</div>"; break;
                     case "Areas":
-                        result += "<h2>Areas</h2><div class='table'>" + showAllAreas(search, "all", null) +
+                        result += "<h2>Areas</h2><div class='table'>" + showAllAreas(search, "all", null,"") +
                                 "</div>"; break;
                     case "Employees":
-                        result += "<h2>Employees</h2><div class='table'>" + showAllEmployees(search, "all", null) +
+                        result += "<h2>Employees</h2><div class='table'>" + showAllEmployees(search, "all", null,"") +
                                 "</div>"; break;
                 }
             }

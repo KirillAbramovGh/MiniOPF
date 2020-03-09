@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/tab.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/tabs.css">
     <title>MiniOPF</title>
     <%
         CustomerWebOperations customerWO = CustomerWebOperations.getInstance();

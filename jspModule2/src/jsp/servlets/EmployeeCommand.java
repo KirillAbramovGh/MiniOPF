@@ -3,6 +3,7 @@ package jsp.servlets;
 
 import com.netcracker.students.o3.Exceptions.UnpossibleChangeAreaException;
 import com.netcracker.students.o3.Exceptions.WrongInputException;
+import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.controller.sorters.SortType.CustomerSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.EmployeeSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.OrderSortType;
@@ -25,6 +26,55 @@ import jsp.EmployeeWebOperations;
 public enum EmployeeCommand
 {
 
+    cancelOrder{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            ControllerImpl.getInstance().suspendOrder(id);
+        }
+    },
+    createCustomer{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/CreateJSP/createCustomer.jsp");
+        }
+    },
+    createTemplate{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/CreateJSP/createTemplate.jsp");
+        }
+    },
+    createService{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/CreateJSP/createService.jsp");
+        }
+    },
+    createOrder{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/CreateJSP/createOrder.jsp");
+        }
+    },
+    createArea{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeWebOperations employeeWebOperations,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/CreateJSP/createArea.jsp");
+        }
+    },
     updateCustomer{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
                 final ServletContext context, EmployeeWebOperations employeeWebOperations,

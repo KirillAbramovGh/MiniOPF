@@ -55,6 +55,9 @@ public class CardBuilder
                 result += createButton("disconnect", "disconnect", service.getId().toString());
                 result += createButton("suspend", "suspend", service.getId().toString());
                 break;
+            case Processing:
+                start = start = "<div class='card'>";
+                break;
         }
         result += "</div>";
         return start+result;
@@ -110,7 +113,12 @@ public class CardBuilder
                 result.append(makeCardFromService(service));
             }
         }
-
+        for(Service service : services){
+            if(service.getStatus().equals(ServiceStatus.Processing))
+            {
+                result.append(makeCardFromService(service));
+            }
+        }
         return result.toString();
     }
 

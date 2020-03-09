@@ -78,10 +78,14 @@ public class HtmlTableBuilder {
                         "id"+createButton("↑","ServiceSortUpById")+
                                 createButton("↓","ServiceSortDownById"),
                         "Name"+createButton("↑","ServiceSortDownByName")+
-                                createButton("↓","ServiceSortUpByName"),
+                                createButton("↓","ServiceSortUpByName")+
+                        createInput("filterServiceName"),
                         "Cost"+createButton("↑","ServiceSortDownByCost")+
-                                createButton("↓","ServiceSortUpByCost"),
-                        "Status", "TemplateId", "UserId",
+                                createButton("↓","ServiceSortUpByCost")+
+                        createInput("filterServiceCost"),
+                        "Status",
+                        "TemplateId",
+                        "UserId",
                         "ActivationDate", "Areas","","");
 
         innerPart += addEmployeeServicesToTable(services);
@@ -97,8 +101,10 @@ public class HtmlTableBuilder {
                                 +createButton("↓","TemplateSortUpById")
                         , "Name"+createButton("↑","TemplateSortDownByName")
                                 +createButton("↓","TemplateSortUpByName")
+                        +createInput("filterTemplateName")
                         , "Cost"+createButton("↑","TemplateSortDownByCost")
                                 +createButton("↓","TemplateSortUpByCost")
+                        +createInput("filterTemplateCost")
                         , "Description", "Areas","","")
         );
 
@@ -117,7 +123,9 @@ public class HtmlTableBuilder {
         innerPart.append(addColumns(
                         "id"+createButton("↑","OrderSortDownById")
                 +createButton("↓","OrderSortUpById")
-                ,"TemplateId", "ServiceId", "EmployeeId", "Status", "Action", "CreationDate","",""));
+                ,"TemplateId"+createInput("filterOrderTemplateId"),
+                "ServiceId"+createInput("filterOrderServiceId"),
+                "EmployeeId"+createInput("filterOrderEmployeeId"), "Status", "Action", "CreationDate",""));
         int i = 1;
         for (Order order : orders) {
             i = getNextColorNumber(i);
@@ -136,9 +144,10 @@ public class HtmlTableBuilder {
                                 createButton("↓","CustomerSortUpById")
                         , "Name"+createButton("↑","CustomerSortDownByName")+
                                 createButton("↓","CustomerSortUpByName")
+                        +createInput("filterCustomerName")
                         , "Login"+createButton("↑","CustomerSortDownByLogin")+
                                 createButton("↓","CustomerSortUpByLogin")
-                        , "Password", "Area",
+                        , "Password", "Area"+createInput("filterCustomerArea"),
                         "Balance"+createButton("↑","CustomerSortDownByBalance")+
                                 createButton("↓","CustomerSortUpByBalance")
                         , "ConnectedServices","","")
@@ -162,6 +171,7 @@ public class HtmlTableBuilder {
                                 createButton("↓","EmployeeSortUpById")
                         , "Name"+createButton("↑","EmployeeSortDownByName")+
                                 createButton("↓","EmployeeSortUpByName")
+                        +createInput("filterEmployeeName")
                         , "Login"+createButton("↑","EmployeeSortDownByLogin")+
                                 createButton("↓","EmployeeSortUpByLogin")
                         , "Password","","")
@@ -184,6 +194,7 @@ public class HtmlTableBuilder {
                                 createButton("↓","AreaSortUpById")
                         , "Name"+createButton("↑","AreaSortDownByName")+
                                 createButton("↓","AreaSortUpByName")
+                        +createInput("filterAreaName")
                         , "Description"+createButton("↑","AreaSortDownByDescription")+
                                 createButton("↓","AreaSortUpByDescription")
                         ,"","")
@@ -261,14 +272,20 @@ public class HtmlTableBuilder {
         result += addCell(order.getAction() + "");
         result += addCell(order.getCreationDate() + "");
 
+        String buttons = "";
         switch (order.getStatus()){
-            case Entering:result+=addCell(createButton("Start","startOrder",order.getId().toString()));break;
-            case Suspended:result+=addCell(createButton("Resume","resumeOrder",order.getId().toString()));break;
-            case Completed:result+=addCell("");break;
-            case Processing:result+=addCell(createButton("Complete","completeOrder",order.getId().toString()));break;
+            case Entering:buttons+=createButton("Start","startOrder",order.getId().toString());break;
+            case Suspended:
+                buttons+=createButton("BackToEntering","cancelOrder",order.getId().toString());
+                buttons+=createButton("Resume","resumeOrder",order.getId().toString());break;
+            case Completed:break;
+            case Processing:
+                buttons+=createButton("BackToEntering","cancelOrder",order.getId().toString());
+                buttons+=createButton("Complete","completeOrder",order.getId().toString());break;
         }
-        result += addCell(createButton("Delete","deleteOrder",order.getId().toString()));
-        result += addCell(createButton("Update","updateOrder",order.getId().toString()));
+        buttons+= createButton("Delete","deleteOrder",order.getId().toString())+
+                createButton("Update","updateOrder",order.getId().toString());
+        result += addCell(buttons);
 
         return result + "</tr>";
     }
@@ -426,6 +443,9 @@ public class HtmlTableBuilder {
         return result.toString();
     }
 
+    private String createInput(String name){
+        return "<input type=\"text\" name=\""+name+"\">";
+    }
     public static HtmlTableBuilder getInstance() {
         if (instance == null) {
             instance = new HtmlTableBuilder();

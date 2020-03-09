@@ -4,8 +4,8 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="allStyles.css">
-    <link rel="stylesheet" href="tab.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/tabs.css">
     <meta charset="UTF-8">
     <title>MiniOPF</title>
 </head>
@@ -26,8 +26,7 @@
         </div>
 
         <div class="tabs__content">
-
-            <div class="tab is-active tab-1">
+            <div style="display: table-row" class="tab is-active tab-1">
                 <form action="${pageContext.request.contextPath}/start" method="post">
                     <input type="text" name="login"><br/>
                     <input type="password" name="password" value="password"><br/>

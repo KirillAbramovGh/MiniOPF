@@ -34,6 +34,10 @@ public interface Controller
 
     void suspendService(BigInteger serviceId);
 
+    void process(BigInteger serviceId);
+
+    void backToEntering(BigInteger serviceId);
+    void activate(BigInteger serviceId);
 
     /**
      * start execution of order
@@ -278,7 +282,7 @@ public interface Controller
 
     void resumeOrder(BigInteger orderId);
 
-    List<Service> getEnteringActiveSuspendedService(BigInteger customerId);
+    List<Service> getEnteringActiveSuspendedProcessingService(BigInteger customerId);
 
     String getServiceName(final BigInteger serviceId);
 
