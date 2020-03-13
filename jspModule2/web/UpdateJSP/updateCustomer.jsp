@@ -3,19 +3,22 @@
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="java.util.HashSet" %>
 <%@ page import="java.util.Set" %>
+<%@ page import="com.netcracker.students.o3.controller.Controller" %>
+<%@ page import="com.netcracker.students.o3.model.services.ServiceStatus" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/tab.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/tabs.css">
     <title>UpdateCustomer</title>
     <%!
         BigInteger customerId;
         Customer customer;
+        Controller controller = ControllerImpl.getInstance();
     %>
     <%
         customerId = (BigInteger) request.getSession().getAttribute("updateCustomerId");
-        customer = ControllerImpl.getInstance().getCustomer(customerId);
+        customer = controller.getCustomer(customerId);
     %>
 </head>
 <body>
@@ -39,18 +42,18 @@
                          value=<%=customer.getAreaId()%>>
         </div>
         <div>
-            ConnectedServicesId: <input type="text" name="connectedServicesId" value="<%=getConnectedServicesId()%>">
+            ConnectedTemplatesId: <input type="text" name="connectedTemplatesId" value="<%=getConnectedTemplatesId()%>">
         </div>
         <input type="submit" name="save" class="button">
     </div>
 </form>
 <%!
-    private String getConnectedServicesId()
+    private String getConnectedTemplatesId()
     {
         String res = "";
         for (BigInteger id : customer.getConnectedServicesIds())
         {
-            res += id + ",";
+            res += controller.getService(id).getTemplateId() + ",";
         }
         return res;
     }
@@ -64,21 +67,30 @@
             String password = request.getParameter("password");
             String login = request.getParameter("login");
             String area = request.getParameter("area");
-            String servicesValue = request.getParameter("connectedServicesId");
-            String[] services = servicesValue.split(",");
+            String servicesValue = request.getParameter("connectedTemplatesId");
+            String[] templates = servicesValue.split(",");
 
             customer.setName(name);
             customer.setPassword(password);
             customer.setLogin(login);
             customer.setAreaId(BigInteger.valueOf(Long.parseLong(area)));
 
-            Set<BigInteger> set = new HashSet<>();
-            for (String s : services)
+            for (String s : templates)
             {
-                if (s != null && !s.isEmpty())
-                    set.add(BigInteger.valueOf(Long.parseLong(s)));
+                if (s != null && !s.isEmpty()){
+                    BigInteger templateId = BigInteger.valueOf(Long.parseLong(s));
+                    boolean connected = false;
+                    for(BigInteger serviceId : customer.getConnectedServicesIds()){
+                        if(controller.getService(serviceId).getTemplateId().equals(templateId)){
+                            connected = true;
+                            break;
+                        }
+                    }
+                    if(!connected){
+                        controller.createService(customerId,templateId, ServiceStatus.Entering);
+                    }
+                }
             }
-            customer.setConnectedServicesIds(set);
             ControllerImpl.getInstance().setCustomer(customer);
 
 %>

@@ -3,6 +3,11 @@ package com.netcracker.students.o3.model.area;
 import java.math.BigInteger;
 import java.util.Objects;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(name = "area")
+@XmlRootElement
 public class AreaImpl implements Area {
     private BigInteger id;
     private String name;

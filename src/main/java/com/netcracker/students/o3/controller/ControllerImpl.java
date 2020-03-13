@@ -3,6 +3,10 @@ package com.netcracker.students.o3.controller;
 import com.netcracker.students.o3.Exceptions.IncorrectCredentialsException;
 import com.netcracker.students.o3.Exceptions.LoginOccupiedException;
 import com.netcracker.students.o3.Exceptions.WrongInputException;
+import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesByCost;
+import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesById;
+import com.netcracker.students.o3.controller.sorters.ServiceSorter;
+import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.model.Model;
 import com.netcracker.students.o3.model.model.ModelBD;
@@ -28,11 +32,13 @@ public class ControllerImpl implements Controller
 {
     private final Model model;
     private static Controller instance;
+    private final ServiceSorter serviceSorter;
 
     private ControllerImpl()
     {
-        takeMoney(new Timer());
         model = ModelBD.getInstance();
+        serviceSorter = ServiceSorter.getInstance();
+        takeMoney(new Timer());
     }
 
 
@@ -650,11 +656,18 @@ public class ControllerImpl implements Controller
                 return;
             }
         }
-        Service service = createService(customerId, templateId, ServiceStatus.Entering);
-        Order order = createOrder(templateId, service.getId(), OrderStatus.Entering, OrderAction.New);
-        customer.addConnectedServiceId(service.getId());
-        model.setCustomer(customer);
+        Template template = getTemplate(templateId);
+        if(customer.getMoneyBalance().doubleValue()>=template.getCost().doubleValue())
+        {
+            customer.setMoneyBalance(BigDecimal.valueOf(
+                    customer.getMoneyBalance().doubleValue() - template.getCost().doubleValue())
+            );
 
+            Service service = createService(customerId, templateId, ServiceStatus.Entering);
+            Order order = createOrder(templateId, service.getId(), OrderStatus.Entering, OrderAction.New);
+            customer.addConnectedServiceId(service.getId());
+            model.setCustomer(customer);
+        }
        // completeOrder(order,service);
     }
 
@@ -743,13 +756,15 @@ public class ControllerImpl implements Controller
 
 
     public void takeMoney(Timer timer){
-        timer.scheduleAtFixedRate(new TimerTask()
+        timer.schedule(new TimerTask()
         {
             @Override
             public void run()
             {
                for(Customer customer : getCustomers()){
-                   for(Service service : getActiveServices(customer.getId())){
+                   List<Service> services = getActiveServices(customer.getId());
+                   serviceSorter.sort(services,ServiceSortType.UpByCost);
+                   for(Service service : services){
                        if(customer.getMoneyBalance().compareTo(service.getCost())>-1){
                            customer.setMoneyBalance(
                                    BigDecimal.valueOf(
@@ -763,6 +778,6 @@ public class ControllerImpl implements Controller
                    setCustomer(customer);
                }
             }
-        },new Date(),86_400_000);
+        },new Date(),10000);
     }
 }

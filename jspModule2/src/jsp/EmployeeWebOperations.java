@@ -4,7 +4,7 @@ import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.controller.searcher.SearcherArea;
 import com.netcracker.students.o3.controller.searcher.SearcherCustomer;
-import com.netcracker.students.o3.controller.searcher.SearcherEmployee;
+import com.netcracker.students.o3.controller.searcher.EmployeeSearcher;
 import com.netcracker.students.o3.controller.searcher.SearcherOrders;
 import com.netcracker.students.o3.controller.searcher.SearcherService;
 import com.netcracker.students.o3.controller.searcher.SearcherTemplates;
@@ -36,7 +36,6 @@ public class EmployeeWebOperations
 {
     private static EmployeeWebOperations instance;
 
-    private BigInteger employeeId;
     private Controller controller;
     private HtmlTableBuilder tableBuilder;
     private SearcherService searcherService;
@@ -44,18 +43,8 @@ public class EmployeeWebOperations
     private SearcherCustomer searcherCustomer;
     private SearcherOrders searcherOrders;
     private SearcherArea searcherArea;
-    private SearcherEmployee searcherEmployee;
+    private EmployeeSearcher employeeSearcher;
 
-    private List<Service> allServices;
-    private List<Template> allTemplates;
-    private List<Order> allOrders;
-    private List<Area> allAreas;
-    private List<Customer> allCustomers;
-    private List<Employee> allEmployees;
-
-    public BigInteger getEmployeeId(){
-        return employeeId;
-    }
 
     private EmployeeWebOperations()
     {
@@ -66,7 +55,7 @@ public class EmployeeWebOperations
         searcherOrders = SearcherOrders.getInstance();
         searcherTemplates = SearcherTemplates.getInstance();
         searcherCustomer = SearcherCustomer.getInstance();
-        searcherEmployee = SearcherEmployee.getInstance();
+        employeeSearcher = EmployeeSearcher.getInstance();
     }
 
     public static EmployeeWebOperations getInstance()
@@ -78,26 +67,14 @@ public class EmployeeWebOperations
         return instance;
     }
 
-    public void start(BigInteger employeeId)
-    {
-        System.out.println("start EmployeeWebOperations");
-        this.employeeId = employeeId;
-        allAreas = controller.getAreas();
-        allCustomers = controller.getCustomers();
-        allOrders = controller.getOrders();
-        allEmployees = controller.getEmployees();
-        allServices = controller.getServices();
-        allTemplates = controller.getTemplates();
-    }
-
-    public Employee getEmployee()
+    public Employee getEmployee(BigInteger employeeId)
     {
         return controller.getEmployee(employeeId);
     }
 
-    public void changeNameAndPassword(String name, String password)
+    public void changeNameAndPassword(String name, String password,BigInteger employeeId)
     {
-        Employee employee = getEmployee();
+        Employee employee = getEmployee(employeeId);
         boolean isChanged = false;
         if (!employee.getName().equals(name))
         {
@@ -131,9 +108,9 @@ public class EmployeeWebOperations
     }
 
     public String showEmployeeOrders(String search, String field, OrderSortType sortOrders,
-            String templateId,String serviceId,String employeeId)
+            String templateId,String serviceId,BigInteger eId)
     {
-        List<Order> orders = getEmployeeOrders();
+        List<Order> orders = getEmployeeOrders(eId);
         if (isNotNullOrEmpty(search))
         {
             orders = searcherOrders.search(search, field, orders);
@@ -143,13 +120,6 @@ public class EmployeeWebOperations
         }
         if(isNotNullOrEmpty(serviceId)){
             orders = searcherOrders.search(serviceId,"ServiceId",orders);
-        }
-        if(isNotNullOrEmpty(employeeId)){
-            orders = searcherOrders.search(employeeId,"EmployeeId",orders);
-        }
-        if (orders.isEmpty())
-        {
-            return "</br>There are no orders";
         }
 
         if (sortOrders != null)
@@ -163,7 +133,7 @@ public class EmployeeWebOperations
     public String showAllOrders(String search, String field, OrderSortType sortOrders,
             String templateId,String serviceId,String employeeId)
     {
-        List<Order> orders = allOrders;
+        List<Order> orders = controller.getOrders();
         if (isNotNullOrEmpty(search))
         {
             orders = searcherOrders.search(search, field, orders);
@@ -177,10 +147,6 @@ public class EmployeeWebOperations
         if(isNotNullOrEmpty(employeeId)){
             orders = searcherOrders.search(employeeId,"EmployeeId",orders);
         }
-        if (orders.isEmpty())
-        {
-            return "</br>There are no orders";
-        }
 
         if (sortOrders != null)
         {
@@ -193,7 +159,7 @@ public class EmployeeWebOperations
     public String showAllServices(String search, String field, ServiceSortType sortService,
             String name,String cost)
     {
-        List<Service> services = allServices;
+        List<Service> services = controller.getServices();
         if (isNotNullOrEmpty(search))
         {
             services = searcherService.search(search, field, services);
@@ -204,10 +170,6 @@ public class EmployeeWebOperations
         }
         if(isNotNullOrEmpty(cost)){
             services = searcherService.search(cost,"Cost",services);
-        }
-        if (services.isEmpty())
-        {
-            return "</br>There are no services";
         }
 
         if (sortService != null)
@@ -220,7 +182,7 @@ public class EmployeeWebOperations
     public String showAllTemplates(String search, String field, TemplateSortType sortTemplates,
             String name,String cost)
     {
-        List<Template> templates = allTemplates;
+        List<Template> templates = controller.getTemplates();
         if (isNotNullOrEmpty(search))
         {
             templates = searcherTemplates.search(search, field, templates);
@@ -230,10 +192,6 @@ public class EmployeeWebOperations
         }
         if(isNotNullOrEmpty(cost)){
             templates = searcherTemplates.search(cost,"Cost",templates);
-        }
-        if (templates.isEmpty())
-        {
-            return "</br>There are no templates";
         }
 
         if (sortTemplates != null)
@@ -246,7 +204,7 @@ public class EmployeeWebOperations
     public String showAllCustomers(String search, String field, CustomerSortType sortCustomers,
             String name,String area)
     {
-        List<Customer> customers = allCustomers;
+        List<Customer> customers = controller.getCustomers();
         if (isNotNullOrEmpty(search))
         {
             customers = searcherCustomer.search(search, field, customers);
@@ -258,11 +216,6 @@ public class EmployeeWebOperations
             customers = searcherCustomer.search(area,"Area",customers);
         }
 
-        if (customers.isEmpty())
-        {
-            return "</br>There are no customers";
-        }
-
         if (sortCustomers != null)
         {
             CustomerSorter.getInstance().sort(customers, sortCustomers);
@@ -270,20 +223,17 @@ public class EmployeeWebOperations
         return tableBuilder.createCustomersTable(customers);
     }
 
-    public String showAllEmployees(String search, String field, EmployeeSortType sortEmployees,
+
+    public String showAllEmployees(String searchValue, String searchField, EmployeeSortType sortEmployees,
             String name)
     {
-        List<Employee> employees = allEmployees;
-        if (isNotNullOrEmpty(search))
+        List<Employee> employees = controller.getEmployees();
+        if (isNotNullOrEmpty(searchValue))
         {
-            employees = searcherEmployee.search(search, field, employees);
+            employees = employeeSearcher.search(searchValue, searchField, employees);
         }
         if(isNotNullOrEmpty(name)){
-            employees = searcherEmployee.search(name,"Name",employees);
-        }
-        if (employees.isEmpty())
-        {
-            return "</br>There are no employees";
+            employees = employeeSearcher.search(name,"Name",employees);
         }
 
         if (sortEmployees != null)
@@ -296,17 +246,13 @@ public class EmployeeWebOperations
     public String showAllAreas(String search, String field, AreaSortType sortAreas,
             String name)
     {
-        List<Area> areas = allAreas;
+        List<Area> areas = controller.getAreas();
         if (isNotNullOrEmpty(search))
         {
             areas = searcherArea.search(search, field, areas);
         }
         if(isNotNullOrEmpty(name)){
             areas = searcherArea.search(name, "Name",areas);
-        }
-        if (areas.isEmpty())
-        {
-            return "</br>There are no areas";
         }
 
         if (sortAreas != null)
@@ -317,12 +263,19 @@ public class EmployeeWebOperations
     }
 
 
-    public void startOrder(BigInteger orderId)
+
+
+
+    public void startOrder(BigInteger orderId,BigInteger employeeId)
     {
-        controller.startOrder(orderId, employeeId);
+        Order order = controller.getOrder(orderId);
+        if(order.getEmployeeId().longValue() == 0 || order.getEmployeeId().equals(employeeId))
+        {
+            controller.startOrder(orderId, employeeId);
+        }
     }
 
-    private List<Order> getEmployeeOrders()
+    private List<Order> getEmployeeOrders(BigInteger employeeId)
     {
         return controller.getOrdersByEmployeeId(employeeId);
     }

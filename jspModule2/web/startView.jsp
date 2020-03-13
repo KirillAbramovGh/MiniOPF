@@ -26,7 +26,7 @@
         </div>
 
         <div class="tabs__content">
-            <div style="display: table-row" class="tab is-active tab-1">
+            <div class="tab is-active tab-1">
                 <form action="${pageContext.request.contextPath}/start" method="post">
                     <input type="text" name="login"><br/>
                     <input type="password" name="password" value="password"><br/>

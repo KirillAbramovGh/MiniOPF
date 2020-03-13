@@ -8,8 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.swing.plaf.nimbus.State;
-
 public class LastIdDao
 {
     private static final String USER_NAME = "postgres";

@@ -22,10 +22,10 @@ public class CustomerDao extends AbstractDao<Customer>
     {
         List<Customer> customers = new ArrayList<>();
 
-        System.out.println("CustomerDao.getAll() ");
+        String sqlReq;
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            String sqlReq = "select * from " + getTableName();
+            sqlReq = "select * from " + getTableName();
             try (ResultSet resultSet = statement.executeQuery(sqlReq))
             {
                 String sqlServiceReq = "select id from services where userid=?";
@@ -59,14 +59,13 @@ public class CustomerDao extends AbstractDao<Customer>
             }
         }
 
-
+        xmlLogController.addRequest(sqlReq,customers.toArray(new Customer[0]));
         return customers;
     }
 
     @Override
     public Customer getEntityById(final BigInteger id) throws SQLException
     {
-        System.out.println("customer getEntityByID");
         Customer customer = null;
         String sqlReq = "select * from " + getTableName() + " where id=?";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -105,13 +104,13 @@ public class CustomerDao extends AbstractDao<Customer>
             }
         }
 
+        xmlLogController.addRequest(sqlReq,customer);
         return customer;
     }
 
     @Override
     public void update(final Customer entity) throws SQLException
     {
-        System.out.println("customer update");
         String sqlReq =
                 "update " + getTableName() + " set name=?, login=?, password=?, moneybalance=?, areaid=? where id=?";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -136,7 +135,6 @@ public class CustomerDao extends AbstractDao<Customer>
     @Override
     public void create(final Customer entity) throws SQLException
     {
-        System.out.println("customer create");
         String sqlReq = "INSERT INTO " + getTableName() + " VALUES (?,?,?,?,?,?)";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
@@ -152,7 +150,6 @@ public class CustomerDao extends AbstractDao<Customer>
 
     public Customer getCustomerByLogin(String login) throws SQLException
     {
-        System.out.println("customer getByLogin");
         Customer customer = null;
         String sqlReq = "select * from " + getTableName() + " where login=?";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -188,6 +185,7 @@ public class CustomerDao extends AbstractDao<Customer>
             }
         }
 
+        xmlLogController.addRequest(sqlReq,customer);
         return customer;
     }
 

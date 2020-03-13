@@ -1,5 +1,7 @@
 package com.netcracker.students.o3.model.dao;
 
+import com.netcracker.students.o3.model.serializer.XMLLog.XMLLogController;
+
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,6 +16,7 @@ public abstract class AbstractDao<T>
     private static final String PASSWORD = "postgres";
     private static final String CONNECTION_URL = "jdbc:postgresql://localhost:5432/entities";
     private static final String DRIVER_NAME = "org.postgresql.Driver";
+    protected XMLLogController xmlLogController = XMLLogController.getInstance();
 
 
     public abstract List<T> getAll() throws SQLException;

@@ -1,5 +1,6 @@
 package com.netcracker.students.o3.model.dao;
 
+import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
 
@@ -20,14 +21,13 @@ public class TemplateDao extends AbstractDao<Template>
     @Override
     public List<Template> getAll() throws SQLException
     {
-        System.out.println("TemplateDao.getAll()");
 
         List<Template> templates = new ArrayList<>();
-
+        String sqlReq;
 
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            String sqlReq = "select * from " + getTableName();
+            sqlReq = "select * from " + getTableName();
             try (ResultSet resultSet = statement.executeQuery(sqlReq))
             {
                 ResultSet areaSet;
@@ -61,21 +61,23 @@ public class TemplateDao extends AbstractDao<Template>
         }
 
 
+        xmlLogController.addRequest(sqlReq,templates.toArray(new Template[0]));
         return templates;
     }
 
     @Override
     public Template getEntityById(final BigInteger id) throws SQLException
     {
-        System.out.println("templateById");
+        String sqlReq;
         Template template;
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            String sqlReq = "select * from " + getTableName() + " where id=" + id;
+            sqlReq = "select * from " + getTableName() + " where id=" + id;
             String areaReq = "select * from " + templateAreaLinkTable + " where templateid=";
 
             template = getTemplateFromResultSet(statement, sqlReq, areaReq + id);
         }
+        xmlLogController.addRequest(sqlReq,template);
         return template;
     }
 
@@ -142,11 +144,11 @@ public class TemplateDao extends AbstractDao<Template>
 
     public Template getTemplateByName(String templateName) throws SQLException
     {
-        System.out.println("template by name");
+        String sqlReq;
         Template template = null;
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            String sqlReq = "select * from " + getTableName() + " where template_name='" + templateName + "'";
+            sqlReq = "select * from " + getTableName() + " where template_name='" + templateName + "'";
             String areaReq = "select * from " + templateAreaLinkTable + " where templateid=";
             ResultSet resultSet = statement.executeQuery(sqlReq);
             ResultSet areaSet;
@@ -172,18 +174,18 @@ public class TemplateDao extends AbstractDao<Template>
             resultSet.close();
         }
 
-
+        xmlLogController.addRequest(sqlReq,template);
         return template;
     }
 
     public List<Template> getTemplatesByAreaId(BigInteger areaId) throws SQLException
     {
-        System.out.println("template by area");
         List<Template> templates = new ArrayList<>();
+        String sqlReq;
 
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            String sqlReq = "select * from " + templateAreaLinkTable + " where areaid=" + areaId;
+            sqlReq = "select * from " + templateAreaLinkTable + " where areaid=" + areaId;
             try (ResultSet resultSet = statement.executeQuery(sqlReq))
             {
                 List<BigInteger> templateIds = new ArrayList<>();
@@ -198,6 +200,7 @@ public class TemplateDao extends AbstractDao<Template>
             }
         }
 
+        xmlLogController.addRequest(sqlReq,templates.toArray(new Template[0]));
         return templates;
     }
 
@@ -228,7 +231,7 @@ public class TemplateDao extends AbstractDao<Template>
 
     private List<Template> getTemplates(String sqlReq) throws SQLException
     {
-        System.out.println("TemplateDao.getAll()");
+
 
         List<Template> templates = new ArrayList<>();
 

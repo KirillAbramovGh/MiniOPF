@@ -2,8 +2,11 @@ package com.netcracker.students.o3.model.dao;
 
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
+import com.netcracker.students.o3.model.serializer.XMLLog.XMLLogController;
+import com.netcracker.students.o3.model.serializer.XMLLog.XMLRequest;
 
 import java.math.BigInteger;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,12 +22,12 @@ public class AreaDao extends AbstractDao<Area>
     @Override
     public List<Area> getAll() throws SQLException
     {
-        System.out.println("area getAll");
         List<Area> areas = new ArrayList<>();
 
+        String sqlReq;
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            String sqlReq = "select * from " + getTableName();
+            sqlReq = "select * from " + getTableName();
             try (ResultSet resultSet = statement.executeQuery(sqlReq))
             {
 
@@ -44,13 +47,13 @@ public class AreaDao extends AbstractDao<Area>
                 }
             }
         }
+        xmlLogController.addRequest(sqlReq,areas.toArray(new Area[0]));
         return areas;
     }
 
     @Override
     public Area getEntityById(final BigInteger id) throws SQLException
     {
-        System.out.println("area getEntityById");
         Area area = new AreaImpl();
         String sqlReq = "select * from " + getTableName() + " where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -70,6 +73,7 @@ public class AreaDao extends AbstractDao<Area>
                 }
             }
         }
+        xmlLogController.addRequest(sqlReq,area);
         return area;
     }
 
@@ -86,7 +90,6 @@ public class AreaDao extends AbstractDao<Area>
             statement.setLong(3,entity.getId().longValue());
             statement.executeUpdate();
         }
-
     }
 
     @Override
@@ -111,11 +114,11 @@ public class AreaDao extends AbstractDao<Area>
 
     public Area getAreaByName(String areaName) throws SQLException
     {
-        System.out.println("AreaDao.getEntityByName(" + areaName + ") ");
         Area area = new AreaImpl();
+        String sqlReq;
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            String sqlReq = "select * from " + getTableName() + " where area_name='" + areaName + "'";
+            sqlReq = "select * from " + getTableName() + " where area_name='" + areaName + "'";
             try (ResultSet resultSet = statement.executeQuery(sqlReq))
             {
                 if (resultSet.next())
@@ -130,6 +133,7 @@ public class AreaDao extends AbstractDao<Area>
                 }
             }
         }
+        xmlLogController.addRequest(sqlReq,area);
         return area;
     }
 }

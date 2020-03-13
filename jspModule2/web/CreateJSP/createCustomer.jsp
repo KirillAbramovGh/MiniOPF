@@ -4,6 +4,7 @@
 <%@ page import="java.util.HashSet" %>
 <%@ page import="java.util.Set" %>
 <%@ page import="com.netcracker.students.o3.controller.Controller" %>
+<%@ page import="com.netcracker.students.o3.model.services.ServiceStatus" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -12,6 +13,7 @@
     <title>CreateCustomer</title>
 </head>
 <body>
+<%! Controller controller = ControllerImpl.getInstance();%>
 <form action="${pageContext.request.contextPath}/CreateJSP/createCustomer.jsp" method="post">
     <div style="size: 200px">
         <div class="name">
@@ -30,7 +32,7 @@
             Area: <input type="text" name="area">
         </div>
         <div>
-            ConnectedServicesId: <input type="text" name="connectedServicesId">
+            ConnectedTemplatesId: <input type="text" name="connectedTemplatesId">
         </div>
         <input type="submit" name="save" class="button">
     </div>
@@ -44,19 +46,20 @@
             String password = request.getParameter("password");
             String login = request.getParameter("login");
             String area = request.getParameter("area");
-            String servicesValue = request.getParameter("connectedServicesId");
-            String[] services = servicesValue.split(",");
+            String servicesValue = request.getParameter("connectedTemplatesId");
+            String[] templates = servicesValue.split(",");
 
            Customer customer = ControllerImpl.getInstance()
                    .createCustomer(name,login,password,BigInteger.valueOf(Long.parseLong(area)));
 
-            Set<BigInteger> set = new HashSet<>();
-            for (String s : services)
+           BigInteger customerId = customer.getId();
+            for (String s : templates)
             {
-                if (s != null && !s.isEmpty())
-                    set.add(BigInteger.valueOf(Long.parseLong(s)));
+                if (s != null && !s.isEmpty()){
+                    BigInteger templateId = BigInteger.valueOf(Long.parseLong(s));
+                    controller.createService(customerId,templateId, ServiceStatus.Entering);
+                }
             }
-            customer.setConnectedServicesIds(set);
             ControllerImpl.getInstance().setCustomer(customer);
 
 %>

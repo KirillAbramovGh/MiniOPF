@@ -4,6 +4,11 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(name = "customer")
+@XmlRootElement
 public class CustomerImpl implements Customer {
     private BigInteger id;
     private String name;

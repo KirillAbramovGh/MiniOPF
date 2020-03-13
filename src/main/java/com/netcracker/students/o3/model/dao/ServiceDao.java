@@ -1,5 +1,6 @@
 package com.netcracker.students.o3.model.dao;
 
+import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.services.ServiceStatus;
@@ -21,15 +22,16 @@ public class ServiceDao extends AbstractDao<Service>
     @Override
     public List<Service> getAll() throws SQLException
     {
-        System.out.println("ServiceDao.getAll()");
         String sqlReq = "select * from " + getTableName();
-        return getServices(sqlReq);
+        List<Service> services = getServices(sqlReq);
+        xmlLogController.addRequest(sqlReq,services.toArray(new Service[0]));
+
+        return services;
     }
 
     @Override
     public Service getEntityById(final BigInteger id) throws SQLException
     {
-        System.out.println("service getById");
         Service service = null;
         String sqlReq = "select * from " + getTableName() + " where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -44,7 +46,7 @@ public class ServiceDao extends AbstractDao<Service>
             }
         }
 
-
+        xmlLogController.addRequest(sqlReq,service);
         return service;
     }
 
@@ -76,7 +78,6 @@ public class ServiceDao extends AbstractDao<Service>
     @Override
     public void create(final Service entity) throws SQLException
     {
-        System.out.println("service create");
         String sqlReq = "INSERT INTO " + getTableName() + " VALUES (?,?,?,?,?)";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
@@ -95,30 +96,38 @@ public class ServiceDao extends AbstractDao<Service>
 
     public List<Service> getServicesByUserId(BigInteger userId) throws SQLException
     {
-        System.out.println("service getUserId");
         String sqlReq = "select * from " + getTableName() + " where userid=" + userId;
-        return getServices(sqlReq);
+        List<Service> services = getServices(sqlReq);
+        xmlLogController.addRequest(sqlReq,services.toArray(new Service[0]));
+
+        return services;
     }
 
     public List<Service> getServicesByTemplateId(BigInteger templateId) throws SQLException
     {
-        System.out.println("service getTemplId");
         String sqlReq = "select * from " + getTableName() + " where templateid=" + templateId;
-        return getServices(sqlReq);
+        List<Service> services = getServices(sqlReq);
+        xmlLogController.addRequest(sqlReq,services.toArray(new Service[0]));
+
+        return services;
     }
 
     public List<Service> getServicesByStatus(ServiceStatus status) throws SQLException
     {
-        System.out.println("ServiceByStatus");
         String sqlReq = "select * from " + getTableName() + " where status='" + status+"'";
-        return getServices(sqlReq);
+        List<Service> services = getServices(sqlReq);
+        xmlLogController.addRequest(sqlReq,services.toArray(new Service[0]));
+
+        return services;
     }
 
     public List<Service> getServicesByStatusAndCustomerId(BigInteger userId,ServiceStatus status) throws SQLException
     {
-        System.out.println("service by status and cus");
         String sqlReq = "select * from " + getTableName() + " where status='" + status+"' and userid="+userId;
-        return getServices(sqlReq);
+        List<Service> services = getServices(sqlReq);
+        xmlLogController.addRequest(sqlReq,services.toArray(new Service[0]));
+
+        return services;
     }
 
     private List<Service> getServices(String sqlReq) throws SQLException

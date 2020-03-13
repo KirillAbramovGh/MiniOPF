@@ -144,7 +144,7 @@ public enum EmployeeCommand
                     String name = req.getParameter("fio");
                     String password = req.getParameter("password");
 
-                    employeeWebOperations.changeNameAndPassword(name, password);
+                    employeeWebOperations.changeNameAndPassword(name, password,(BigInteger) req.getSession().getAttribute("id"));
                 }
             },
 
@@ -155,7 +155,8 @@ public enum EmployeeCommand
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    employeeWebOperations.startOrder(id);
+                    BigInteger employeeId = (BigInteger)req.getSession().getAttribute("id");
+                    employeeWebOperations.startOrder(id,employeeId);
                 }
             },
 

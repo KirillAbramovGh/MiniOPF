@@ -8,7 +8,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/tab.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/tabs.css">
     <title>UpdateArea</title>
     <%!
         BigInteger areaId;

@@ -19,12 +19,11 @@ public class EmployeeDao extends AbstractDao<Employee>
     @Override
     public List<Employee> getAll() throws SQLException
     {
-        System.out.println("employee getAll");
         List<Employee> employees = new ArrayList<>();
-
+        String sqlReq;
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            String sqlReq = "select * from " + getTableName();
+            sqlReq = "select * from " + getTableName();
             try(ResultSet resultSet = statement.executeQuery(sqlReq))
             {
 
@@ -44,14 +43,14 @@ public class EmployeeDao extends AbstractDao<Employee>
             }
         }
 
-
+        xmlLogController.addRequest(sqlReq,employees.toArray(new Employee[0]));
         return employees;
     }
 
     @Override
     public Employee getEntityById(final BigInteger id) throws SQLException
     {
-        System.out.println("employee getEntityById");
+
         if(id== null){
             return null;
         }
@@ -76,6 +75,7 @@ public class EmployeeDao extends AbstractDao<Employee>
             }
         }
 
+        xmlLogController.addRequest(sqlReq,employee);
         return employee;
     }
 
@@ -122,7 +122,6 @@ public class EmployeeDao extends AbstractDao<Employee>
 
     public Employee getEmployeeByLogin(final String login) throws SQLException
     {
-        System.out.println("employee getByLogin");
         Employee employee = new EmployerImpl();
         String sqlReq = "select * from " + getTableName() + " where login=?";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -143,6 +142,7 @@ public class EmployeeDao extends AbstractDao<Employee>
             }
         }
 
+        xmlLogController.addRequest(sqlReq,employee);
         return employee;
     }
 }

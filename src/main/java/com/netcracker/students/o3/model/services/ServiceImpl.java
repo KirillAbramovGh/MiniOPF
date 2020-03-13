@@ -9,6 +9,11 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.Objects;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(name = "service")
+@XmlRootElement
 public class ServiceImpl implements Service
 {
     private BigInteger id;

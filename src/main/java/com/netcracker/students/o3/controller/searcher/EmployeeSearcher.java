@@ -1,34 +1,33 @@
 package com.netcracker.students.o3.controller.searcher;
 
-import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.users.Employee;
 
 import java.util.*;
 
-public class SearcherEmployee extends Searcher<Employee>{
-    private static SearcherEmployee instance;
+public class EmployeeSearcher extends Searcher<Employee>{
+    private static EmployeeSearcher instance;
 
-    private SearcherEmployee(){
+    private EmployeeSearcher(){
     }
 
-    public static SearcherEmployee getInstance(){
+    public static EmployeeSearcher getInstance(){
         if(instance == null){
-            instance = new SearcherEmployee();
+            instance = new EmployeeSearcher();
         }
 
         return instance;
     }
 
-    public List<Employee> search(String search, String field, Collection<Employee> employees) {
-        switch (field){
-            case "Id": return searchById(search,employees);
-            case "Name": return searchByName(search,employees);
-            case "Login": return searchByLogin(search,employees);
+    public List<Employee> search(String searchValue, String searchField, Collection<Employee> employees) {
+        switch (searchField){
+            case "Id": return searchById(searchValue,employees);
+            case "Name": return searchByName(searchValue,employees);
+            case "Login": return searchByLogin(searchValue,employees);
             case "all":
-                Set<Employee> res = new HashSet<>(searchById(search,employees));
+                Set<Employee> res = new HashSet<>(searchById(searchValue,employees));
 
-                res.addAll(searchByName(search,employees));
-                res.addAll(searchByLogin(search,employees));
+                res.addAll(searchByName(searchValue,employees));
+                res.addAll(searchByLogin(searchValue,employees));
 
                 return new ArrayList<>(res);
         }

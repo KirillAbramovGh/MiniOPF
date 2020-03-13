@@ -10,7 +10,6 @@ import com.netcracker.students.o3.model.dao.LastIdDao;
 import com.netcracker.students.o3.model.dao.OrderDao;
 import com.netcracker.students.o3.model.dao.ServiceDao;
 import com.netcracker.students.o3.model.dao.TemplateDao;
-import com.netcracker.students.o3.model.model.Model;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderAction;
 import com.netcracker.students.o3.model.orders.OrderImpl;
@@ -36,17 +35,18 @@ import java.util.Map;
 
 public class ModelBD implements Model
 {
-    private AbstractDao<Order> orderDao;
-    private AbstractDao<Template> templateDao;
-    private AbstractDao<Service> serviceDao;
-    private AbstractDao<Customer> customerDao;
-    private AbstractDao<Employee> employeeDao;
-    private AbstractDao<Area> areaDao;
-    private LastIdDao lastIdDao;
+    private final AbstractDao<Order> orderDao;
+    private final AbstractDao<Template> templateDao;
+    private final AbstractDao<Service> serviceDao;
+    private final AbstractDao<Customer> customerDao;
+    private final AbstractDao<Employee> employeeDao;
+    private final AbstractDao<Area> areaDao;
+    private final LastIdDao lastIdDao;
 
     private static ModelBD instance;
 
-    private ModelBD(){
+    private ModelBD()
+    {
         orderDao = new OrderDao();
         templateDao = new TemplateDao();
         serviceDao = new ServiceDao();
@@ -59,14 +59,18 @@ public class ModelBD implements Model
     @Override
     public void setOrders(final Map<BigInteger, Order> orders)
     {
-        for(Order order : orders.values()){
-            try
+        synchronized (orderDao)
+        {
+            for (Order order : orders.values())
             {
-                orderDao.create(order);
-            }
-            catch (SQLException e)
-            {
-                e.printStackTrace();
+                try
+                {
+                    orderDao.create(order);
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -74,14 +78,18 @@ public class ModelBD implements Model
     @Override
     public void setTemplates(final Map<BigInteger, Template> templates)
     {
-        for(Template template : templates.values()){
-            try
+        synchronized (templateDao)
+        {
+            for (Template template : templates.values())
             {
-                templateDao.create(template);
-            }
-            catch (SQLException e)
-            {
-                e.printStackTrace();
+                try
+                {
+                    templateDao.create(template);
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -89,14 +97,18 @@ public class ModelBD implements Model
     @Override
     public void setServices(final Map<BigInteger, Service> services)
     {
-        for(Service service : services.values()){
-            try
+        synchronized (serviceDao)
+        {
+            for (Service service : services.values())
             {
-                serviceDao.create(service);
-            }
-            catch (SQLException e)
-            {
-                e.printStackTrace();
+                try
+                {
+                    serviceDao.create(service);
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -104,14 +116,18 @@ public class ModelBD implements Model
     @Override
     public void setCustomers(final Map<BigInteger, Customer> customers)
     {
-        for(Customer customer : customers.values()){
-            try
+        synchronized (customerDao)
+        {
+            for (Customer customer : customers.values())
             {
-                customerDao.create(customer);
-            }
-            catch (SQLException e)
-            {
-                e.printStackTrace();
+                try
+                {
+                    customerDao.create(customer);
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -119,14 +135,18 @@ public class ModelBD implements Model
     @Override
     public void setEmployees(final Map<BigInteger, Employee> employees)
     {
-        for(Employee employee : employees.values()){
-            try
+        synchronized (employeeDao)
+        {
+            for (Employee employee : employees.values())
             {
-                employeeDao.create(employee);
-            }
-            catch (SQLException e)
-            {
-                e.printStackTrace();
+                try
+                {
+                    employeeDao.create(employee);
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -134,10 +154,36 @@ public class ModelBD implements Model
     @Override
     public void setAreas(final Map<BigInteger, Area> areas)
     {
-        for(Area area : areas.values()){
+        synchronized (areaDao)
+        {
+            for (Area area : areas.values())
+            {
+                try
+                {
+                    areaDao.create(area);
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Deprecated
+    public BigInteger getLastId()
+    {
+        return null;
+    }
+
+    @Override
+    public void setLastId(final BigInteger lastId)
+    {
+        synchronized (lastIdDao)
+        {
             try
             {
-                areaDao.create(area);
+                lastIdDao.setLastId(lastId);
             }
             catch (SQLException e)
             {
@@ -146,112 +192,112 @@ public class ModelBD implements Model
         }
     }
 
-    @Deprecated
-    public BigInteger getLastId()
-    {
-
-
-        return null;
-    }
-
-    @Override
-    public void setLastId(final BigInteger lastId)
-    {
-        try
-        {
-            lastIdDao.setLastId(lastId);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
-    }
-
     @Override
     public BigInteger getNextId()
     {
-        try
+        synchronized (lastIdDao)
         {
-            return lastIdDao.getNextId();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+            try
+            {
+                return lastIdDao.getNextId();
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
 
-        return null;
+            return null;
+        }
     }
 
     @Override
     public Customer createCustomer(final String name, final String login, final String password,
             final BigInteger areaId)
     {
-        Customer newCustomer = new CustomerImpl(getNextId(), name, login, password, areaId);
-        addCustomer(newCustomer);
+        synchronized (customerDao)
+        {
+            Customer newCustomer = new CustomerImpl(getNextId(), name, login, password, areaId);
+            addCustomer(newCustomer);
 
-        return newCustomer;
+            return newCustomer;
+        }
     }
 
     @Override
     public Employee createEmployee(final String name, final String login, final String password)
 
     {
-        Employee newEmployee = new EmployerImpl(getNextId(), name, login, password);
-        addEmployee(newEmployee);
+        synchronized (employeeDao)
+        {
+            Employee newEmployee = new EmployerImpl(getNextId(), name, login, password);
+            addEmployee(newEmployee);
 
-        return newEmployee;
+            return newEmployee;
+        }
     }
 
     @Override
     public Order createOrder(final BigInteger templateId, final BigInteger serviceId, final OrderStatus status,
             final OrderAction action)
     {
-        Order newOrder = new OrderImpl(getNextId(), templateId, serviceId, status, action);
-        newOrder.setCreationDate(new Date());
-        addOrder(newOrder);
+        synchronized (orderDao)
+        {
+            Order newOrder = new OrderImpl(getNextId(), templateId, serviceId, status, action);
+            newOrder.setCreationDate(new Date());
+            addOrder(newOrder);
 
-        return newOrder;
+            return newOrder;
+        }
     }
 
     @Override
     public Template createTemplate(final String name, final BigDecimal cost, final String description)
 
     {
-        Template newTemplate = new TemplateImpl(getNextId(), name, cost, description);
-        addTemplate(newTemplate);
+        synchronized (templateDao)
+        {
+            Template newTemplate = new TemplateImpl(getNextId(), name, cost, description);
+            addTemplate(newTemplate);
 
-        return newTemplate;
+            return newTemplate;
+        }
     }
 
     @Override
     public Service createService(final BigInteger userId, final BigInteger templateId, final ServiceStatus status)
 
     {
-        Service newService = new ServiceImpl(getNextId(), userId, templateId, status);
-        addService(newService);
+        synchronized (serviceDao)
+        {
+            Service newService = new ServiceImpl(getNextId(), userId, templateId, status);
+            addService(newService);
 
-        return newService;
+            return newService;
+        }
     }
 
     @Override
     public Area createArea(final String name, final String description)
 
     {
-        Area newArea = new AreaImpl(getNextId(), name, description);
-        addArea(newArea);
+        synchronized (areaDao)
+        {
+            Area newArea = new AreaImpl(getNextId(), name, description);
+            addArea(newArea);
 
-        return newArea;
+            return newArea;
+        }
     }
 
     @Override
     public Map<BigInteger, Order> getOrders()
     {
-        Map<BigInteger,Order> orderMap = new HashMap<>();
+        Map<BigInteger, Order> orderMap = new HashMap<>();
         try
         {
-            for(Order order : orderDao.getAll()){
-                if(order!=null && order.getId()!=null)
+            for (Order order : orderDao.getAll())
+            {
+                if (order != null && order.getId() != null)
                 {
                     orderMap.put(order.getId(), order);
                 }
@@ -267,11 +313,12 @@ public class ModelBD implements Model
     @Override
     public Map<BigInteger, Template> getTemplates()
     {
-        Map<BigInteger,Template> templateMap = new HashMap<>();
+        Map<BigInteger, Template> templateMap = new HashMap<>();
         try
         {
-            for(Template template : templateDao.getAll()){
-                if(template!=null && template.getName()!=null)
+            for (Template template : templateDao.getAll())
+            {
+                if (template != null && template.getName() != null)
                 {
                     templateMap.put(template.getId(), template);
                 }
@@ -287,11 +334,12 @@ public class ModelBD implements Model
     @Override
     public Map<BigInteger, Service> getServices()
     {
-        Map<BigInteger,Service> serviceMap = new HashMap<>();
+        Map<BigInteger, Service> serviceMap = new HashMap<>();
         try
         {
-            for(Service service : serviceDao.getAll()){
-                if(service!=null && service.getStatus()!=null)
+            for (Service service : serviceDao.getAll())
+            {
+                if (service != null && service.getStatus() != null)
                 {
                     serviceMap.put(service.getId(), service);
                 }
@@ -308,11 +356,12 @@ public class ModelBD implements Model
     @Override
     public Map<BigInteger, Customer> getCustomers()
     {
-        Map<BigInteger,Customer> serviceMap = new HashMap<>();
+        Map<BigInteger, Customer> serviceMap = new HashMap<>();
         try
         {
-            for(Customer customer : customerDao.getAll()){
-                if(customer!=null && customer.getName()!=null)
+            for (Customer customer : customerDao.getAll())
+            {
+                if (customer != null && customer.getName() != null)
                 {
                     serviceMap.put(customer.getId(), customer);
                 }
@@ -328,11 +377,12 @@ public class ModelBD implements Model
     @Override
     public Map<BigInteger, Employee> getEmployees()
     {
-        Map<BigInteger,Employee> employeeMap = new HashMap<>();
+        Map<BigInteger, Employee> employeeMap = new HashMap<>();
         try
         {
-            for(Employee employee : employeeDao.getAll()){
-                if(employee!=null && employee.getName()!=null)
+            for (Employee employee : employeeDao.getAll())
+            {
+                if (employee != null && employee.getName() != null)
                 {
                     employeeMap.put(employee.getId(), employee);
                 }
@@ -348,11 +398,12 @@ public class ModelBD implements Model
     @Override
     public Map<BigInteger, Area> getAreas()
     {
-        Map<BigInteger,Area> areaMap = new HashMap<>();
+        Map<BigInteger, Area> areaMap = new HashMap<>();
         try
         {
-            for(Area area : areaDao.getAll()){
-                if(area!=null && area.getName()!=null)
+            for (Area area : areaDao.getAll())
+            {
+                if (area != null && area.getName() != null)
                 {
                     areaMap.put(area.getId(), area);
                 }
@@ -371,7 +422,8 @@ public class ModelBD implements Model
         try
         {
             Order order = orderDao.getEntityById(id);
-            if(order!=null && order.getServiceId() == null){
+            if (order != null && order.getServiceId() == null)
+            {
                 order = null;
             }
             return order;
@@ -389,7 +441,8 @@ public class ModelBD implements Model
         try
         {
             Template template = templateDao.getEntityById(id);
-            if(template!=null && template.getName()==null){
+            if (template != null && template.getName() == null)
+            {
                 template = null;
             }
             return template;
@@ -408,7 +461,8 @@ public class ModelBD implements Model
         try
         {
             Service service = serviceDao.getEntityById(id);
-            if(service!=null && service.getStatus()==null){
+            if (service != null && service.getStatus() == null)
+            {
                 service = null;
             }
             return service;
@@ -427,7 +481,8 @@ public class ModelBD implements Model
         try
         {
             Customer customer = customerDao.getEntityById(id);
-            if(customer!=null && customer.getName()==null){
+            if (customer != null && customer.getName() == null)
+            {
                 customer = null;
             }
             return customer;
@@ -446,7 +501,8 @@ public class ModelBD implements Model
         try
         {
             Employee employee = employeeDao.getEntityById(id);
-            if(employee!=null && employee.getName()==null){
+            if (employee != null && employee.getName() == null)
+            {
                 employee = null;
             }
 
@@ -466,7 +522,8 @@ public class ModelBD implements Model
         try
         {
             Area area = areaDao.getEntityById(id);
-            if(area!=null && area.getName()==null){
+            if (area != null && area.getName() == null)
+            {
                 area = null;
             }
             return area;
@@ -482,252 +539,299 @@ public class ModelBD implements Model
     @Override
     public void addOrder(final Order order)
     {
-        try
+        synchronized (areaDao)
         {
-            orderDao.create(order);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
+            try
+            {
+                orderDao.create(order);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void addService(final Service service)
     {
-        try
+        synchronized (serviceDao)
         {
-            serviceDao.create(service);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
+            try
+            {
+                serviceDao.create(service);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void addTemplate(final Template template)
     {
-        try
+        synchronized (templateDao)
         {
-            templateDao.create(template);
-        }
+            try
+            {
+                templateDao.create(template);
+            }
 
-        catch (SQLException e)
-        {
-            e.printStackTrace();
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void addCustomer(final Customer customer)
     {
-        try
+        synchronized (customerDao)
         {
-            customerDao.create(customer);
-        }
+            try
+            {
+                customerDao.create(customer);
+            }
 
-        catch (SQLException e)
-        {
-            e.printStackTrace();
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void addEmployee(final Employee employee)
     {
-        try
+        synchronized (employeeDao)
         {
-            employeeDao.create(employee);
-        }
+            try
+            {
+                employeeDao.create(employee);
+            }
 
-        catch (SQLException e)
-        {
-            e.printStackTrace();
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void addArea(final Area area)
     {
-        try
+        synchronized (areaDao)
         {
-            areaDao.create(area);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
+            try
+            {
+                areaDao.create(area);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void deleteOrderById(final BigInteger id)
     {
-        try
+        synchronized (orderDao)
         {
-            orderDao.delete(id);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
+            try
+            {
+                orderDao.delete(id);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void deleteTemplateById(final BigInteger id)
     {
-        try
+        synchronized (templateDao)
         {
-            templateDao.delete(id);
+            try
+            {
+                templateDao.delete(id);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
     public void deleteServiceById(final BigInteger id)
     {
-        try
+        synchronized (serviceDao)
         {
-            serviceDao.delete(id);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
+            try
+            {
+                serviceDao.delete(id);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void deleteCustomerById(final BigInteger id)
     {
-        try
+        synchronized (customerDao)
         {
-            customerDao.delete(id);
+            try
+            {
+                customerDao.delete(id);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
     public void deleteEmployeeById(final BigInteger id)
     {
-        try
+        synchronized (employeeDao)
         {
-            employeeDao.delete(id);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
+            try
+            {
+                employeeDao.delete(id);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void deleteAreaById(final BigInteger id)
     {
-        try
+        synchronized (areaDao)
         {
-            areaDao.delete(id);
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
+            try
+            {
+                areaDao.delete(id);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void setOrder(final Order order)
     {
-        try
+        synchronized (orderDao)
         {
-            orderDao.update(order);
+            try
+            {
+                orderDao.update(order);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
     public void setTemplate(final Template template)
     {
-        try
+        synchronized (templateDao)
         {
-            templateDao.update(template);
+            try
+            {
+                templateDao.update(template);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
     public void setService(final Service service)
     {
-        try
+        synchronized (serviceDao)
         {
-            serviceDao.update(service);
+            try
+            {
+                serviceDao.update(service);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
     public void setCustomer(final Customer customer)
     {
-        try
+        synchronized (customerDao)
         {
-            customerDao.update(customer);
+            try
+            {
+                customerDao.update(customer);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
     public void setEmployee(final Employee employee)
     {
-        try
+        synchronized (employeeDao)
         {
-            employeeDao.update(employee);
+            try
+            {
+                employeeDao.update(employee);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
     public void setArea(final Area area)
     {
-        try
+        synchronized (areaDao)
         {
-            areaDao.update(area);
+            try
+            {
+                areaDao.update(area);
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
     }
 
-    public Area getAreaByName(final String name){
+    public Area getAreaByName(final String name)
+    {
         try
         {
-            return ((AreaDao)areaDao).getAreaByName(name);
+            return ((AreaDao) areaDao).getAreaByName(name);
         }
         catch (SQLException e)
         {
@@ -737,10 +841,11 @@ public class ModelBD implements Model
         return null;
     }
 
-    public Customer getCustomerByLogin(final String login){
+    public Customer getCustomerByLogin(final String login)
+    {
         try
         {
-            return ((CustomerDao)customerDao).getCustomerByLogin(login);
+            return ((CustomerDao) customerDao).getCustomerByLogin(login);
         }
         catch (SQLException e)
         {
@@ -749,10 +854,11 @@ public class ModelBD implements Model
         return null;
     }
 
-    public Employee getEmployeeByLogin(final String login){
+    public Employee getEmployeeByLogin(final String login)
+    {
         try
         {
-            return ((EmployeeDao)employeeDao).getEmployeeByLogin(login);
+            return ((EmployeeDao) employeeDao).getEmployeeByLogin(login);
         }
         catch (SQLException e)
         {
@@ -761,10 +867,11 @@ public class ModelBD implements Model
         return null;
     }
 
-    public List<Order> getOrdersByTemplateId(final BigInteger templateId){
+    public List<Order> getOrdersByTemplateId(final BigInteger templateId)
+    {
         try
         {
-            return ((OrderDao)orderDao).getOrdersByTemplateId(templateId);
+            return ((OrderDao) orderDao).getOrdersByTemplateId(templateId);
         }
         catch (SQLException e)
         {
@@ -773,10 +880,11 @@ public class ModelBD implements Model
         return new ArrayList<>();
     }
 
-    public List<Order> getOrdersByServiceId(final BigInteger serviceId){
+    public List<Order> getOrdersByServiceId(final BigInteger serviceId)
+    {
         try
         {
-            return ((OrderDao)orderDao).getOrdersByServiceId(serviceId);
+            return ((OrderDao) orderDao).getOrdersByServiceId(serviceId);
         }
         catch (SQLException e)
         {
@@ -785,10 +893,11 @@ public class ModelBD implements Model
         return new ArrayList<>();
     }
 
-    public List<Order> getOrdersByEmployeeId(final BigInteger employeeId){
+    public List<Order> getOrdersByEmployeeId(final BigInteger employeeId)
+    {
         try
         {
-            return ((OrderDao)orderDao).getOrdersByEmployeeId(employeeId);
+            return ((OrderDao) orderDao).getOrdersByEmployeeId(employeeId);
         }
         catch (SQLException e)
         {
@@ -797,10 +906,11 @@ public class ModelBD implements Model
         return new ArrayList<>();
     }
 
-    public List<Order> getOrdersByStatus(final OrderStatus status){
+    public List<Order> getOrdersByStatus(final OrderStatus status)
+    {
         try
         {
-            return ((OrderDao)orderDao).getOrdersByStatus(status);
+            return ((OrderDao) orderDao).getOrdersByStatus(status);
         }
         catch (SQLException e)
         {
@@ -809,10 +919,11 @@ public class ModelBD implements Model
         return new ArrayList<>();
     }
 
-    public List<Order> getOrdersByAction(final OrderAction action){
+    public List<Order> getOrdersByAction(final OrderAction action)
+    {
         try
         {
-            return ((OrderDao)orderDao).getOrdersByAction(action);
+            return ((OrderDao) orderDao).getOrdersByAction(action);
         }
         catch (SQLException e)
         {
@@ -821,10 +932,11 @@ public class ModelBD implements Model
         return new ArrayList<>();
     }
 
-    public List<Service> getServicesByUserId(BigInteger userId){
+    public List<Service> getServicesByUserId(BigInteger userId)
+    {
         try
         {
-            return ((ServiceDao)serviceDao).getServicesByUserId(userId);
+            return ((ServiceDao) serviceDao).getServicesByUserId(userId);
         }
         catch (SQLException e)
         {
@@ -833,10 +945,11 @@ public class ModelBD implements Model
         return null;
     }
 
-    public List<Service> getServicesByTemplateId(BigInteger templateId){
+    public List<Service> getServicesByTemplateId(BigInteger templateId)
+    {
         try
         {
-            return ((ServiceDao)serviceDao).getServicesByTemplateId(templateId);
+            return ((ServiceDao) serviceDao).getServicesByTemplateId(templateId);
         }
         catch (SQLException e)
         {
@@ -845,10 +958,11 @@ public class ModelBD implements Model
         return null;
     }
 
-    public List<Service> getServicesByStatus(ServiceStatus status){
+    public List<Service> getServicesByStatus(ServiceStatus status)
+    {
         try
         {
-            return ((ServiceDao)serviceDao).getServicesByStatus(status);
+            return ((ServiceDao) serviceDao).getServicesByStatus(status);
         }
         catch (SQLException e)
         {
@@ -857,10 +971,11 @@ public class ModelBD implements Model
         return null;
     }
 
-    public List<Service> getServicesByStatusAndCustomerId(BigInteger userId,ServiceStatus status){
+    public List<Service> getServicesByStatusAndCustomerId(BigInteger userId, ServiceStatus status)
+    {
         try
         {
-            return ((ServiceDao)serviceDao).getServicesByStatusAndCustomerId(userId,status);
+            return ((ServiceDao) serviceDao).getServicesByStatusAndCustomerId(userId, status);
         }
         catch (SQLException e)
         {
@@ -869,10 +984,11 @@ public class ModelBD implements Model
         return null;
     }
 
-    public List<Template> getTemplatesByAreaId(BigInteger areaId){
+    public List<Template> getTemplatesByAreaId(BigInteger areaId)
+    {
         try
         {
-            return ((TemplateDao)templateDao).getTemplatesByAreaId(areaId);
+            return ((TemplateDao) templateDao).getTemplatesByAreaId(areaId);
         }
         catch (SQLException e)
         {
@@ -881,10 +997,11 @@ public class ModelBD implements Model
         return null;
     }
 
-    public Template getTemplateByName(String name){
+    public Template getTemplateByName(String name)
+    {
         try
         {
-            return ((TemplateDao)templateDao).getTemplateByName(name);
+            return ((TemplateDao) templateDao).getTemplateByName(name);
         }
         catch (SQLException e)
         {
@@ -894,8 +1011,10 @@ public class ModelBD implements Model
     }
 
 
-    public static ModelBD getInstance(){
-        if(instance == null){
+    public static synchronized ModelBD getInstance()
+    {
+        if (instance == null)
+        {
             instance = new ModelBD();
         }
 

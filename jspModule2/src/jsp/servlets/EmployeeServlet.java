@@ -22,11 +22,6 @@ public class EmployeeServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        BigInteger id = (BigInteger) req.getSession().getAttribute("id");
-        if(!employeeWebOperations.getEmployeeId().equals(id))
-        {
-            employeeWebOperations.start(id);
-        }
         cleanSession(req.getSession());
         req.getSession().setAttribute("nextPage","/webEmployeeView.jsp");
         for (String key : req.getParameterMap().keySet())

@@ -14,14 +14,13 @@
     %>
     <%
         BigInteger id = (BigInteger) request.getSession().getAttribute("id");
-        employeeWebOperations.start(id);
         Employee employee;
         String name = "";
         String login = "";
         String password = "";
         if(id!=null)
         {
-            employee = employeeWebOperations.getEmployee();
+            employee = employeeWebOperations.getEmployee(id);
             name = employee.getName();
             login = employee.getLogin();
             password = employee.getPassword();
@@ -68,7 +67,7 @@
                             (OrderSortType) request.getSession().getAttribute("sortOrders"),
                             request.getParameter("filterOrderTemplateId"),
                             request.getParameter("filterOrderServiceId"),
-                            request.getParameter("filterOrderEmployeeId")
+                            (BigInteger) request.getSession().getAttribute("id")
                     )%>
                 </form>
             </div>

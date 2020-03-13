@@ -5,6 +5,11 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(name = "template")
+@XmlRootElement
 public class TemplateImpl implements Template
 {
     private BigInteger id;

@@ -3,6 +3,11 @@ package com.netcracker.students.o3.model.users;
 import java.math.BigInteger;
 import java.util.Objects;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(name = "employee")
+@XmlRootElement
 public class EmployerImpl implements Employee
 {
     private BigInteger id;

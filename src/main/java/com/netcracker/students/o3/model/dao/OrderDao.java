@@ -22,15 +22,17 @@ public class OrderDao extends AbstractDao<Order>
     @Override
     public List<Order> getAll() throws SQLException
     {
-        System.out.println("Orders getAll");
         String sqlReq = "select * from " + getTableName();
-        return getOrders(sqlReq);
+        List<Order> orders = getOrders(sqlReq);
+
+        xmlLogController.addRequest(sqlReq, orders.toArray(new Order[0]));
+
+        return orders;
     }
 
     @Override
     public Order getEntityById(final BigInteger id) throws SQLException
     {
-        System.out.println("orders getEntityByID");
         Order order = null;
         String sqlReq = "select * from " + getTableName() + " where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -45,6 +47,7 @@ public class OrderDao extends AbstractDao<Order>
             }
         }
 
+        xmlLogController.addRequest(sqlReq, order);
 
         return order;
     }
@@ -52,7 +55,6 @@ public class OrderDao extends AbstractDao<Order>
     @Override
     public void update(final Order entity) throws SQLException
     {
-        System.out.println("order update");
         String sqlReq =
                 "update " + getTableName() +
                         " set templateid=?, serviceid=?, status=?, creationdate=?,employeeid=?, orderaction=? where " +
@@ -115,37 +117,48 @@ public class OrderDao extends AbstractDao<Order>
 
     public List<Order> getOrdersByTemplateId(final BigInteger templateId) throws SQLException
     {
-        System.out.println("OrderDao.getEntityById(" + templateId + ")");
         String sqlReq = "select * from " + getTableName() + " where templateid=" + templateId;
-        return getOrders(sqlReq);
+        List<Order> orders = getOrders(sqlReq);
+
+        xmlLogController.addRequest(sqlReq, orders.toArray(new Order[0]));
+
+        return orders;
     }
 
     public List<Order> getOrdersByServiceId(final BigInteger serviceId) throws SQLException
     {
-        System.out.println("OrderDao.getEntityById(" + serviceId + ")");
         String sqlReq = "select * from " + getTableName() + " where serviceid=" + serviceId;
-        return getOrders(sqlReq);
+        List<Order> orders = getOrders(sqlReq);
+        xmlLogController.addRequest(sqlReq, orders.toArray(new Order[0]));
+
+        return orders;
     }
 
     public List<Order> getOrdersByEmployeeId(final BigInteger employeeId) throws SQLException
     {
-        System.out.println("OrderDao.getEmployeeById(" + employeeId + ")");
         String sqlReq = "select * from " + getTableName() + " where employeeid=" + employeeId;
-        return getOrders(sqlReq);
+        List<Order> orders = getOrders(sqlReq);
+        xmlLogController.addRequest(sqlReq, orders.toArray(new Order[0]));
+
+        return orders;
     }
 
     public List<Order> getOrdersByStatus(final OrderStatus status) throws SQLException
     {
-        System.out.println("OrderDao.getEntityByStatus(" + status + ")");
         String sqlReq = "select * from " + getTableName() + " where status='" + status + "'";
-        return getOrders(sqlReq);
+        List<Order> orders = getOrders(sqlReq);
+        xmlLogController.addRequest(sqlReq, orders.toArray(new Order[0]));
+
+        return orders;
     }
 
     public List<Order> getOrdersByAction(final OrderAction action) throws SQLException
     {
-        System.out.println("OrderDao.getEntityByAction(" + action + ")");
         String sqlReq = "select * from " + getTableName() + " where orderaction='" + action + "'";
-        return getOrders(sqlReq);
+        List<Order> orders = getOrders(sqlReq);
+        xmlLogController.addRequest(sqlReq, orders.toArray(new Order[0]));
+
+        return orders;
     }
 
     private List<Order> getOrders(String sqlReq) throws SQLException
@@ -166,6 +179,8 @@ public class OrderDao extends AbstractDao<Order>
                 }
             }
         }
+
+
         return orders;
     }
 
