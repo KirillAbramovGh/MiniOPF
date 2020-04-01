@@ -21,7 +21,7 @@ public abstract class AbstractDao<T>
 
     public abstract List<T> getAll() throws SQLException;
 
-    public abstract T getEntityById(BigInteger id) throws SQLException;
+    public abstract T getEntity(BigInteger id) throws SQLException;
 
     public abstract void update(T entity) throws SQLException;
 

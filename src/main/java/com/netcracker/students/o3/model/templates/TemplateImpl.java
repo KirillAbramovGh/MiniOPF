@@ -31,6 +31,13 @@ public class TemplateImpl implements Template
         this.description = description;
     }
 
+    public TemplateImpl(final String name, final BigDecimal cost, final String description)
+    {
+        this.name = name;
+        this.cost = cost;
+        this.description = description;
+    }
+
     @Override
     public String toString()
     {

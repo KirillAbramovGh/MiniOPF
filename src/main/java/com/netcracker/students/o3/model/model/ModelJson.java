@@ -252,34 +252,34 @@ public class ModelJson implements Model
      * methods which return entity by id
      * @return entity
      * */
-    public Order getOrderById(BigInteger id)
+    public Order getOrder(BigInteger orderId)
     {
-        return orders.get(id);
+        return orders.get(orderId);
     }
 
-    public Template getTemplateById(BigInteger id)
+    public Template getTemplate(BigInteger templateId)
     {
-        return templates.get(id);
+        return templates.get(templateId);
     }
 
-    public Service getServiceById(BigInteger id)
+    public Service getService(BigInteger serviceId)
     {
-        return services.get(id);
+        return services.get(serviceId);
     }
 
-    public Customer getCustomerById(BigInteger id)
+    public Customer getCustomer(BigInteger customerId)
     {
-        return customers.get(id);
+        return customers.get(customerId);
     }
 
-    public Employee getEmployeeById(BigInteger id)
+    public Employee getEmployee(BigInteger employeeId)
     {
-        return employees.get(id);
+        return employees.get(employeeId);
     }
 
-    public Area getAreaById(BigInteger id)
+    public Area getArea(BigInteger areaId)
     {
-        return areas.get(id);
+        return areas.get(areaId);
     }
 
 
@@ -357,7 +357,7 @@ public class ModelJson implements Model
     /**
      * delete entity by id
      * */
-    public void deleteOrderById(BigInteger id)
+    public void deleteOrder(BigInteger id)
     {
         synchronized (orders)
         {
@@ -366,7 +366,7 @@ public class ModelJson implements Model
             onDataChange();
     }
 
-    public void deleteTemplateById(BigInteger id)
+    public void deleteTemplate(BigInteger id)
     {
         synchronized (templates)
         {
@@ -375,7 +375,7 @@ public class ModelJson implements Model
             onDataChange();
     }
 
-    public void deleteServiceById(BigInteger id)
+    public void deleteService(BigInteger id)
     {
         synchronized (services)
         {
@@ -384,7 +384,7 @@ public class ModelJson implements Model
             onDataChange();
     }
 
-    public void deleteCustomerById(BigInteger id)
+    public void deleteCustomer(BigInteger id)
     {
         synchronized (customers)
         {
@@ -393,7 +393,7 @@ public class ModelJson implements Model
             onDataChange();
     }
 
-    public void deleteEmployeeById(BigInteger id)
+    public void deleteEmployee(BigInteger id)
     {
         synchronized (employees)
         {
@@ -402,7 +402,7 @@ public class ModelJson implements Model
             onDataChange();
     }
 
-    public void deleteAreaById(BigInteger id)
+    public void deleteArea(BigInteger id)
     {
         synchronized (areas)
         {

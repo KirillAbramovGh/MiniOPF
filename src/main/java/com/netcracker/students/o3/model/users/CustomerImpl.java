@@ -34,6 +34,14 @@ public class CustomerImpl implements Customer {
         moneyBalance = BigDecimal.ZERO;
     }
 
+    public CustomerImpl(final String name, final String login, final String password,final BigInteger areaId)
+    {
+        this.name = name;
+        this.login = login;
+        this.password = password;
+        this.areaId = areaId;
+    }
+
     @Override
     public String toString()
     {

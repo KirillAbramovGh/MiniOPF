@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:complexType name="request">
+        <xs:sequence>
+            <xs:element name="date" type="xs:date"/>
+            <xs:element name="query" type="xs:string"/>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element name="result" type="customer"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element name="result" type="employee"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element name="result" type="area"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element name="result" type="service"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element name="result" type="template"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element name="result" type="order"/>
+                </xs:sequence>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="requests">
+        <xs:sequence>
+            <xs:element name="request" type="request"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="customer">
+        <xs:sequence>
+            <xs:element name="areaId" type="xs:int"/>
+            <xs:element name="connectedServicesIds" type="xs:int"/>
+            <xs:element name="id" type="xs:int"/>
+            <xs:element name="login" type="xs:string"/>
+            <xs:element name="moneyBalance" type="xs:int"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="password" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="employee">
+        <xs:sequence>
+            <xs:element name="id" type="xs:int"/>
+            <xs:element name="login" type="xs:string"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="password" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="area">
+        <xs:sequence>
+            <xs:element name="id" type="xs:int"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="order">
+        <xs:sequence>
+            <xs:element name="id" type="xs:int"/>
+            <xs:element name="serviceId" type="xs:int"/>
+            <xs:element name="status" type="xs:string"/>
+            <xs:element name="action" type="xs:string"/>
+            <xs:element name="templateId" type="xs:int"/>
+            <xs:element name="employeeId" type="xs:int"/>
+            <xs:element name="creationDate" type="xs:date"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="service">
+        <xs:sequence>
+            <xs:element name="id" type="xs:int"/>
+            <xs:element name="status" type="xs:string"/>
+            <xs:element name="action" type="xs:string"/>
+            <xs:element name="templateId" type="xs:int"/>
+            <xs:element name="activationDate" type="xs:date"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="template">
+        <xs:sequence>
+            <xs:element name="id" type="xs:int"/>
+            <xs:element name="cost" type="xs:int"/>
+            <xs:element name="possibleAreasId" type="xs:int"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+</xs:schema>

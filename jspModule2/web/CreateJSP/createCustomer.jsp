@@ -57,7 +57,7 @@
             {
                 if (s != null && !s.isEmpty()){
                     BigInteger templateId = BigInteger.valueOf(Long.parseLong(s));
-                    controller.createService(customerId,templateId, ServiceStatus.Entering);
+                    controller.createService(customerId,templateId, ServiceStatus.Planned);
                 }
             }
             ControllerImpl.getInstance().setCustomer(customer);

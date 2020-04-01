@@ -1,8 +1,9 @@
 package com.netcracker.students.o3.model.dao;
 
+import org.postgresql.util.PSQLException;
+
 import java.math.BigInteger;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +38,6 @@ public class LastIdDao
     }
 
 
-
     public void setLastId(final BigInteger id) throws SQLException
     {
         String sqlReq = "ALTER SEQUENCE serial RESTART WITH ?";
@@ -52,35 +52,38 @@ public class LastIdDao
     public void createLastId(final BigInteger entity) throws SQLException
     {
         System.out.println("createLastId");
-        String sqlReq = "create sequence lastid START ?";
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
-        {
-            statement.setLong(1, entity.longValue());
-            statement.executeUpdate();
-        }
-    }
-
-    public void deleteLastId() throws SQLException
-    {
-        System.out.println("deleteLastID");
-        String sqlReq = "delete sequence lastid";
+        String sqlReq = "create sequence lastid START " + entity;
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
             statement.executeUpdate(sqlReq);
         }
     }
 
+    public void deleteLastId() throws SQLException
+    {
+        System.out.println("deleteLastID");
+        String sqlReq = "drop sequence lastid";
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement())
+        {
+            statement.executeUpdate(sqlReq);
+        }
+        catch (PSQLException e)
+        {
+            System.out.println("lastid is not exist");
+        }
+    }
+
     protected Connection getConnection() throws SQLException
     {
-//                try
-//                {
-//                    Class.forName(DRIVER_NAME);
-//                }
-//                catch (ClassNotFoundException e)
-//                {
-//                    e.printStackTrace();
-//                }
-//                return DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
+        //                try
+        //                {
+        //                    Class.forName(DRIVER_NAME);
+        //                }
+        //                catch (ClassNotFoundException e)
+        //                {
+        //                    e.printStackTrace();
+        //                }
+        //                return DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
         return ConnectionPool.getInstance().getConnection();
     }
 }

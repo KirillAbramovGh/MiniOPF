@@ -4,36 +4,37 @@ package com.netcracker.students.o3.model.serializer.XMLLog;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-@XmlRootElement
+@XmlRootElement(name = "requests")
 public class XMLRequestsWrapper
 {
-    private List<XMLRequest> requests;
+    private List<XMLRequest> request;
 
     public XMLRequestsWrapper()
     {
-        requests = new ArrayList<>();
+        request = new ArrayList<>();
     }
 
     public void addRequests(XMLRequest... req)
     {
-        requests.addAll(Arrays.asList(req));
+        request.addAll(Arrays.asList(req));
     }
 
     public int getNumOfRequests()
     {
-        return requests.size();
+        return request.size();
     }
 
-    public List<XMLRequest> getRequests()
+    public List<XMLRequest> getRequest()
     {
-        return requests;
+        return request;
     }
 
-    public void setRequests(final List<XMLRequest> requests)
+    public void setRequest(final List<XMLRequest> request)
     {
-        this.requests = requests;
+        this.request = request;
     }
 }

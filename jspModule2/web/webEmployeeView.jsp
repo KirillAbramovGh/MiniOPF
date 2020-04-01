@@ -1,7 +1,12 @@
-<%@ page import="com.netcracker.students.o3.controller.sorters.SortType.*" %>
-<%@ page import="jsp.EmployeeWebOperations" %>
-<%@ page import="java.math.BigInteger" %>
+<%@ page import="com.netcracker.students.o3.controller.sorters.SortType.AreaSortType" %>
+<%@ page import="com.netcracker.students.o3.controller.sorters.SortType.CustomerSortType" %>
+<%@ page import="com.netcracker.students.o3.controller.sorters.SortType.EmployeeSortType" %>
+<%@ page import="com.netcracker.students.o3.controller.sorters.SortType.OrderSortType" %>
+<%@ page import="com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType" %>
+<%@ page import="com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType" %>
 <%@ page import="com.netcracker.students.o3.model.users.Employee" %>
+<%@ page import="java.math.BigInteger" %>
+<%@ page import="jsp.EmployeeWebOperations" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <html lang="en">
 <head>
@@ -18,7 +23,7 @@
         String name = "";
         String login = "";
         String password = "";
-        if(id!=null)
+        if (id != null)
         {
             employee = employeeWebOperations.getEmployee(id);
             name = employee.getName();
@@ -61,7 +66,7 @@
                         <option>Action</option>
                     </select>
                     <input type="submit" name="createOrder" value="Create">
-                    <%=employeeWebOperations.showEmployeeOrders(
+                    <%=employeeWebOperations.showFilteredOrdersByEmployeeId(
                             request.getParameter("searchFieldEmployeeOrders"),
                             request.getParameter("employeeOrderSelectField"),
                             (OrderSortType) request.getSession().getAttribute("sortOrders"),
@@ -84,7 +89,7 @@
                         <option>Action</option>
                     </select>
                     <input type="submit" name="createOrder" value="Create">
-                    <%=employeeWebOperations.showAllOrders(
+                    <%=employeeWebOperations.showFilteredOrders(
                             request.getParameter("searchFieldAllOrders"),
                             request.getParameter("allOrderSelectField"),
                             (OrderSortType) request.getSession().getAttribute("sortOrders"),
@@ -109,7 +114,7 @@
                         <option>Areas</option>
                     </select>
                     <input type="submit" name="createService" value="Create">
-                    <%=employeeWebOperations.showAllServices(
+                    <%=employeeWebOperations.showFilteredServices(
                             request.getParameter("searchFieldAllServices"),
                             request.getParameter("allServicesSelectField"),
                             (ServiceSortType) request.getSession().getAttribute("sortServices"),
@@ -130,7 +135,7 @@
                         <option>Areas</option>
                     </select>
                     <input type="submit" name="createTemplate" value="Create">
-                    <%=employeeWebOperations.showAllTemplates(
+                    <%=employeeWebOperations.showFilteredTemplates(
                             request.getParameter("searchFieldAllTemplates"),
                             request.getParameter("allTemplatesSelectField"),
                             (TemplateSortType) request.getSession().getAttribute("sortTemplates"),
@@ -152,7 +157,7 @@
                         <option>ConnectedServices</option>
                     </select>
                     <input type="submit" name="createCustomer" value="Create">
-                    <%=employeeWebOperations.showAllCustomers(
+                    <%=employeeWebOperations.showFilteredCustomers(
                             request.getParameter("searchFieldAllCustomers"),
                             request.getParameter("allCustomersSelectField"),
                             (CustomerSortType) request.getSession().getAttribute("sortCustomers"),
@@ -171,7 +176,7 @@
                         <option>Login</option>
                     </select>
                     <input type="submit" name="createEmployee" value="Create">
-                    <%=employeeWebOperations.showAllEmployees(
+                    <%=employeeWebOperations.showFilteredEmployees(
                             request.getParameter("searchFieldAllEmployees"),
                             request.getParameter("allEmployeesSelectField"),
                             (EmployeeSortType) request.getSession().getAttribute("sortEmployees"),
@@ -190,7 +195,7 @@
                     </select>
                     <input type="submit" name="createArea" value="Create">
                     <input type="submit" name="filterArea" value="Filter">
-                    <%=employeeWebOperations.showAllAreas(
+                    <%=employeeWebOperations.showFilteredAreas(
                             request.getParameter("searchFieldAllAreas"),
                             request.getParameter("allAreasSelectField"),
                             (AreaSortType) request.getSession().getAttribute("sortAreas"),

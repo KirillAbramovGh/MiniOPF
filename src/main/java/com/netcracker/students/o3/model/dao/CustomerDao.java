@@ -64,7 +64,7 @@ public class CustomerDao extends AbstractDao<Customer>
     }
 
     @Override
-    public Customer getEntityById(final BigInteger id) throws SQLException
+    public Customer getEntity(final BigInteger id) throws SQLException
     {
         Customer customer = null;
         String sqlReq = "select * from " + getTableName() + " where id=?";

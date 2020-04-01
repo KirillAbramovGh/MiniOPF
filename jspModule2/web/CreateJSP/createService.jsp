@@ -1,5 +1,4 @@
 <%@ page import="com.netcracker.students.o3.controller.ControllerImpl" %>
-<%@ page import="com.netcracker.students.o3.model.services.Service" %>
 <%@ page import="com.netcracker.students.o3.model.services.ServiceStatus" %>
 <%@ page import="java.math.BigInteger" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -20,7 +19,13 @@
             UserId: <input type="text" name="userId">
         </div>
         <div class="">
-            Status: <input type="text" name="status">
+            Status: <select name="status">
+            <option>Planned</option>
+            <option>Active</option>
+            <option>Processing</option>
+            <option>Disconnected</option>
+            <option>Suspended</option>
+        </select>
         </div>
         <input type="submit" name="save" class="button">
     </div>

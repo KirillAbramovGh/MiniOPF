@@ -35,6 +35,15 @@ public class OrderImpl implements Order
 
     }
 
+    public OrderImpl(final BigInteger templateId, final BigInteger serviceId, final OrderStatus status,
+            final OrderAction action)
+    {
+        this.templateId = templateId;
+        this.serviceId = serviceId;
+        this.status = status;
+        this.action = action;
+    }
+
     @Override
     public String toString()
     {

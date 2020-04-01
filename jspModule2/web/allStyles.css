@@ -140,3 +140,8 @@ p{
     color: white;
     font-weight: bold;
 }
+
+.update_area{
+    display: grid;
+    grid-auto-columns: 1fr 1fr;
+}

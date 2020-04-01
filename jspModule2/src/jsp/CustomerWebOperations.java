@@ -52,7 +52,7 @@ public class CustomerWebOperations {
         SearcherService searcherService = SearcherService.getInstance();
         if(req!=null) {
             List<Service> services =searcherService.searchServicesByAllEntities(
-                    controller.getEnteringActiveSuspendedProcessingService(customerId), req);
+                    controller.getPlannedActiveSuspendedProvisioningService(customerId), req);
             List<Template> templates = searcher.searchTemplatesByAllFields(
                     controller.getCustomerAvailableTemplates(customerId), req);
 
@@ -101,7 +101,7 @@ public class CustomerWebOperations {
      * @return entering and active customer services
      */
     public List<Service> getConnectedServices() {
-        List<Service> result = controller.getEnteringActiveSuspendedProcessingService(customerId);
+        List<Service> result = controller.getPlannedActiveSuspendedProvisioningService(customerId);
         return result;
     }
 

@@ -5,7 +5,7 @@
 
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/tabs.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/startPageStyles.css">
     <meta charset="UTF-8">
     <title>MiniOPF</title>
 </head>
@@ -25,8 +25,8 @@
             <div class="tabs-nav__item" data-tab-name="tab-3">RegAdmin</div>
         </div>
 
-        <div class="tabs__content">
-            <div class="tab is-active tab-1">
+        <div style="text-align: center;" class="tabs__content">
+            <div style="text-align: center" class="tab is-active tab-1">
                 <form action="${pageContext.request.contextPath}/start" method="post">
                     <input type="text" name="login"><br/>
                     <input type="password" name="password" value="password"><br/>

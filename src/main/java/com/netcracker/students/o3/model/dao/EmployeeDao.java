@@ -48,7 +48,7 @@ public class EmployeeDao extends AbstractDao<Employee>
     }
 
     @Override
-    public Employee getEntityById(final BigInteger id) throws SQLException
+    public Employee getEntity(final BigInteger id) throws SQLException
     {
 
         if(id== null){

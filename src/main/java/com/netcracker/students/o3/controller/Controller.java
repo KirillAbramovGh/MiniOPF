@@ -14,6 +14,8 @@ import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.Employee;
 
+
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
@@ -21,6 +23,8 @@ import java.util.List;
 /**
  * class contains business logic of program
  */
+
+
 public interface Controller
 {
     /**
@@ -36,7 +40,7 @@ public interface Controller
 
     void process(BigInteger serviceId);
 
-    void backToEntering(BigInteger serviceId);
+    void backToPlanned(BigInteger serviceId);
     void activate(BigInteger serviceId);
 
     /**
@@ -135,7 +139,7 @@ public interface Controller
     /**
      * check equals password and user password
      */
-    boolean checkPassword(BigInteger id, String password);
+    boolean checkCustomerPassword(BigInteger id, String password);
 
     /**
      * check existing of login
@@ -150,7 +154,7 @@ public interface Controller
     /**
      * @return entering services of customer
      */
-    List<Service> getEnteringServices(BigInteger customerId);
+    List<Service> getPlannedServices(BigInteger customerId);
 
     /**
      * @return active services of customer
@@ -160,7 +164,7 @@ public interface Controller
     /**
      * @return entering and active services of customer
      */
-    List<Service> getEnteringAndActiveServices(BigInteger customerId);
+    List<Service> getPlannedAndActiveServices(BigInteger customerId);
 
     /**
      * @return templates which available to area
@@ -268,7 +272,7 @@ public interface Controller
     /**
      * connect service
      */
-    void connectService(BigInteger customerId, BigInteger serviceId);
+    void connectService(BigInteger customerId, BigInteger templateId);
 
     /**
      * @return list of customers service
@@ -282,7 +286,7 @@ public interface Controller
 
     void resumeOrder(BigInteger orderId);
 
-    List<Service> getEnteringActiveSuspendedProcessingService(BigInteger customerId);
+    List<Service> getPlannedActiveSuspendedProvisioningService(BigInteger customerId);
 
     String getServiceName(final BigInteger serviceId);
 
@@ -301,5 +305,18 @@ public interface Controller
 
     void setArea(Area area);
 
+
+    Area getAreaByName(final String name);
+    Customer getCustomerByLogin(final String login);
+    Employee getEmployeeByLogin(final String login);
+    List<Order> getOrdersByTemplateId(final BigInteger templateId);
+    List<Order> getOrdersByServiceId(final BigInteger serviceId);
+    List<Order> getOrdersByStatus(final OrderStatus status);
+    List<Order> getOrdersByAction(final OrderAction action);
+    List<Service> getServicesByUserId(BigInteger userId);
+    List<Service> getServicesByTemplateId(BigInteger templateId);
+    List<Service> getServicesByStatus(ServiceStatus status);
+    List<Service> getServicesByStatusAndCustomerId(BigInteger userId, ServiceStatus status);
+    Template getTemplateByName(String name);
 
 }

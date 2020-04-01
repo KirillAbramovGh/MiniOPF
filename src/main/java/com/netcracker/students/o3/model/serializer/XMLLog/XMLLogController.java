@@ -7,6 +7,8 @@ import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.Employee;
 
+import org.xml.sax.SAXException;
+
 import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
@@ -68,15 +70,8 @@ public class XMLLogController
         final int fileSize = 50;
         if (wrapper.getNumOfRequests() > fileSize)
         {
-            try
-            {
-                serializer.serializeObjectToXML(wrapper,
-                        "C:\\Users\\Kirill\\IdeaProjects\\MiniOPF\\logs\\" + numOfLogs + rootName);
-            }
-            catch (JAXBException | IOException e)
-            {
-                e.printStackTrace();
-            }
+            serializer.serializeObjectToXML(wrapper,
+                    "C:\\Users\\Kirill\\IdeaProjects\\MiniOPF\\logs\\" + numOfLogs + rootName);
             wrapper = new XMLRequestsWrapper();
             numOfLogs++;
         }

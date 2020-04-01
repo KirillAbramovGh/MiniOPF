@@ -16,6 +16,12 @@ public class AreaImpl implements Area {
     public AreaImpl() {
     }
 
+    public AreaImpl(final String name, final String description)
+    {
+        this.name = name;
+        this.description = description;
+    }
+
     public AreaImpl(final BigInteger id, final String name, final String description) {
         this.id = id;
         this.name = name;

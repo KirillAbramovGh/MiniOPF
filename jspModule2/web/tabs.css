@@ -50,10 +50,10 @@
     background-color: #343434;
     display: grid;
     grid-template-columns: repeat(auto-fit, 170px);
-
     grid-gap: 1em;
-    overflow-x: hidden;
+    overflow-x: auto;
     border-radius: 5px;
+
 }
 
 

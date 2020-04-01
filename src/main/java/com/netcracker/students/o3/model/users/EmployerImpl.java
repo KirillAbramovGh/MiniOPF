@@ -15,7 +15,12 @@ public class EmployerImpl implements Employee
     private String login;
     private String password;
 
-
+    public EmployerImpl(final String name, final String login, final String password)
+    {
+        this.name = name;
+        this.login = login;
+        this.password = password;
+    }
 
 
     @Override
@@ -59,7 +64,10 @@ public class EmployerImpl implements Employee
     @Override
     public void setName(final String name)
     {
-        this.name = name;
+        if(name!=null && !name.replaceAll(" ","").isEmpty())
+        {
+            this.name = name;
+        }
     }
 
     @Override
@@ -71,7 +79,10 @@ public class EmployerImpl implements Employee
     @Override
     public void setLogin(final String login)
     {
-        this.login = login;
+        if(login!=null && !login.replaceAll(" ","").isEmpty())
+        {
+            this.login = login;
+        }
     }
 
     @Override
@@ -83,7 +94,10 @@ public class EmployerImpl implements Employee
     @Override
     public void setPassword(final String password)
     {
-        this.password = password;
+        if(password!=null && !password.replaceAll(" ","").isEmpty())
+        {
+            this.password = password;
+        }
     }
 
     @Override

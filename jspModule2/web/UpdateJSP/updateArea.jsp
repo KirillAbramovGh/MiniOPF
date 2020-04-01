@@ -1,9 +1,6 @@
 <%@ page import="com.netcracker.students.o3.controller.ControllerImpl" %>
-<%@ page import="com.netcracker.students.o3.model.users.Customer" %>
-<%@ page import="java.math.BigInteger" %>
-<%@ page import="java.util.HashSet" %>
-<%@ page import="java.util.Set" %>
 <%@ page import="com.netcracker.students.o3.model.area.Area" %>
+<%@ page import="java.math.BigInteger" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -20,8 +17,9 @@
     %>
 </head>
 <body>
+<h4>Update Area</h4>
 <form action="${pageContext.request.contextPath}/UpdateJSP/updateArea.jsp" method="post">
-    <div style="size: 200px">
+    <div class="update_area">
         <div class="name">
             Name: <input type="text" name="name" value="<%=area.getName()%>">
         </div>
@@ -33,7 +31,7 @@
     </div>
 </form>
 <%
-    if(request.getParameter("save")!=null)
+    if (request.getParameter("save") != null)
     {
         try
         {
@@ -44,12 +42,14 @@
             area.setDescription(description);
 
             ControllerImpl.getInstance().setArea(area);
-        }catch (Exception e){
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
             response.getWriter().println("Input error");
         }
 %>
-<jsp:forward page="/webEmployeeView.jsp" />
+<jsp:forward page="/webEmployeeView.jsp"/>
 <%
 
     }

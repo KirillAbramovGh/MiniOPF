@@ -48,12 +48,11 @@
     overflow-y: auto;
     border: 1px solid #343434;
     background-color: #343434;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 170px);
-
+    display: inline;
     grid-gap: 1em;
     overflow-x: hidden;
     border-radius: 5px;
+
 }
 
 
@@ -69,6 +68,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 5px;
+
 }
 div.smalltext{
     font-size: 1px;

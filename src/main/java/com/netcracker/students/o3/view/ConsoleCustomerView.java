@@ -321,7 +321,7 @@ public class ConsoleCustomerView implements View
         System.out.print("Введите старый пароль: ");
         String oldPassword = scanner.nextLine();
 
-        if (controller.checkPassword(customerId, oldPassword))
+        if (controller.checkCustomerPassword(customerId, oldPassword))
         {
             System.out.print("Введите новый пароль: ");
 
@@ -388,7 +388,7 @@ public class ConsoleCustomerView implements View
     private void showInactiveServices()
     {
         List<Service> suspendedServices = controller.getSuspendedServices(customerId);
-        List<Service> enteringServices = controller.getEnteringServices(customerId);
+        List<Service> enteringServices = controller.getPlannedServices(customerId);
 
         if (suspendedServices.size() > 0)
         {
@@ -504,7 +504,7 @@ public class ConsoleCustomerView implements View
             }
         }
 
-        for (Service service : controller.getEnteringServices(customerId))
+        for (Service service : controller.getPlannedServices(customerId))
         {
             if (!controller.getTemplate(service.getTemplateId()).getPossibleAreasId()
                     .contains(areas.get(areaNumber).getId()))

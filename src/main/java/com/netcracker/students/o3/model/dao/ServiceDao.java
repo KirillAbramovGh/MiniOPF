@@ -30,7 +30,7 @@ public class ServiceDao extends AbstractDao<Service>
     }
 
     @Override
-    public Service getEntityById(final BigInteger id) throws SQLException
+    public Service getEntity(final BigInteger id) throws SQLException
     {
         Service service = null;
         String sqlReq = "select * from " + getTableName() + " where id=?";

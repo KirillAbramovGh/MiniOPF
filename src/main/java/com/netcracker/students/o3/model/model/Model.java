@@ -64,17 +64,17 @@ public interface Model
     Map<BigInteger, Area> getAreas();
 
 
-    Order getOrderById(BigInteger id);
+    Order getOrder(BigInteger orderId);
 
-    Template getTemplateById(BigInteger id);
+    Template getTemplate(BigInteger templateId);
 
-    Service getServiceById(BigInteger id);
+    Service getService(BigInteger serviceId);
 
-    Customer getCustomerById(BigInteger id);
+    Customer getCustomer(BigInteger customerId);
 
-    Employee getEmployeeById(BigInteger id);
+    Employee getEmployee(BigInteger employeeId);
 
-    Area getAreaById(BigInteger id);
+    Area getArea(BigInteger areaId);
 
 
     void addOrder(Order order);
@@ -90,17 +90,17 @@ public interface Model
     void addArea(Area area);
 
 
-    void deleteOrderById(BigInteger id);
+    void deleteOrder(BigInteger id);
 
-    void deleteTemplateById(BigInteger id);
+    void deleteTemplate(BigInteger id);
 
-    void deleteServiceById(BigInteger id);
+    void deleteService(BigInteger id);
 
-    void deleteCustomerById(BigInteger id);
+    void deleteCustomer(BigInteger id);
 
-    void deleteEmployeeById(BigInteger id);
+    void deleteEmployee(BigInteger id);
 
-    void deleteAreaById(BigInteger id);
+    void deleteArea(BigInteger id);
 
 
     void setOrder(Order order);

@@ -46,7 +46,7 @@ public class CardBuilder
                 result += createButton("resume", "resume", service.getId().toString());
                 result += createButton("disconnect", "disconnect", service.getId().toString());
                 break;
-            case Entering:
+            case Planned:
                 start = "<div class='cardyellow'>";
                 result += createButton("cancel", "disconnect", service.getId().toString());
                 break;
@@ -55,7 +55,7 @@ public class CardBuilder
                 result += createButton("disconnect", "disconnect", service.getId().toString());
                 result += createButton("suspend", "suspend", service.getId().toString());
                 break;
-            case Processing:
+            case Provisioning:
                 start = start = "<div class='card'>";
                 break;
         }
@@ -96,7 +96,7 @@ public class CardBuilder
         StringBuilder result = new StringBuilder();
         for (Service service : services)
         {
-            if(service.getStatus().equals(ServiceStatus.Entering))
+            if(service.getStatus().equals(ServiceStatus.Planned))
             {
                 result.append(makeCardFromService(service));
             }
@@ -114,7 +114,7 @@ public class CardBuilder
             }
         }
         for(Service service : services){
-            if(service.getStatus().equals(ServiceStatus.Processing))
+            if(service.getStatus().equals(ServiceStatus.Provisioning))
             {
                 result.append(makeCardFromService(service));
             }

@@ -1,7 +1,12 @@
 <%@ page import="com.netcracker.students.o3.controller.ControllerImpl" %>
+<%@ page import="com.netcracker.students.o3.model.orders.Order" %>
+<%@ page import="com.netcracker.students.o3.model.orders.OrderStatus" %>
 <%@ page import="com.netcracker.students.o3.model.services.Service" %>
 <%@ page import="com.netcracker.students.o3.model.services.ServiceStatus" %>
 <%@ page import="java.math.BigInteger" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.netcracker.students.o3.controller.Controller" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -28,8 +33,14 @@
             UserId: <input type="text" name="userId" value="<%=service.getUserId()%>">
         </div>
         <div class="">
-            Status: <input type="text" name="status"
-                           value=<%=service.getStatus()%>>
+            Status:
+            <select name="status">
+                <option>Planned</option>
+                <option>Active</option>
+                <option>Processing</option>
+                <option>Disconnected</option>
+                <option>Suspended</option>
+            </select>
         </div>
         <input type="submit" name="save" class="button">
     </div>
@@ -37,6 +48,12 @@
 <%
     try
     {
+
+            if (ControllerImpl.getInstance().getOrdersByServiceId(serviceId).size()>0)
+            {
+                response.getWriter().println("У этого сервиса есть order");
+            }
+
         if (request.getParameter("save") != null)
         {
             String templateId = request.getParameter("templateId");
@@ -46,6 +63,34 @@
             service.setTemplateId(BigInteger.valueOf(Long.parseLong(templateId)));
             service.setUserId(BigInteger.valueOf(Long.parseLong(userId)));
             service.setStatus(ServiceStatus.valueOf(status));
+
+            for (Order order : ControllerImpl.getInstance().getOrdersByServiceId(serviceId))
+            {
+                if (!order.getStatus().equals(OrderStatus.Completed))
+                {
+                    if (service.getStatus().equals(ServiceStatus.Disconnected))
+                    {
+                        order.setStatus(OrderStatus.Completed);
+                        continue;
+                    }
+
+                    switch (order.getAction())
+                    {
+                        case New:
+                            if (
+                                    !service.getStatus().equals(ServiceStatus.Planned)
+                            )
+                            {
+                                order.setStatus(OrderStatus.Completed);
+                            } ; break;
+                        case Resume:
+                        case Suspend:
+                            break;
+                    }
+                    ControllerImpl.getInstance().setOrder(order);
+                }
+            }
+
 
             ControllerImpl.getInstance().setService(service);
 

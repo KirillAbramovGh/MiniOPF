@@ -31,7 +31,7 @@ public class OrderDao extends AbstractDao<Order>
     }
 
     @Override
-    public Order getEntityById(final BigInteger id) throws SQLException
+    public Order getEntity(final BigInteger id) throws SQLException
     {
         Order order = null;
         String sqlReq = "select * from " + getTableName() + " where id=?";

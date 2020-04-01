@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ModelBD implements Model
+public class ModelDb implements Model
 {
     private final AbstractDao<Order> orderDao;
     private final AbstractDao<Template> templateDao;
@@ -43,9 +43,9 @@ public class ModelBD implements Model
     private final AbstractDao<Area> areaDao;
     private final LastIdDao lastIdDao;
 
-    private static ModelBD instance;
+    private static ModelDb instance;
 
-    private ModelBD()
+    private ModelDb()
     {
         orderDao = new OrderDao();
         templateDao = new TemplateDao();
@@ -417,11 +417,11 @@ public class ModelBD implements Model
     }
 
     @Override
-    public Order getOrderById(final BigInteger id)
+    public Order getOrder(final BigInteger orderId)
     {
         try
         {
-            Order order = orderDao.getEntityById(id);
+            Order order = orderDao.getEntity(orderId);
             if (order != null && order.getServiceId() == null)
             {
                 order = null;
@@ -436,11 +436,11 @@ public class ModelBD implements Model
     }
 
     @Override
-    public Template getTemplateById(final BigInteger id)
+    public Template getTemplate(final BigInteger templateId)
     {
         try
         {
-            Template template = templateDao.getEntityById(id);
+            Template template = templateDao.getEntity(templateId);
             if (template != null && template.getName() == null)
             {
                 template = null;
@@ -456,11 +456,11 @@ public class ModelBD implements Model
     }
 
     @Override
-    public Service getServiceById(final BigInteger id)
+    public Service getService(final BigInteger serviceId)
     {
         try
         {
-            Service service = serviceDao.getEntityById(id);
+            Service service = serviceDao.getEntity(serviceId);
             if (service != null && service.getStatus() == null)
             {
                 service = null;
@@ -476,11 +476,11 @@ public class ModelBD implements Model
     }
 
     @Override
-    public Customer getCustomerById(final BigInteger id)
+    public Customer getCustomer(final BigInteger customerId)
     {
         try
         {
-            Customer customer = customerDao.getEntityById(id);
+            Customer customer = customerDao.getEntity(customerId);
             if (customer != null && customer.getName() == null)
             {
                 customer = null;
@@ -496,11 +496,11 @@ public class ModelBD implements Model
     }
 
     @Override
-    public Employee getEmployeeById(final BigInteger id)
+    public Employee getEmployee(final BigInteger employeeId)
     {
         try
         {
-            Employee employee = employeeDao.getEntityById(id);
+            Employee employee = employeeDao.getEntity(employeeId);
             if (employee != null && employee.getName() == null)
             {
                 employee = null;
@@ -517,11 +517,11 @@ public class ModelBD implements Model
     }
 
     @Override
-    public Area getAreaById(final BigInteger id)
+    public Area getArea(final BigInteger areaId)
     {
         try
         {
-            Area area = areaDao.getEntityById(id);
+            Area area = areaDao.getEntity(areaId);
             if (area != null && area.getName() == null)
             {
                 area = null;
@@ -636,7 +636,7 @@ public class ModelBD implements Model
     }
 
     @Override
-    public void deleteOrderById(final BigInteger id)
+    public void deleteOrder(final BigInteger id)
     {
         synchronized (orderDao)
         {
@@ -652,7 +652,7 @@ public class ModelBD implements Model
     }
 
     @Override
-    public void deleteTemplateById(final BigInteger id)
+    public void deleteTemplate(final BigInteger id)
     {
         synchronized (templateDao)
         {
@@ -668,7 +668,7 @@ public class ModelBD implements Model
     }
 
     @Override
-    public void deleteServiceById(final BigInteger id)
+    public void deleteService(final BigInteger id)
     {
         synchronized (serviceDao)
         {
@@ -684,7 +684,7 @@ public class ModelBD implements Model
     }
 
     @Override
-    public void deleteCustomerById(final BigInteger id)
+    public void deleteCustomer(final BigInteger id)
     {
         synchronized (customerDao)
         {
@@ -700,7 +700,7 @@ public class ModelBD implements Model
     }
 
     @Override
-    public void deleteEmployeeById(final BigInteger id)
+    public void deleteEmployee(final BigInteger id)
     {
         synchronized (employeeDao)
         {
@@ -716,7 +716,7 @@ public class ModelBD implements Model
     }
 
     @Override
-    public void deleteAreaById(final BigInteger id)
+    public void deleteArea(final BigInteger id)
     {
         synchronized (areaDao)
         {
@@ -1011,11 +1011,11 @@ public class ModelBD implements Model
     }
 
 
-    public static synchronized ModelBD getInstance()
+    public static synchronized ModelDb getInstance()
     {
         if (instance == null)
         {
-            instance = new ModelBD();
+            instance = new ModelDb();
         }
 
         return instance;

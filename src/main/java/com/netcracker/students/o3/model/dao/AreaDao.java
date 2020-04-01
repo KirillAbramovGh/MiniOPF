@@ -52,7 +52,7 @@ public class AreaDao extends AbstractDao<Area>
     }
 
     @Override
-    public Area getEntityById(final BigInteger id) throws SQLException
+    public Area getEntity(final BigInteger id) throws SQLException
     {
         Area area = new AreaImpl();
         String sqlReq = "select * from " + getTableName() + " where id=?";

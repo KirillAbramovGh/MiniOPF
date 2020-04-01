@@ -1,10 +1,15 @@
+<%@ page import="com.netcracker.students.o3.controller.Controller" %>
 <%@ page import="com.netcracker.students.o3.controller.ControllerImpl" %>
+<%@ page import="com.netcracker.students.o3.model.services.ServiceStatus" %>
 <%@ page import="com.netcracker.students.o3.model.users.Customer" %>
 <%@ page import="java.math.BigInteger" %>
-<%@ page import="java.util.HashSet" %>
 <%@ page import="java.util.Set" %>
-<%@ page import="com.netcracker.students.o3.controller.Controller" %>
-<%@ page import="com.netcracker.students.o3.model.services.ServiceStatus" %>
+<%@ page import="jsp.CustomerWebOperations" %>
+<%@ page import="com.netcracker.students.o3.model.services.Service" %>
+<%@ page import="com.netcracker.students.o3.model.templates.Template" %>
+<%@ page import="jsp.EmployeeWebOperations" %>
+<%@ page import="java.math.BigDecimal" %>
+<%@ page import="com.netcracker.students.o3.Exceptions.WrongInputException" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -36,7 +41,9 @@
             Password: <input type="text" name="password"
                              value=<%=customer.getPassword()%>>
         </div>
-
+        <div class="">
+            Balance: <input type="text" name="balance" value="<%=customer.getMoneyBalance()%>">
+        </div>
         <div class="selectArea">
             Area: <input type="text" name="area"
                          value=<%=customer.getAreaId()%>>
@@ -59,7 +66,7 @@
     }
 %>
 <%
-    if(request.getParameter("save")!=null)
+    if (request.getParameter("save") != null)
     {
         try
         {
@@ -69,34 +76,54 @@
             String area = request.getParameter("area");
             String servicesValue = request.getParameter("connectedTemplatesId");
             String[] templates = servicesValue.split(",");
+            String moneyBalance = request.getParameter("balance");
 
             customer.setName(name);
             customer.setPassword(password);
             customer.setLogin(login);
             customer.setAreaId(BigInteger.valueOf(Long.parseLong(area)));
+            customer.setMoneyBalance(BigDecimal.valueOf(Double.parseDouble(moneyBalance)));
 
             for (String s : templates)
             {
-                if (s != null && !s.isEmpty()){
+                if (s != null && !s.isEmpty())
+                {
                     BigInteger templateId = BigInteger.valueOf(Long.parseLong(s));
                     boolean connected = false;
-                    for(BigInteger serviceId : customer.getConnectedServicesIds()){
-                        if(controller.getService(serviceId).getTemplateId().equals(templateId)){
+                    for (BigInteger serviceId : customer.getConnectedServicesIds())
+                    {
+                        Service service = controller.getService(serviceId);
+                        Template template = controller.getTemplate(service.getTemplateId());
+                        if(!template.getPossibleAreasId().contains(customer.getAreaId())){
+                            CustomerWebOperations.getInstance().disconnectService(serviceId);
+                            break;
+                        }
+                        if (service.getTemplateId().equals(templateId))
+                        {
                             connected = true;
                             break;
                         }
                     }
-                    if(!connected){
-                        controller.createService(customerId,templateId, ServiceStatus.Entering);
+                    if (!connected && controller.getTemplate(templateId).getPossibleAreasId().contains(customer.getAreaId()))
+                    {
+                        controller.connectService(customerId,templateId);
+                    }else{
+                        throw new WrongInputException("Service уже подключен или Area пользователя не соответствует " +
+                                "данному template");
                     }
                 }
             }
             ControllerImpl.getInstance().setCustomer(customer);
 
 %>
-<jsp:forward page="/webEmployeeView.jsp" />
+<jsp:forward page="/webEmployeeView.jsp"/>
 <%
-        }catch (Exception e){
+        }
+        catch (WrongInputException e1){
+            response.getWriter().println(e1.getMessage());
+        }
+        catch (Exception e)
+        {
             response.getWriter().println("Input error");
         }
     }

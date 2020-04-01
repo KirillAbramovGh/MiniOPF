@@ -1,14 +1,9 @@
 <%@ page import="com.netcracker.students.o3.controller.ControllerImpl" %>
-<%@ page import="com.netcracker.students.o3.model.users.Customer" %>
-<%@ page import="java.math.BigInteger" %>
-<%@ page import="java.util.HashSet" %>
-<%@ page import="java.util.Set" %>
-<%@ page import="com.netcracker.students.o3.model.area.Area" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/tab.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/tabs.css">
     <title>CreateArea</title>
 </head>
 <body>
@@ -25,19 +20,21 @@
     </div>
 </form>
 <%
-    if(request.getParameter("save")!=null)
+    if (request.getParameter("save") != null)
     {
         try
         {
             String name = request.getParameter("name");
             String description = request.getParameter("description");
 
-            ControllerImpl.getInstance().createArea(name,description);
-        }catch (Exception e){
+            ControllerImpl.getInstance().createArea(name, description);
+        }
+        catch (Exception e)
+        {
             response.getWriter().println("Input error");
         }
 %>
-<jsp:forward page="/webEmployeeView.jsp" />
+<jsp:forward page="/webEmployeeView.jsp"/>
 <%
 
     }

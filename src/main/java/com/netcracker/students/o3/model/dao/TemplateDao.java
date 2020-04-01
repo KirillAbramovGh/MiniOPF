@@ -1,6 +1,5 @@
 package com.netcracker.students.o3.model.dao;
 
-import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
 
@@ -66,7 +65,7 @@ public class TemplateDao extends AbstractDao<Template>
     }
 
     @Override
-    public Template getEntityById(final BigInteger id) throws SQLException
+    public Template getEntity(final BigInteger id) throws SQLException
     {
         String sqlReq;
         Template template;
@@ -84,7 +83,6 @@ public class TemplateDao extends AbstractDao<Template>
     @Override
     public void update(final Template entity) throws SQLException
     {
-        System.out.println("update");
         String sqlReq =
                 "update " + getTableName() + " set template_name=?, cost=?, description=? where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
@@ -95,6 +93,22 @@ public class TemplateDao extends AbstractDao<Template>
             statement.setLong(4, entity.getId().longValue());
 
             statement.executeUpdate();
+        }
+        sqlReq = "delete from template_area_link where templateid=?";
+        try(Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
+        {
+            statement.setLong(1,entity.getId().longValue());
+            statement.executeUpdate();
+        }
+
+        sqlReq = "insert into template_area_link values (?,?)";
+        try(Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
+        {
+            for(BigInteger areaId : entity.getPossibleAreasId()){
+                statement.setLong(1,entity.getId().longValue());
+                statement.setLong(2,areaId.longValue());
+                statement.executeUpdate();
+            }
         }
 
     }
@@ -195,7 +209,7 @@ public class TemplateDao extends AbstractDao<Template>
                 }
                 for (BigInteger id : templateIds)
                 {
-                    templates.add(getEntityById(id));
+                    templates.add(getEntity(id));
                 }
             }
         }
