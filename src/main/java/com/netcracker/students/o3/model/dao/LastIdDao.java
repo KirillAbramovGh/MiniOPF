@@ -4,6 +4,7 @@ import org.postgresql.util.PSQLException;
 
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -75,15 +76,15 @@ public class LastIdDao
 
     protected Connection getConnection() throws SQLException
     {
-        //                try
-        //                {
-        //                    Class.forName(DRIVER_NAME);
-        //                }
-        //                catch (ClassNotFoundException e)
-        //                {
-        //                    e.printStackTrace();
-        //                }
-        //                return DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
-        return ConnectionPool.getInstance().getConnection();
+                        try
+                        {
+                            Class.forName(DRIVER_NAME);
+                        }
+                        catch (ClassNotFoundException e)
+                        {
+                            e.printStackTrace();
+                        }
+                        return DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
+        //return ConnectionPool.getInstance().getConnection();
     }
 }

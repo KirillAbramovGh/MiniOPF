@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@Entity
+
 @Table(name = "customers")
 @XmlType(name = "customer")
 @XmlRootElement

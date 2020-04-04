@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@Entity
+
 @Table(name = "templates")
 @XmlType(name = "template")
 @XmlRootElement

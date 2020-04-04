@@ -41,16 +41,16 @@ public abstract class AbstractJdbcDao<T> implements Dao<T>
 
     protected Connection getConnection() throws SQLException
     {
-//        try
-//                {
-//                    Class.forName(DRIVER_NAME);
-//                }
-//                catch (ClassNotFoundException e)
-//                {
-//                    e.printStackTrace();
-//                }
-//                return DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
+        try
+                {
+                    Class.forName(DRIVER_NAME);
+                }
+                catch (ClassNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
+                return DriverManager.getConnection(CONNECTION_URL, USER_NAME, PASSWORD);
 
-          return ConnectionPool.getInstance().getConnection();
+         // return ConnectionPool.getInstance().getConnection();
     }
 }
