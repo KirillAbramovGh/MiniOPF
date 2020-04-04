@@ -18,7 +18,7 @@ import javax.persistence.Table;
 /**
  * service which could be connected to customer
  */
-@Entity
+
 @Table(name = "services")
 public interface Service
 {

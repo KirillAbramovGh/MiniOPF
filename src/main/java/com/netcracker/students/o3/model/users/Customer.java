@@ -22,7 +22,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Entity
+
 @Table(name = "customers")
 public interface Customer extends User
 {

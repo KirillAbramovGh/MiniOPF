@@ -16,7 +16,7 @@ import javax.persistence.Table;
  * district of customer
  */
 
-@Entity
+
 @Table(name = "areas")
 public interface Area
 {

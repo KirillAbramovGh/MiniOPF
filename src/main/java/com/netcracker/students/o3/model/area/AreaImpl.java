@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@Entity
+
 @Table(name = "areas")
 @XmlType(name = "area")
 @XmlRootElement

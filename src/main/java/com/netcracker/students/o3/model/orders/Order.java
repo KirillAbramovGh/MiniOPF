@@ -18,7 +18,7 @@ import javax.persistence.Table;
 /**
  * class order for employee. Create to do action for service
  */
-@Entity
+
 @Table(name = "orders")
 public interface Order
 {
