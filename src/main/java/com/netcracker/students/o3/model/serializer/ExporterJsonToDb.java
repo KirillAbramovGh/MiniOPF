@@ -1,15 +1,14 @@
 package com.netcracker.students.o3.model.serializer;
 
 import com.netcracker.students.o3.model.area.Area;
-import com.netcracker.students.o3.model.dao.AbstractDao;
-import com.netcracker.students.o3.model.dao.AreaDao;
-import com.netcracker.students.o3.model.dao.CustomerDao;
-import com.netcracker.students.o3.model.dao.EmployeeDao;
+import com.netcracker.students.o3.model.dao.AbstractJdbcDao;
+import com.netcracker.students.o3.model.dao.AreaDao.AreaJdbcDao;
+import com.netcracker.students.o3.model.dao.CustomerDao.CustomerJdbcDao;
+import com.netcracker.students.o3.model.dao.EmployeeDao.EmployeeJdbcDao;
 import com.netcracker.students.o3.model.dao.LastIdDao;
-import com.netcracker.students.o3.model.dao.OrderDao;
-import com.netcracker.students.o3.model.dao.ServiceDao;
-import com.netcracker.students.o3.model.dao.TemplateDao;
-import com.netcracker.students.o3.model.model.Model;
+import com.netcracker.students.o3.model.dao.OrderDao.OrderJdbcDao;
+import com.netcracker.students.o3.model.dao.ServiceDao.ServiceJdbcDao;
+import com.netcracker.students.o3.model.dao.TemplateDao.TemplateJdbcDao;
 import com.netcracker.students.o3.model.model.ModelJson;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.services.Service;
@@ -19,12 +18,9 @@ import com.netcracker.students.o3.model.users.Employee;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.rmi.server.ServerCloneException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.CyclicBarrier;
 
 public class ExporterJsonToDb
 {
@@ -58,25 +54,25 @@ public class ExporterJsonToDb
 
     private void exportTemplates(Collection<Template> templates) throws SQLException, ClassNotFoundException
     {
-        AbstractDao<Template> templateAbstractDao = new TemplateDao();
+        AbstractJdbcDao<Template> templateAbstractJdbcDao = new TemplateJdbcDao();
 
         for(Template template : templates){
-            templateAbstractDao.create(template);
+            templateAbstractJdbcDao.create(template);
         }
     }
 
     private void exportServices(Collection<Service> services) throws SQLException, ClassNotFoundException
     {
-        AbstractDao<Service> serviceAbstractDao = new ServiceDao();
+        AbstractJdbcDao<Service> serviceAbstractJdbcDao = new ServiceJdbcDao();
 
         for(Service service : services){
-            serviceAbstractDao.create(service);
+            serviceAbstractJdbcDao.create(service);
         }
     }
 
     private void exportCustomers(Collection<Customer> customers) throws SQLException, ClassNotFoundException
     {
-        AbstractDao<Customer> customerDao = new CustomerDao();
+        AbstractJdbcDao<Customer> customerDao = new CustomerJdbcDao();
 
         for(Customer customer : customers){
             customerDao.create(customer);
@@ -85,25 +81,25 @@ public class ExporterJsonToDb
 
     private void exportAreas(Collection<Area> areas) throws SQLException, ClassNotFoundException
     {
-        AbstractDao<Area> serviceAbstractDao = new AreaDao();
+        AbstractJdbcDao<Area> serviceAbstractJdbcDao = new AreaJdbcDao();
 
         for(Area area : areas){
-            serviceAbstractDao.create(area);
+            serviceAbstractJdbcDao.create(area);
         }
     }
 
     private void exportEmployees(Collection<Employee> employees) throws SQLException, ClassNotFoundException
     {
-        AbstractDao<Employee> serviceAbstractDao = new EmployeeDao();
+        AbstractJdbcDao<Employee> serviceAbstractJdbcDao = new EmployeeJdbcDao();
 
         for(Employee employee : employees){
-            serviceAbstractDao.create(employee);
+            serviceAbstractJdbcDao.create(employee);
         }
     }
 
     public void deleteAllAreasFromDb() throws SQLException, ClassNotFoundException
     {
-        AbstractDao<Area> dao = new AreaDao();
+        AbstractJdbcDao<Area> dao = new AreaJdbcDao();
         List<Area> areas = dao.getAll();
 
         for(Area area : areas){
@@ -113,7 +109,7 @@ public class ExporterJsonToDb
 
     public void deleteAllServicesFromDb() throws SQLException, ClassNotFoundException
     {
-        AbstractDao<Service> dao = new ServiceDao();
+        AbstractJdbcDao<Service> dao = new ServiceJdbcDao();
         List<Service> services = dao.getAll();
 
         for(Service service : services){
@@ -122,7 +118,7 @@ public class ExporterJsonToDb
     }
     public void deleteAllTemplatesFromDb() throws SQLException, ClassNotFoundException
     {
-        AbstractDao<Template> dao = new TemplateDao();
+        AbstractJdbcDao<Template> dao = new TemplateJdbcDao();
         List<Template> templates = dao.getAll();
 
         for(Template template : templates){
@@ -131,7 +127,7 @@ public class ExporterJsonToDb
     }
     public void deleteAllOrdersFromDb() throws SQLException, ClassNotFoundException
     {
-        AbstractDao<Order> dao = new OrderDao();
+        AbstractJdbcDao<Order> dao = new OrderJdbcDao();
         List<Order> areas = dao.getAll();
 
         for(Order order : areas){
@@ -141,7 +137,7 @@ public class ExporterJsonToDb
 
     public void deleteAllCustomersFromDb() throws SQLException, ClassNotFoundException
     {
-        AbstractDao<Customer> dao = new CustomerDao();
+        AbstractJdbcDao<Customer> dao = new CustomerJdbcDao();
         List<Customer> customers = dao.getAll();
 
         for(Customer customer : customers){
@@ -151,7 +147,7 @@ public class ExporterJsonToDb
 
     public void deleteAllEmployeesFromDb() throws SQLException, ClassNotFoundException
     {
-        AbstractDao<Employee> dao = new EmployeeDao();
+        AbstractJdbcDao<Employee> dao = new EmployeeJdbcDao();
         List<Employee> employees = dao.getAll();
 
         for(Employee employee : employees){

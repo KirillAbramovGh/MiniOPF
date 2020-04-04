@@ -4,19 +4,38 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+@Entity
+@Table(name = "orders")
 @XmlType(name = "order")
 @XmlRootElement
 public class OrderImpl implements Order
 {
+    @Id
     private BigInteger id;
+
+    @Column(name = "templateid")
     private BigInteger templateId;
+
+    @Column(name = "serviceid")
     private BigInteger serviceId;
+
+    @Column(name = "employeeid")
     private BigInteger employeeId;
+
+    @Column(name = "status")
     private OrderStatus status;
+
+    @Column(name = "orderaction")
     private OrderAction action;
+
+    @Column(name = "creationdate")
     private Date creationDate;
 
     public OrderImpl()

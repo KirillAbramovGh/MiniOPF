@@ -71,7 +71,7 @@ public class SearcherService extends Searcher<Service> {
     /**
      * search services by all fields
      */
-    public List<Service> searchServicesByAllEntities(List<Service> services, String searchField) {
+    public List<Service> searchServicesByAllFields(List<Service> services, String searchField) {
         Set<Service> result = new HashSet<>();
 
 

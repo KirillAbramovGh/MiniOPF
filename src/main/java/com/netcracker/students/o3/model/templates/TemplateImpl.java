@@ -5,17 +5,32 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+@Entity
+@Table(name = "templates")
 @XmlType(name = "template")
 @XmlRootElement
 public class TemplateImpl implements Template
 {
+    @Id
     private BigInteger id;
+
+    @Column(name = "template_name")
     private String name;
+
+    @Column(name = "cost")
     private BigDecimal cost;
+
+    @Column(name = "description")
     private String description;
+
+
     private List<BigInteger> possibleAreasId;
 
 

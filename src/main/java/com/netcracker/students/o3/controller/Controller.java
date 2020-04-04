@@ -319,4 +319,11 @@ public interface Controller
     List<Service> getServicesByStatusAndCustomerId(BigInteger userId, ServiceStatus status);
     Template getTemplateByName(String name);
 
+    /**
+     * dont use it if you need high performance
+     * @param entityId
+     * @return
+     */
+    Object getEntity(BigInteger entityId);
+
 }

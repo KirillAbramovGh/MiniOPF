@@ -3,14 +3,24 @@ package com.netcracker.students.o3.model.area;
 import java.math.BigInteger;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+@Entity
+@Table(name = "areas")
 @XmlType(name = "area")
 @XmlRootElement
 public class AreaImpl implements Area {
+
+    @Id
     private BigInteger id;
+    @Column(name = "area_name")
     private String name;
+    @Column(name = "description")
     private String description;
 
     public AreaImpl() {

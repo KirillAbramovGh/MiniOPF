@@ -2,14 +2,14 @@ package com.netcracker.students.o3.model.model;
 
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
-import com.netcracker.students.o3.model.dao.AbstractDao;
-import com.netcracker.students.o3.model.dao.AreaDao;
-import com.netcracker.students.o3.model.dao.CustomerDao;
-import com.netcracker.students.o3.model.dao.EmployeeDao;
+import com.netcracker.students.o3.model.dao.AbstractJdbcDao;
+import com.netcracker.students.o3.model.dao.AreaDao.AreaJdbcDao;
+import com.netcracker.students.o3.model.dao.CustomerDao.CustomerJdbcDao;
+import com.netcracker.students.o3.model.dao.EmployeeDao.EmployeeJdbcDao;
 import com.netcracker.students.o3.model.dao.LastIdDao;
-import com.netcracker.students.o3.model.dao.OrderDao;
-import com.netcracker.students.o3.model.dao.ServiceDao;
-import com.netcracker.students.o3.model.dao.TemplateDao;
+import com.netcracker.students.o3.model.dao.OrderDao.OrderJdbcDao;
+import com.netcracker.students.o3.model.dao.ServiceDao.ServiceJdbcDao;
+import com.netcracker.students.o3.model.dao.TemplateDao.TemplateJdbcDao;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderAction;
 import com.netcracker.students.o3.model.orders.OrderImpl;
@@ -35,24 +35,24 @@ import java.util.Map;
 
 public class ModelDb implements Model
 {
-    private final AbstractDao<Order> orderDao;
-    private final AbstractDao<Template> templateDao;
-    private final AbstractDao<Service> serviceDao;
-    private final AbstractDao<Customer> customerDao;
-    private final AbstractDao<Employee> employeeDao;
-    private final AbstractDao<Area> areaDao;
+    private final AbstractJdbcDao<Order> orderDao;
+    private final AbstractJdbcDao<Template> templateDao;
+    private final AbstractJdbcDao<Service> serviceDao;
+    private final AbstractJdbcDao<Customer> customerDao;
+    private final AbstractJdbcDao<Employee> employeeDao;
+    private final AbstractJdbcDao<Area> areaDao;
     private final LastIdDao lastIdDao;
 
     private static ModelDb instance;
 
     private ModelDb()
     {
-        orderDao = new OrderDao();
-        templateDao = new TemplateDao();
-        serviceDao = new ServiceDao();
-        customerDao = new CustomerDao();
-        employeeDao = new EmployeeDao();
-        areaDao = new AreaDao();
+        orderDao = new OrderJdbcDao();
+        templateDao = new TemplateJdbcDao();
+        serviceDao = new ServiceJdbcDao();
+        customerDao = new CustomerJdbcDao();
+        employeeDao = new EmployeeJdbcDao();
+        areaDao = new AreaJdbcDao();
         lastIdDao = new LastIdDao();
     }
 
@@ -831,7 +831,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((AreaDao) areaDao).getAreaByName(name);
+            return ((AreaJdbcDao) areaDao).getAreaByName(name);
         }
         catch (SQLException e)
         {
@@ -845,7 +845,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((CustomerDao) customerDao).getCustomerByLogin(login);
+            return ((CustomerJdbcDao) customerDao).getCustomerByLogin(login);
         }
         catch (SQLException e)
         {
@@ -858,7 +858,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((EmployeeDao) employeeDao).getEmployeeByLogin(login);
+            return ((EmployeeJdbcDao) employeeDao).getEmployeeByLogin(login);
         }
         catch (SQLException e)
         {
@@ -871,7 +871,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((OrderDao) orderDao).getOrdersByTemplateId(templateId);
+            return ((OrderJdbcDao) orderDao).getOrdersByTemplateId(templateId);
         }
         catch (SQLException e)
         {
@@ -884,7 +884,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((OrderDao) orderDao).getOrdersByServiceId(serviceId);
+            return ((OrderJdbcDao) orderDao).getOrdersByServiceId(serviceId);
         }
         catch (SQLException e)
         {
@@ -897,7 +897,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((OrderDao) orderDao).getOrdersByEmployeeId(employeeId);
+            return ((OrderJdbcDao) orderDao).getOrdersByEmployeeId(employeeId);
         }
         catch (SQLException e)
         {
@@ -910,7 +910,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((OrderDao) orderDao).getOrdersByStatus(status);
+            return ((OrderJdbcDao) orderDao).getOrdersByStatus(status);
         }
         catch (SQLException e)
         {
@@ -923,7 +923,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((OrderDao) orderDao).getOrdersByAction(action);
+            return ((OrderJdbcDao) orderDao).getOrdersByAction(action);
         }
         catch (SQLException e)
         {
@@ -936,7 +936,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((ServiceDao) serviceDao).getServicesByUserId(userId);
+            return ((ServiceJdbcDao) serviceDao).getServicesByUserId(userId);
         }
         catch (SQLException e)
         {
@@ -949,7 +949,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((ServiceDao) serviceDao).getServicesByTemplateId(templateId);
+            return ((ServiceJdbcDao) serviceDao).getServicesByTemplateId(templateId);
         }
         catch (SQLException e)
         {
@@ -962,7 +962,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((ServiceDao) serviceDao).getServicesByStatus(status);
+            return ((ServiceJdbcDao) serviceDao).getServicesByStatus(status);
         }
         catch (SQLException e)
         {
@@ -975,7 +975,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((ServiceDao) serviceDao).getServicesByStatusAndCustomerId(userId, status);
+            return ((ServiceJdbcDao) serviceDao).getServicesByStatusAndCustomerId(userId, status);
         }
         catch (SQLException e)
         {
@@ -988,7 +988,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((TemplateDao) templateDao).getTemplatesByAreaId(areaId);
+            return ((TemplateJdbcDao) templateDao).getTemplatesByAreaId(areaId);
         }
         catch (SQLException e)
         {
@@ -1001,7 +1001,7 @@ public class ModelDb implements Model
     {
         try
         {
-            return ((TemplateDao) templateDao).getTemplateByName(name);
+            return ((TemplateJdbcDao) templateDao).getTemplateByName(name);
         }
         catch (SQLException e)
         {

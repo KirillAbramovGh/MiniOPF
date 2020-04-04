@@ -1,0 +1,224 @@
+package jsp.ejb;
+
+import com.netcracker.students.o3.Exceptions.UnpossibleChangeAreaException;
+import com.netcracker.students.o3.Exceptions.WrongInputException;
+import com.netcracker.students.o3.controller.Controller;
+import com.netcracker.students.o3.controller.ControllerImpl;
+import com.netcracker.students.o3.controller.searcher.SearcherService;
+import com.netcracker.students.o3.controller.searcher.SearcherTemplates;
+import com.netcracker.students.o3.controller.sorters.ServiceSorter;
+import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
+import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
+import com.netcracker.students.o3.controller.sorters.TemplateSorter;
+import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.services.Service;
+import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.users.Customer;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.ejb.Stateless;
+
+@Stateless
+public class CustomerEJB
+{
+    public List<Service> searchServices(String searchValue, BigInteger customerId)
+    {
+        Controller controller = ControllerImpl.getInstance();
+        SearcherService searcherService = SearcherService.getInstance();
+        List<Service> result;
+        if (searchValue != null)
+        {
+            result = searcherService.searchServicesByAllFields(
+                    controller.getPlannedActiveSuspendedProvisioningService(customerId),
+                    searchValue
+            );
+        }
+        else
+        {
+            result = new ArrayList<>();
+        }
+        return result;
+    }
+
+    public List<Template> searchTemplates(String searchValue, BigInteger customerId)
+    {
+        Controller controller = ControllerImpl.getInstance();
+        SearcherTemplates searcherTemplates = SearcherTemplates.getInstance();
+        List<Template> result;
+        if (searchValue != null)
+        {
+            result = searcherTemplates.searchTemplatesByAllFields(
+                    controller.getCustomerAvailableTemplates(customerId),
+                    searchValue
+            );
+        }
+        else
+        {
+            result = new ArrayList<>();
+        }
+        return result;
+    }
+
+    public BigDecimal getBalance(BigInteger customerId)
+    {
+        return ControllerImpl.getInstance().getBalance(customerId);
+    }
+
+    public String getFIO(BigInteger customerId)
+    {
+        return ControllerImpl.getInstance().getCustomerFio(customerId);
+    }
+
+    public String getAreaName(BigInteger customerId)
+    {
+        return ControllerImpl.getInstance().getAreaName(customerId);
+    }
+
+    public String getPassword(BigInteger customerId)
+    {
+        return ControllerImpl.getInstance().getCustomer(customerId).getPassword();
+    }
+
+    public Map<BigInteger, Template> getConnectedTemplates(BigInteger customerId)
+    {
+        List<Service> connectedServices =
+                ControllerImpl.getInstance().getPlannedActiveSuspendedProvisioningService(customerId);
+        Map<BigInteger, Template> templates = new HashMap<>();
+
+        for (Service service : connectedServices)
+        {
+            templates.put(service.getId(), ControllerImpl.getInstance().getTemplate(service.getTemplateId()));
+        }
+
+        return templates;
+    }
+
+    public List<Template> getUnconnectedTemplates(BigInteger customerId)
+    {
+        List<Template> templates = ControllerImpl.getInstance().getCustomerAvailableTemplates(customerId);
+        for (Service service : ControllerImpl.getInstance().getPlannedActiveSuspendedProvisioningService(customerId))
+        {
+            templates.remove(ControllerImpl.getInstance().getTemplate(service.getTemplateId()));
+        }
+
+        return templates;
+    }
+
+    public void changeName(String newName, BigInteger customerId) throws WrongInputException
+    {
+        if (newName != null && !newName.isEmpty())
+        {
+            ControllerImpl.getInstance().setCustomerName(customerId, newName);
+        }
+    }
+
+    public void changePassword(String newPassword, BigInteger customerId) throws WrongInputException
+    {
+
+        if (newPassword != null && !newPassword.isEmpty())
+        {
+            ControllerImpl.getInstance().setUserPassword(customerId, newPassword);
+        }
+    }
+
+    public void changeArea(Area area, BigInteger customerId) throws UnpossibleChangeAreaException
+    {
+        if (area != null)
+        {
+            ControllerImpl.getInstance().setCustomerArea(customerId, area.getId());
+        }
+    }
+
+
+    public void addBalance(String value, BigInteger customerId)
+    {
+        if (value != null && !value.isEmpty())
+        {
+            ControllerImpl.getInstance().putOnBalance(customerId, parseBigDec(value));
+        }
+    }
+
+
+    public BigDecimal parseBigDec(String value)
+    {
+        double d = Double.parseDouble(value);
+        return BigDecimal.valueOf(d);
+    }
+
+
+    public void disconnectService(BigInteger serviceId)
+
+    {
+        ControllerImpl.getInstance().disconnectService(serviceId);
+    }
+
+    public void connectService(BigInteger templateId, BigInteger customerId)
+    {
+        ControllerImpl.getInstance().connectService(customerId, templateId);
+    }
+
+    public String getLogin(BigInteger customerId)
+
+    {
+        return ControllerImpl.getInstance().getCustomer(customerId).getLogin();
+    }
+
+    public List<Area> getAreas()
+    {
+        return ControllerImpl.getInstance().getAreas();
+    }
+
+
+    public List<Service> getConnectedServices(BigInteger customerId)
+    {
+        return ControllerImpl.getInstance().getPlannedActiveSuspendedProvisioningService(customerId);
+    }
+
+
+    public List<Template> showAllTemplates(TemplateSortType sortType, BigInteger customerId)
+    {
+        List<Template> templates = getUnconnectedTemplates(customerId);
+        TemplateSorter.getInstance().sort(templates, sortType);
+
+        return templates;
+    }
+
+    public void suspendService(final BigInteger serviceId)
+    {
+        ControllerImpl.getInstance().suspendService(serviceId);
+    }
+
+    public void resumeService(final BigInteger serviceId)
+    {
+        ControllerImpl.getInstance().resumeService(serviceId);
+    }
+
+    public BigInteger getAreaId(final BigInteger customerId){
+        return ControllerImpl.getInstance().getCustomerAreaId(customerId);
+    }
+
+    public void setCustomersFields(BigInteger customerId, String name, String password,String login,BigInteger areaId,BigDecimal balance){
+        Controller controller = ControllerImpl.getInstance();
+        Customer customer = controller.getCustomer(customerId);
+
+        customer.setName(name);
+        customer.setLogin(login);
+        customer.setPassword(password);
+        customer.setAreaId(areaId);
+        customer.setMoneyBalance(balance);
+
+        controller.setCustomer(customer);
+    }
+
+    public Set<BigInteger> getConnectedServicesIds(BigInteger customerId)
+    {
+        return ControllerImpl.getInstance().getCustomer(customerId).getConnectedServicesIds();
+    }
+}

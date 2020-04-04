@@ -1,36 +1,26 @@
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:complexType name="request">
-        <xs:sequence>
-            <xs:element name="date" type="xs:date"/>
-            <xs:element name="query" type="xs:string"/>
-            <xs:choice>
-                <xs:sequence>
-                    <xs:element name="result" type="customer"/>
-                </xs:sequence>
-                <xs:sequence>
-                    <xs:element name="result" type="employee"/>
-                </xs:sequence>
-                <xs:sequence>
-                    <xs:element name="result" type="area"/>
-                </xs:sequence>
-                <xs:sequence>
-                    <xs:element name="result" type="service"/>
-                </xs:sequence>
-                <xs:sequence>
-                    <xs:element name="result" type="template"/>
-                </xs:sequence>
-                <xs:sequence>
-                    <xs:element name="result" type="order"/>
-                </xs:sequence>
-            </xs:choice>
-        </xs:sequence>
-    </xs:complexType>
+    <xs:element name="requests"/>
     <xs:complexType name="requests">
         <xs:sequence>
             <xs:element name="request" type="request"/>
         </xs:sequence>
     </xs:complexType>
+    <xs:complexType name="request">
+        <xs:sequence>
+            <xs:element name="date" type="xs:date"/>
+            <xs:element name="query" type="xs:string"/>
+            <xs:choice>
+                    <xs:element name="resultCustomer" type="customer"/>
+                    <xs:element name="resultEmployee" type="employee"/>
+                    <xs:element name="resultArea" type="area"/>
+                    <xs:element name="resultService" type="service"/>
+                    <xs:element name="resultTemplate" type="template"/>
+                    <xs:element name="resultOrder" type="order"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
 
     <xs:complexType name="customer">
         <xs:sequence>

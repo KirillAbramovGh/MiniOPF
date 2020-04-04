@@ -1,0 +1,660 @@
+package jsp.servlets;
+
+
+import com.netcracker.students.o3.controller.ControllerImpl;
+import com.netcracker.students.o3.controller.sorters.SortType.CustomerSortType;
+import com.netcracker.students.o3.controller.sorters.SortType.EmployeeSortType;
+import com.netcracker.students.o3.controller.sorters.SortType.OrderSortType;
+import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
+import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
+
+import java.io.IOException;
+import java.math.BigInteger;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import jsp.ejb.EmployeeEJB;
+
+public enum EmployeeCommand
+{
+
+    cancelOrder{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeEJB employeeEJB,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            ControllerImpl.getInstance().suspendOrder(id);
+        }
+    },
+    createCustomer{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeEJB employeeEJB,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/CreateJSP/createCustomer.jsp");
+        }
+    },
+    createTemplate{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeEJB employeeEJB,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/CreateJSP/createTemplate.jsp");
+        }
+    },
+    createService{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeEJB employeeEJB,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/CreateJSP/createService.jsp");
+        }
+    },
+    createOrder{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeEJB employeeEJB,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/CreateJSP/createOrder.jsp");
+        }
+    },
+    createArea{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeEJB employeeEJB,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/CreateJSP/createArea.jsp");
+        }
+    },
+    updateCustomer{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeEJB employeeEJB,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            req.getSession().setAttribute("updateCustomerId",id);
+            req.getSession().setAttribute("nextPage","/UpdateJSP/updateCustomer.jsp");
+        }
+    },
+    updateService{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeEJB employeeEJB,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            req.getSession().setAttribute("updateServiceId",id);
+            req.getSession().setAttribute("nextPage","/UpdateJSP/updateService.jsp");
+        }
+    },
+    updateTemplate{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeEJB employeeEJB,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            req.getSession().setAttribute("updateTemplateId",id);
+            req.getSession().setAttribute("nextPage","/UpdateJSP/updateTemplate.jsp");
+        }
+    },
+    updateOrder{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeEJB employeeEJB,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            req.getSession().setAttribute("updateOrderId",id);
+            req.getSession().setAttribute("nextPage","/UpdateJSP/updateOrder.jsp");
+        }
+    },
+    updateArea{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeEJB employeeEJB,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            req.getSession().setAttribute("updateAreaId",id);
+            req.getSession().setAttribute("nextPage","/UpdateJSP/updateArea.jsp");
+        }
+    },
+    updateEmployee{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeEJB employeeEJB,
+                final String key) throws ServletException, IOException
+        {
+            BigInteger id = getIdFromKey(key);
+            req.getSession().setAttribute("updateEmployeeId",id);
+            req.getSession().setAttribute("nextPage","/UpdateJSP/updateEmployee.jsp");
+        }
+    },
+    save
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    String name = req.getParameter("fio");
+                    String password = req.getParameter("password");
+
+                    employeeEJB.changeNameAndPassword(name, password,(BigInteger) req.getSession().getAttribute("id"));
+                }
+            },
+
+    startOrder
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    BigInteger id = getIdFromKey(key);
+                    BigInteger employeeId = (BigInteger)req.getSession().getAttribute("id");
+                    employeeEJB.startOrder(id,employeeId);
+                }
+            },
+
+    resumeOrder
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    BigInteger id = getIdFromKey(key);
+                    employeeEJB.resumeOrder(id);
+                }
+            },
+
+    completeOrder
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    BigInteger id = getIdFromKey(key);
+                    employeeEJB.completeOrder(id);
+                }
+            },
+
+    deleteTemplate
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    BigInteger id = getIdFromKey(key);
+                    employeeEJB.deleteTemplate(id);
+                }
+            },
+    deleteOrder
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    BigInteger id = getIdFromKey(key);
+                    employeeEJB.deleteOrder(id);
+                }
+            },
+    deleteService
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    BigInteger id = getIdFromKey(key);
+                    employeeEJB.deleteService(id);
+                }
+            },
+    deleteCustomer
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    BigInteger id = getIdFromKey(key);
+                    employeeEJB.deleteCustomer(id);
+                }
+            },
+
+    deleteEmployee
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    BigInteger id = getIdFromKey(key);
+                    employeeEJB.deleteEmployee(id);
+                }
+            },
+
+    deleteArea
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    BigInteger id = getIdFromKey(key);
+                    employeeEJB.deleteArea(id);
+                }
+            },
+    ServiceSortUpByName
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.UpByName, req);
+                }
+            },
+    ServiceSortDownByName
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.DownByName, req);
+                }
+            },
+
+    ServiceSortUpByCost
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.UpByCost, req);
+                }
+            },
+
+    ServiceSortDownByCost
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.DownByCost, req);
+                }
+            },
+    ServiceSortUpById
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.UpById, req);
+
+                }
+            },
+    ServiceSortDownById
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.DownById, req);
+                }
+            },
+
+
+    TemplateSortUpByName
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortTemplates", TemplateSortType.UpByName, req);
+                }
+            },
+
+    TemplateSortDownByName
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortTemplates", TemplateSortType.DownByName, req);
+                }
+            },
+
+    TemplateSortUpByCost
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortTemplates", TemplateSortType.UpByCost, req);
+                }
+            },
+
+    TemplateSortDownByCost
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortTemplates", TemplateSortType.DownByCost, req);
+                }
+            },
+
+
+    TemplateSortUpById
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortTemplates", TemplateSortType.UpById, req);
+                }
+            },
+    TemplateSortDownById
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortTemplates", TemplateSortType.DownById, req);
+                }
+            },
+    OrderSortUpById
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortOrders", OrderSortType.UpById, req);
+                }
+            },
+    OrderSortDownById
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortOrders", OrderSortType.DownById, req);
+                }
+            },
+    EmployeeSortUpById
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortEmployees", EmployeeSortType.UpById, req);
+                }
+            },
+    EmployeeSortDownById
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortEmployees", EmployeeSortType.DownById, req);
+                }
+            },
+    EmployeeSortUpByLogin
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortEmployees", EmployeeSortType.UpByLogin, req);
+                }
+            },
+    EmployeeSortDownByLogin
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortEmployees", EmployeeSortType.DownByLogin, req);
+                }
+            },
+    EmployeeSortUpByName
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortEmployees", EmployeeSortType.UpByName, req);
+                }
+            },
+    EmployeeSortDownByName
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortEmployees", EmployeeSortType.DownByName, req);
+                }
+            },
+    CustomerSortUpByBalance
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortCustomers", CustomerSortType.UpByBalance, req);
+                }
+            },
+    CustomerSortDownByBalance
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortCustomers", CustomerSortType.DownByBalance, req);
+
+                }
+            },
+    CustomerSortUpById
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortCustomers", CustomerSortType.UpById, req);
+
+                }
+            },
+    CustomerSortDownById
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortCustomers", CustomerSortType.DownById, req);
+
+                }
+            },
+    CustomerSortUpByLogin
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortCustomers", CustomerSortType.UpByLogin, req);
+
+                }
+            },
+    CustomerSortDownByLogin
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("sortCustomers", CustomerSortType.DownByLogin, req);
+
+                }
+            },
+    CustomerSortUpByName
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+
+                }
+            },
+    CustomerSortDownByName
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+
+                }
+            },
+    AreaSortUpByDescription
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+
+                }
+            },
+    AreaSortDownByDescription
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+
+                }
+            },
+    AreaSortUpById
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+
+                }
+            },
+    AreaSortDownById
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+
+                }
+            },
+    AreaSortUpByName
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+
+                }
+            },
+    AreaSortDownByName
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+
+                }
+            },
+    serviceRadio
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+
+                }
+            },
+    templateRadio
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+
+                }
+            },
+    orderRadio
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("orderRadio", true, req);
+
+                }
+            },
+    areaRadio
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("areaRadio", true, req);
+
+                }
+            },
+    customerRadio
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("customerRadio", true, req);
+
+                }
+            },
+    employeeRadio
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key)
+                {
+                    setAttribute("employeeRadio", true, req);
+                }
+            },
+
+    out
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final String key) throws ServletException, IOException
+                {
+                    forward("/startView.jsp", context, req, resp);
+                }
+            };
+
+    public void execute(HttpServletRequest req, final HttpServletResponse resp,
+            final ServletContext context, EmployeeEJB employeeEJB, final String key)
+            throws IOException, ServletException
+    {
+        System.out.println("standard");
+    }
+
+    private static BigInteger getIdFromKey(String key)
+    {
+        String[] res = key.split(" ");
+        long longValue = Long.parseLong(res[1]);
+        return BigInteger.valueOf(longValue);
+    }
+
+
+    private static void setAttribute(String key, Object value, HttpServletRequest request)
+    {
+        request.getSession().setAttribute(key, value);
+    }
+
+    private static void forward(String path, ServletContext context, HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        RequestDispatcher requestDispatcher = context.getRequestDispatcher(path);
+
+        requestDispatcher.forward(request, response);
+    }
+}

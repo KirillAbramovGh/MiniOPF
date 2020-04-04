@@ -8,17 +8,32 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+@Entity
+@Table(name = "services")
 @XmlType(name = "service")
 @XmlRootElement
 public class ServiceImpl implements Service
 {
+    @Id
     private BigInteger id;
+
+    @Column(name = "userid")
     private BigInteger userId;
+
+    @Column(name = "templateid")
     private BigInteger templateId;
+
+    @Column(name = "status")
     private ServiceStatus status;
+
+    @Column(name = "activationdate")
     private Date activationDate;
 
     public ServiceImpl(final BigInteger userId, final BigInteger templateId, final ServiceStatus status)
@@ -99,9 +114,8 @@ public class ServiceImpl implements Service
     @JsonIgnore
     public BigDecimal getCost()
     {
-//        return ModelDb.getInstance()
-//                .getTemplate(templateId).getCost();
-        return BigDecimal.TEN;
+        return ModelDb.getInstance()
+                .getTemplate(templateId).getCost();
     }
 
     public Date getActivationDate()

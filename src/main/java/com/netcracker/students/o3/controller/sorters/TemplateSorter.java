@@ -47,12 +47,12 @@ public class TemplateSorter {
     /**
      * sort services
      *
-     * @param services
+     * @param templates
      */
-    public void sort(List<Template> services, TemplateSortType type) {
+    public void sort(List<Template> templates, TemplateSortType type) {
         if(type!=null) {
             Comparator<Template> templateComparator = defineSortType(type);
-            services.sort(templateComparator);
+            templates.sort(templateComparator);
         }
     }
 

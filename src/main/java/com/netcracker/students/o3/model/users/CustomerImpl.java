@@ -4,18 +4,41 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+@Entity
+@Table(name = "customers")
 @XmlType(name = "customer")
 @XmlRootElement
 public class CustomerImpl implements Customer {
+
+    @Id
     private BigInteger id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "login")
     private String login;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "moneybalance")
     private BigDecimal moneyBalance;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "")
     private Set<BigInteger> connectedServicesIds;
+
+    @Column(name = "areaid")
     private BigInteger areaId;
 
     public CustomerImpl() {

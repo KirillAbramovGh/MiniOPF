@@ -403,6 +403,29 @@ public class ControllerImpl implements Controller
         return model.getTemplateByName(name);
     }
 
+    @Override
+    public Object getEntity(final BigInteger entityId)
+    {
+        Object result = getArea(entityId);
+        if(result == null){
+            result = getTemplate(entityId);
+        }
+        if(result == null){
+            result = getEmployee(entityId);
+        }
+        if(result == null){
+            result = getCustomer(entityId);
+        }
+        if(result == null){
+            result = getService(entityId);
+        }
+        if(result == null){
+            result = getOrder(entityId);
+        }
+
+        return result;
+    }
+
 
     @Override
     public Customer registerCustomer(final String login, final String password, final String name,
