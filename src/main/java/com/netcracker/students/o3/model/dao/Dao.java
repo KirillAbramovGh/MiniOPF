@@ -14,5 +14,7 @@ public interface Dao<T>
 
     void delete(BigInteger id)throws SQLException;
 
+    void delete(T entity)throws SQLException;
+
     void create(T entity)throws SQLException;
 }

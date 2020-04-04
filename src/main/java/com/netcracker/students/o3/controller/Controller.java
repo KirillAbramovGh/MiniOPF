@@ -46,7 +46,7 @@ public interface Controller
     /**
      * start execution of order
      */
-    void startOrder(BigInteger orderId, BigInteger employeeId);
+    void startOrder(BigInteger orderId, Employee employee);
 
     /**
      * suspend execution of order
@@ -101,18 +101,18 @@ public interface Controller
     /**
      * create entities
      */
-    Customer createCustomer(String name, String login, String password, BigInteger areaId)
+    Customer createCustomer(String name, String login, String password, Area area)
     ;
 
     Employee createEmployee(String name, String login, String password);
 
-    Order createOrder(BigInteger templateId, BigInteger serviceId,
+    Order createOrder(Template template, Service service,
             OrderStatus status, OrderAction action);
 
     Template createTemplate(String name, BigDecimal cost, String description)
             ;
 
-    Service createService(BigInteger userId, BigInteger templateId, ServiceStatus status)
+    Service createService(Customer customer, Template template, ServiceStatus status)
             ;
 
     Area createArea(String name, String description);
@@ -127,7 +127,7 @@ public interface Controller
     /**
      * register new Customer
      */
-    Customer registerCustomer(String login, String password, String Name, BigInteger areaId)
+    Customer registerCustomer(String login, String password, String Name, Area area)
             throws LoginOccupiedException;
 
     /**
@@ -180,7 +180,7 @@ public interface Controller
     /**
      * @return customer area id
      */
-    BigInteger getCustomerAreaId(BigInteger customerId);
+    Area getCustomerArea(BigInteger customerId);
 
     /**
      * check user on customer

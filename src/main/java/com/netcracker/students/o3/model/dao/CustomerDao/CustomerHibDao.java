@@ -1,45 +1,41 @@
 package com.netcracker.students.o3.model.dao.CustomerDao;
 
+import com.netcracker.students.o3.model.dao.AbstractHibDao;
+import com.netcracker.students.o3.model.dao.HibernateSessionFactoryUtil;
 import com.netcracker.students.o3.model.users.Customer;
+import com.netcracker.students.o3.model.users.CustomerImpl;
+
+import org.hibernate.query.Query;
 
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.List;
 
-public class CustomerHibDao implements CustomerDao
+public class CustomerHibDao extends AbstractHibDao<Customer> implements CustomerDao
 {
     @Override
-    public Customer getCustomerByLogin(final String login) throws SQLException
+    public Customer getCustomerByLogin(final String login)
     {
-        return null;
+        Query query = HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                createQuery("from CustomerImpl where login=:login");
+        query.setParameter("login", login);
+
+        return (Customer) query.uniqueResult();
     }
 
     @Override
-    public List<Customer> getAll() throws SQLException
+    public List<Customer> getAll()
     {
-        return null;
+        List<Customer> customers = HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                createQuery("from CustomerImpl ").list();
+        return customers;
     }
 
     @Override
-    public Customer getEntity(final BigInteger id) throws SQLException
+    public Customer getEntity(final BigInteger id)
     {
-        return null;
+        Customer customer = HibernateSessionFactoryUtil.getSessionFactory().openSession()
+                .get(CustomerImpl.class, id);
+        return customer;
     }
 
-    @Override
-    public void update(final Customer entity) throws SQLException
-    {
-
-    }
-
-    @Override
-    public void delete(final BigInteger id) throws SQLException
-    {
-
-    }
-
-    @Override
-    public void create(final Customer entity) throws SQLException
-    {
-    }
 }

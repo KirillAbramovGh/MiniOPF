@@ -24,7 +24,7 @@ public abstract class Searcher<T> {
 
     protected BigInteger getServiceArea(Service service) {
         Controller controller = ControllerImpl.getInstance();
-        return controller.getCustomer(service.getUserId()).getAreaId();
+        return service.getCustomer().getArea().getId();
     }
 
     protected BigDecimal parseBigDecimal(String value) {

@@ -105,7 +105,7 @@ public class StartConsoleView
         if ("1".equals(userType))
         {
             BigInteger areaId = chooseArea();
-            final BigInteger newCustomerId = controller.registerCustomer(login, password, name, areaId).getId();
+            final BigInteger newCustomerId = controller.registerCustomer(login, password, name, controller.getArea(areaId)).getId();
 
             new ConsoleCustomerView(newCustomerId).start();
         }

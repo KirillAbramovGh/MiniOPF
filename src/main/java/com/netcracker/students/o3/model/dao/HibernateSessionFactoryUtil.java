@@ -1,13 +1,20 @@
 package com.netcracker.students.o3.model.dao;
 
+import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
+import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderImpl;
+import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceImpl;
+import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
+import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.CustomerImpl;
-import com.netcracker.students.o3.model.users.EmployerImpl;
+import com.netcracker.students.o3.model.users.Employee;
+import com.netcracker.students.o3.model.users.EmployeeImpl;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
@@ -23,26 +30,25 @@ public class HibernateSessionFactoryUtil
     {
         if (sessionFactory == null)
         {
-            try
-            {
                 Configuration configuration = new Configuration().configure();
 
+                configuration.addAnnotatedClass(Customer.class);
+                configuration.addAnnotatedClass(Area.class);
+                configuration.addAnnotatedClass(Template.class);
+                configuration.addAnnotatedClass(Service.class);
+                configuration.addAnnotatedClass(Employee.class);
+                configuration.addAnnotatedClass(Order.class);
                 configuration.addAnnotatedClass(AreaImpl.class);
-                configuration.addAnnotatedClass(EmployerImpl.class);
+                configuration.addAnnotatedClass(EmployeeImpl.class);
                 configuration.addAnnotatedClass(TemplateImpl.class);
+                configuration.addAnnotatedClass(CustomerImpl.class);
                 configuration.addAnnotatedClass(ServiceImpl.class);
                 configuration.addAnnotatedClass(OrderImpl.class);
-                configuration.addAnnotatedClass(CustomerImpl.class);
 
                 StandardServiceRegistryBuilder builder =
                         new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
-                sessionFactory = configuration.buildSessionFactory(builder.build());
-
-            }
-            catch (Exception e)
-            {
-                System.out.println("Исключение!" + e);
-            }
+               StandardServiceRegistry standardServiceRegistry =  builder.build();
+                sessionFactory = configuration.buildSessionFactory(standardServiceRegistry);
         }
         return sessionFactory;
     }

@@ -4,8 +4,11 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -26,11 +29,6 @@ public class AreaImpl implements Area {
     public AreaImpl() {
     }
 
-    public AreaImpl(final String name, final String description)
-    {
-        this.name = name;
-        this.description = description;
-    }
 
     public AreaImpl(final BigInteger id, final String name, final String description) {
         this.id = id;

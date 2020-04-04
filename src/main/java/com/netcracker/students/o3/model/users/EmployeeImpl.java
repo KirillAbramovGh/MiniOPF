@@ -3,25 +3,31 @@ package com.netcracker.students.o3.model.users;
 import java.math.BigInteger;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+@Entity
+@Table(name = "employees")
 @XmlType(name = "employee")
 @XmlRootElement
-public class EmployerImpl implements Employee
+public class EmployeeImpl implements Employee
 {
+
+    @Id
     private BigInteger id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "login")
     private String login;
+
+    @Column(name = "password")
     private String password;
-
-    public EmployerImpl(final String name, final String login, final String password)
-    {
-        this.name = name;
-        this.login = login;
-        this.password = password;
-    }
-
 
     @Override
     public String toString()
@@ -32,9 +38,11 @@ public class EmployerImpl implements Employee
                 '}';
     }
 
-    public EmployerImpl(){}
+    public EmployeeImpl()
+    {
+    }
 
-    public EmployerImpl(final BigInteger id, final String name, final String login, final String password)
+    public EmployeeImpl(final BigInteger id, final String name, final String login, final String password)
     {
         this.id = id;
         this.name = name;
@@ -64,7 +72,7 @@ public class EmployerImpl implements Employee
     @Override
     public void setName(final String name)
     {
-        if(name!=null && !name.replaceAll(" ","").isEmpty())
+        if (name != null && !name.replaceAll(" ", "").isEmpty())
         {
             this.name = name;
         }
@@ -79,7 +87,7 @@ public class EmployerImpl implements Employee
     @Override
     public void setLogin(final String login)
     {
-        if(login!=null && !login.replaceAll(" ","").isEmpty())
+        if (login != null && !login.replaceAll(" ", "").isEmpty())
         {
             this.login = login;
         }
@@ -94,7 +102,7 @@ public class EmployerImpl implements Employee
     @Override
     public void setPassword(final String password)
     {
-        if(password!=null && !password.replaceAll(" ","").isEmpty())
+        if (password != null && !password.replaceAll(" ", "").isEmpty())
         {
             this.password = password;
         }
@@ -111,7 +119,7 @@ public class EmployerImpl implements Employee
         {
             return false;
         }
-        final EmployerImpl employer = (EmployerImpl) o;
+        final EmployeeImpl employer = (EmployeeImpl) o;
         return Objects.equals(id, employer.id);
     }
 

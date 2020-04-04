@@ -18,7 +18,7 @@ public class ComparatorServicesByCost implements Comparator<Service>
     @Override
     public int compare(final Service o1, final Service o2)
     {
-        int res = o1.getCost().compareTo(o2.getCost());
+        int res = o1.templateGetCost().compareTo(o2.templateGetCost());
 
         if(isUp) return res;
         else return (-1)*res;

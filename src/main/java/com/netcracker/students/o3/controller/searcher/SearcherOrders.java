@@ -80,7 +80,7 @@ public class SearcherOrders extends Searcher<Order> {
 
         String employeeId;
         for (Order order : orders) {
-            employeeId = order.getEmployeeId().toString();
+            employeeId = order.getEmployee().toString();
             if (employeeId.contains(search) || checkRegExp(search, employeeId)) {
                 result.add(order);
             }
@@ -94,7 +94,7 @@ public class SearcherOrders extends Searcher<Order> {
 
         String serviceId;
         for (Order order : orders) {
-            serviceId = order.getServiceId().toString();
+            serviceId = order.getService().toString();
             if (serviceId.contains(search) || checkRegExp(search, serviceId)) {
                 result.add(order);
             }
@@ -108,7 +108,7 @@ public class SearcherOrders extends Searcher<Order> {
 
         String templateId;
         for (Order order : orders) {
-            templateId = order.getTemplateId().toString();
+            templateId = order.getTemplate().toString();
             if (templateId.contains(search) || checkRegExp(search, templateId)) {
                 result.add(order);
             }

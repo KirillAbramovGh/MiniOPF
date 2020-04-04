@@ -45,6 +45,12 @@ public class TemplateHibDao implements TemplateDao
     }
 
     @Override
+    public void delete(final Template entity) throws SQLException
+    {
+
+    }
+
+    @Override
     public void create(final Template entity) throws SQLException
     {
 

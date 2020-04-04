@@ -18,7 +18,7 @@ import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.CustomerImpl;
 import com.netcracker.students.o3.model.users.Employee;
-import com.netcracker.students.o3.model.users.EmployerImpl;
+import com.netcracker.students.o3.model.users.EmployeeImpl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -44,7 +44,7 @@ public class ModelJson implements Model
     private Map<BigInteger, Service> services;
     @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = CustomerImpl.class)
     private Map<BigInteger, Customer> customers;
-    @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = EmployerImpl.class)
+    @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = EmployeeImpl.class)
     private Map<BigInteger, Employee> employees;
     @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = AreaImpl.class)
     private Map<BigInteger, Area> areas;
@@ -152,10 +152,10 @@ public class ModelJson implements Model
  *methods which create entities by credentials
  * @return id of created entity
  * */
-    public Customer createCustomer(String name,String login,String password,BigInteger areaId){
+    public Customer createCustomer(String name,String login,String password, Area area){
         synchronized (customers)
         {
-            Customer newCustomer = new CustomerImpl(getNextId(), name, login, password, areaId);
+            Customer newCustomer = new CustomerImpl(getNextId(), name, login, password, area);
             addCustomer(newCustomer);
             return newCustomer;
         }
@@ -164,18 +164,18 @@ public class ModelJson implements Model
     public Employee createEmployee(String name,String login,String password){
         synchronized (employees)
         {
-            Employee newEmployee = new EmployerImpl(getNextId(), name, login, password);
+            Employee newEmployee = new EmployeeImpl(getNextId(), name, login, password);
             addEmployee(newEmployee);
 
             return newEmployee;
         }
     }
 
-    public Order createOrder(BigInteger templateId,BigInteger serviceId,
+    public Order createOrder(Template template, Service service,
             OrderStatus status, OrderAction action){
         synchronized (orders)
         {
-            Order newOrder = new OrderImpl(getNextId(), templateId, serviceId, status, action);
+            Order newOrder = new OrderImpl(getNextId(), template, service, status, action);
             newOrder.setCreationDate(new Date());
             addOrder(newOrder);
             return newOrder;
@@ -193,10 +193,10 @@ public class ModelJson implements Model
         }
     }
 
-    public Service createService(BigInteger userId,BigInteger templateId, ServiceStatus status){
+    public Service createService(Customer customer, Template template, ServiceStatus status){
         synchronized (services)
         {
-            Service newService = new ServiceImpl(getNextId(), userId, templateId, status);
+            Service newService = new ServiceImpl(getNextId(), customer, template, status);
             addService(newService);
             return newService;
         }

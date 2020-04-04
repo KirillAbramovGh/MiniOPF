@@ -15,7 +15,7 @@ import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.CustomerImpl;
 import com.netcracker.students.o3.model.users.Employee;
-import com.netcracker.students.o3.model.users.EmployerImpl;
+import com.netcracker.students.o3.model.users.EmployeeImpl;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -90,12 +90,12 @@ public class ControllerImplTest
 
     @Before
     public void before(){
-        defaultOrder = new OrderImpl(orderId, null, serviceId, OrderStatus.Processing, null);
+        defaultOrder = new OrderImpl(orderId, null, defaultService, OrderStatus.Processing, null);
         defaultCustomer = new CustomerImpl(customerId, "", customerLogin, defaultPassword, null);
-        defaultEmployee = new EmployerImpl(employeeId, "", employeeLogin, defaultPassword);
+        defaultEmployee = new EmployeeImpl(employeeId, "", employeeLogin, defaultPassword);
         defaultTemplate = new TemplateImpl(templateId, "", BigDecimal.ZERO, "");
         defaultArea = new AreaImpl(areaId, "", "");
-        defaultService = new ServiceImpl(serviceId, customerId, templateId, ServiceStatus.Active);
+        defaultService = new ServiceImpl(serviceId, defaultCustomer, defaultTemplate, ServiceStatus.Active);
 
         givenModelGet();
         givenModelGetCustomerByLogin();

@@ -26,11 +26,11 @@
 <form action="${pageContext.request.contextPath}/UpdateJSP/updateService.jsp" method="post">
     <div style="size: 200px">
         <div class="">
-            TemplateId: <input type="text" name="templateId" value="<%=service.getTemplateId()%>">
+            TemplateId: <input type="text" name="templateId" value="<%=service.getTemplate()%>">
         </div>
 
         <div class="">
-            UserId: <input type="text" name="userId" value="<%=service.getUserId()%>">
+            UserId: <input type="text" name="userId" value="<%=service.getCustomer()%>">
         </div>
         <div class="">
             Status:
@@ -56,12 +56,13 @@
 
         if (request.getParameter("save") != null)
         {
+            Controller controller = ControllerImpl.getInstance();
             String templateId = request.getParameter("templateId");
             String userId = request.getParameter("userId");
             String status = request.getParameter("status");
 
-            service.setTemplateId(BigInteger.valueOf(Long.parseLong(templateId)));
-            service.setUserId(BigInteger.valueOf(Long.parseLong(userId)));
+            service.setTemplate(controller.getTemplate(BigInteger.valueOf(Long.parseLong(templateId))));
+            service.setCustomer(controller.getCustomer(BigInteger.valueOf(Long.parseLong(userId))));
             service.setStatus(ServiceStatus.valueOf(status));
 
             for (Order order : ControllerImpl.getInstance().getOrdersByServiceId(serviceId))

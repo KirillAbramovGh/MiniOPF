@@ -2,7 +2,7 @@ package com.netcracker.students.o3.model.dao.EmployeeDao;
 
 import com.netcracker.students.o3.model.dao.AbstractJdbcDao;
 import com.netcracker.students.o3.model.users.Employee;
-import com.netcracker.students.o3.model.users.EmployerImpl;
+import com.netcracker.students.o3.model.users.EmployeeImpl;
 
 import java.math.BigInteger;
 import java.sql.Connection;
@@ -30,7 +30,7 @@ public class EmployeeJdbcDao extends AbstractJdbcDao<Employee> implements Employ
 
                 for (Employee employee; resultSet.next(); )
                 {
-                    employee = new EmployerImpl();
+                    employee = new EmployeeImpl();
                     employee.setId(BigInteger.valueOf(resultSet.getInt("id")));
                     employee.setName(resultSet.getString("name"));
                     if(employee.getName()==null){
@@ -57,7 +57,7 @@ public class EmployeeJdbcDao extends AbstractJdbcDao<Employee> implements Employ
             return null;
         }
         String sqlReq = "select * from " + getTableName() + " where id=?";
-        Employee employee = new EmployerImpl();
+        Employee employee = new EmployeeImpl();
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
            statement.setLong(1,id.longValue());
@@ -100,6 +100,12 @@ public class EmployeeJdbcDao extends AbstractJdbcDao<Employee> implements Employ
     }
 
     @Override
+    public void delete(final Employee entity) throws SQLException
+    {
+
+    }
+
+    @Override
     protected String getTableName()
     {
         return tableName;
@@ -124,7 +130,7 @@ public class EmployeeJdbcDao extends AbstractJdbcDao<Employee> implements Employ
 
     public Employee getEmployeeByLogin(final String login) throws SQLException
     {
-        Employee employee = new EmployerImpl();
+        Employee employee = new EmployeeImpl();
         String sqlReq = "select * from " + getTableName() + " where login=?";
         try (Connection connection = getConnection();PreparedStatement statement = connection.prepareStatement(sqlReq))
         {

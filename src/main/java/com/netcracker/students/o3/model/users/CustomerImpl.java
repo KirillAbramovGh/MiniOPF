@@ -1,5 +1,11 @@
 package com.netcracker.students.o3.model.users;
 
+import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.area.AreaImpl;
+import com.netcracker.students.o3.model.services.Service;
+
+import org.hibernate.annotations.Type;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
@@ -9,6 +15,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -35,35 +43,29 @@ public class CustomerImpl implements Customer {
     @Column(name = "moneybalance")
     private BigDecimal moneyBalance;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "")
-    private Set<BigInteger> connectedServicesIds;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
+    private Set<Service> connectedServices;
 
-    @Column(name = "areaid")
-    private BigInteger areaId;
+    @ManyToOne(cascade = CascadeType.REFRESH,fetch = FetchType.EAGER)
+    @JoinColumn(name = "areaid")
+    private Area area;
 
     public CustomerImpl() {
         moneyBalance = BigDecimal.ZERO;
-        connectedServicesIds = new HashSet<>();
+        connectedServices = new HashSet<>();
     }
 
     public CustomerImpl(final BigInteger id, final String name, final String login, final String password,
-                        final BigInteger areaId) {
+                        final Area area) {
         this.id = id;
         this.name = name;
         this.login = login;
         this.password = password;
-        this.areaId = areaId;
-        connectedServicesIds = new HashSet<>();
+        this.area = area;
+        connectedServices = new HashSet<>();
         moneyBalance = BigDecimal.ZERO;
     }
 
-    public CustomerImpl(final String name, final String login, final String password,final BigInteger areaId)
-    {
-        this.name = name;
-        this.login = login;
-        this.password = password;
-        this.areaId = areaId;
-    }
 
     @Override
     public String toString()
@@ -74,8 +76,8 @@ public class CustomerImpl implements Customer {
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", moneyBalance=" + moneyBalance +
-                ", connectedServicesIds=" + connectedServicesIds +
-                ", areaId=" + areaId +
+                ", connectedServicesIds=" + connectedServices +
+                ", areaId=" + area +
                 '}';
     }
 
@@ -87,25 +89,25 @@ public class CustomerImpl implements Customer {
         this.moneyBalance = moneyBalance;
     }
 
-    public Set<BigInteger> getConnectedServicesIds() {
-        return connectedServicesIds;
+    public Set<Service> getConnectedServices() {
+        return connectedServices;
     }
 
-    public void setConnectedServicesIds(final Set<BigInteger> connectedServicesIds) {
-        this.connectedServicesIds = connectedServicesIds;
+    public void setConnectedServices(final Set<Service> connectedServices) {
+        this.connectedServices = connectedServices;
     }
 
-    public BigInteger getAreaId() {
-        return areaId;
+    public Area getArea() {
+        return area;
     }
 
-    public void setAreaId(final BigInteger areaId) {
-        this.areaId = areaId;
+    public void setArea(final Area area) {
+        this.area = area;
     }
 
     @Override
-    public void addConnectedServiceId(final BigInteger serviceId) {
-            connectedServicesIds.add(serviceId);
+    public void addConnectedService(Service service) {
+            connectedServices.add(service);
     }
 
     public BigInteger getId() {

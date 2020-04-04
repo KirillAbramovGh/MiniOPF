@@ -7,6 +7,8 @@
 <%@ page import="java.util.HashSet" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="com.netcracker.students.o3.model.area.Area" %>
+<%@ page import="com.netcracker.students.o3.controller.Controller" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -38,6 +40,7 @@
     {
         if (request.getParameter("save") != null)
         {
+            Controller controller = ControllerImpl.getInstance();
             String name = request.getParameter("name");
             String cost = request.getParameter("cost");
             String description = request.getParameter("description");
@@ -48,13 +51,13 @@
             );
 
 
-            List<BigInteger> set = new ArrayList<>();
+            List<Area> set = new ArrayList<>();
             for(String id : areas){
                 if(id!= null && !id.isEmpty()){
-                    set.add(BigInteger.valueOf(Long.parseLong(id)));
+                    set.add(controller.getArea(BigInteger.valueOf(Long.parseLong(id))));
                 }
             }
-            template.setPossibleAreasId(set);
+            template.setPossibleAreas(set);
             ControllerImpl.getInstance().setTemplate(template);
 
 %>

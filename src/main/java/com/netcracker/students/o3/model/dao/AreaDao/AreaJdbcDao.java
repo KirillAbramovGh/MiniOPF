@@ -93,6 +93,12 @@ public class AreaJdbcDao extends AbstractJdbcDao<Area> implements AreaDao
     }
 
     @Override
+    public void delete(final Area entity) throws SQLException
+    {
+
+    }
+
+    @Override
     protected String getTableName()
     {
         return tableName;

@@ -65,6 +65,12 @@ public class OrderHibDao implements OrderDao
     }
 
     @Override
+    public void delete(final Order entity) throws SQLException
+    {
+
+    }
+
+    @Override
     public void create(final Order entity) throws SQLException
     {
 

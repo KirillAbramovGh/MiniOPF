@@ -4,6 +4,7 @@
 <%@ page import="com.netcracker.students.o3.model.orders.OrderStatus" %>
 <%@ page import="com.netcracker.students.o3.model.services.Service" %>
 <%@ page import="java.math.BigInteger" %>
+<%@ page import="com.netcracker.students.o3.controller.Controller" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -47,6 +48,7 @@
     {
         if (request.getParameter("save") != null)
         {
+            Controller controller = ControllerImpl.getInstance();
             String employeeId = request.getParameter("employeeId");
             String serviceId = request.getParameter("serviceId");
             String status = request.getParameter("status");
@@ -56,11 +58,11 @@
             Service service = ControllerImpl.getInstance().getService(serviceIdValue);
 
             Order order = ControllerImpl.getInstance().createOrder(
-                    service.getTemplateId(), serviceIdValue, OrderStatus.valueOf(status),
+                    service.getTemplate(), controller.getService(serviceIdValue), OrderStatus.valueOf(status),
                     OrderAction.valueOf(action)
             );
 
-            order.setEmployeeId(BigInteger.valueOf(Long.parseLong(employeeId)));
+            order.setEmployee(controller.getEmployee(BigInteger.valueOf(Long.parseLong(employeeId))));
 
             ControllerImpl.getInstance().setOrder(order);
 

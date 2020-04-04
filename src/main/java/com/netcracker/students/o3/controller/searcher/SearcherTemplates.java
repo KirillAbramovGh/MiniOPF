@@ -24,8 +24,7 @@ public class SearcherTemplates extends Searcher<Template> {
         List<Template> results = new ArrayList<>();
 
         for (Template template : templates) {
-            for (BigInteger id : template.getPossibleAreasId()) {
-                Area area = ControllerImpl.getInstance().getArea(id);
+            for (Area area : template.getPossibleAreas()) {
                 if (area.getName().contains(areaName) || checkRegExp(areaName, area.getName())) {
                     results.add(template);
                 }

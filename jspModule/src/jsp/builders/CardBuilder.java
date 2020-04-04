@@ -2,6 +2,7 @@ package jsp.builders;
 
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
+import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceStatus;
 import com.netcracker.students.o3.model.templates.Template;
@@ -37,7 +38,7 @@ public class CardBuilder
 
         result += "</br>"+"<l style=\"font-size: 15px;margin:3px\">" + cntrl.getServiceName(service.getId()) + "</l>"+"</br>";
         result +=  service.getStatus() +"</br>" + "<k style=\"font-size: 6px\">"+getServiceAreaName(service)+"</k>"+"</br>"
-                + cntrl.getServiceDescription(service.getId())+"</br>"+service.getCost() + "$"+"</br>";
+                + cntrl.getServiceDescription(service.getId())+"</br>"+service.templateGetCost() + "$"+"</br>";
 
         switch (service.getStatus())
         {
@@ -136,8 +137,8 @@ public class CardBuilder
 
     private String getServiceAreaName(Service service){
         String res = "";
-        for(BigInteger id : cntrl.getTemplate(service.getTemplateId()).getPossibleAreasId()){
-            res += cntrl.getArea(id).getName()+",";
+        for(Area area : service.getTemplate().getPossibleAreas()){
+            res += area.getName()+",";
         }
         return res;
     }

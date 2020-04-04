@@ -1,13 +1,22 @@
 package com.netcracker.students.o3.model.templates;
 
+import com.netcracker.students.o3.model.area.Area;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -31,7 +40,13 @@ public class TemplateImpl implements Template
     private String description;
 
 
-    private List<BigInteger> possibleAreasId;
+    @ManyToMany
+    @JoinTable(
+            name="template_area_link",
+            joinColumns=@JoinColumn(name="templateid"),
+            inverseJoinColumns=@JoinColumn(name="areaid")
+    )
+    private List<Area> possibleAreas;
 
 
     public TemplateImpl()
@@ -46,12 +61,6 @@ public class TemplateImpl implements Template
         this.description = description;
     }
 
-    public TemplateImpl(final String name, final BigDecimal cost, final String description)
-    {
-        this.name = name;
-        this.cost = cost;
-        this.description = description;
-    }
 
     @Override
     public String toString()
@@ -105,14 +114,14 @@ public class TemplateImpl implements Template
     }
 
 
-    public List<BigInteger> getPossibleAreasId()
+    public List<Area> getPossibleAreas()
     {
-        return possibleAreasId;
+        return possibleAreas;
     }
 
-    public void setPossibleAreasId(final List<BigInteger> possibleAreasId)
+    public void setPossibleAreas(final List<Area> possibleAreas)
     {
-        this.possibleAreasId = possibleAreasId;
+        this.possibleAreas = possibleAreas;
     }
 
     @Override

@@ -6,6 +6,6 @@
         <property name="connection.password">postgres</property> <!-- DB Password -->
         <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property> <!-- DB Dialect -->
         <property name="show_sql">true</property> <!-- Show SQL in console -->
-        <property name="hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">validate</property>
     </session-factory>
 </hibernate-configuration>
