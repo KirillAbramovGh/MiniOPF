@@ -9,9 +9,12 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-@Entity
+
 @Table(name = "templates")
 public interface Template
 {
@@ -62,11 +65,17 @@ public interface Template
     /**
      * @return possible area id by connected services
      */
-    List<Area> getPossibleArea();
+    @ManyToMany
+    @JoinTable(
+            name="template_area_link",
+            joinColumns=@JoinColumn(name="templateid"),
+            inverseJoinColumns=@JoinColumn(name="areaid")
+    )
+    List<Area> getPossibleAreas();
 
-     /**
-      * set possible area id
-      * @param possibleAreasId
-      */
-    void setPossibleAreasId(final List<Area> possibleAreas);
+    /**
+     * set possible area id
+     * @param possibleAreas
+     */
+    void setPossibleAreas(final List<Area> possibleAreas);
 }
