@@ -7,15 +7,21 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
-@Entity
 @Table(name = "templates")
 @XmlType(name = "template")
 @XmlRootElement
@@ -34,6 +40,12 @@ public class TemplateImpl implements Template
     private String description;
 
 
+    @ManyToMany
+    @JoinTable(
+            name="template_area_link",
+            joinColumns=@JoinColumn(name="templateid"),
+            inverseJoinColumns=@JoinColumn(name="areaid")
+    )
     private List<Area> possibleAreas;
 
 
@@ -49,12 +61,6 @@ public class TemplateImpl implements Template
         this.description = description;
     }
 
-    public TemplateImpl(final String name, final BigDecimal cost, final String description)
-    {
-        this.name = name;
-        this.cost = cost;
-        this.description = description;
-    }
 
     @Override
     public String toString()
@@ -108,14 +114,14 @@ public class TemplateImpl implements Template
     }
 
 
-    public List<BigInteger> getPossibleAreas()
+    public List<Area> getPossibleAreas()
     {
         return possibleAreas;
     }
 
-    public void setPossibleAreas(final List<BigInteger> possibleAreasId)
+    public void setPossibleAreas(final List<Area> possibleAreas)
     {
-        this.possibleAreas = possibleAreasId;
+        this.possibleAreas = possibleAreas;
     }
 
     @Override
