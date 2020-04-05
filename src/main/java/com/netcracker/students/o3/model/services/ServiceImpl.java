@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
+@Entity
 @Table(name = "services")
 @XmlType(name = "service")
 @XmlRootElement

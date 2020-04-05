@@ -1,27 +1,25 @@
 package com.netcracker.students.o3.model.templates;
 
 import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.area.AreaImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
+@Entity
 @Table(name = "templates")
 @XmlType(name = "template")
 @XmlRootElement
@@ -40,11 +38,11 @@ public class TemplateImpl implements Template
     private String description;
 
 
-    @ManyToMany
+    @ManyToMany(targetEntity = AreaImpl.class)
     @JoinTable(
-            name="template_area_link",
-            joinColumns=@JoinColumn(name="templateid"),
-            inverseJoinColumns=@JoinColumn(name="areaid")
+            name = "template_area_link",
+            joinColumns = @JoinColumn(name = "templateid"),
+            inverseJoinColumns = @JoinColumn(name = "areaid")
     )
     private List<Area> possibleAreas;
 

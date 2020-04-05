@@ -1,6 +1,7 @@
 package com.netcracker.students.o3.model.templates;
 
 import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.area.AreaImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -15,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 
+@Entity
 @Table(name = "templates")
 public interface Template
 {
@@ -65,7 +67,7 @@ public interface Template
     /**
      * @return possible area id by connected services
      */
-    @ManyToMany
+    @ManyToMany(targetEntity = AreaImpl.class)
     @JoinTable(
             name="template_area_link",
             joinColumns=@JoinColumn(name="templateid"),

@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 @Table(name = "employees")
 @XmlType(name = "employee")
 @XmlRootElement
-public class EmployerImpl implements Employee
+public class EmployeeImpl implements Employee
 {
     @Id
     private BigInteger id;
@@ -38,9 +38,9 @@ public class EmployerImpl implements Employee
                 '}';
     }
 
-    public EmployerImpl(){}
+    public EmployeeImpl(){}
 
-    public EmployerImpl(final BigInteger id, final String name, final String login, final String password)
+    public EmployeeImpl(final BigInteger id, final String name, final String login, final String password)
     {
         this.id = id;
         this.name = name;
@@ -117,7 +117,7 @@ public class EmployerImpl implements Employee
         {
             return false;
         }
-        final EmployerImpl employer = (EmployerImpl) o;
+        final EmployeeImpl employer = (EmployeeImpl) o;
         return Objects.equals(id, employer.id);
     }
 
