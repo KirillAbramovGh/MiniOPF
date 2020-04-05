@@ -3,12 +3,13 @@ package com.netcracker.students.o3.model.users;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.services.Service;
-
-import org.hibernate.annotations.Type;
+import com.netcracker.students.o3.model.services.ServiceImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,10 +24,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
+@Entity
 @Table(name = "customers")
 @XmlType(name = "customer")
 @XmlRootElement
-public class CustomerImpl implements Customer {
+public class CustomerImpl implements Customer
+{
 
     @Id
     private BigInteger id;
@@ -43,20 +46,22 @@ public class CustomerImpl implements Customer {
     @Column(name = "moneybalance")
     private BigDecimal moneyBalance;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
+    @OneToMany(targetEntity = ServiceImpl.class,cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
     private Set<Service> connectedServices;
 
-    @ManyToOne(cascade = CascadeType.REFRESH,fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = AreaImpl.class,cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "areaid")
     private Area area;
 
-    public CustomerImpl() {
+    public CustomerImpl()
+    {
         moneyBalance = BigDecimal.ZERO;
         connectedServices = new HashSet<>();
     }
 
     public CustomerImpl(final BigInteger id, final String name, final String login, final String password,
-                        final Area area) {
+            final Area area)
+    {
         this.id = id;
         this.name = name;
         this.login = login;
@@ -81,64 +86,79 @@ public class CustomerImpl implements Customer {
                 '}';
     }
 
-    public BigDecimal getMoneyBalance() {
+    public BigDecimal getMoneyBalance()
+    {
         return moneyBalance;
     }
 
-    public void setMoneyBalance(final BigDecimal moneyBalance) {
+    public void setMoneyBalance(final BigDecimal moneyBalance)
+    {
         this.moneyBalance = moneyBalance;
     }
 
-    public Set<Service> getConnectedServices() {
+    public Set<Service> getConnectedServices()
+    {
         return connectedServices;
     }
 
-    public void setConnectedServices(final Set<Service> connectedServices) {
+    public void setConnectedServices(final Set<Service> connectedServices)
+    {
         this.connectedServices = connectedServices;
     }
 
-    public Area getArea() {
+    public Area getArea()
+    {
         return area;
     }
 
-    public void setArea(final Area area) {
+    public void setArea(final Area area)
+    {
         this.area = area;
     }
 
     @Override
-    public void addConnectedService(Service service) {
-            connectedServices.add(service);
+    public void addConnectedService(Service service)
+    {
+        connectedServices.add(service);
     }
 
-    public BigInteger getId() {
+    public BigInteger getId()
+    {
         return id;
     }
 
-    public void setId(final BigInteger id) {
+    public void setId(final BigInteger id)
+    {
         this.id = id;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(final String name)
+    {
         this.name = name;
     }
 
-    public String getLogin() {
+    public String getLogin()
+    {
         return login;
     }
 
-    public void setLogin(final String login) {
+    public void setLogin(final String login)
+    {
         this.login = login;
     }
 
-    public String getPassword() {
+    public String getPassword()
+    {
         return password;
     }
 
-    public void setPassword(final String password) {
+    public void setPassword(final String password)
+    {
         this.password = password;
     }
 

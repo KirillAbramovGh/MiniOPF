@@ -1,72 +1,54 @@
 package com.netcracker.students.o3.model.dao.ServiceDao;
 
+import com.netcracker.students.o3.model.dao.AbstractHibDao;
+import com.netcracker.students.o3.model.dao.HibernateSessionFactoryUtil;
 import com.netcracker.students.o3.model.services.Service;
+import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.services.ServiceStatus;
 
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.List;
 
-public class ServiceHibDao implements ServiceDao
+public class ServiceHibDao extends AbstractHibDao<Service> implements ServiceDao
 {
     @Override
-    public List<Service> getServicesByUserId(final BigInteger userId) throws SQLException
+    public List<Service> getServicesByUserId(final BigInteger userId)
     {
         return null;
     }
 
     @Override
-    public List<Service> getServicesByTemplateId(final BigInteger templateId) throws SQLException
+    public List<Service> getServicesByTemplateId(final BigInteger templateId)
     {
         return null;
     }
 
     @Override
-    public List<Service> getServicesByStatus(final ServiceStatus status) throws SQLException
+    public List<Service> getServicesByStatus(final ServiceStatus status)
     {
         return null;
     }
 
     @Override
     public List<Service> getServicesByStatusAndCustomerId(final BigInteger userId, final ServiceStatus status)
-            throws SQLException
     {
         return null;
     }
 
     @Override
-    public List<Service> getAll() throws SQLException
+    public List<Service> getAll()
     {
-        return null;
+        List<Service> services =
+                (List<Service>) HibernateSessionFactoryUtil.getSessionFactory().openSession()
+                        .createQuery("From AreaImpl ")
+                        .list();
+        return services;
     }
 
     @Override
-    public Service getEntity(final BigInteger id) throws SQLException
+    public Service getEntity(final BigInteger id)
     {
-        return null;
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(ServiceImpl.class, id);
     }
 
-    @Override
-    public void update(final Service entity) throws SQLException
-    {
-
-    }
-
-    @Override
-    public void delete(final BigInteger id) throws SQLException
-    {
-
-    }
-
-    @Override
-    public void delete(final Service entity) throws SQLException
-    {
-
-    }
-
-    @Override
-    public void create(final Service entity) throws SQLException
-    {
-
-    }
 }

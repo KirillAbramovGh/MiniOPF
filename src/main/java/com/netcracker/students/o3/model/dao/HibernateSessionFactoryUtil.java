@@ -2,30 +2,47 @@ package com.netcracker.students.o3.model.dao;
 
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
+import com.netcracker.students.o3.model.services.Service;
+import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
+import com.netcracker.students.o3.model.users.Customer;
+import com.netcracker.students.o3.model.users.CustomerImpl;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-public class HibernateSessionFactoryUtil {
+public class HibernateSessionFactoryUtil
+{
     private static SessionFactory sessionFactory;
 
-    private HibernateSessionFactoryUtil() {}
+    private HibernateSessionFactoryUtil()
+    {
+    }
 
-    public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
-            try {
+    public static SessionFactory getSessionFactory()
+    {
+        if (sessionFactory == null)
+        {
+            try
+            {
                 Configuration configuration = new Configuration().configure();
                 configuration.addAnnotatedClass(Area.class);
                 configuration.addAnnotatedClass(AreaImpl.class);
                 configuration.addAnnotatedClass(Template.class);
                 configuration.addAnnotatedClass(TemplateImpl.class);
-                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+                configuration.addAnnotatedClass(Customer.class);
+                configuration.addAnnotatedClass(CustomerImpl.class);
+                configuration.addAnnotatedClass(Service.class);
+                configuration.addAnnotatedClass(ServiceImpl.class);
+                StandardServiceRegistryBuilder builder =
+                        new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
 
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 e.printStackTrace();
             }
         }
