@@ -171,7 +171,7 @@ public class ControllerImpl implements Controller
 
         List<Customer> customers = getCustomers();
         for(Customer customer : customers){
-            if(customer.getAreaId().equals(areaId)){
+            if(customer.getArea().equals(areaId)){
                 deepDeleteCustomer(customer.getId());
             }
         }
@@ -512,7 +512,7 @@ public class ControllerImpl implements Controller
     @Override
     public BigInteger getCustomerAreaId(final BigInteger customerId)
     {
-        return model.getCustomer(customerId).getAreaId();
+        return model.getCustomer(customerId).getArea();
     }
 
     @Override
@@ -650,7 +650,7 @@ public class ControllerImpl implements Controller
 
     public String getAreaName(BigInteger customerId)
     {
-        return getArea(getCustomer(customerId).getAreaId()).getName();
+        return getArea(getCustomer(customerId).getArea()).getName();
     }
 
     public List<Template> getCustomerAvailableTemplates(BigInteger customerId)
@@ -740,7 +740,7 @@ public class ControllerImpl implements Controller
     {
         disconnectImpossibleServices(customerId, areaId);
         Customer customer = getCustomer(customerId);
-        customer.setAreaId(areaId);
+        customer.setArea(areaId);
         model.setCustomer(customer);
     }
 

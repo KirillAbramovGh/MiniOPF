@@ -1,14 +1,24 @@
 package com.netcracker.students.o3.model.templates;
 
+import com.netcracker.students.o3.model.area.Area;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "templates")
 public interface Template
 {
     /**
      * @return Template id
      */
+    @Id
     BigInteger getId();
 
     /**
@@ -19,6 +29,7 @@ public interface Template
     /**
      * @return template name
      */
+    @Column(name = "template_name")
     String getName();
 
     /**
@@ -29,6 +40,7 @@ public interface Template
     /**
      * @return template cost per month
      */
+    @Column(name = "cost")
     BigDecimal getCost();
 
     /**
@@ -39,6 +51,7 @@ public interface Template
     /**
      * @return template description
      */
+    @Column(name = "description")
     String getDescription();
 
     /**
@@ -49,11 +62,11 @@ public interface Template
     /**
      * @return possible area id by connected services
      */
-    List<BigInteger> getPossibleAreasId();
+    List<Area> getPossibleArea();
 
      /**
       * set possible area id
       * @param possibleAreasId
       */
-    void setPossibleAreasId(final List<BigInteger> possibleAreasId);
+    void setPossibleAreasId(final List<Area> possibleAreas);
 }

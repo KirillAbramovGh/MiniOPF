@@ -1,5 +1,7 @@
 package com.netcracker.students.o3.model.templates;
 
+import com.netcracker.students.o3.model.area.Area;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
@@ -13,6 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
+@Entity
 @Table(name = "templates")
 @XmlType(name = "template")
 @XmlRootElement
@@ -31,7 +34,7 @@ public class TemplateImpl implements Template
     private String description;
 
 
-    private List<BigInteger> possibleAreasId;
+    private List<Area> possibleAreas;
 
 
     public TemplateImpl()
@@ -105,14 +108,14 @@ public class TemplateImpl implements Template
     }
 
 
-    public List<BigInteger> getPossibleAreasId()
+    public List<BigInteger> getPossibleAreas()
     {
-        return possibleAreasId;
+        return possibleAreas;
     }
 
-    public void setPossibleAreasId(final List<BigInteger> possibleAreasId)
+    public void setPossibleAreas(final List<BigInteger> possibleAreasId)
     {
-        this.possibleAreasId = possibleAreasId;
+        this.possibleAreas = possibleAreasId;
     }
 
     @Override

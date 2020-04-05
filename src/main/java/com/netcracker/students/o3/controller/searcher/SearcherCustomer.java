@@ -54,7 +54,7 @@ public class SearcherCustomer extends Searcher<Customer> {
         List<Customer> result = new ArrayList<>();
 
         for (Customer customer : customers) {
-            for (BigInteger serviceId : customer.getConnectedServicesIds()) {
+            for (BigInteger serviceId : customer.getConnectedServices()) {
                 if (checkService(search, serviceId)) {
                     result.add(customer);
                 }
@@ -74,7 +74,7 @@ public class SearcherCustomer extends Searcher<Customer> {
         List<Customer> result = new ArrayList<>();
 
         for (Customer customer : customers) {
-            if (checkArea(search, customer.getAreaId())) {
+            if (checkArea(search, customer.getArea())) {
                 result.add(customer);
             }
         }

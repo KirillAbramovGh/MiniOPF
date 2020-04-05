@@ -3,16 +3,29 @@ package com.netcracker.students.o3.model.users;
 import java.math.BigInteger;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+@Entity
+@Table(name = "employees")
 @XmlType(name = "employee")
 @XmlRootElement
 public class EmployerImpl implements Employee
 {
+    @Id
     private BigInteger id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "login")
     private String login;
+
+    @Column(name = "password")
     private String password;
 
 

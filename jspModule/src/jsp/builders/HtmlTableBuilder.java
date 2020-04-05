@@ -257,7 +257,7 @@ public class HtmlTableBuilder {
         result += addCell(customer.getName() + "");
         result += addCell(customer.getLogin());
         result += addCell(customer.getPassword());
-        result += addCell(customer.getAreaId() + "");
+        result += addCell(customer.getArea() + "");
         result += addCell(customer.getMoneyBalance() + "");
         result += addCell(
                 getCustomerConnectedServiceIds(customer)
@@ -366,7 +366,7 @@ public class HtmlTableBuilder {
 
     private String getCustomerConnectedServiceIds(Customer customer) {
         StringBuilder result = new StringBuilder();
-        for (BigInteger id : customer.getConnectedServicesIds()) {
+        for (BigInteger id : customer.getConnectedServices()) {
             result.append(id).append(",");
         }
         return result.toString();

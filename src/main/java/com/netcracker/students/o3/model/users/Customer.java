@@ -1,9 +1,10 @@
 package com.netcracker.students.o3.model.users;
 
+import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.services.Service;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 public interface Customer extends User
@@ -21,24 +22,24 @@ public interface Customer extends User
      /**
       * @return set of connected customer services ids
       */
-     Set<BigInteger> getConnectedServicesIds();
+     Set<Service> getConnectedServices();
 
      /***
       * set customer connected services
-      * @param connectedServicesIds
+      * @param connectedServices
       */
-     void setConnectedServicesIds(final Set<BigInteger> connectedServicesIds);
+     void setConnectedServicesIds(final Set<Service> connectedServices);
 
      /**
       * @return customer area id
       */
-     BigInteger getAreaId();
+     Area getArea();
 
      /**
       * set customer area id
-      * @param areaId
+      * @param area
       */
-     void setAreaId(final BigInteger areaId);
+     void setArea(final Area area);
 
      /**
       * add service to customer

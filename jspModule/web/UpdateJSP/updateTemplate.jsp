@@ -88,7 +88,7 @@
                 if (service.getTemplateId().equals(template.getId()))
                 {
                     Customer customer = controller.getCustomer(service.getUserId());
-                    if (!template.getPossibleAreasId().contains(customer.getAreaId()))
+                    if (!template.getPossibleAreasId().contains(customer.getArea()))
                     {
                         controller.disconnectService(service.getId());
                     }

@@ -42,7 +42,7 @@ public class CustomerJdbcDao extends AbstractJdbcDao<Customer> implements Custom
                     customer.setLogin(resultSet.getString("login"));
                     customer.setPassword(resultSet.getString("password"));
                     customer.setMoneyBalance(resultSet.getBigDecimal("moneybalance"));
-                    customer.setAreaId(BigInteger.valueOf(resultSet.getLong("areaid")));
+                    customer.setArea(BigInteger.valueOf(resultSet.getLong("areaid")));
 
                     try(PreparedStatement serviceStatement = connection.prepareStatement(sqlServiceReq))
                     {
@@ -89,7 +89,7 @@ public class CustomerJdbcDao extends AbstractJdbcDao<Customer> implements Custom
                     customer.setLogin(resultSet.getString("login"));
                     customer.setPassword(resultSet.getString("password"));
                     customer.setMoneyBalance(resultSet.getBigDecimal("moneybalance"));
-                    customer.setAreaId(BigInteger.valueOf(resultSet.getLong("areaid")));
+                    customer.setArea(BigInteger.valueOf(resultSet.getLong("areaid")));
                     String sqlServiceReq = "select id from services where userid=?";
 
                     PreparedStatement preparedStatement = connection.prepareStatement(sqlServiceReq);
@@ -121,7 +121,7 @@ public class CustomerJdbcDao extends AbstractJdbcDao<Customer> implements Custom
             statement.setString(2,entity.getLogin());
             statement.setString(3,entity.getPassword());
             statement.setBigDecimal(4,entity.getMoneyBalance());
-            statement.setLong(5,entity.getAreaId().longValue());
+            statement.setLong(5,entity.getArea().longValue());
             statement.setLong(6,entity.getId().longValue());
             statement.executeUpdate();
         }
@@ -145,7 +145,7 @@ public class CustomerJdbcDao extends AbstractJdbcDao<Customer> implements Custom
             statement.setString(3,entity.getLogin());
             statement.setString(4,entity.getPassword());
             statement.setBigDecimal(5,entity.getMoneyBalance());
-            statement.setLong(6,entity.getAreaId().longValue());
+            statement.setLong(6,entity.getArea().longValue());
             statement.executeUpdate();
         }
     }
@@ -171,7 +171,7 @@ public class CustomerJdbcDao extends AbstractJdbcDao<Customer> implements Custom
                     customer.setLogin(resultSet.getString("login"));
                     customer.setPassword(resultSet.getString("password"));
                     customer.setMoneyBalance(resultSet.getBigDecimal("moneybalance"));
-                    customer.setAreaId(BigInteger.valueOf(resultSet.getLong("areaid")));
+                    customer.setArea(BigInteger.valueOf(resultSet.getLong("areaid")));
                     String sqlServiceReq = "select id from services where userid=?";
                     PreparedStatement serviceStatement = connection.prepareStatement(sqlServiceReq);
 

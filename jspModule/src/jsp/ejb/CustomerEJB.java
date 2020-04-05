@@ -6,8 +6,6 @@ import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.controller.searcher.SearcherService;
 import com.netcracker.students.o3.controller.searcher.SearcherTemplates;
-import com.netcracker.students.o3.controller.sorters.ServiceSorter;
-import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
 import com.netcracker.students.o3.controller.sorters.TemplateSorter;
 import com.netcracker.students.o3.model.area.Area;
@@ -211,7 +209,7 @@ public class CustomerEJB
         customer.setName(name);
         customer.setLogin(login);
         customer.setPassword(password);
-        customer.setAreaId(areaId);
+        customer.setArea(areaId);
         customer.setMoneyBalance(balance);
 
         controller.setCustomer(customer);
@@ -219,6 +217,6 @@ public class CustomerEJB
 
     public Set<BigInteger> getConnectedServicesIds(BigInteger customerId)
     {
-        return ControllerImpl.getInstance().getCustomer(customerId).getConnectedServicesIds();
+        return ControllerImpl.getInstance().getCustomer(customerId).getConnectedServices();
     }
 }

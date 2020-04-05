@@ -213,7 +213,7 @@ public class ConsoleCustomerView implements View
             changeArea();
         }
 
-        controller.getCustomer(customerId).setAreaId(areas.get(areaNumber).getId());
+        controller.getCustomer(customerId).setArea(areas.get(areaNumber).getId());
     }
 
 
