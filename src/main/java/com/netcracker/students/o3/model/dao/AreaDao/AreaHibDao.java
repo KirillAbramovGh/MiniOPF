@@ -1,12 +1,13 @@
 package com.netcracker.students.o3.model.dao.AreaDao;
 
 import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.dao.AbstractHibDao;
 
 import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AreaHibDao implements AreaDao
+public class AreaHibDao extends AbstractHibDao<Area> implements AreaDao
 {
     @Override
     public Area getAreaByName(final String areaName) throws SQLException
@@ -26,21 +27,4 @@ public class AreaHibDao implements AreaDao
         return null;
     }
 
-    @Override
-    public void update(final Area entity) throws SQLException
-    {
-
-    }
-
-    @Override
-    public void delete(final BigInteger id) throws SQLException
-    {
-
-    }
-
-    @Override
-    public void create(final Area entity) throws SQLException
-    {
-
-    }
 }
