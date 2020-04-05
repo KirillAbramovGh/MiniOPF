@@ -2,7 +2,9 @@ package com.netcracker.students.o3.model.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
+import com.netcracker.students.o3.model.users.CustomerImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -28,11 +30,11 @@ public class ServiceImpl implements Service
     @Id
     private BigInteger id;
 
-    @ManyToOne()
+    @ManyToOne(targetEntity = CustomerImpl.class)
     @JoinColumn(name = "userid")
     private Customer customer;
 
-    @ManyToOne()
+    @ManyToOne(targetEntity = TemplateImpl.class)
     @JoinColumn(name = "templateid")
     private Template template;
 
@@ -48,8 +50,8 @@ public class ServiceImpl implements Service
     {
         return "ServiceImpl{" +
                 "id=" + id +
-                ", userId=" + customer +
-                ", template=" + template +
+                ", userId=" + customer.getId() +
+                ", template=" + template.getId() +
                 ", status=" + status +
                 ", cost=" + templateGetCost() +
                 ", activationDate=" + activationDate +

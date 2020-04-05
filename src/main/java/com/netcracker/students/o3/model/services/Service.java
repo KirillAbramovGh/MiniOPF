@@ -1,7 +1,9 @@
 package com.netcracker.students.o3.model.services;
 
 import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
+import com.netcracker.students.o3.model.users.CustomerImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -38,7 +40,7 @@ public interface Service
     /**
      * @return user id if service connected to him
      */
-    @ManyToOne()
+    @ManyToOne(targetEntity = CustomerImpl.class)
     @JoinColumn(name = "userid")
     Customer getCustomer();
 
@@ -52,7 +54,7 @@ public interface Service
     /**
      * @return template of service
      */
-    @ManyToOne()
+    @ManyToOne(targetEntity = TemplateImpl.class)
     @JoinColumn(name = "templateid")
     Template getTemplate();
 

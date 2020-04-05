@@ -82,7 +82,7 @@ public class CustomerImpl implements Customer
                 ", password='" + password + '\'' +
                 ", moneyBalance=" + moneyBalance +
                 ", connectedServicesIds=" + connectedServices +
-                ", areaId=" + area +
+                ", areaId=" + area.getId() +
                 '}';
     }
 
