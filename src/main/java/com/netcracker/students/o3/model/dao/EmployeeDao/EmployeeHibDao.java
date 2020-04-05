@@ -1,12 +1,17 @@
 package com.netcracker.students.o3.model.dao.EmployeeDao;
 
+import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.area.AreaImpl;
+import com.netcracker.students.o3.model.dao.AbstractHibDao;
+import com.netcracker.students.o3.model.dao.HibernateSessionFactoryUtil;
 import com.netcracker.students.o3.model.users.Employee;
+import com.netcracker.students.o3.model.users.EmployeeImpl;
 
 import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.List;
 
-public class EmployeeHibDao implements EmployeeDao
+public class EmployeeHibDao extends AbstractHibDao<Employee> implements EmployeeDao
 {
     @Override
     public Employee getEmployeeByLogin(final String login) throws SQLException
@@ -17,36 +22,16 @@ public class EmployeeHibDao implements EmployeeDao
     @Override
     public List<Employee> getAll() throws SQLException
     {
-        return null;
+        List<Employee> employees =
+                (List<Employee>) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery("From EmployeeImpl ")
+                        .list();
+        return employees;
     }
 
     @Override
     public Employee getEntity(final BigInteger id) throws SQLException
     {
-        return null;
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(EmployeeImpl.class, id);
     }
 
-    @Override
-    public void update(final Employee entity) throws SQLException
-    {
-
-    }
-
-    @Override
-    public void delete(final BigInteger id) throws SQLException
-    {
-
-    }
-
-    @Override
-    public void delete(final Employee entity) throws SQLException
-    {
-
-    }
-
-    @Override
-    public void create(final Employee entity) throws SQLException
-    {
-
-    }
 }

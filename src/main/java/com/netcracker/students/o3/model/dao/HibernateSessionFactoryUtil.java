@@ -8,6 +8,8 @@ import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.CustomerImpl;
+import com.netcracker.students.o3.model.users.Employee;
+import com.netcracker.students.o3.model.users.EmployeeImpl;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -36,6 +38,8 @@ public class HibernateSessionFactoryUtil
                 configuration.addAnnotatedClass(CustomerImpl.class);
                 configuration.addAnnotatedClass(Service.class);
                 configuration.addAnnotatedClass(ServiceImpl.class);
+                configuration.addAnnotatedClass(EmployeeImpl.class);
+                configuration.addAnnotatedClass(Employee.class);
                 StandardServiceRegistryBuilder builder =
                         new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
