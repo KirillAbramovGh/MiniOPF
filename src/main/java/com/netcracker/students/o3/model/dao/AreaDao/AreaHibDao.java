@@ -1,7 +1,11 @@
 package com.netcracker.students.o3.model.dao.AreaDao;
 
 import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.dao.AbstractHibDao;
+import com.netcracker.students.o3.model.dao.HibernateSessionFactoryUtil;
+
+import org.hibernate.query.Query;
 
 import java.math.BigInteger;
 import java.sql.SQLException;
@@ -10,21 +14,27 @@ import java.util.List;
 public class AreaHibDao extends AbstractHibDao<Area> implements AreaDao
 {
     @Override
-    public Area getAreaByName(final String areaName) throws SQLException
+    public Area getAreaByName(final String areaName)
     {
-        return null;
+        Query query = HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                createQuery("from AreaImpl where name=:name");
+        query.setParameter("name", areaName);
+        return (Area) query.uniqueResult();
     }
 
     @Override
-    public List<Area> getAll() throws SQLException
+    public List<Area> getAll()
     {
-        return null;
+        List<Area> areas =
+                (List<Area>) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery("From AreaImpl ")
+                        .list();
+        return areas;
     }
 
     @Override
-    public Area getEntity(final BigInteger id) throws SQLException
+    public Area getEntity(final BigInteger id)
     {
-        return null;
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(AreaImpl.class, id);
     }
 
 }

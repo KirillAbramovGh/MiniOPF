@@ -15,13 +15,6 @@ public class EmployerImpl implements Employee
     private String login;
     private String password;
 
-    public EmployerImpl(final String name, final String login, final String password)
-    {
-        this.name = name;
-        this.login = login;
-        this.password = password;
-    }
-
 
     @Override
     public String toString()
