@@ -2,14 +2,22 @@ package com.netcracker.students.o3.model.area;
 
 import java.math.BigInteger;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * district of customer
  */
+@Entity
+@Table(name = "areas")
 public interface Area
 {
     /**
      * @return area id
      */
+    @Id
     BigInteger getId();
 
     /**
@@ -21,6 +29,7 @@ public interface Area
     /**
      * @return area name
      */
+    @Column(name = "area_name")
     String getName();
 
     /**
@@ -32,6 +41,7 @@ public interface Area
     /**
      * @return description of area
      */
+    @Column(name = "description")
     String getDescription();
 
     /**

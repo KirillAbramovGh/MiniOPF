@@ -1,5 +1,6 @@
 package com.netcracker.students.o3;
 
+import com.netcracker.students.o3.model.dao.HibernateSessionFactoryUtil;
 import com.netcracker.students.o3.model.model.Model;
 import com.netcracker.students.o3.model.model.ModelDb;
 import com.netcracker.students.o3.model.serializer.ExporterJsonToDb;
@@ -13,7 +14,7 @@ public class Main
 {
     public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException, JAXBException
     {
-        downloadDataFromJSON();
+        HibernateSessionFactoryUtil.getSessionFactory();
     }
 
     public static void downloadDataFromJSON() throws SQLException, ClassNotFoundException, IOException

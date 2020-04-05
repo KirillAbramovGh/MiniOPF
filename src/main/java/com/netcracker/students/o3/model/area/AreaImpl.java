@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
+@Entity
 @Table(name = "areas")
 @XmlType(name = "area")
 @XmlRootElement
@@ -24,12 +24,6 @@ public class AreaImpl implements Area {
     private String description;
 
     public AreaImpl() {
-    }
-
-    public AreaImpl(final String name, final String description)
-    {
-        this.name = name;
-        this.description = description;
     }
 
     public AreaImpl(final BigInteger id, final String name, final String description) {
