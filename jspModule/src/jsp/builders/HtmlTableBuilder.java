@@ -193,9 +193,9 @@ public class HtmlTableBuilder {
 
         result += addCell("<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId="+order.getId()+
                 "' target=\"_blank\">"+order.getId() + "</a>");
-        result += addCell(order.getTemplateId() + "");
-        result += addCell(order.getServiceId() + "");
-        result += addCell(order.getEmployeeId() + "");
+        result += addCell(order.getTemplate() + "");
+        result += addCell(order.getService() + "");
+        result += addCell(order.getEmployee() + "");
         result += addCell(order.getStatus() + "");
         result += addCell(order.getAction() + "");
         result += addCell(order.getCreationDate() + "");
@@ -223,12 +223,12 @@ public class HtmlTableBuilder {
 
         result += addCell("<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId="+service.getId()+"' target=\"_blank\">"+service.getId() + "</a>");
         result += addCell(controller.getServiceName(service.getId()));
-        result += addCell(service.getCost() + "");
+        result += addCell(service.templateGetCost() + "");
         result += addCell(service.getStatus() + "");
-        result += addCell(service.getTemplateId() + "");
-        result += addCell(service.getUserId() + "");
+        result += addCell(service.getTemplate() + "");
+        result += addCell(service.getCustomer() + "");
         result += addCell(service.getActivationDate() + "");
-        result += addCell(getAreasByTemplateId(service.getTemplateId()));
+        result += addCell(getAreasByTemplateId(service.getTemplate().getId()));
         result += addCell(createButton("Delete","deleteService",service.getId().toString()));
         result += addCell(createButton("Update","updateService",service.getId().toString()));
 
@@ -354,10 +354,9 @@ public class HtmlTableBuilder {
         Controller controller = ControllerImpl.getInstance();
         Template template = controller.getTemplate(templateId);
 
-        List<BigInteger> areasId = template.getPossibleAreasId();
-        Area area;
-        for (BigInteger areaId : areasId) {
-            area = controller.getArea(areaId);
+        List<Area> areas = template.getPossibleAreas();
+
+        for (Area area : areas) {
             result.append(" ").append(area.getName());
         }
 
@@ -366,8 +365,8 @@ public class HtmlTableBuilder {
 
     private String getCustomerConnectedServiceIds(Customer customer) {
         StringBuilder result = new StringBuilder();
-        for (BigInteger id : customer.getConnectedServices()) {
-            result.append(id).append(",");
+        for (Service service : customer.getConnectedServices()) {
+            result.append(service.getId()).append(",");
         }
         return result.toString();
     }

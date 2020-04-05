@@ -59,6 +59,12 @@ public class ServiceHibDao implements ServiceDao
     }
 
     @Override
+    public void delete(final Service entity) throws SQLException
+    {
+
+    }
+
+    @Override
     public void create(final Service entity) throws SQLException
     {
 

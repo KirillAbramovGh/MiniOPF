@@ -37,16 +37,16 @@ public interface Model
     BigInteger getNextId();
 
 
-    Customer createCustomer(String name, String login, String password, BigInteger areaId);
+    Customer createCustomer(String name, String login, String password, Area area);
 
     Employee createEmployee(String name, String login, String password);
 
-    Order createOrder(BigInteger templateId, BigInteger serviceId,
+    Order createOrder(Template template, Service service,
             OrderStatus status, OrderAction action);
 
     Template createTemplate(String name, BigDecimal cost, String description);
 
-    Service createService(BigInteger userId, BigInteger templateId, ServiceStatus status);
+    Service createService(Customer customer, Template template, ServiceStatus status);
 
     Area createArea(String name, String description);
 

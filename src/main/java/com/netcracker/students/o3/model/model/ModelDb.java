@@ -22,7 +22,7 @@ import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.CustomerImpl;
 import com.netcracker.students.o3.model.users.Employee;
-import com.netcracker.students.o3.model.users.EmployerImpl;
+import com.netcracker.students.o3.model.users.EmployeeImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -212,11 +212,11 @@ public class ModelDb implements Model
 
     @Override
     public Customer createCustomer(final String name, final String login, final String password,
-            final BigInteger areaId)
+            final Area area)
     {
         synchronized (customerDao)
         {
-            Customer newCustomer = new CustomerImpl(getNextId(), name, login, password, areaId);
+            Customer newCustomer = new CustomerImpl(getNextId(), name, login, password, area);
             addCustomer(newCustomer);
 
             return newCustomer;
@@ -229,7 +229,7 @@ public class ModelDb implements Model
     {
         synchronized (employeeDao)
         {
-            Employee newEmployee = new EmployerImpl(getNextId(), name, login, password);
+            Employee newEmployee = new EmployeeImpl(getNextId(), name, login, password);
             addEmployee(newEmployee);
 
             return newEmployee;
@@ -237,12 +237,12 @@ public class ModelDb implements Model
     }
 
     @Override
-    public Order createOrder(final BigInteger templateId, final BigInteger serviceId, final OrderStatus status,
+    public Order createOrder(final Template template, final Service service, final OrderStatus status,
             final OrderAction action)
     {
         synchronized (orderDao)
         {
-            Order newOrder = new OrderImpl(getNextId(), templateId, serviceId, status, action);
+            Order newOrder = new OrderImpl(getNextId(), template, service, status, action);
             newOrder.setCreationDate(new Date());
             addOrder(newOrder);
 
@@ -264,12 +264,12 @@ public class ModelDb implements Model
     }
 
     @Override
-    public Service createService(final BigInteger userId, final BigInteger templateId, final ServiceStatus status)
+    public Service createService(final Customer customer, final Template template, final ServiceStatus status)
 
     {
         synchronized (serviceDao)
         {
-            Service newService = new ServiceImpl(getNextId(), userId, templateId, status);
+            Service newService = new ServiceImpl(getNextId(), customer, template, status);
             addService(newService);
 
             return newService;
@@ -422,7 +422,7 @@ public class ModelDb implements Model
         try
         {
             Order order = orderDao.getEntity(orderId);
-            if (order != null && order.getServiceId() == null)
+            if (order != null && order.getService() == null)
             {
                 order = null;
             }

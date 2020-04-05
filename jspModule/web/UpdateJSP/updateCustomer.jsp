@@ -89,20 +89,20 @@
                             .getConnectedServicesIds((BigInteger) request.getSession().getAttribute("id")))
                     {
                         Service service = ControllerImpl.getInstance().getService(serviceId);
-                        Template template = ControllerImpl.getInstance().getTemplate(service.getTemplateId());
-                        if (!template.getPossibleAreasId()
+                        Template template = service.getTemplate();
+                        if (!template.getPossibleAreas()
                                 .contains(customerEJB.getAreaId((BigInteger) request.getSession().getAttribute("id"))))
                         {
                             customerEJB.disconnectService(serviceId);
                             break;
                         }
-                        if (service.getTemplateId().equals(templateId))
+                        if (service.getTemplate().equals(templateId))
                         {
                             connected = true;
                             break;
                         }
                     }
-                    if (!connected && ControllerImpl.getInstance().getTemplate(templateId).getPossibleAreasId()
+                    if (!connected && ControllerImpl.getInstance().getTemplate(templateId).getPossibleAreas()
                             .contains(customerEJB.getAreaId((BigInteger) request.getSession().getAttribute("id"))))
                     {
                         customerEJB.connectService((BigInteger) request.getSession().getAttribute("id"), templateId);

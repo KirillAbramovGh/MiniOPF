@@ -1,6 +1,7 @@
 package com.netcracker.students.o3.controller.searcher;
 
 import com.netcracker.students.o3.controller.ControllerImpl;
+import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.users.Customer;
 
 import java.math.BigDecimal;
@@ -54,8 +55,8 @@ public class SearcherCustomer extends Searcher<Customer> {
         List<Customer> result = new ArrayList<>();
 
         for (Customer customer : customers) {
-            for (BigInteger serviceId : customer.getConnectedServices()) {
-                if (checkService(search, serviceId)) {
+            for (Service service : customer.getConnectedServices()) {
+                if (checkService(search, service.getId())) {
                     result.add(customer);
                 }
             }
@@ -74,7 +75,7 @@ public class SearcherCustomer extends Searcher<Customer> {
         List<Customer> result = new ArrayList<>();
 
         for (Customer customer : customers) {
-            if (checkArea(search, customer.getArea())) {
+            if (checkArea(search, customer.getArea().getId())) {
                 result.add(customer);
             }
         }

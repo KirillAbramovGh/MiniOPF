@@ -73,9 +73,9 @@ public interface Template
     )
     List<Area> getPossibleAreas();
 
-    /**
-     * set possible area id
-     * @param possibleAreas
-     */
+     /**
+      * set possible area id
+      * @param possibleAreas
+      */
     void setPossibleAreas(final List<Area> possibleAreas);
 }

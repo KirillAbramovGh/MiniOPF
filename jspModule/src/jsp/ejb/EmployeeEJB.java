@@ -229,9 +229,9 @@ public class EmployeeEJB
     public void startOrder(BigInteger orderId, BigInteger employeeId)
     {
         Order order = ControllerImpl.getInstance().getOrder(orderId);
-        if (order.getEmployeeId().longValue() == 0 || order.getEmployeeId().equals(employeeId))
+        if (order.getEmployee().getId().longValue() == 0 || order.getEmployee().getId().equals(employeeId))
         {
-            ControllerImpl.getInstance().startOrder(orderId, employeeId);
+            ControllerImpl.getInstance().startOrder(orderId, order.getEmployee());
         }
     }
 

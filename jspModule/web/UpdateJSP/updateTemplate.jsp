@@ -7,6 +7,7 @@
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.netcracker.students.o3.model.area.Area" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -45,9 +46,9 @@
             private String getPossibleAreasId()
             {
                 String res = "";
-                for (BigInteger id : template.getPossibleAreasId())
+                for (Area area : template.getPossibleAreas())
                 {
-                    res += id + ",";
+                    res += area.getId() + ",";
                 }
                 return res;
             }
@@ -65,6 +66,7 @@
 
         if (request.getParameter("save") != null)
         {
+            Controller controller = ControllerImpl.getInstance();
             String name = request.getParameter("name");
             String cost = request.getParameter("cost");
             String description = request.getParameter("description");
@@ -74,21 +76,21 @@
             template.setCost(BigDecimal.valueOf(Double.parseDouble(cost)));
             template.setName(name);
 
-            List<BigInteger> set = new ArrayList<>();
+            List<Area> set = new ArrayList<>();
             for (String id : areas)
             {
                 if (id != null && !id.isEmpty())
                 {
-                    set.add(BigInteger.valueOf(Long.parseLong(id)));
+                    set.add(controller.getArea(BigInteger.valueOf(Long.parseLong(id))));
                 }
             }
-            template.setPossibleAreasId(set);
+            template.setPossibleAreas(set);
             for (Service service : controller.getServices())
             {
-                if (service.getTemplateId().equals(template.getId()))
+                if (service.getTemplate().equals(template.getId()))
                 {
-                    Customer customer = controller.getCustomer(service.getUserId());
-                    if (!template.getPossibleAreasId().contains(customer.getArea()))
+                    Customer customer = service.getCustomer();
+                    if (!template.getPossibleAreas().contains(customer.getArea()))
                     {
                         controller.disconnectService(service.getId());
                     }

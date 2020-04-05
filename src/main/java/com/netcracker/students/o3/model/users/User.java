@@ -2,9 +2,13 @@ package com.netcracker.students.o3.model.users;
 
 import java.math.BigInteger;
 
+import javax.persistence.Entity;
+import javax.persistence.MappedSuperclass;
+
 /**
  * user
  */
+
 public interface User
 {
     /**

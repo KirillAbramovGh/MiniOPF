@@ -60,14 +60,20 @@ public class ServiceJdbcDao extends AbstractJdbcDao<Service> implements ServiceD
                 "update " + getTableName() + " set userid=?, templateid=?, status=?, activationdate=? where id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            statement.setLong(1, entity.getUserId().longValue());
-            statement.setLong(2, entity.getTemplateId().longValue());
-            statement.setString(3, entity.getStatus() + "");
+//            statement.setLong(1, entity.getCustomer().longValue());
+//            statement.setLong(2, entity.getTemplate().longValue());
+//            statement.setString(3, entity.getStatus() + "");
             statement.setDate(4, new java.sql.Date(entity.getActivationDate().getTime()));
             statement.setLong(5, entity.getId().longValue());
 
             statement.executeUpdate();
         }
+
+    }
+
+    @Override
+    public void delete(final Service entity) throws SQLException
+    {
 
     }
 
@@ -84,8 +90,8 @@ public class ServiceJdbcDao extends AbstractJdbcDao<Service> implements ServiceD
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
             statement.setLong(1, entity.getId().longValue());
-            statement.setLong(2, entity.getUserId().longValue());
-            statement.setLong(3, entity.getTemplateId().longValue());
+            statement.setLong(2, entity.getCustomer().getId().longValue());
+            statement.setLong(3, entity.getTemplate().getId().longValue());
             statement.setString(4, entity.getStatus() + "");
             statement.setDate(5, new java.sql.Date(entity.
                     getActivationDate().
@@ -166,8 +172,8 @@ public class ServiceJdbcDao extends AbstractJdbcDao<Service> implements ServiceD
         {
             service = new ServiceImpl();
             service.setId(set.getBigDecimal("id").toBigInteger());
-            service.setUserId(BigInteger.valueOf(set.getLong("userid")));
-            service.setTemplateId(BigInteger.valueOf(set.getLong("templateid")));
+//            service.setCustomer(BigInteger.valueOf(set.getLong("userid")));
+//            service.setTemplate(BigInteger.valueOf(set.getLong("templateid")));
             service.setStatus(ServiceStatus.valueOf(set.getString("status")));
             service.setActivationDate(new Date(set.getDate("activationdate").getTime()));
         }

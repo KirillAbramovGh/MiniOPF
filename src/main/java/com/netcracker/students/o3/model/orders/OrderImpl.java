@@ -1,5 +1,9 @@
 package com.netcracker.students.o3.model.orders;
 
+import com.netcracker.students.o3.model.services.Service;
+import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.users.Employee;
+
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.Objects;
@@ -7,6 +11,10 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -20,14 +28,17 @@ public class OrderImpl implements Order
     @Id
     private BigInteger id;
 
-    @Column(name = "templateid")
-    private BigInteger templateId;
+    @ManyToOne
+    @JoinColumn(name = "templateid")
+    private Template template;
 
-    @Column(name = "serviceid")
-    private BigInteger serviceId;
+    @OneToOne
+    @JoinColumn(name = "serviceid")
+    private Service service;
 
-    @Column(name = "employeeid")
-    private BigInteger employeeId;
+    @ManyToOne
+    @JoinColumn(name = "employeeid")
+    private Employee employee;
 
     @Column(name = "status")
     private OrderStatus status;
@@ -42,26 +53,18 @@ public class OrderImpl implements Order
     {
     }
 
-    public OrderImpl(final BigInteger id, final BigInteger templateId, final BigInteger serviceId,
+    public OrderImpl(final BigInteger id, final Template template, final Service service,
             final OrderStatus status, final OrderAction action)
     {
         this.id = id;
-        this.templateId = templateId;
-        this.serviceId = serviceId;
+        this.template = template;
+        this.service = service;
         this.status = status;
         this.action = action;
         this.creationDate = new Date();
 
     }
 
-    public OrderImpl(final BigInteger templateId, final BigInteger serviceId, final OrderStatus status,
-            final OrderAction action)
-    {
-        this.templateId = templateId;
-        this.serviceId = serviceId;
-        this.status = status;
-        this.action = action;
-    }
 
     @Override
     public String toString()
@@ -85,34 +88,34 @@ public class OrderImpl implements Order
         this.id = id;
     }
 
-    public BigInteger getTemplateId()
+    public Template getTemplate()
     {
-        return templateId;
+        return template;
     }
 
-    public void setTemplateId(final BigInteger templateId)
+    public void setTemplate(final Template template)
     {
-        this.templateId = templateId;
+        this.template = template;
     }
 
-    public BigInteger getServiceId()
+    public Service getService()
     {
-        return serviceId;
+        return service;
     }
 
-    public void setServiceId(final BigInteger serviceId)
+    public void setService(final Service service)
     {
-        this.serviceId = serviceId;
+        this.service = service;
     }
 
-    public BigInteger getEmployeeId()
+    public Employee getEmployee()
     {
-        return employeeId;
+        return employee;
     }
 
-    public void setEmployeeId(final BigInteger employeeId)
+    public void setEmployee(final Employee employee)
     {
-        this.employeeId = employeeId;
+        this.employee = employee;
     }
 
     public OrderStatus getStatus()

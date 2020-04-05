@@ -1,5 +1,6 @@
 package com.netcracker.students.o3.model.dao.TemplateDao;
 
+import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.dao.AbstractJdbcDao;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
@@ -51,7 +52,7 @@ public class TemplateJdbcDao extends AbstractJdbcDao<Template> implements Templa
                         {
                             areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
                         }
-                        template.setPossibleAreasId(areaIds);
+                       // template.setPossibleAreas(areaIds);
 
                         templates.add(template);
                         areaSet.close();
@@ -108,10 +109,10 @@ public class TemplateJdbcDao extends AbstractJdbcDao<Template> implements Templa
         sqlReq = "insert into template_area_link values (?,?)";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            for (BigInteger areaId : entity.getPossibleAreasId())
+            for (Area areaId : entity.getPossibleAreas())
             {
                 statement.setLong(1, entity.getId().longValue());
-                statement.setLong(2, areaId.longValue());
+                statement.setLong(2, areaId.getId().longValue());
                 statement.executeUpdate();
             }
         }
@@ -139,6 +140,12 @@ public class TemplateJdbcDao extends AbstractJdbcDao<Template> implements Templa
     }
 
     @Override
+    public void delete(final Template entity) throws SQLException
+    {
+
+    }
+
+    @Override
     public void create(final Template entity) throws SQLException
     {
         System.out.println("template create");
@@ -151,12 +158,12 @@ public class TemplateJdbcDao extends AbstractJdbcDao<Template> implements Templa
 
             statement.executeUpdate(sqlReq);
 
-            for (BigInteger areaId : entity.getPossibleAreasId())
-            {
-                String templateAreaLink =
-                        "INSERT INTO " + "template_area_link" + " VALUES (" + entity.getId() + ", " + areaId + ")";
-                statement.executeUpdate(templateAreaLink);
-            }
+//            for (BigInteger areaId : entity.getPossibleAreas())
+//            {
+//                String templateAreaLink =
+//                        "INSERT INTO " + "template_area_link" + " VALUES (" + entity.getId() + ", " + areaId + ")";
+//                statement.executeUpdate(templateAreaLink);
+//            }
         }
 
     }
@@ -187,7 +194,7 @@ public class TemplateJdbcDao extends AbstractJdbcDao<Template> implements Templa
                 {
                     areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
                 }
-                template.setPossibleAreasId(areaIds);
+              //  template.setPossibleAreas(areaIds);
                 areaSet.close();
             }
             resultSet.close();
@@ -245,7 +252,7 @@ public class TemplateJdbcDao extends AbstractJdbcDao<Template> implements Templa
         {
             areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
         }
-        template.setPossibleAreasId(areaIds);
+     //   template.setPossibleAreas(areaIds);
         resultSet.close();
         areaSet.close();
         return template;
@@ -282,7 +289,7 @@ public class TemplateJdbcDao extends AbstractJdbcDao<Template> implements Templa
                         {
                             areaIds.add(areaSet.getBigDecimal("areaid").toBigInteger());
                         }
-                        template.setPossibleAreasId(areaIds);
+              //          template.setPossibleAreas(areaIds);
 
                         templates.add(template);
                     }

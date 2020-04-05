@@ -5,7 +5,7 @@ import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.CustomerImpl;
-import com.netcracker.students.o3.model.users.EmployerImpl;
+import com.netcracker.students.o3.model.users.EmployeeImpl;
 
 import org.xml.sax.SAXException;
 
@@ -17,7 +17,6 @@ import java.util.HashSet;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -29,7 +28,7 @@ public class XMLSerializer
     private static final Class[] classes = new Class[]{
             XMLRequestsWrapper.class, XMLRequest.class,
             HashSet.class, HashMap.class,
-            CustomerImpl.class, EmployerImpl.class, AreaImpl.class,
+            CustomerImpl.class, EmployeeImpl.class, AreaImpl.class,
             OrderImpl.class, TemplateImpl.class, ServiceImpl.class
     };
 

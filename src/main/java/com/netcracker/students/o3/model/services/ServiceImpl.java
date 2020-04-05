@@ -1,7 +1,8 @@
 package com.netcracker.students.o3.model.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.netcracker.students.o3.model.model.ModelDb;
+import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.users.Customer;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -11,6 +12,8 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -24,11 +27,13 @@ public class ServiceImpl implements Service
     @Id
     private BigInteger id;
 
-    @Column(name = "userid")
-    private BigInteger userId;
+    @ManyToOne()
+    @JoinColumn(name = "userid")
+    private Customer customer;
 
-    @Column(name = "templateid")
-    private BigInteger templateId;
+    @ManyToOne()
+    @JoinColumn(name = "templateid")
+    private Template template;
 
     @Column(name = "status")
     private ServiceStatus status;
@@ -36,22 +41,16 @@ public class ServiceImpl implements Service
     @Column(name = "activationdate")
     private Date activationDate;
 
-    public ServiceImpl(final BigInteger userId, final BigInteger templateId, final ServiceStatus status)
-    {
-        this.userId = userId;
-        this.templateId = templateId;
-        this.status = status;
-    }
 
     @Override
     public String toString()
     {
         return "ServiceImpl{" +
                 "id=" + id +
-                ", userId=" + userId +
-                ", templateId=" + templateId +
+                ", userId=" + customer +
+                ", template=" + template +
                 ", status=" + status +
-                ", cost=" + getCost() +
+                ", cost=" + templateGetCost() +
                 ", activationDate=" + activationDate +
                 '}';
     }
@@ -61,12 +60,12 @@ public class ServiceImpl implements Service
         this.activationDate = new Date();
     }
 
-    public ServiceImpl(final BigInteger id, final BigInteger userId, final BigInteger templateId,
+    public ServiceImpl(final BigInteger id, final Customer customer, final Template template,
             final ServiceStatus status)
     {
         this.id = id;
-        this.userId = userId;
-        this.templateId = templateId;
+        this.customer = customer;
+        this.template = template;
         this.status = status;
         this.activationDate = new Date();
     }
@@ -81,24 +80,24 @@ public class ServiceImpl implements Service
         this.id = id;
     }
 
-    public BigInteger getUserId()
+    public Customer getCustomer()
     {
-        return userId;
+        return customer;
     }
 
-    public void setUserId(final BigInteger userId)
+    public void setCustomer(final Customer customer)
     {
-        this.userId = userId;
+        this.customer = customer;
     }
 
-    public BigInteger getTemplateId()
+    public Template getTemplate()
     {
-        return templateId;
+        return template;
     }
 
-    public void setTemplateId(final BigInteger templateId)
+    public void setTemplate(final Template template)
     {
-        this.templateId = templateId;
+        this.template = template;
     }
 
     public ServiceStatus getStatus()
@@ -112,10 +111,9 @@ public class ServiceImpl implements Service
     }
 
     @JsonIgnore
-    public BigDecimal getCost()
+    public BigDecimal templateGetCost()
     {
-        return ModelDb.getInstance()
-                .getTemplate(templateId).getCost();
+        return template.getCost();
     }
 
     public Date getActivationDate()

@@ -39,6 +39,12 @@ public class EmployeeHibDao implements EmployeeDao
     }
 
     @Override
+    public void delete(final Employee entity) throws SQLException
+    {
+
+    }
+
+    @Override
     public void create(final Employee entity) throws SQLException
     {
 

@@ -16,7 +16,6 @@ public class LastIdDao
     private static final String PASSWORD = "postgres";
     private static final String CONNECTION_URL = "jdbc:postgresql://localhost:5432/entities";
     private static final String DRIVER_NAME = "org.postgresql.Driver";
-    private static final String TABLE_NAME = "last_id";
 
     public BigInteger getNextId() throws SQLException
     {

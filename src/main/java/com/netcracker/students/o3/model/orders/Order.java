@@ -1,16 +1,31 @@
 package com.netcracker.students.o3.model.orders;
 
+import com.netcracker.students.o3.model.services.Service;
+import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.users.Employee;
+
 import java.math.BigInteger;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * class order for employee. Create to do action for service
  */
+
+@Table(name = "orders")
 public interface Order
 {
     /**
      * @return id of order
      */
+    @Id
     BigInteger getId();
 
     /**
@@ -21,38 +36,45 @@ public interface Order
     /**
      * @return template id
      */
-    BigInteger getTemplateId();
+    @ManyToOne
+    @JoinColumn(name = "templateid")
+    Template getTemplate();
 
     /**
      * set template id
-     * @param  templateId of template
+     * @param  template of template
      */
-    void setTemplateId(final BigInteger templateId);
+    void setTemplate(final Template template);
 
     /**
      * @return service id
      */
-    BigInteger getServiceId();
+    @OneToOne
+    @JoinColumn(name = "serviceid")
+    Service getService();
 
     /**
      * set service id
-     * @param serviceId of service which
+     * @param service of service which
      */
-    void setServiceId(final BigInteger serviceId);
+    void setService(final Service service);
 
     /**
      * @return employee id who response for order
      */
-    BigInteger getEmployeeId();
+    @ManyToOne
+    @JoinColumn(name = "employeeid")
+    Employee getEmployee();
 
     /**
-     * @param employeeId who response for order
+     * @param employee who response for order
      */
-    void setEmployeeId(final BigInteger employeeId);
+    void setEmployee(final Employee employee);
 
     /**
      * @return Order status
      */
+    @Column(name = "status")
     OrderStatus getStatus();
 
     /**
@@ -64,6 +86,7 @@ public interface Order
     /**
      * @return order action define action
      */
+    @Column(name = "orderaction")
     OrderAction getAction();
 
     /**
@@ -74,6 +97,7 @@ public interface Order
     /**
      * @return date of creation
      */
+    @Column(name = "creationdate")
     Date getCreationDate();
 
     /**

@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -92,7 +93,7 @@ public class CustomerEJB
 
         for (Service service : connectedServices)
         {
-            templates.put(service.getId(), ControllerImpl.getInstance().getTemplate(service.getTemplateId()));
+            templates.put(service.getId(), service.getTemplate());
         }
 
         return templates;
@@ -103,7 +104,7 @@ public class CustomerEJB
         List<Template> templates = ControllerImpl.getInstance().getCustomerAvailableTemplates(customerId);
         for (Service service : ControllerImpl.getInstance().getPlannedActiveSuspendedProvisioningService(customerId))
         {
-            templates.remove(ControllerImpl.getInstance().getTemplate(service.getTemplateId()));
+            templates.remove(service.getTemplate());
         }
 
         return templates;
@@ -199,7 +200,7 @@ public class CustomerEJB
     }
 
     public BigInteger getAreaId(final BigInteger customerId){
-        return ControllerImpl.getInstance().getCustomerAreaId(customerId);
+        return ControllerImpl.getInstance().getCustomerArea(customerId).getId();
     }
 
     public void setCustomersFields(BigInteger customerId, String name, String password,String login,BigInteger areaId,BigDecimal balance){
@@ -209,7 +210,7 @@ public class CustomerEJB
         customer.setName(name);
         customer.setLogin(login);
         customer.setPassword(password);
-        customer.setArea(areaId);
+        customer.setArea(controller.getArea(areaId));
         customer.setMoneyBalance(balance);
 
         controller.setCustomer(customer);
@@ -217,6 +218,10 @@ public class CustomerEJB
 
     public Set<BigInteger> getConnectedServicesIds(BigInteger customerId)
     {
-        return ControllerImpl.getInstance().getCustomer(customerId).getConnectedServices();
+        Set<BigInteger> result = new HashSet<>();
+        for(Service service :  ControllerImpl.getInstance().getCustomer(customerId).getConnectedServices()){
+            result.add(service.getId());
+        }
+        return result;
     }
 }

@@ -213,7 +213,7 @@ public class ConsoleCustomerView implements View
             changeArea();
         }
 
-        controller.getCustomer(customerId).setArea(areas.get(areaNumber).getId());
+        controller.getCustomer(customerId).setArea(areas.get(areaNumber));
     }
 
 
@@ -244,7 +244,7 @@ public class ConsoleCustomerView implements View
     {
         Scanner scanner = new Scanner(System.in);
 
-        List<Template> templates = controller.getTemplatesByAreaId(controller.getCustomerAreaId(customerId));
+        List<Template> templates = controller.getTemplatesByAreaId(controller.getCustomerArea(customerId).getId());
 
         String choice = null;
         while (!"0".equals(choice))
@@ -263,7 +263,7 @@ public class ConsoleCustomerView implements View
                 case "7":
                 case "8":
                     ControllerImpl.getInstance()
-                            .createOrder(templates.get(from + Integer.parseInt(choice)).getId(), null,
+                            .createOrder(templates.get(from + Integer.parseInt(choice)), null,
                                     OrderStatus.Entering, OrderAction.New);
                     break;
                 case "9":
@@ -497,8 +497,8 @@ public class ConsoleCustomerView implements View
 
         for (Service service : controller.getActiveServices(customerId))
         {
-            if (!controller.getTemplate(service.getTemplateId()).getPossibleAreasId()
-                    .contains(areas.get(areaNumber).getId()))
+            if (!service.getTemplate().getPossibleAreas()
+                    .contains(areas.get(areaNumber)))
             {
                 throw new UnpossibleChangeAreaException("Вы не можете поменять район");
             }
@@ -506,8 +506,8 @@ public class ConsoleCustomerView implements View
 
         for (Service service : controller.getPlannedServices(customerId))
         {
-            if (!controller.getTemplate(service.getTemplateId()).getPossibleAreasId()
-                    .contains(areas.get(areaNumber).getId()))
+            if (!service.getTemplate().getPossibleAreas()
+                    .contains(areas.get(areaNumber)))
             {
                 throw new UnpossibleChangeAreaException("Вы не можете поменять район");
             }

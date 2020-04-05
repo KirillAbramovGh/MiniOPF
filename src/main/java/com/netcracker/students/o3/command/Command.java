@@ -1,10 +1,5 @@
 package com.netcracker.students.o3.command;
 
-import com.netcracker.students.o3.model.users.CustomerImpl;
-import com.netcracker.students.o3.model.users.EmployerImpl;
-
-import java.math.BigInteger;
-
 public enum Command
 {
     COMMAND_CHANGE_BALANCE()

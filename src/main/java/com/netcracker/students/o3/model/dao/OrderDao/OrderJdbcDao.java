@@ -65,13 +65,13 @@ public class OrderJdbcDao extends AbstractJdbcDao<Order> implements OrderDao
                         "id=?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
-            statement.setLong(1, entity.getTemplateId().longValue());
-            statement.setLong(2, entity.getServiceId().longValue());
+            statement.setLong(1, entity.getTemplate().getId().longValue());
+            statement.setLong(2, entity.getService().getId().longValue());
             statement.setString(3, entity.getStatus().toString());
             statement.setDate(4, new java.sql.Date(entity.getCreationDate().getTime()));
-            if (entity.getEmployeeId() != null)
+            if (entity.getEmployee() != null)
             {
-                statement.setLong(5, entity.getEmployeeId().longValue());
+                statement.setLong(5, entity.getEmployee().getId().longValue());
             }
             else
             {
@@ -82,6 +82,12 @@ public class OrderJdbcDao extends AbstractJdbcDao<Order> implements OrderDao
 
             statement.executeUpdate();
         }
+    }
+
+    @Override
+    public void delete(final Order entity) throws SQLException
+    {
+
     }
 
     @Override
@@ -98,12 +104,12 @@ public class OrderJdbcDao extends AbstractJdbcDao<Order> implements OrderDao
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sqlReq))
         {
             statement.setLong(1, entity.getId().longValue());
-            statement.setLong(2, entity.getTemplateId().longValue());
-            statement.setLong(3, entity.getServiceId().longValue());
+            statement.setLong(2, entity.getTemplate().getId().longValue());
+            statement.setLong(3, entity.getService().getId().longValue());
 
-            if (entity.getEmployeeId() != null)
+            if (entity.getEmployee() != null)
             {
-                statement.setLong(4, entity.getEmployeeId().longValue());
+                statement.setLong(4, entity.getEmployee().getId().longValue());
             }
             else
             {
@@ -209,12 +215,12 @@ public class OrderJdbcDao extends AbstractJdbcDao<Order> implements OrderDao
         {
             order = new OrderImpl();
             order.setId(set.getBigDecimal("id").toBigInteger());
-            order.setTemplateId(BigInteger.valueOf(set.getLong("templateid")));
-            order.setServiceId(BigInteger.valueOf(set.getLong("serviceid")));
-            order.setStatus(OrderStatus.valueOf(set.getString("status")));
-            order.setCreationDate(new Date(set.getDate("creationdate").getTime()));
-            order.setAction(OrderAction.valueOf(set.getString("orderaction")));
-            order.setEmployeeId(BigInteger.valueOf(set.getLong("employeeid")));
+//            order.setTemplate(BigInteger.valueOf(set.getLong("templateid")));
+//            order.setService(BigInteger.valueOf(set.getLong("serviceid")));
+//            order.setStatus(OrderStatus.valueOf(set.getString("status")));
+//            order.setCreationDate(new Date(set.getDate("creationdate").getTime()));
+//            order.setAction(OrderAction.valueOf(set.getString("orderaction")));
+//            order.setEmployee(BigInteger.valueOf(set.getLong("employeeid")));
         }
         return order;
     }

@@ -1,6 +1,5 @@
 package com.netcracker.students.o3.controller.searcher;
 
-import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.model.services.Service;
 
@@ -22,8 +21,8 @@ public class SearcherService extends Searcher<Service> {
         List<Service> result = new ArrayList<>();
 
         for (Service service : services) {
-            if (isCostInDiapason(service.getCost(), cost, 60)
-                    || checkRegExp(cost, service.getCost().toString())
+            if (isCostInDiapason(service.templateGetCost(), cost, 60)
+                    || checkRegExp(cost, service.templateGetCost().toString())
             ) {
                 result.add(service);
             }
@@ -141,7 +140,7 @@ public class SearcherService extends Searcher<Service> {
 
         String userId;
         for (Service service : services) {
-            userId = service.getUserId().toString();
+            userId = service.getCustomer().toString();
             if (userId.contains(search) || checkRegExp(search, userId)) {
                 result.add(service);
             }
@@ -155,7 +154,7 @@ public class SearcherService extends Searcher<Service> {
 
         String templateId;
         for (Service service : services) {
-            templateId = service.getTemplateId().toString();
+            templateId = service.getTemplate().toString();
             if (templateId.contains(search) || checkRegExp(search, templateId)) {
                 result.add(service);
             }

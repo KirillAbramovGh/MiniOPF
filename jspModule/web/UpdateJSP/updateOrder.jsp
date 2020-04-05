@@ -6,6 +6,7 @@
 <%@ page import="com.netcracker.students.o3.model.services.ServiceStatus" %>
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.netcracker.students.o3.controller.Controller" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -25,11 +26,11 @@
 <form action="${pageContext.request.contextPath}/UpdateJSP/updateOrder.jsp" method="post">
     <div style="size: 200px">
         <div class="name">
-            EmployeeId: <input type="text" name="employeeId" value="<%=order.getEmployeeId()%>">
+            EmployeeId: <input type="text" name="employeeId" value="<%=order.getEmployee()%>">
         </div>
 
         <div class="">
-            ServiceId: <input type="text" name="serviceId" value="<%=order.getServiceId()%>">
+            ServiceId: <input type="text" name="serviceId" value="<%=order.getService()%>">
         </div>
 
         <div class="password">
@@ -58,7 +59,7 @@
         List<Service> services = ControllerImpl.getInstance().getServices();
         for (Service service : services)
         {
-            if (service.getId().equals(order.getServiceId()) &&
+            if (service.getId().equals(order.getService()) &&
                     !service.getStatus().equals(ServiceStatus.Disconnected))
             {
                 response.getWriter().println("У этого order есть service");
@@ -67,6 +68,7 @@
         }
         if (request.getParameter("save") != null)
         {
+            Controller controller = ControllerImpl.getInstance();
             String employeeId = request.getParameter("employeeId");
             String serviceId = request.getParameter("serviceId");
             String status = request.getParameter("status");
@@ -75,9 +77,9 @@
             BigInteger serviceIdValue = BigInteger.valueOf(Long.parseLong(serviceId));
             Service service = ControllerImpl.getInstance().getService(serviceIdValue);
 
-            order.setEmployeeId(BigInteger.valueOf(Long.parseLong(employeeId)));
-            order.setServiceId(serviceIdValue);
-            order.setTemplateId(service.getTemplateId());
+            order.setEmployee(controller.getEmployee(BigInteger.valueOf(Long.parseLong(employeeId))));
+            order.setService(controller.getService(serviceIdValue));
+            order.setTemplate(service.getTemplate());
             order.setStatus(OrderStatus.valueOf(status));
             order.setAction(OrderAction.valueOf(action));
 

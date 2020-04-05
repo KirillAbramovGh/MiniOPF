@@ -49,12 +49,12 @@ public class ControllerImpl implements Controller
 
 
     @Override
-    public void startOrder(final BigInteger orderId, final BigInteger employeeId)
+    public void startOrder(final BigInteger orderId, final Employee employee)
     {
         Order order = getOrder(orderId);
-        order.setEmployeeId(employeeId);
+        order.setEmployee(employee);
         order.setStatus(OrderStatus.Processing);
-        Service service = getService(order.getServiceId());
+        Service service = order.getService();
         service.setStatus(ServiceStatus.Provisioning);
         model.setOrder(order);
         model.setService(service);
@@ -64,9 +64,9 @@ public class ControllerImpl implements Controller
     public void suspendOrder(final BigInteger orderId)
     {
         Order order = getOrder(orderId);
-        order.setEmployeeId(BigInteger.ZERO);
+        order.setEmployee(null);
         order.setStatus(OrderStatus.Entering);
-        Service service = getService(order.getServiceId());
+        Service service = order.getService();
         switch (order.getAction()){
             case Suspend: service.setStatus(ServiceStatus.Active);break;
             case Resume:
@@ -89,7 +89,7 @@ public class ControllerImpl implements Controller
     public void completeOrder(final BigInteger orderId)
     {
         Order order = getOrder(orderId);
-        Service service = getService(order.getServiceId());
+        Service service = order.getService();
         completeOrder(order,service);
     }
 
@@ -163,9 +163,14 @@ public class ControllerImpl implements Controller
     {
         List<Template> templates = getTemplatesByAreaId(areaId);
         for(Template template : templates){
-            List<BigInteger> possibleAreas = template.getPossibleAreasId();
-            possibleAreas.remove(areaId);
-            template.setPossibleAreasId(possibleAreas);
+            List<Area> possibleAreas = template.getPossibleAreas();
+            for(Area area : possibleAreas){
+                if(area!= null && area.getId().equals(areaId)){
+                    possibleAreas.remove(area);
+                    break;
+                }
+            }
+            template.setPossibleAreas(possibleAreas);
             model.setTemplate(template);
         }
 
@@ -182,7 +187,7 @@ public class ControllerImpl implements Controller
     public void deepDeleteOrder(final BigInteger orderId)
     {
         Order order = getOrder(orderId);
-        Service service = getService(order.getServiceId());
+        Service service = order.getService();
         deepDeleteService(service.getId());
 
         model.deleteOrder(orderId);
@@ -194,7 +199,7 @@ public class ControllerImpl implements Controller
         List<Order> orders = getOrders();
 
         for(Order order : orders){
-            if (order.getServiceId().equals(serviceId) && !order.getStatus().equals(OrderStatus.Completed)){
+            if (order.getService().equals(serviceId) && !order.getStatus().equals(OrderStatus.Completed)){
                 model.deleteOrder(order.getId());
             }
         }
@@ -208,7 +213,7 @@ public class ControllerImpl implements Controller
         List<Service> services = getServices();
 
         for(Service service : services){
-            if(service.getTemplateId().equals(templateId)){
+            if(service.getTemplate().equals(templateId)){
                 deepDeleteService(service.getId());
             }
         }
@@ -239,9 +244,9 @@ public class ControllerImpl implements Controller
 
     @Override
     public Customer createCustomer(final String name, final String login, final String password,
-            final BigInteger areaId)
+            final Area area)
     {
-        return model.createCustomer(name, login, password, areaId);
+        return model.createCustomer(name, login, password, area);
     }
 
     @Override
@@ -252,11 +257,11 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public Order createOrder(final BigInteger templateId, final BigInteger serviceId,
+    public Order createOrder(final Template template, final Service service,
             final OrderStatus status, final OrderAction action)
 
     {
-        return model.createOrder(templateId, serviceId, status, action);
+        return model.createOrder(template, service, status, action);
     }
 
     @Override
@@ -267,10 +272,10 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public Service createService(final BigInteger userId, final BigInteger templateId, final ServiceStatus status)
+    public Service createService(final Customer customer, final Template template, final ServiceStatus status)
 
     {
-        return model.createService(userId, templateId, status);
+        return model.createService(customer, template, status);
     }
 
     @Override
@@ -429,12 +434,12 @@ public class ControllerImpl implements Controller
 
     @Override
     public Customer registerCustomer(final String login, final String password, final String name,
-            final BigInteger areaId)
+            final Area area)
             throws LoginOccupiedException
     {
         if (!isLoginExists(login))
         {
-            return createCustomer(name, login, password, areaId);
+            return createCustomer(name, login, password, area);
         }
         else
         {
@@ -510,7 +515,7 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public BigInteger getCustomerAreaId(final BigInteger customerId)
+    public Area getCustomerArea(final BigInteger customerId)
     {
         return model.getCustomer(customerId).getArea();
     }
@@ -650,12 +655,12 @@ public class ControllerImpl implements Controller
 
     public String getAreaName(BigInteger customerId)
     {
-        return getArea(getCustomer(customerId).getArea()).getName();
+        return getCustomer(customerId).getArea().getName();
     }
 
     public List<Template> getCustomerAvailableTemplates(BigInteger customerId)
     {
-        return getTemplatesByAreaId(getCustomerAreaId(customerId));
+        return getTemplatesByAreaId(getCustomerArea(customerId).getId());
     }
 
     public void setCustomerName(BigInteger customerId, String name) throws WrongInputException
@@ -740,7 +745,7 @@ public class ControllerImpl implements Controller
     {
         disconnectImpossibleServices(customerId, areaId);
         Customer customer = getCustomer(customerId);
-        customer.setArea(areaId);
+        customer.setArea(getArea(areaId));
         model.setCustomer(customer);
     }
 
@@ -755,8 +760,9 @@ public class ControllerImpl implements Controller
         Template template;
         for (Service service : getCustomerServices(customerId))
         {
-            template = getTemplate(service.getTemplateId());
-            if (!template.getPossibleAreasId().contains(areaId))
+            template = service.getTemplate();
+            Area area = model.getArea(areaId);
+            if (!template.getPossibleAreas().contains(area))
             {
                 disconnectService(service.getId());
             }
@@ -768,7 +774,7 @@ public class ControllerImpl implements Controller
     public void suspendService(final BigInteger serviceId)
     {
         Service service = getService(serviceId);
-        Order order = createOrder(service.getTemplateId(), serviceId, OrderStatus.Entering, OrderAction.Suspend);
+        Order order = createOrder(service.getTemplate(), service, OrderStatus.Entering, OrderAction.Suspend);
         completeOrder(order,service);
     }
 
@@ -797,7 +803,7 @@ public class ControllerImpl implements Controller
     public void resumeService(final BigInteger serviceId)
     {
         Service service = getService(serviceId);
-        Order order = createOrder(service.getTemplateId(), serviceId, OrderStatus.Entering, OrderAction.Resume);
+        Order order = createOrder(service.getTemplate(), service, OrderStatus.Entering, OrderAction.Resume);
         completeOrder(order,service);
     }
 
@@ -806,7 +812,7 @@ public class ControllerImpl implements Controller
     {
         Customer customer = getCustomer(customerId);
         for(Service service : getPlannedActiveSuspendedProvisioningService(customerId)){
-            if(service.getTemplateId().equals(templateId)){
+            if(service.getTemplate().equals(templateId)){
                 return;
             }
         }
@@ -817,9 +823,9 @@ public class ControllerImpl implements Controller
                     customer.getMoneyBalance().doubleValue() - template.getCost().doubleValue())
             );
 
-            Service service = createService(customerId, templateId, ServiceStatus.Planned);
-            Order order = createOrder(templateId, service.getId(), OrderStatus.Entering, OrderAction.New);
-            customer.addConnectedServiceId(service.getId());
+            Service service = createService(customer, template, ServiceStatus.Planned);
+            Order order = createOrder(template, service, OrderStatus.Entering, OrderAction.New);
+            customer.addConnectedService(service);
             model.setCustomer(customer);
         }
        // completeOrder(order,service);
@@ -830,7 +836,7 @@ public class ControllerImpl implements Controller
     {
         Service service = getService(serviceId);
         Order order =
-                createOrder(service.getTemplateId(), serviceId, OrderStatus.Entering, OrderAction.Disconnect);
+                createOrder(service.getTemplate(), service, OrderStatus.Entering, OrderAction.Disconnect);
         service.setStatus(ServiceStatus.Provisioning);
         model.setService(service);
        // completeOrder(order,service);
@@ -851,15 +857,15 @@ public class ControllerImpl implements Controller
 
         if (services.size() > 0)
         {
-            availableAreas.add(getArea(getCustomerAreaId(customerId)));
+            availableAreas.add(getCustomerArea(customerId));
             for (Service service : services)
             {
-                Template template = getTemplate(service.getTemplateId());
-                for (BigInteger areaId : template.getPossibleAreasId())
+                Template template = service.getTemplate();
+                for (Area area : template.getPossibleAreas())
                 {
-                    if (!availableAreas.contains(getArea(areaId)))
+                    if (!availableAreas.contains(area))
                     {
-                        availableAreas.add(getArea(areaId));
+                        availableAreas.add(area);
                     }
                 }
             }
@@ -877,7 +883,7 @@ public class ControllerImpl implements Controller
     {
         Order order = getOrder(orderId);
         order.setStatus(OrderStatus.Processing);
-        Service service = getService(order.getServiceId());
+        Service service = order.getService();
         service.setStatus(ServiceStatus.Provisioning);
         model.setService(service);
         model.setOrder(order);
@@ -898,13 +904,13 @@ public class ControllerImpl implements Controller
     @Override
     public String getServiceName(final BigInteger serviceId)
     {
-        return getTemplate(getService(serviceId).getTemplateId()).getName();
+        return getService(serviceId).getTemplate().getName();
     }
 
     @Override
     public String getServiceDescription(final BigInteger serviceId)
     {
-        return getTemplate(getService(serviceId).getTemplateId()).getDescription();
+        return getService(serviceId).getTemplate().getDescription();
     }
 
 
@@ -919,10 +925,10 @@ public class ControllerImpl implements Controller
                    System.out.println("Take money from customer");
                    serviceSorter.sort(services,ServiceSortType.UpByCost);
                    for(Service service : services){
-                       if(customer.getMoneyBalance().compareTo(service.getCost())>-1){
+                       if(customer.getMoneyBalance().compareTo(service.templateGetCost())>-1){
                            customer.setMoneyBalance(
                                    BigDecimal.valueOf(
-                                           customer.getMoneyBalance().doubleValue()-service.getCost().doubleValue()));
+                                           customer.getMoneyBalance().doubleValue()-service.templateGetCost().doubleValue()));
                        }
                        else {
                            service.setStatus(ServiceStatus.Suspended);

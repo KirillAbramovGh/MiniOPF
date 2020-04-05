@@ -1,7 +1,10 @@
 package com.netcracker.students.o3.model.users;
 
 import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.services.Service;
+
+import org.hibernate.annotations.Type;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -12,12 +15,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@Entity
+
 @Table(name = "customers")
 @XmlType(name = "customer")
 @XmlRootElement
@@ -38,10 +43,11 @@ public class CustomerImpl implements Customer {
     @Column(name = "moneybalance")
     private BigDecimal moneyBalance;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
     private Set<Service> connectedServices;
 
-    @Column(name = "areaid")
+    @ManyToOne(cascade = CascadeType.REFRESH,fetch = FetchType.EAGER)
+    @JoinColumn(name = "areaid")
     private Area area;
 
     public CustomerImpl() {
@@ -50,7 +56,7 @@ public class CustomerImpl implements Customer {
     }
 
     public CustomerImpl(final BigInteger id, final String name, final String login, final String password,
-                        final BigInteger area) {
+                        final Area area) {
         this.id = id;
         this.name = name;
         this.login = login;
@@ -60,13 +66,6 @@ public class CustomerImpl implements Customer {
         moneyBalance = BigDecimal.ZERO;
     }
 
-    public CustomerImpl(final String name, final String login, final String password,final BigInteger area)
-    {
-        this.name = name;
-        this.login = login;
-        this.password = password;
-        this.area = area;
-    }
 
     @Override
     public String toString()
@@ -107,8 +106,8 @@ public class CustomerImpl implements Customer {
     }
 
     @Override
-    public void addConnectedServiceId(final BigInteger serviceId) {
-            connectedServices.add(serviceId);
+    public void addConnectedService(Service service) {
+            connectedServices.add(service);
     }
 
     public BigInteger getId() {
