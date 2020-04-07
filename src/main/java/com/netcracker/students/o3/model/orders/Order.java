@@ -1,24 +1,33 @@
 package com.netcracker.students.o3.model.orders;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.netcracker.students.o3.model.services.Service;
+import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Employee;
+import com.netcracker.students.o3.model.users.EmployeeImpl;
 
 import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
  * class order for employee. Create to do action for service
  */
-
+@Entity
 @Table(name = "orders")
 public interface Order
 {
@@ -26,6 +35,11 @@ public interface Order
      * @return id of order
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "last_id")
+    @SequenceGenerator(name="last_id",
+            sequenceName="last_id")
+    @Column(name = "id", updatable = false, nullable = false)
     BigInteger getId();
 
     /**
@@ -36,7 +50,10 @@ public interface Order
     /**
      * @return template id
      */
-    @ManyToOne
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @ManyToOne(targetEntity = TemplateImpl.class,fetch = FetchType.EAGER)
     @JoinColumn(name = "templateid")
     Template getTemplate();
 
@@ -49,7 +66,10 @@ public interface Order
     /**
      * @return service id
      */
-    @OneToOne
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @OneToOne(targetEntity = ServiceImpl.class,fetch = FetchType.EAGER)
     @JoinColumn(name = "serviceid")
     Service getService();
 
@@ -62,7 +82,10 @@ public interface Order
     /**
      * @return employee id who response for order
      */
-    @ManyToOne
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @ManyToOne(targetEntity = EmployeeImpl.class,fetch = FetchType.EAGER)
     @JoinColumn(name = "employeeid")
     Employee getEmployee();
 

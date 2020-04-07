@@ -1,5 +1,7 @@
 package com.netcracker.students.o3.model.templates;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
 
@@ -9,10 +11,14 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 
@@ -24,6 +30,11 @@ public interface Template
      * @return Template id
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "last_id")
+    @SequenceGenerator(name="last_id",
+            sequenceName="last_id")
+    @Column(name = "id", updatable = false, nullable = false)
     BigInteger getId();
 
     /**
@@ -67,7 +78,10 @@ public interface Template
     /**
      * @return possible area id by connected services
      */
-    @ManyToMany(targetEntity = AreaImpl.class)
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @ManyToMany(targetEntity = AreaImpl.class,fetch = FetchType.EAGER)
     @JoinTable(
             name="template_area_link",
             joinColumns=@JoinColumn(name="templateid"),

@@ -1,5 +1,7 @@
 package com.netcracker.students.o3.model.services;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
@@ -9,12 +11,17 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -28,6 +35,11 @@ public interface Service
      * @return service id
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "last_id")
+    @SequenceGenerator(name="last_id",
+            sequenceName="last_id")
+    @Column(name = "id", updatable = false, nullable = false)
     BigInteger getId();
 
     /**
@@ -40,7 +52,10 @@ public interface Service
     /**
      * @return user id if service connected to him
      */
-    @ManyToOne(targetEntity = CustomerImpl.class)
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @ManyToOne(targetEntity = CustomerImpl.class,fetch = FetchType.EAGER)
     @JoinColumn(name = "userid")
     Customer getCustomer();
 
@@ -54,7 +69,10 @@ public interface Service
     /**
      * @return template of service
      */
-    @ManyToOne(targetEntity = TemplateImpl.class)
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @ManyToOne(targetEntity = TemplateImpl.class,fetch = FetchType.EAGER)
     @JoinColumn(name = "templateid")
     Template getTemplate();
 

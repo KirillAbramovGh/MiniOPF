@@ -4,6 +4,8 @@ import com.netcracker.students.o3.model.dao.AbstractJdbcDao;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.services.ServiceStatus;
+import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.users.Customer;
 
 import java.math.BigInteger;
 import java.sql.Connection;
@@ -102,17 +104,17 @@ public class ServiceJdbcDao extends AbstractJdbcDao<Service> implements ServiceD
 
     }
 
-    public List<Service> getServicesByUserId(BigInteger userId) throws SQLException
+    public List<Service> getServicesByCustomer(Customer customer) throws SQLException
     {
-        String sqlReq = "select * from " + getTableName() + " where userid=" + userId;
+        String sqlReq = "select * from " + getTableName() + " where userid=" + customer;
         List<Service> services = getServices(sqlReq);
 
         return services;
     }
 
-    public List<Service> getServicesByTemplateId(BigInteger templateId) throws SQLException
+    public List<Service> getServicesByTemplate(Template template) throws SQLException
     {
-        String sqlReq = "select * from " + getTableName() + " where templateid=" + templateId;
+        String sqlReq = "select * from " + getTableName() + " where templateid=" + template;
         List<Service> services = getServices(sqlReq);
 
         return services;

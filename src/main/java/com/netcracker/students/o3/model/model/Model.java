@@ -132,15 +132,13 @@ public interface Model
 
     List<Order> getOrdersByAction(final OrderAction action);
 
-    List<Service> getServicesByUserId(BigInteger userId);
+    List<Service> getServicesByCustomer(Customer customer);
 
-    List<Service> getServicesByTemplateId(BigInteger templateId);
+    List<Service> getServicesByTemplate(Template template);
 
     List<Service> getServicesByStatus(ServiceStatus status);
 
-    List<Service> getServicesByStatusAndCustomerId(BigInteger userId, ServiceStatus status);
-
-    List<Template> getTemplatesByAreaId(BigInteger areaId);
+    List<Template> getTemplatesByArea(Area area);
 
     Template getTemplateByName(String name);
 

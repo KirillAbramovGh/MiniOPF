@@ -1,6 +1,8 @@
 package com.netcracker.students.o3.model.services;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
@@ -11,11 +13,15 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -28,12 +34,23 @@ import javax.xml.bind.annotation.XmlType;
 public class ServiceImpl implements Service
 {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "last_id")
+    @SequenceGenerator(name="last_id",
+            sequenceName="last_id")
+    @Column(name = "id", updatable = false, nullable = false)
     private BigInteger id;
 
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     @ManyToOne(targetEntity = CustomerImpl.class)
     @JoinColumn(name = "userid")
     private Customer customer;
 
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     @ManyToOne(targetEntity = TemplateImpl.class)
     @JoinColumn(name = "templateid")
     private Template template;
@@ -48,15 +65,17 @@ public class ServiceImpl implements Service
     @Override
     public String toString()
     {
-        return "ServiceImpl{" +
-                "id=" + id +
-                ", userId=" + customer.getId() +
-                ", template=" + template.getId() +
-                ", status=" + status +
-                ", cost=" + templateGetCost() +
-                ", activationDate=" + activationDate +
-                '}';
+        return "ServiceImpl{" + "</br>"+
+                "       id:" + id + ",</br>"+
+                "       userId:" + addUrl(customer.getId()) + ",</br>"+
+                "       templateId:" + addUrl(template.getId()) + ",</br>"+
+                "       status:" + status + ",</br>"+
+                "       cost:" + templateGetCost() + ",</br>"+
+                "       activationDate:" + activationDate + "</br>"+
+                "      }";
     }
+
+
 
     public ServiceImpl()
     {
@@ -148,5 +167,13 @@ public class ServiceImpl implements Service
     public int hashCode()
     {
         return Objects.hash(id);
+    }
+
+    private String addUrl(BigInteger value){
+        String start = "<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId=";
+        String mid = "' target=\"_blank\">";
+        String close = "</a>";
+
+        return start+value+mid+value+close;
     }
 }

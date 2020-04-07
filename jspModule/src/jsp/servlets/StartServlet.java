@@ -134,7 +134,7 @@ public class StartServlet extends HttpServlet {
         Controller controller = ControllerImpl.getInstance();
         BigInteger userId = null;
         if (isNotEmptyLoginPasswordName(login, password, name)) {
-            userId = controller.registerCustomer(login, password, name, areaId).getId();
+            userId = controller.registerCustomer(login, password, name, controller.getArea(areaId)).getId();
         } else {
             throw new RegisterException("Login,Password,Name can not be null");
         }

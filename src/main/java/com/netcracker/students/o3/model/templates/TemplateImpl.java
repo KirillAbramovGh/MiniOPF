@@ -1,5 +1,7 @@
 package com.netcracker.students.o3.model.templates;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
 
@@ -11,10 +13,14 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -26,6 +32,11 @@ import javax.xml.bind.annotation.XmlType;
 public class TemplateImpl implements Template
 {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "last_id")
+    @SequenceGenerator(name="last_id",
+            sequenceName="last_id")
+    @Column(name = "id", updatable = false, nullable = false)
     private BigInteger id;
 
     @Column(name = "template_name")
@@ -38,7 +49,10 @@ public class TemplateImpl implements Template
     private String description;
 
 
-    @ManyToMany(targetEntity = AreaImpl.class)
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @ManyToMany(targetEntity = AreaImpl.class,fetch = FetchType.EAGER)
     @JoinTable(
             name = "template_area_link",
             joinColumns = @JoinColumn(name = "templateid"),
@@ -63,12 +77,18 @@ public class TemplateImpl implements Template
     @Override
     public String toString()
     {
-        return "TemplateImpl{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", cost=" + cost +
-                ", description='" + description + '\'' +
-                '}';
+        String areas ="[";
+        for(Area area : possibleAreas){
+            areas+= addUrl(area.getId())+",";
+        }
+        areas+="]";
+        return "TemplateImpl{" + "</br>"+
+                "           id:" + id + ",</br>"+
+                "           name:'" + name + '\'' + ",</br>"+
+                "           cost:" + cost + ",</br>"+
+                "           description:'" + description + '\'' + "</br>"+
+                "           possibleAreasIds:'" + areas + '\'' + "</br>"+
+                "      }";
     }
 
     public BigInteger getId()
@@ -141,5 +161,13 @@ public class TemplateImpl implements Template
     public int hashCode()
     {
         return Objects.hash(id);
+    }
+
+    private String addUrl(BigInteger value){
+        String start = "<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId=";
+        String mid = "' target=\"_blank\">";
+        String close = "</a>";
+
+        return start+value+mid+value+close;
     }
 }

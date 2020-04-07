@@ -191,11 +191,15 @@ public class HtmlTableBuilder {
     private String addOrderToHtmlTable(Order order, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
-        result += addCell("<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId="+order.getId()+
-                "' target=\"_blank\">"+order.getId() + "</a>");
-        result += addCell(order.getTemplate() + "");
-        result += addCell(order.getService() + "");
-        result += addCell(order.getEmployee() + "");
+        result += addCell(addId(order.getId()));
+        result += addCell(addId(order.getTemplate().getId()));
+        result += addCell(addId(order.getService().getId()));
+        if(order.getEmployee()!=null)
+        {
+            result += addCell(addId(order.getEmployee().getId()));
+        }else {
+            result += addCell(addId(BigInteger.ZERO));
+        }
         result += addCell(order.getStatus() + "");
         result += addCell(order.getAction() + "");
         result += addCell(order.getCreationDate() + "");
@@ -221,12 +225,12 @@ public class HtmlTableBuilder {
     private String addEmployeeServiceToHtmlTable(Service service, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
-        result += addCell("<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId="+service.getId()+"' target=\"_blank\">"+service.getId() + "</a>");
+        result += addCell(addId(service.getId()));
         result += addCell(controller.getServiceName(service.getId()));
         result += addCell(service.templateGetCost() + "");
         result += addCell(service.getStatus() + "");
-        result += addCell(service.getTemplate() + "");
-        result += addCell(service.getCustomer() + "");
+        result += addCell(addId(service.getTemplate().getId()));
+        result += addCell(addId(service.getCustomer().getId()));
         result += addCell(service.getActivationDate() + "");
         result += addCell(getAreasByTemplateId(service.getTemplate().getId()));
         result += addCell(createButton("Delete","deleteService",service.getId().toString()));
@@ -239,7 +243,7 @@ public class HtmlTableBuilder {
     private String addEmployeeTemplateToHtmlTable(Template template, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
-        result += addCell("<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId="+template.getId()+"' target=\"_blank\">"+template.getId() + "</a>");
+        result += addCell(addId(template.getId()));
         result += addCell(template.getName() + "");
         result += addCell(template.getCost() + "");
         result += addCell(template.getDescription() + "");
@@ -253,11 +257,11 @@ public class HtmlTableBuilder {
     private String addCustomerToHtmlTable(Customer customer, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
-        result += addCell("<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId="+customer.getId()+"' target=\"_blank\">"+customer.getId() + "</a>");
+        result += addCell(addId(customer.getId()));
         result += addCell(customer.getName() + "");
         result += addCell(customer.getLogin());
         result += addCell(customer.getPassword());
-        result += addCell(customer.getArea() + "");
+        result += addCell(addId(customer.getArea().getId()));
         result += addCell(customer.getMoneyBalance() + "");
         result += addCell(
                 getCustomerConnectedServiceIds(customer)
@@ -272,7 +276,7 @@ public class HtmlTableBuilder {
     private String addEmployeeToHtmlTable(Employee employee, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
-        result += addCell("<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId="+employee.getId()+"' target=\"_blank\">"+employee.getId() + "</a>");
+        result += addCell(addId(employee.getId()));
         result += addCell(employee.getName() + "");
         result += addCell(employee.getLogin());
         result += addCell(employee.getPassword());
@@ -285,8 +289,7 @@ public class HtmlTableBuilder {
     private String addAreaToHtmlTable(Area area, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
-        result += addCell("<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId="+area.getId()+
-                "' target=\"_blank\">"+area.getId() + "</a>");
+        result += addCell(addId(area.getId()));
         result += addCell(area.getName() + "");
         result += addCell(area.getDescription());
         result += addCell(createButton("Delete","deleteArea",area.getId().toString()));
@@ -366,7 +369,7 @@ public class HtmlTableBuilder {
     private String getCustomerConnectedServiceIds(Customer customer) {
         StringBuilder result = new StringBuilder();
         for (Service service : customer.getConnectedServices()) {
-            result.append(service.getId()).append(",");
+            result.append(addId(service.getId())).append(",");
         }
         return result.toString();
     }
@@ -380,6 +383,14 @@ public class HtmlTableBuilder {
             value = "";
         }
         return "<input type=\"text\" name=\""+name+"\" value=\""+value+"\">";
+    }
+
+    private String addId(BigInteger id){
+        String start = "<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId=";
+        String mid = "' target=\"_blank\">";
+        String close = "</a>";
+
+        return start+id+mid+id+close;
     }
     public static HtmlTableBuilder getInstance() {
         if (instance == null) {

@@ -517,13 +517,13 @@ public class ModelJson implements Model
     }
 
     @Override
-    public List<Service> getServicesByUserId(final BigInteger userId)
+    public List<Service> getServicesByCustomer(final Customer customer)
     {
         return null;
     }
 
     @Override
-    public List<Service> getServicesByTemplateId(final BigInteger templateId)
+    public List<Service> getServicesByTemplate(final Template template)
     {
         return null;
     }
@@ -534,14 +534,9 @@ public class ModelJson implements Model
         return null;
     }
 
-    @Override
-    public List<Service> getServicesByStatusAndCustomerId(final BigInteger userId, final ServiceStatus status)
-    {
-        return null;
-    }
 
     @Override
-    public List<Template> getTemplatesByAreaId(final BigInteger areaId)
+    public List<Template> getTemplatesByArea(final Area area)
     {
         return null;
     }

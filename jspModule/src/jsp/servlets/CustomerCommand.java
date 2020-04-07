@@ -62,8 +62,10 @@ public enum CustomerCommand
                         final ServletContext context, CustomerEJB customerEJB,
                         final String key)
                 {
-                    BigInteger id = getIdFromKey(key);
-                    customerEJB.connectService(id,(BigInteger) req.getSession().getAttribute("id"));
+                    BigInteger serviceId = getIdFromKey(key);
+                    BigInteger customerId = (BigInteger) req.getSession().getAttribute("id");
+
+                    customerEJB.connectService(serviceId,customerId);
                 }
             },
 

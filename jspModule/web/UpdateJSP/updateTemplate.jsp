@@ -59,7 +59,7 @@
 <%
     try
     {
-        if (controller.getServicesByTemplateId(templateId).size() > 0)
+        if (controller.getServicesByTemplate(templateId).size() > 0)
         {
             response.getWriter().println("У этого template есть связанные services");
         }

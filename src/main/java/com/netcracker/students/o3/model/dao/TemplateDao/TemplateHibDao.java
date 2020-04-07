@@ -1,14 +1,15 @@
 package com.netcracker.students.o3.model.dao.TemplateDao;
 
-import com.netcracker.students.o3.model.area.Area;
-import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.dao.AbstractHibDao;
 import com.netcracker.students.o3.model.dao.HibernateSessionFactoryUtil;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.List;
 
 public class TemplateHibDao extends AbstractHibDao<Template> implements TemplateDao
@@ -16,27 +17,51 @@ public class TemplateHibDao extends AbstractHibDao<Template> implements Template
     @Override
     public Template getTemplateByName(final String templateName)
     {
-        return null;
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        Query query = session.
+                createQuery("from TemplateImpl where name=:name");
+        query.setParameter("name", templateName);
+        Template template = (Template) query.uniqueResult();
+        tx1.commit();
+        session.close();
+        return template;
     }
 
-    @Override
-    public List<Template> getTemplatesByAreaId(final BigInteger areaId)
-    {
-        return null;
-    }
 
     @Override
     public List<Template> getAll()
     {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
         List<Template> templates =
-                (List<Template>) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery("From TemplateImpl  ")
+                (List<Template>) session
+                        .createQuery("From TemplateImpl  ")
                         .list();
+        tx1.commit();
+        session.close();
         return templates;
     }
 
     @Override
     public Template getEntity(final BigInteger id)
     {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(TemplateImpl.class, id);
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        Template template = session.get(TemplateImpl.class, id);
+        tx1.commit();
+        session.close();
+        return template;
+    }
+    @Override
+    public void delete(final BigInteger id)
+    {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        Query query = session.createQuery("delete from TemplateImpl where id=:id");
+        query.setParameter("id",id);
+        query.executeUpdate();
+        tx1.commit();
+        session.close();
     }
 }

@@ -244,7 +244,7 @@ public class ConsoleCustomerView implements View
     {
         Scanner scanner = new Scanner(System.in);
 
-        List<Template> templates = controller.getTemplatesByAreaId(controller.getCustomerArea(customerId).getId());
+        List<Template> templates = controller.getCustomer(customerId).getArea().getTemplates();
 
         String choice = null;
         while (!"0".equals(choice))

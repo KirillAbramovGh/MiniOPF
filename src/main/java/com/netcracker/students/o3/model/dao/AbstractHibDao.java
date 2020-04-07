@@ -1,5 +1,6 @@
 package com.netcracker.students.o3.model.dao;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -13,7 +14,7 @@ public abstract class AbstractHibDao<T> implements Dao<T>
     {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.save(entity);
+        session.update(entity);
         tx1.commit();
         session.close();
     }

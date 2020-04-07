@@ -8,4 +8,5 @@ import java.sql.SQLException;
 public interface AreaDao extends Dao<Area>
 {
     Area getAreaByName(String areaName) throws SQLException;
+
 }

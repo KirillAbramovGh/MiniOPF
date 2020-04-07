@@ -24,6 +24,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -161,7 +162,7 @@ public class ControllerImpl implements Controller
     @Override
     public void deepDeleteArea(final BigInteger areaId)
     {
-        List<Template> templates = getTemplatesByAreaId(areaId);
+        List<Template> templates = getArea(areaId).getTemplates();
         for(Template template : templates){
             List<Area> possibleAreas = template.getPossibleAreas();
             for(Area area : possibleAreas){
@@ -224,7 +225,7 @@ public class ControllerImpl implements Controller
     @Override
     public void deepDeleteCustomer(final BigInteger customerId)
     {
-        List<Service> services = getCustomerServices(customerId);
+        Set<Service> services = getCustomer(customerId).getConnectedServices();
         for(Service service : services){
             deepDeleteService(service.getId());
         }
@@ -379,15 +380,15 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public List<Service> getServicesByUserId(final BigInteger userId)
+    public List<Service> getServicesByCustomer(final Customer customer)
     {
-        return model.getServicesByUserId(userId);
+        return model.getServicesByCustomer(customer);
     }
 
     @Override
-    public List<Service> getServicesByTemplateId(final BigInteger templateId)
+    public List<Service> getServicesByTemplate(final Template template)
     {
-        return model.getServicesByTemplateId(templateId);
+        return model.getServicesByTemplate(template);
     }
 
     @Override
@@ -399,8 +400,16 @@ public class ControllerImpl implements Controller
     @Override
     public List<Service> getServicesByStatusAndCustomerId(final BigInteger userId, final ServiceStatus status)
     {
-        return model.getServicesByStatusAndCustomerId(userId,status);
+        Set<Service> services = model.getCustomer(userId).getConnectedServices();
+        List<Service> result = new ArrayList<>();
+        for(Service service : services){
+            if(service.getStatus().equals(status)){
+                result.add(service);
+            }
+        }
+        return result;
     }
+
 
     @Override
     public Template getTemplateByName(final String name)
@@ -475,20 +484,27 @@ public class ControllerImpl implements Controller
     @Override
     public List<Service> getSuspendedServices(final BigInteger customerId)
     {
-        return model.getServicesByStatusAndCustomerId(customerId,ServiceStatus.Suspended);
+        Set<Service> services = model.getCustomer(customerId).getConnectedServices();
+        List<Service> result = new ArrayList<>();
+        for(Service service : services){
+            if(service.getStatus().equals(ServiceStatus.Suspended)){
+                result.add(service);
+            }
+        }
+        return getServicesByStatusAndCustomerId(customerId,ServiceStatus.Suspended);
     }
 
     @Override
     public List<Service> getPlannedServices(final BigInteger customerId)
     {
-        return model.getServicesByStatusAndCustomerId(customerId,ServiceStatus.Planned);
+        return getServicesByStatusAndCustomerId(customerId,ServiceStatus.Planned);
     }
 
 
     @Override
     public List<Service> getActiveServices(final BigInteger customerId)
     {
-        return model.getServicesByStatusAndCustomerId(customerId,ServiceStatus.Active);
+        return getServicesByStatusAndCustomerId(customerId,ServiceStatus.Active);
     }
 
     @Override
@@ -501,9 +517,9 @@ public class ControllerImpl implements Controller
 
 
     @Override
-    public List<Template> getTemplatesByAreaId(final BigInteger areaId)
+    public List<Template> getTemplatesByArea(final Area area)
     {
-        return model.getTemplatesByAreaId(areaId);
+        return model.getTemplatesByArea(area);
     }
 
 
@@ -660,7 +676,7 @@ public class ControllerImpl implements Controller
 
     public List<Template> getCustomerAvailableTemplates(BigInteger customerId)
     {
-        return getTemplatesByAreaId(getCustomerArea(customerId).getId());
+        return getTemplatesByArea(getCustomerArea(customerId));
     }
 
     public void setCustomerName(BigInteger customerId, String name) throws WrongInputException
@@ -743,9 +759,10 @@ public class ControllerImpl implements Controller
 
     public void setCustomerArea(BigInteger customerId, BigInteger areaId)
     {
-        disconnectImpossibleServices(customerId, areaId);
         Customer customer = getCustomer(customerId);
-        customer.setArea(getArea(areaId));
+        Area area = getArea(areaId);
+        disconnectImpossibleServices(customer, area);
+        customer.setArea(area);
         model.setCustomer(customer);
     }
 
@@ -755,13 +772,12 @@ public class ControllerImpl implements Controller
         model.setEmployee(employee);
     }
 
-    private void disconnectImpossibleServices(BigInteger customerId, BigInteger areaId)
+    private void disconnectImpossibleServices(Customer customer, Area area)
     {
         Template template;
-        for (Service service : getCustomerServices(customerId))
+        for (Service service : customer.getConnectedServices())
         {
             template = service.getTemplate();
-            Area area = model.getArea(areaId);
             if (!template.getPossibleAreas().contains(area))
             {
                 disconnectService(service.getId());
@@ -844,9 +860,9 @@ public class ControllerImpl implements Controller
 
 
     @Override
-    public List<Service> getCustomerServices(final BigInteger customerId)
+    public List<Service> getCustomerServices(final Customer customer)
     {
-        return model.getServicesByUserId(customerId);
+        return model.getServicesByCustomer(customer);
     }
 
     @Override
@@ -899,7 +915,7 @@ public class ControllerImpl implements Controller
     }
 
     private List<Service> getProvisioningServices(BigInteger customerId){
-        return model.getServicesByStatusAndCustomerId(customerId,ServiceStatus.Provisioning);
+        return getServicesByStatusAndCustomerId(customerId,ServiceStatus.Provisioning);
     }
     @Override
     public String getServiceName(final BigInteger serviceId)

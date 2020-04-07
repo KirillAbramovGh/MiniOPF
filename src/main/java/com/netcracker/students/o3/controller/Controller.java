@@ -168,8 +168,9 @@ public interface Controller
 
     /**
      * @return templates which available to area
+     * @param area
      */
-    List<Template> getTemplatesByAreaId(BigInteger areaId);
+    List<Template> getTemplatesByArea(Area area);
 
 
     /**
@@ -276,8 +277,9 @@ public interface Controller
 
     /**
      * @return list of customers service
+     * @param customer
      */
-    List<Service> getCustomerServices(BigInteger customerId);
+    List<Service> getCustomerServices(Customer customer);
 
     /**
      * @return areas available to customer
@@ -313,8 +315,8 @@ public interface Controller
     List<Order> getOrdersByServiceId(final BigInteger serviceId);
     List<Order> getOrdersByStatus(final OrderStatus status);
     List<Order> getOrdersByAction(final OrderAction action);
-    List<Service> getServicesByUserId(BigInteger userId);
-    List<Service> getServicesByTemplateId(BigInteger templateId);
+    List<Service> getServicesByCustomer(Customer customer);
+    List<Service> getServicesByTemplate(Template template);
     List<Service> getServicesByStatus(ServiceStatus status);
     List<Service> getServicesByStatusAndCustomerId(BigInteger userId, ServiceStatus status);
     Template getTemplateByName(String name);

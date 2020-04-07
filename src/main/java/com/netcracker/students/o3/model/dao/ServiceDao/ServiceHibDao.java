@@ -5,6 +5,12 @@ import com.netcracker.students.o3.model.dao.HibernateSessionFactoryUtil;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.services.ServiceStatus;
+import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.users.Customer;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -12,43 +18,87 @@ import java.util.List;
 public class ServiceHibDao extends AbstractHibDao<Service> implements ServiceDao
 {
     @Override
-    public List<Service> getServicesByUserId(final BigInteger userId)
+    public List<Service> getServicesByCustomer(final Customer customer)
     {
-        return null;
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.
+                createQuery("from ServiceImpl where customer=:customer");
+        query.setParameter("customer", customer);
+        List<Service> services = query.getResultList();
+        transaction.commit();
+        session.close();
+
+        return services;
     }
 
     @Override
-    public List<Service> getServicesByTemplateId(final BigInteger templateId)
+    public List<Service> getServicesByTemplate(final Template template)
     {
-        return null;
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.
+                createQuery("from ServiceImpl where template=:template");
+        query.setParameter("template", template);
+        List<Service> services = (List<Service>) query.getResultList();
+        transaction.commit();
+        session.close();
+
+        return services;
     }
 
     @Override
     public List<Service> getServicesByStatus(final ServiceStatus status)
     {
-        return null;
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.
+                createQuery("from ServiceImpl where status=:status");
+        query.setParameter("status", status);
+
+        List<Service> services = (List<Service>) query.getResultList();
+        transaction.commit();
+        session.close();
+
+        return services;
     }
 
-    @Override
-    public List<Service> getServicesByStatusAndCustomerId(final BigInteger userId, final ServiceStatus status)
-    {
-        return null;
-    }
 
     @Override
     public List<Service> getAll()
     {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
         List<Service> services =
-                (List<Service>) HibernateSessionFactoryUtil.getSessionFactory().openSession()
-                        .createQuery("From AreaImpl ")
+                (List<Service>) session
+                        .createQuery("From ServiceImpl ")
                         .list();
+        transaction.commit();
+        session.close();
         return services;
     }
 
     @Override
     public Service getEntity(final BigInteger id)
     {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(ServiceImpl.class, id);
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Service service = session.get(ServiceImpl.class, id);
+        transaction.commit();
+        session.close();
+        return service;
+    }
+
+    @Override
+    public void delete(final BigInteger id)
+    {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        Query query = session.createQuery("delete from ServiceImpl where id=:id");
+        query.setParameter("id",id);
+        query.executeUpdate();
+        tx1.commit();
+        session.close();
     }
 
 }

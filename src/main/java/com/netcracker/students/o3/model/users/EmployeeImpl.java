@@ -5,7 +5,10 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -17,6 +20,11 @@ import javax.xml.bind.annotation.XmlType;
 public class EmployeeImpl implements Employee
 {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "last_id")
+    @SequenceGenerator(name="last_id",
+            sequenceName="last_id")
+    @Column(name = "id", updatable = false, nullable = false)
     private BigInteger id;
 
     @Column(name = "name")
@@ -32,10 +40,10 @@ public class EmployeeImpl implements Employee
     @Override
     public String toString()
     {
-        return "Employer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return "Employer{" + "</br>"+
+                "        id:" + id + ",</br>"+
+                "        name:'" + name + '\'' + ",</br>"+
+                "    }";
     }
 
     public EmployeeImpl(){}

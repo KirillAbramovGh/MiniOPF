@@ -1,8 +1,13 @@
 package com.netcracker.students.o3.model.orders;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.netcracker.students.o3.model.services.Service;
+import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Employee;
+import com.netcracker.students.o3.model.users.EmployeeImpl;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -10,33 +15,50 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
+@Entity
 @Table(name = "orders")
 @XmlType(name = "order")
 @XmlRootElement
 public class OrderImpl implements Order
 {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "last_id")
+    @SequenceGenerator(name="last_id",
+            sequenceName="last_id")
+    @Column(name = "id", updatable = false, nullable = false)
     private BigInteger id;
 
-    @ManyToOne
+
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @ManyToOne(targetEntity = TemplateImpl.class)
     @JoinColumn(name = "templateid")
     private Template template;
 
-    @OneToOne
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @OneToOne(targetEntity = ServiceImpl.class)
     @JoinColumn(name = "serviceid")
     private Service service;
 
-    @ManyToOne
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @ManyToOne(targetEntity = EmployeeImpl.class)
     @JoinColumn(name = "employeeid")
     private Employee employee;
 
@@ -69,13 +91,21 @@ public class OrderImpl implements Order
     @Override
     public String toString()
     {
-        return "OrderImpl{" +
-                "id=" + id +
-                ", status=" + status +
-                ", action=" + action +
-                ", creationDate=" + creationDate +
-                '}';
+        BigInteger employeeId = null;
+        if(employee!=null){
+            employeeId = employee.getId();
+        }
+        return "OrderImpl{" + "</br>"+
+                "        id:" + id + ",</br>"+
+                "        serviceId:" + addUrl(service.getId()) + ",</br>"+
+                "        templateId:" + addUrl(template.getId()) + ",</br>"+
+                "        employeeId:" + addUrl(employeeId) + ",</br>"+
+                "        status:" + status + ",</br>"+
+                "        action:" + action +",</br>"+
+                "        creationDate:" + creationDate + "</br>"+
+                "     }";
     }
+
 
 
     public BigInteger getId()
@@ -167,5 +197,13 @@ public class OrderImpl implements Order
     public int hashCode()
     {
         return Objects.hash(id);
+    }
+
+    private String addUrl(BigInteger value){
+        String start = "<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId=";
+        String mid = "' target=\"_blank\">";
+        String close = "</a>";
+
+        return start+value+mid+value+close;
     }
 }

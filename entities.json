@@ -139,9 +139,6 @@
       "password": "1234",
       "moneyBalance": 900.0,
       "connectedServicesIds": [
-        19,
-        21,
-        23
       ],
       "areaId": 13
     }

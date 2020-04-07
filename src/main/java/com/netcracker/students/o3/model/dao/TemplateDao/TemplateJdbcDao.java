@@ -204,14 +204,14 @@ public class TemplateJdbcDao extends AbstractJdbcDao<Template> implements Templa
         return template;
     }
 
-    public List<Template> getTemplatesByAreaId(BigInteger areaId) throws SQLException
+    public List<Template> getTemplatesByArea(Area area) throws SQLException
     {
         List<Template> templates = new ArrayList<>();
         String sqlReq;
 
         try (Connection connection = getConnection(); Statement statement = connection.createStatement())
         {
-            sqlReq = "select * from " + templateAreaLinkTable + " where areaid=" + areaId;
+            sqlReq = "select * from " + templateAreaLinkTable + " where areaid=" + area;
             try (ResultSet resultSet = statement.executeQuery(sqlReq))
             {
                 List<BigInteger> templateIds = new ArrayList<>();

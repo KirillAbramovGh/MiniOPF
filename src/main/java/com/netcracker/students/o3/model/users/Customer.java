@@ -1,5 +1,7 @@
 package com.netcracker.students.o3.model.users;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.services.Service;
@@ -9,14 +11,17 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -25,10 +30,15 @@ public interface Customer extends User
 {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "last_id")
+    @SequenceGenerator(name="last_id",
+            sequenceName="last_id")
+    @Column(name = "id", updatable = false, nullable = false)
     @Override
     BigInteger getId();
 
-    @Column(name = "login")
+    @Column(name = "login", unique = true)
     @Override
     String getLogin();
 
@@ -54,7 +64,10 @@ public interface Customer extends User
     /**
      * @return set of connected customer services ids
      */
-    @OneToMany(targetEntity = ServiceImpl.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER,
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @OneToMany(targetEntity = ServiceImpl.class, fetch = FetchType.EAGER,
             mappedBy = "customer")
     Set<Service> getConnectedServices();
 
@@ -67,7 +80,10 @@ public interface Customer extends User
     /**
      * @return customer area id
      */
-    @ManyToOne(targetEntity = AreaImpl.class,cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @ManyToOne(targetEntity = AreaImpl.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "areaid")
     Area getArea();
 

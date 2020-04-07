@@ -1,26 +1,28 @@
+<%@ page import="com.netcracker.students.o3.controller.ControllerImpl" %>
 <%@ page import="java.math.BigInteger" %>
-<%@ page import="javax.inject.Inject" %>
-<%@ page import="jsp.ejb.JSONVisualiseEJB" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>JSON</title>
 </head>
 <body>
-<script>
-    function getJSON() {
-        let object = <%=jsonVisualiseEJB.getJsonFromEntity(BigInteger.valueOf(Long.parseLong(request.getParameter("entityId"))))%>;
-        return JSON.stringify(object);
-    }
-</script>
-<%!
-    @Inject
-    JSONVisualiseEJB jsonVisualiseEJB;
-%>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/tabs.css">
+<h2>JSON Entity</h2>
 <pre>
-<code>
-    <script>document.write(getJSON());</script>
-</code>
+    <%
+        try
+        { %>
+          <%=ControllerImpl.getInstance().getEntity(
+                  BigInteger.valueOf(Long.parseLong(request.getParameter("entityId"))))%>
+    <%
+        }
+        catch (Exception e)
+        {
+            response.getWriter().println("Несуществующая сущность");
+        }
+    %>
 </pre>
 </body>
 </html>

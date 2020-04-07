@@ -1,5 +1,7 @@
 package com.netcracker.students.o3.model.users;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.services.Service;
@@ -15,10 +17,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -32,12 +37,17 @@ public class CustomerImpl implements Customer
 {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "last_id")
+    @SequenceGenerator(name="last_id",
+            sequenceName="last_id")
+    @Column(name = "id", updatable = false, nullable = false)
     private BigInteger id;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "login")
+    @Column(name = "login",unique = true)
     private String login;
 
     @Column(name = "password")
@@ -46,10 +56,16 @@ public class CustomerImpl implements Customer
     @Column(name = "moneybalance")
     private BigDecimal moneyBalance;
 
-    @OneToMany(targetEntity = ServiceImpl.class,cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @OneToMany(targetEntity = ServiceImpl.class, fetch = FetchType.EAGER, mappedBy = "customer")
     private Set<Service> connectedServices;
 
-    @ManyToOne(targetEntity = AreaImpl.class,cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @ManyToOne(targetEntity = AreaImpl.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "areaid")
     private Area area;
 
@@ -75,15 +91,28 @@ public class CustomerImpl implements Customer
     @Override
     public String toString()
     {
-        return "CustomerImpl{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", moneyBalance=" + moneyBalance +
-                ", connectedServicesIds=" + connectedServices +
-                ", areaId=" + area.getId() +
-                '}';
+        String tmpr = "[";
+        for(Service service : connectedServices){
+            tmpr+=addUrl(service.getId())+",";
+        }
+        tmpr+="]";
+        return "CustomerImpl{" + "</br>"+
+                "           id:" + id + ",</br>"+
+                "           name:'" + name + '\'' + ",</br>"+
+                "           login:'" + login + '\'' + ",</br>"+
+                "           password:'" + password + '\'' + ",</br>"+
+                "           moneyBalance:" + moneyBalance + ",</br>"+
+                "           connectedServicesIds:" + tmpr + ",</br>"+
+                "           areaId:" + addUrl(area.getId()) + "</br>"+
+                "      }";
+    }
+
+    private String addUrl(BigInteger value){
+        String start = "<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId=";
+        String mid = "' target=\"_blank\">";
+        String close = "</a>";
+
+        return start+value+mid+value+close;
     }
 
     public BigDecimal getMoneyBalance()

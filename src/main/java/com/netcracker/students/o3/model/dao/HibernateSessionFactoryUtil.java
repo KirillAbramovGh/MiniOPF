@@ -2,6 +2,8 @@ package com.netcracker.students.o3.model.dao;
 
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
+import com.netcracker.students.o3.model.orders.Order;
+import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.templates.Template;
@@ -40,6 +42,8 @@ public class HibernateSessionFactoryUtil
                 configuration.addAnnotatedClass(ServiceImpl.class);
                 configuration.addAnnotatedClass(EmployeeImpl.class);
                 configuration.addAnnotatedClass(Employee.class);
+                configuration.addAnnotatedClass(Order.class);
+                configuration.addAnnotatedClass(OrderImpl.class);
                 StandardServiceRegistryBuilder builder =
                         new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
