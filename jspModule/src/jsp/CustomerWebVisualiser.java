@@ -9,7 +9,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import jsp.builders.CardBuilder;
-import jsp.ejb.CustomerEJB;
+import jsp.ejb.CustomerSessionBean;
 
 public class CustomerWebVisualiser
 {
@@ -23,10 +23,10 @@ public class CustomerWebVisualiser
     /**
      * @return search result by req
      */
-    public String search(String req, BigInteger customerId, CustomerEJB customerEJB)
+    public String search(String req, BigInteger customerId, CustomerSessionBean customerSessionBean)
     {
-        List<Service> services = customerEJB.searchServices(req, customerId);
-        List<Template> templates = customerEJB.searchTemplates(req, customerId);
+        List<Service> services = customerSessionBean.searchServices(req, customerId);
+        List<Template> templates = customerSessionBean.searchTemplates(req, customerId);
 
         String result = CardBuilder.getInstance().makeCardsFromServices(services);
         result += CardBuilder.getInstance().makeCardsFromTemplates(templates);
@@ -37,9 +37,9 @@ public class CustomerWebVisualiser
     /**
      * @return table of services
      */
-    public String showConnectedServices(BigInteger customerId, CustomerEJB customerEJB)
+    public String showConnectedServices(BigInteger customerId, CustomerSessionBean customerSessionBean)
     {
-        List<Service> services = customerEJB.getConnectedServices(customerId);
+        List<Service> services = customerSessionBean.getConnectedServices(customerId);
         if (services.isEmpty())
         {
             return "There are no connected service";
@@ -50,9 +50,9 @@ public class CustomerWebVisualiser
     /**
      * @return templates available to connect
      */
-    public String showAllTemplates(BigInteger customerId, CustomerEJB customerEJB)
+    public String showAllTemplates(BigInteger customerId, CustomerSessionBean customerSessionBean)
     {
-        List<Template> templates = customerEJB.getUnconnectedTemplates(customerId);
+        List<Template> templates = customerSessionBean.getUnconnectedTemplates(customerId);
 
         if (templates.isEmpty())
         {

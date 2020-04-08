@@ -8,7 +8,7 @@
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="javax.inject.Inject" %>
 <%@ page import="jsp.EmployeeWebVisualiser" %>
-<%@ page import="jsp.ejb.EmployeeEJB" %>
+<%@ page import="jsp.ejb.EmployeeSessionBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <html lang="en">
 <head>
@@ -18,7 +18,7 @@
     <title>MiniOPF</title>
     <%!
         @Inject
-        EmployeeEJB employeeEJB;
+        EmployeeSessionBean employeeSessionBean;
 
         private EmployeeWebVisualiser employeeWebVisualiser = EmployeeWebVisualiser.getInstance();
     %>
@@ -30,7 +30,7 @@
         String password = "";
         if (id != null)
         {
-            employee = employeeEJB.getEmployee(id);
+            employee = employeeSessionBean.getEmployee(id);
             name = employee.getName();
             login = employee.getLogin();
             password = employee.getPassword();
@@ -78,7 +78,7 @@
                             request.getParameter("filterOrderTemplateId"),
                             request.getParameter("filterOrderServiceId"),
                             (BigInteger) request.getSession().getAttribute("id"),
-                            employeeEJB
+                            employeeSessionBean
                     )%>
                 </form>
             </div>
@@ -102,7 +102,7 @@
                             request.getParameter("filterOrderTemplateId"),
                             request.getParameter("filterOrderServiceId"),
                             request.getParameter("filterOrderEmployeeId"),
-                            employeeEJB
+                            employeeSessionBean
                     )%>
                 </form>
             </div>
@@ -127,7 +127,7 @@
                             (ServiceSortType) request.getSession().getAttribute("sortServices"),
                             request.getParameter("filterServiceName"),
                             request.getParameter("filterServiceCost"),
-                            employeeEJB
+                            employeeSessionBean
                     )%>
                 </form>
             </div>
@@ -149,7 +149,7 @@
                             (TemplateSortType) request.getSession().getAttribute("sortTemplates"),
                             request.getParameter("filterTemplateName"),
                             request.getParameter("filterTemplateCost"),
-                            employeeEJB
+                            employeeSessionBean
                     )%>
                 </form>
             </div>
@@ -172,7 +172,7 @@
                             (CustomerSortType) request.getSession().getAttribute("sortCustomers"),
                             request.getParameter("filterCustomerName"),
                             request.getParameter("filterCustomerArea"),
-                            employeeEJB
+                            employeeSessionBean
                     )%>
                 </form>
             </div>
@@ -191,7 +191,7 @@
                             request.getParameter("allEmployeesSelectField"),
                             (EmployeeSortType) request.getSession().getAttribute("sortEmployees"),
                             request.getParameter("filterEmployeeName"),
-                            employeeEJB
+                            employeeSessionBean
                     )%>
                 </form>
             </div>
@@ -211,7 +211,7 @@
                             request.getParameter("allAreasSelectField"),
                             (AreaSortType) request.getSession().getAttribute("sortAreas"),
                             request.getParameter("filterAreaName"),
-                            employeeEJB
+                            employeeSessionBean
                     )%>
                 </form>
             </div>
@@ -234,7 +234,7 @@
                     <input name="employeeRadio" type="radio" value="Employees">Employees
                     <input type="submit" name="searchAll" value="Search">
                     <%=employeeWebVisualiser.showAll(request.getParameter("searchAllEntities"),
-                            employeeEJB,
+                            employeeSessionBean,
                             request.getParameter("serviceRadio"),
                             request.getParameter("templateRadio"),
                             request.getParameter("orderRadio"),

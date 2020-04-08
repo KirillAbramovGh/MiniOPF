@@ -12,13 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import jsp.ejb.EmployeeEJB;
+import jsp.ejb.EmployeeSessionBean;
 
 @WebServlet("/employeeServlet")
 public class EmployeeServlet extends HttpServlet
 {
     @EJB
-    EmployeeEJB employeeEJB;
+    EmployeeSessionBean employeeSessionBean;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
@@ -44,7 +44,7 @@ public class EmployeeServlet extends HttpServlet
         try
         {
             EmployeeCommand.valueOf(command).execute(req, resp, getServletContext(),
-                    employeeEJB, key);
+                    employeeSessionBean, key);
         }
         catch (Exception e)
         {

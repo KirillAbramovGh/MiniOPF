@@ -5,7 +5,7 @@
 <%@ page import="java.math.BigDecimal" %>
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="javax.inject.Inject" %>
-<%@ page import="jsp.ejb.CustomerEJB" %>
+<%@ page import="jsp.ejb.CustomerSessionBean" %>
 <%@ page import="javax.ejb.EJB" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -15,7 +15,7 @@
     <title>UpdateCustomer</title>
     <%!
         @Inject
-        CustomerEJB customerEJB;
+        CustomerSessionBean customerSessionBean;
     %>
 </head>
 <body>
@@ -23,25 +23,25 @@
     <div style="size: 200px">
         <div class="name">
             Name: <input type="text" name="fio"
-                         value="<%=customerEJB.getFIO((BigInteger) request.getSession().getAttribute("id"))%>">
+                         value="<%=customerSessionBean.getFIO((BigInteger) request.getSession().getAttribute("id"))%>">
         </div>
 
         <div class="">
             Login: <input type="text" name="login"
-                          value="<%=customerEJB.getLogin((BigInteger) request.getSession().getAttribute("id"))%>">
+                          value="<%=customerSessionBean.getLogin((BigInteger) request.getSession().getAttribute("id"))%>">
         </div>
 
         <div class="password">
             Password: <input type="text" name="password"
-                             value=<%=customerEJB.getPassword((BigInteger) request.getSession().getAttribute("id"))%>>
+                             value=<%=customerSessionBean.getPassword((BigInteger) request.getSession().getAttribute("id"))%>>
         </div>
         <div class="">
             Balance: <input type="text" name="balance"
-                            value="<%=customerEJB.getBalance((BigInteger) request.getSession().getAttribute("id"))%>">
+                            value="<%=customerSessionBean.getBalance((BigInteger) request.getSession().getAttribute("id"))%>">
         </div>
         <div class="selectArea">
             Area: <input type="text" name="area"
-                         value=<%=customerEJB.getAreaId((BigInteger) request.getSession().getAttribute("id"))%>>
+                         value=<%=customerSessionBean.getAreaId((BigInteger) request.getSession().getAttribute("id"))%>>
         </div>
         <div>
             ConnectedTemplatesId: <input type="text" name="connectedTemplatesId" value="<%=getConnectedTemplatesId(
@@ -55,7 +55,7 @@
     private String getConnectedTemplatesId(BigInteger customerId)
     {
         String res = "";
-        for (Template template : customerEJB.getConnectedTemplates(customerId).values())
+        for (Template template : customerSessionBean.getConnectedTemplates(customerId).values())
         {
             res += template.getId() + ",";
         }
@@ -75,7 +75,7 @@
             String[] templates = servicesValue.split(",");
             String moneyBalance = request.getParameter("balance");
 
-            customerEJB.setCustomersFields((BigInteger) request.getSession().getAttribute("id"),
+            customerSessionBean.setCustomersFields((BigInteger) request.getSession().getAttribute("id"),
                     name, password, login, BigInteger.valueOf(Long.parseLong(area)),
                     BigDecimal.valueOf(Double.parseDouble(moneyBalance)));
 
@@ -85,15 +85,15 @@
                 {
                     BigInteger templateId = BigInteger.valueOf(Long.parseLong(s));
                     boolean connected = false;
-                    for (BigInteger serviceId : customerEJB
+                    for (BigInteger serviceId : customerSessionBean
                             .getConnectedServicesIds((BigInteger) request.getSession().getAttribute("id")))
                     {
                         Service service = ControllerImpl.getInstance().getService(serviceId);
                         Template template = service.getTemplate();
                         if (!template.getPossibleAreas()
-                                .contains(customerEJB.getAreaId((BigInteger) request.getSession().getAttribute("id"))))
+                                .contains(customerSessionBean.getAreaId((BigInteger) request.getSession().getAttribute("id"))))
                         {
-                            customerEJB.disconnectService(serviceId);
+                            customerSessionBean.disconnectService(serviceId);
                             break;
                         }
                         if (service.getTemplate().equals(templateId))
@@ -103,9 +103,10 @@
                         }
                     }
                     if (!connected && ControllerImpl.getInstance().getTemplate(templateId).getPossibleAreas()
-                            .contains(customerEJB.getAreaId((BigInteger) request.getSession().getAttribute("id"))))
+                            .contains(customerSessionBean.getAreaId((BigInteger) request.getSession().getAttribute("id"))))
                     {
-                        customerEJB.connectService((BigInteger) request.getSession().getAttribute("id"), templateId);
+                        customerSessionBean
+                                .connectService((BigInteger) request.getSession().getAttribute("id"), templateId);
                     }
                     else
                     {

@@ -17,14 +17,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jsp.ejb.EmployeeEJB;
+import jsp.ejb.EmployeeSessionBean;
+import jsp.ejb.EmployeeSessionBean;
 
 public enum EmployeeCommand
 {
 
     cancelOrder{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeEJB employeeEJB,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
                 final String key) throws ServletException, IOException
         {
             BigInteger id = getIdFromKey(key);
@@ -33,7 +34,7 @@ public enum EmployeeCommand
     },
     createCustomer{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeEJB employeeEJB,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
                 final String key) throws ServletException, IOException
         {
             req.getSession().setAttribute("nextPage","/CreateJSP/createCustomer.jsp");
@@ -41,7 +42,7 @@ public enum EmployeeCommand
     },
     createTemplate{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeEJB employeeEJB,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
                 final String key) throws ServletException, IOException
         {
             req.getSession().setAttribute("nextPage","/CreateJSP/createTemplate.jsp");
@@ -49,7 +50,7 @@ public enum EmployeeCommand
     },
     createService{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeEJB employeeEJB,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
                 final String key) throws ServletException, IOException
         {
             req.getSession().setAttribute("nextPage","/CreateJSP/createService.jsp");
@@ -57,7 +58,7 @@ public enum EmployeeCommand
     },
     createOrder{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeEJB employeeEJB,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
                 final String key) throws ServletException, IOException
         {
             req.getSession().setAttribute("nextPage","/CreateJSP/createOrder.jsp");
@@ -65,7 +66,7 @@ public enum EmployeeCommand
     },
     createArea{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeEJB employeeEJB,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
                 final String key) throws ServletException, IOException
         {
             req.getSession().setAttribute("nextPage","/CreateJSP/createArea.jsp");
@@ -73,7 +74,7 @@ public enum EmployeeCommand
     },
     updateCustomer{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeEJB employeeEJB,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
                 final String key) throws ServletException, IOException
         {
             BigInteger id = getIdFromKey(key);
@@ -83,7 +84,7 @@ public enum EmployeeCommand
     },
     updateService{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeEJB employeeEJB,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
                 final String key) throws ServletException, IOException
         {
             BigInteger id = getIdFromKey(key);
@@ -93,7 +94,7 @@ public enum EmployeeCommand
     },
     updateTemplate{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeEJB employeeEJB,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
                 final String key) throws ServletException, IOException
         {
             BigInteger id = getIdFromKey(key);
@@ -103,7 +104,7 @@ public enum EmployeeCommand
     },
     updateOrder{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeEJB employeeEJB,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
                 final String key) throws ServletException, IOException
         {
             BigInteger id = getIdFromKey(key);
@@ -113,7 +114,7 @@ public enum EmployeeCommand
     },
     updateArea{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeEJB employeeEJB,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
                 final String key) throws ServletException, IOException
         {
             BigInteger id = getIdFromKey(key);
@@ -123,7 +124,7 @@ public enum EmployeeCommand
     },
     updateEmployee{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeEJB employeeEJB,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
                 final String key) throws ServletException, IOException
         {
             BigInteger id = getIdFromKey(key);
@@ -134,116 +135,116 @@ public enum EmployeeCommand
     save
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     String name = req.getParameter("fio");
                     String password = req.getParameter("password");
 
-                    employeeEJB.changeNameAndPassword(name, password,(BigInteger) req.getSession().getAttribute("id"));
+                    employeeSessionBean.changeNameAndPassword(name, password,(BigInteger) req.getSession().getAttribute("id"));
                 }
             },
 
     startOrder
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
                     BigInteger employeeId = (BigInteger)req.getSession().getAttribute("id");
-                    employeeEJB.startOrder(id,employeeId);
+                    employeeSessionBean.startOrder(id,employeeId);
                 }
             },
 
     resumeOrder
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    employeeEJB.resumeOrder(id);
+                    employeeSessionBean.resumeOrder(id);
                 }
             },
 
     completeOrder
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    employeeEJB.completeOrder(id);
+                    employeeSessionBean.completeOrder(id);
                 }
             },
 
     deleteTemplate
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    employeeEJB.deleteTemplate(id);
+                    employeeSessionBean.deleteTemplate(id);
                 }
             },
     deleteOrder
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    employeeEJB.deleteOrder(id);
+                    employeeSessionBean.deleteOrder(id);
                 }
             },
     deleteService
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    employeeEJB.deleteService(id);
+                    employeeSessionBean.deleteService(id);
                 }
             },
     deleteCustomer
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    employeeEJB.deleteCustomer(id);
+                    employeeSessionBean.deleteCustomer(id);
                 }
             },
 
     deleteEmployee
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    employeeEJB.deleteEmployee(id);
+                    employeeSessionBean.deleteEmployee(id);
                 }
             },
 
     deleteArea
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    employeeEJB.deleteArea(id);
+                    employeeSessionBean.deleteArea(id);
                 }
             },
     ServiceSortUpByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortServices", ServiceSortType.UpByName, req);
@@ -252,7 +253,7 @@ public enum EmployeeCommand
     ServiceSortDownByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortServices", ServiceSortType.DownByName, req);
@@ -262,7 +263,7 @@ public enum EmployeeCommand
     ServiceSortUpByCost
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortServices", ServiceSortType.UpByCost, req);
@@ -272,7 +273,7 @@ public enum EmployeeCommand
     ServiceSortDownByCost
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortServices", ServiceSortType.DownByCost, req);
@@ -281,7 +282,7 @@ public enum EmployeeCommand
     ServiceSortUpById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortServices", ServiceSortType.UpById, req);
@@ -291,7 +292,7 @@ public enum EmployeeCommand
     ServiceSortDownById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortServices", ServiceSortType.DownById, req);
@@ -302,7 +303,7 @@ public enum EmployeeCommand
     TemplateSortUpByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortTemplates", TemplateSortType.UpByName, req);
@@ -312,7 +313,7 @@ public enum EmployeeCommand
     TemplateSortDownByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortTemplates", TemplateSortType.DownByName, req);
@@ -322,7 +323,7 @@ public enum EmployeeCommand
     TemplateSortUpByCost
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortTemplates", TemplateSortType.UpByCost, req);
@@ -332,7 +333,7 @@ public enum EmployeeCommand
     TemplateSortDownByCost
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortTemplates", TemplateSortType.DownByCost, req);
@@ -343,7 +344,7 @@ public enum EmployeeCommand
     TemplateSortUpById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortTemplates", TemplateSortType.UpById, req);
@@ -352,7 +353,7 @@ public enum EmployeeCommand
     TemplateSortDownById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortTemplates", TemplateSortType.DownById, req);
@@ -361,7 +362,7 @@ public enum EmployeeCommand
     OrderSortUpById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortOrders", OrderSortType.UpById, req);
@@ -370,7 +371,7 @@ public enum EmployeeCommand
     OrderSortDownById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortOrders", OrderSortType.DownById, req);
@@ -379,7 +380,7 @@ public enum EmployeeCommand
     EmployeeSortUpById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortEmployees", EmployeeSortType.UpById, req);
@@ -388,7 +389,7 @@ public enum EmployeeCommand
     EmployeeSortDownById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortEmployees", EmployeeSortType.DownById, req);
@@ -397,7 +398,7 @@ public enum EmployeeCommand
     EmployeeSortUpByLogin
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortEmployees", EmployeeSortType.UpByLogin, req);
@@ -406,7 +407,7 @@ public enum EmployeeCommand
     EmployeeSortDownByLogin
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortEmployees", EmployeeSortType.DownByLogin, req);
@@ -415,7 +416,7 @@ public enum EmployeeCommand
     EmployeeSortUpByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortEmployees", EmployeeSortType.UpByName, req);
@@ -424,7 +425,7 @@ public enum EmployeeCommand
     EmployeeSortDownByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortEmployees", EmployeeSortType.DownByName, req);
@@ -433,7 +434,7 @@ public enum EmployeeCommand
     CustomerSortUpByBalance
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortCustomers", CustomerSortType.UpByBalance, req);
@@ -442,7 +443,7 @@ public enum EmployeeCommand
     CustomerSortDownByBalance
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortCustomers", CustomerSortType.DownByBalance, req);
@@ -452,7 +453,7 @@ public enum EmployeeCommand
     CustomerSortUpById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortCustomers", CustomerSortType.UpById, req);
@@ -462,7 +463,7 @@ public enum EmployeeCommand
     CustomerSortDownById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortCustomers", CustomerSortType.DownById, req);
@@ -472,7 +473,7 @@ public enum EmployeeCommand
     CustomerSortUpByLogin
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortCustomers", CustomerSortType.UpByLogin, req);
@@ -482,7 +483,7 @@ public enum EmployeeCommand
     CustomerSortDownByLogin
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("sortCustomers", CustomerSortType.DownByLogin, req);
@@ -492,7 +493,7 @@ public enum EmployeeCommand
     CustomerSortUpByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
 
@@ -501,7 +502,7 @@ public enum EmployeeCommand
     CustomerSortDownByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
 
@@ -510,7 +511,7 @@ public enum EmployeeCommand
     AreaSortUpByDescription
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
 
@@ -519,7 +520,7 @@ public enum EmployeeCommand
     AreaSortDownByDescription
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
 
@@ -528,7 +529,7 @@ public enum EmployeeCommand
     AreaSortUpById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
 
@@ -537,7 +538,7 @@ public enum EmployeeCommand
     AreaSortDownById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
 
@@ -546,7 +547,7 @@ public enum EmployeeCommand
     AreaSortUpByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
 
@@ -555,7 +556,7 @@ public enum EmployeeCommand
     AreaSortDownByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
 
@@ -564,7 +565,7 @@ public enum EmployeeCommand
     serviceRadio
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
 
@@ -573,7 +574,7 @@ public enum EmployeeCommand
     templateRadio
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
 
@@ -582,7 +583,7 @@ public enum EmployeeCommand
     orderRadio
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("orderRadio", true, req);
@@ -592,7 +593,7 @@ public enum EmployeeCommand
     areaRadio
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("areaRadio", true, req);
@@ -602,7 +603,7 @@ public enum EmployeeCommand
     customerRadio
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("customerRadio", true, req);
@@ -612,7 +613,7 @@ public enum EmployeeCommand
     employeeRadio
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
                     setAttribute("employeeRadio", true, req);
@@ -622,7 +623,7 @@ public enum EmployeeCommand
     out
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, EmployeeEJB employeeEJB,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
                     forward("/startView.jsp", context, req, resp);
@@ -630,7 +631,7 @@ public enum EmployeeCommand
             };
 
     public void execute(HttpServletRequest req, final HttpServletResponse resp,
-            final ServletContext context, EmployeeEJB employeeEJB, final String key)
+            final ServletContext context, EmployeeSessionBean employeeSessionBean, final String key)
             throws IOException, ServletException
     {
         System.out.println("standard");

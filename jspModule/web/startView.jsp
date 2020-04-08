@@ -1,4 +1,6 @@
-<%@ page import="jsp.StartWebOperations" %>
+<%@ page import="javax.inject.Inject" %>
+<%@ page import="jsp.StartWebVisualiser" %>
+<%@ page import="jsp.ejb.StartSessionBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html lang="en">
@@ -13,7 +15,9 @@
 <body>
 
 <%!
-    StartWebOperations startWebOperations = StartWebOperations.getInstance();
+    @Inject
+    StartSessionBean startSessionBean;
+    StartWebVisualiser startWebVisualiser = StartWebVisualiser.getInstance();
 %>
 
 <div class="wrapper">
@@ -39,7 +43,7 @@
                     <input type="text" name="fio" value="FIO"><br/>
                     <input type="text" name="login" value="login"><br/>
                     <input type="password" name="password" value="password"><br/>
-                    <%=startWebOperations.showAreas()%><br/>
+                    <%=startWebVisualiser.showAreas(startSessionBean)%><br/>
                     <input type="submit" name="regCustomer" value="Register">
                 </form>
             </div>
@@ -57,7 +61,7 @@
     </div>
 </div>
 
-<%=startWebOperations.showErrorMessage(session)%>
+<%=startWebVisualiser.showErrorMessage(session)%>
 
 <script src="../../jspModule2/web/main1.js"></script>
 

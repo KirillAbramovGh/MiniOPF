@@ -29,40 +29,15 @@ public class XMLLogController
         serializer = new XMLSerializer();
     }
 
-    public void addRequest(String sqlReq, Area... d)
+    public void addRequest(String sqlReq)
     {
-        wrapper.addRequests(new XMLRequest<>(sqlReq, d));
-        checkWrapperSize();
-    }
-
-    public void addRequest(String sqlReq, Service... d)
-    {
-        wrapper.addRequests(new XMLRequest<>(sqlReq, d));
-        checkWrapperSize();
-    }
-
-    public void addRequest(String sqlReq, Template... d)
-    {
-        wrapper.addRequests(new XMLRequest<>(sqlReq, d));
-        checkWrapperSize();
-    }
-
-    public void addRequest(String sqlReq, Order... d)
-    {
-        wrapper.addRequests(new XMLRequest<>(sqlReq, d));
-        checkWrapperSize();
-    }
-
-    public void addRequest(String sqlReq, Customer... d)
-    {
-        wrapper.addRequests(new XMLRequest<>(sqlReq, d));
-        checkWrapperSize();
-    }
-
-    public void addRequest(String sqlReq, Employee... d)
-    {
-        wrapper.addRequests(new XMLRequest<>(sqlReq, d));
-        checkWrapperSize();
+        try
+        {
+            wrapper.addRequests(new XMLRequest(sqlReq));
+            checkWrapperSize();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void checkWrapperSize()

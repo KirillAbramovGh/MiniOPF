@@ -2,12 +2,12 @@ package com.netcracker.students.o3;
 
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
-import com.netcracker.students.o3.model.dao.AreaDao.AreaHibDao;
-import com.netcracker.students.o3.model.dao.CustomerDao.CustomerHibDao;
-import com.netcracker.students.o3.model.dao.EmployeeDao.EmployeeHibDao;
-import com.netcracker.students.o3.model.dao.OrderDao.OrderHibDao;
-import com.netcracker.students.o3.model.dao.ServiceDao.ServiceHibDao;
-import com.netcracker.students.o3.model.dao.TemplateDao.TemplateHibDao;
+import com.netcracker.students.o3.model.dao.area.AreaHibDao;
+import com.netcracker.students.o3.model.dao.сustomer.CustomerHibDao;
+import com.netcracker.students.o3.model.dao.employee.EmployeeHibDao;
+import com.netcracker.students.o3.model.dao.order.OrderHibDao;
+import com.netcracker.students.o3.model.dao.service.ServiceHibDao;
+import com.netcracker.students.o3.model.dao.template.TemplateHibDao;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;

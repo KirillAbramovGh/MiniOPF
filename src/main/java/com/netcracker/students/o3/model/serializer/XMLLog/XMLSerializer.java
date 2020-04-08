@@ -27,9 +27,6 @@ public class XMLSerializer
 {
     private static final Class[] classes = new Class[]{
             XMLRequestsWrapper.class, XMLRequest.class,
-            HashSet.class, HashMap.class,
-            CustomerImpl.class, EmployeeImpl.class, AreaImpl.class,
-            OrderImpl.class, TemplateImpl.class, ServiceImpl.class
     };
 
     public void serializeObjectToXML(XMLRequestsWrapper o, String fileName)

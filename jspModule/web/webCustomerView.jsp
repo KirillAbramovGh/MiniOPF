@@ -3,7 +3,7 @@
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="javax.inject.Inject" %>
 <%@ page import="jsp.CustomerWebVisualiser" %>
-<%@ page import="jsp.ejb.CustomerEJB" %>
+<%@ page import="jsp.ejb.CustomerSessionBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <html lang="en">
 <head>
@@ -13,30 +13,30 @@
     <title>MiniOPF</title>
     <%!
         @Inject
-        CustomerEJB customerEJB;
+        CustomerSessionBean customerSessionBean;
     %>
     <%
         CustomerWebVisualiser customerWV = CustomerWebVisualiser.getInstance();
 
-        customerEJB.addBalance(request.getParameter("sum"), (BigInteger) request.getSession().getAttribute("id"));
+        customerSessionBean.addBalance(request.getParameter("sum"), (BigInteger) request.getSession().getAttribute("id"));
 
         String services = new SerializerImpl().serializeToString(
                 ControllerImpl.getInstance().getPlannedActiveSuspendedProvisioningService(
                         (BigInteger) request.getSession().getAttribute("id"))).replaceAll("\"", "'");
         String possibleAreasByServiceId = new SerializerImpl().serializeToString(
-                customerEJB.getConnectedTemplates((BigInteger) request.getSession().getAttribute("id")))
+                customerSessionBean.getConnectedTemplates((BigInteger) request.getSession().getAttribute("id")))
                 .replaceAll("\"", "'");
     %>
 
     <form action="${pageContext.request.contextPath}/customerServlet" method="post" class="header">
         <div class="balance">
-            Balance: <%=customerEJB.getBalance((BigInteger) request.getSession().getAttribute("id")) + "$"%>
+            Balance: <%=customerSessionBean.getBalance((BigInteger) request.getSession().getAttribute("id")) + "$"%>
             <input type="submit" name="putOnBalance" value="+" onclick="showBalanceForm()" class="button">
         </div>
         <div class="login">
             You are logged in as:
             <m style="color: #8c4667">
-                <%=customerEJB.getFIO((BigInteger) request.getSession().getAttribute("id"))%>
+                <%=customerSessionBean.getFIO((BigInteger) request.getSession().getAttribute("id"))%>
             </m>
             <input type="submit" name="out" value="Out" class="button">
         </div>
@@ -57,27 +57,27 @@
                     <div class="tabs__content">
                         <div class="tab is-active tab-1">
                             <%=customerWV.showConnectedServices((BigInteger) request.getSession().getAttribute("id"),
-                                    customerEJB)%>
+                                    customerSessionBean)%>
                         </div>
                         <div class="tab tab-2">
                             <%=customerWV.showAllTemplates((BigInteger) request.getSession().getAttribute("id"),
-                                    customerEJB)%>
+                                    customerSessionBean)%>
                         </div>
                         <div class="tab tab-3">
                             <div class="customerSettings">
                                 <div class="name">
                                     Name: <input type="text" name="fio"
-                                                 value="<%=customerEJB.getFIO((BigInteger) request.getSession().getAttribute("id"))%>">
+                                                 value="<%=customerSessionBean.getFIO((BigInteger) request.getSession().getAttribute("id"))%>">
                                 </div>
 
                                 <div class="login">
-                                    Login: <%=customerEJB
+                                    Login: <%=customerSessionBean
                                         .getLogin((BigInteger) request.getSession().getAttribute("id"))%>
                                 </div>
 
                                 <div class="password">
                                     Password: <input type="text" name="password"
-                                                     value=<%=customerEJB.getPassword((BigInteger) request.getSession().getAttribute("id"))%>>
+                                                     value=<%=customerSessionBean.getPassword((BigInteger) request.getSession().getAttribute("id"))%>>
                                 </div>
 
                                 <div class="selectArea">
@@ -96,7 +96,7 @@
                                 <input type="submit" name="searchButton" value="Search">
                             </div>
                             <%=customerWV.search((String) request.getSession().getAttribute("searchField"),
-                                    (BigInteger) request.getSession().getAttribute("id"), customerEJB)%>
+                                    (BigInteger) request.getSession().getAttribute("id"), customerSessionBean)%>
                         </div>
                     </div>
                 </form>

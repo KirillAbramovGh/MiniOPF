@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jsp.ejb.CustomerEJB;
+import jsp.ejb.CustomerSessionBean;
 
 
 @WebServlet("/customerServlet")
 public class CustomerServlet extends HttpServlet
 {
     @EJB
-    CustomerEJB customerEJB;
+    CustomerSessionBean customerSessionBean;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
@@ -42,7 +42,7 @@ public class CustomerServlet extends HttpServlet
         ServletContext context = getServletContext();
         try
         {
-            CustomerCommand.valueOf(commandName).execute(req, resp, context, customerEJB, command);
+            CustomerCommand.valueOf(commandName).execute(req, resp, context, customerSessionBean, command);
         }catch (IllegalArgumentException ignore){ }
         catch (Exception e){
             e.printStackTrace();

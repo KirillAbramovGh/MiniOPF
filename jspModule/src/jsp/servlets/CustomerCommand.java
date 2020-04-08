@@ -17,7 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jsp.ejb.CustomerEJB;
+import jsp.ejb.CustomerSessionBean;
 
 
 public enum CustomerCommand
@@ -26,63 +26,63 @@ public enum CustomerCommand
     disconnect
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    customerEJB.disconnectService(id);
+                    customerSessionBean.disconnectService(id);
                 }
             },
 
     suspend
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    customerEJB.suspendService(id);
+                    customerSessionBean.suspendService(id);
                 }
             },
 
     resume
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    customerEJB.resumeService(id);
+                    customerSessionBean.resumeService(id);
                 }
             },
 
     connect
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     BigInteger serviceId = getIdFromKey(key);
                     BigInteger customerId = (BigInteger) req.getSession().getAttribute("id");
 
-                    customerEJB.connectService(serviceId,customerId);
+                    customerSessionBean.connectService(serviceId,customerId);
                 }
             },
 
     change
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key) throws WrongInputException, UnpossibleChangeAreaException
                 {
-                    changeSettings(req, customerEJB);
+                    changeSettings(req, customerSessionBean);
                 }
             },
 
     searchButton
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     setAttribute("searchField", req.getParameter("searchField"), req);
@@ -92,7 +92,7 @@ public enum CustomerCommand
     ServiceSortUpByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     setAttribute("sortServices", ServiceSortType.UpByName, req);
@@ -102,7 +102,7 @@ public enum CustomerCommand
     ServiceSortDownByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     setAttribute("sortServices", ServiceSortType.DownByName, req);
@@ -112,7 +112,7 @@ public enum CustomerCommand
     ServiceSortUpByCost
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     setAttribute("sortServices", ServiceSortType.UpByCost, req);
@@ -122,7 +122,7 @@ public enum CustomerCommand
     ServiceSortDownByCost
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     setAttribute("sortServices", ServiceSortType.DownByCost, req);
@@ -132,7 +132,7 @@ public enum CustomerCommand
     TemplateSortUpByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     setAttribute("sortTemplates", TemplateSortType.UpByName, req);
@@ -142,7 +142,7 @@ public enum CustomerCommand
     TemplateSortDownByName
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     setAttribute("sortTemplates", TemplateSortType.DownByName, req);
@@ -152,7 +152,7 @@ public enum CustomerCommand
     TemplateSortUpByCost
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     setAttribute("sortTemplates", TemplateSortType.UpByCost, req);
@@ -162,7 +162,7 @@ public enum CustomerCommand
     TemplateSortDownByCost
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key)
                 {
                     setAttribute("sortTemplates", TemplateSortType.DownByCost, req);
@@ -172,7 +172,7 @@ public enum CustomerCommand
     out
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                        final ServletContext context, CustomerEJB customerEJB,
+                        final ServletContext context, CustomerSessionBean customerSessionBean,
                         final String key) throws ServletException, IOException
                 {
                     forward("/startView.jsp",context, req, resp);
@@ -180,7 +180,7 @@ public enum CustomerCommand
             };
 
     public void execute(HttpServletRequest req, final HttpServletResponse resp,
-            final ServletContext context, CustomerEJB customerEJB, final String key)
+            final ServletContext context, CustomerSessionBean customerSessionBean, final String key)
             throws IOException, ServletException
     {
         System.out.println("standard");
@@ -192,7 +192,7 @@ public enum CustomerCommand
         return BigInteger.valueOf(longValue);
     }
 
-    private static void changeSettings(final HttpServletRequest req, final CustomerEJB customerEJB) throws WrongInputException, UnpossibleChangeAreaException
+    private static void changeSettings(final HttpServletRequest req, final CustomerSessionBean customerSessionBean) throws WrongInputException, UnpossibleChangeAreaException
     {
         String name = req.getParameter("fio");
         String password = req.getParameter("password");
@@ -201,9 +201,9 @@ public enum CustomerCommand
         Area newArea = ControllerImpl.getInstance().getArea(area);
 
 
-        customerEJB.changeName(name,(BigInteger) req.getSession().getAttribute("id"));
-        customerEJB.changePassword(password,(BigInteger) req.getSession().getAttribute("id"));
-        customerEJB.changeArea(newArea,(BigInteger) req.getSession().getAttribute("id"));
+        customerSessionBean.changeName(name,(BigInteger) req.getSession().getAttribute("id"));
+        customerSessionBean.changePassword(password,(BigInteger) req.getSession().getAttribute("id"));
+        customerSessionBean.changeArea(newArea,(BigInteger) req.getSession().getAttribute("id"));
     }
 
     private static void setAttribute(String key, Object value, HttpServletRequest request)

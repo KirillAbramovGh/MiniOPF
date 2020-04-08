@@ -3,22 +3,18 @@ package com.netcracker.students.o3.model.serializer.XMLLog;
 
 import java.util.Date;
 
-
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
 @XmlRootElement
-public class XMLRequest<T>
+public class XMLRequest
 {
     private Date date;
     private String query;
-    private T[] result;
 
-    @SafeVarargs
-    public XMLRequest(String q, T... d)
+    public XMLRequest(String q)
     {
         date = new Date();
         query = q;
-        result = d;
     }
 
 
@@ -41,17 +37,6 @@ public class XMLRequest<T>
     {
         this.query = query;
     }
-
-    public T[] getResult()
-    {
-        return result;
-    }
-
-    public void setResult(final T[] result)
-    {
-        this.result = result;
-    }
-
 
     public XMLRequest()
     {

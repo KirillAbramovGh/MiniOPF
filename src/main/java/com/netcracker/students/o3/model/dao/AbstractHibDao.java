@@ -1,6 +1,8 @@
 package com.netcracker.students.o3.model.dao;
 
-import org.hibernate.Criteria;
+import com.netcracker.students.o3.model.hibernate.HibernateSessionFactoryUtil;
+import com.netcracker.students.o3.model.serializer.XMLLog.XMLLogController;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -9,6 +11,7 @@ import java.sql.SQLException;
 
 public abstract class AbstractHibDao<T> implements Dao<T>
 {
+    XMLLogController logController = XMLLogController.getInstance();
     @Override
     public void update(final T entity)
     {
@@ -17,6 +20,8 @@ public abstract class AbstractHibDao<T> implements Dao<T>
         session.update(entity);
         tx1.commit();
         session.close();
+
+       logController.addRequest("update entity");
     }
 
     @Override
@@ -30,6 +35,8 @@ public abstract class AbstractHibDao<T> implements Dao<T>
         }
         tx1.commit();
         session.close();
+
+        logController.addRequest("create entity");
     }
 
     @Override
@@ -48,6 +55,7 @@ public abstract class AbstractHibDao<T> implements Dao<T>
         }
         tx1.commit();
         session.close();
+        logController.addRequest("delete entity with id="+id);
     }
 
 
@@ -65,5 +73,6 @@ public abstract class AbstractHibDao<T> implements Dao<T>
         }
         tx1.commit();
         session.close();
+        logController.addRequest("delete entity");
     }
 }
