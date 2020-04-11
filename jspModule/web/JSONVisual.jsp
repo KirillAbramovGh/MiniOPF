@@ -1,18 +1,19 @@
 <%@ page import="com.netcracker.students.o3.controller.ControllerImpl" %>
 <%@ page import="java.math.BigInteger" %>
-<%@ page import="jsp.EmployeeWebVisualiser" %>
-<%@ page import="jsp.ejb.EmployeeSessionBean" %>
+<%@ page import="jsp.helpers.EmployeeJspHelper" %>
+<%@ page import="jsp.sessionBeans.EmployeeSessionBean" %>
 <%@ page import="javax.inject.Inject" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title><%=ControllerImpl.getInstance().getEntity(
-            BigInteger.valueOf(Long.parseLong(request.getParameter("entityId")))).getClass().getSimpleName()%></title>
+            BigInteger.valueOf(Long.parseLong(request.getParameter("entityId")))).getClass().getSimpleName()
+    %></title>
     <%!
         @Inject
         EmployeeSessionBean employeeSessionBean;
 
-        private EmployeeWebVisualiser employeeWebVisualiser = EmployeeWebVisualiser.getInstance();
+        private EmployeeJspHelper employeeJspHelper = EmployeeJspHelper.getInstance();
     %>
 </head>
 <body>

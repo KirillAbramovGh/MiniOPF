@@ -4,15 +4,18 @@ import com.netcracker.students.o3.model.area.Area;
 
 import java.util.*;
 
-public class SearcherArea extends Searcher<Area> {
-    private static SearcherArea instance;
+public class AreaSearcher extends EntitySearcher<Area>
+{
+    private static AreaSearcher instance;
+    private SearcherUtil searcherUtil;
 
-    private SearcherArea() {
+    private AreaSearcher() {
+        searcherUtil = SearcherUtil.getInstance();
     }
 
-    public static SearcherArea getInstance() {
+    public static AreaSearcher getInstance() {
         if (instance == null) {
-            instance = new SearcherArea();
+            instance = new AreaSearcher();
         }
 
         return instance;
@@ -38,7 +41,7 @@ public class SearcherArea extends Searcher<Area> {
         String name;
         for (Area area : areas) {
             name = area.getName();
-            if (name.contains(search) || checkRegExp(search, name)) {
+            if (name.contains(search) || searcherUtil.checkRegExp(search, name)) {
                 result.add(area);
             }
         }
@@ -52,7 +55,7 @@ public class SearcherArea extends Searcher<Area> {
         String description;
         for (Area area : areas) {
             description = area.getDescription();
-            if (description.contains(search) || checkRegExp(search, description)) {
+            if (description.contains(search) || searcherUtil.checkRegExp(search, description)) {
                 result.add(area);
             }
         }

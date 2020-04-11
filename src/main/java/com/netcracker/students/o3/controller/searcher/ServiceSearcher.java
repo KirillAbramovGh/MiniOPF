@@ -8,10 +8,13 @@ import java.util.*;
 /**
  * class search templates and services
  */
-public class SearcherService extends Searcher<Service> {
-    private static SearcherService instance;
+public class ServiceSearcher extends EntitySearcher<Service>
+{
+    private static ServiceSearcher instance;
+    private SearcherUtil searcherUtil;
 
-    private SearcherService() {
+    private ServiceSearcher() {
+        searcherUtil = SearcherUtil.getInstance();
     }
 
     /**
@@ -21,8 +24,8 @@ public class SearcherService extends Searcher<Service> {
         List<Service> result = new ArrayList<>();
 
         for (Service service : services) {
-            if (isCostInDiapason(service.templateGetCost(), cost, 60)
-                    || checkRegExp(cost, service.templateGetCost().toString())
+            if (searcherUtil.isCostInDiapason(service.templateGetCost(), cost, 60)
+                    || searcherUtil.checkRegExp(cost, service.templateGetCost().toString())
             ) {
                 result.add(service);
             }
@@ -41,7 +44,7 @@ public class SearcherService extends Searcher<Service> {
         String name;
         for (Service service : services) {
             name = ControllerImpl.getInstance().getServiceName(service.getId());
-            if (name.contains(search) || checkRegExp(search, name)) {
+            if (name.contains(search) || searcherUtil.checkRegExp(search, name)) {
                 result.add(service);
             }
         }
@@ -58,7 +61,7 @@ public class SearcherService extends Searcher<Service> {
         String status;
         for (Service service : services) {
             status = service.getStatus().toString().toLowerCase();
-            if (status.contains(search) || checkRegExp(search, status)) {
+            if (status.contains(search) || searcherUtil.checkRegExp(search, status)) {
                 result.add(service);
             }
         }
@@ -82,9 +85,9 @@ public class SearcherService extends Searcher<Service> {
         return new ArrayList<>(result);
     }
 
-    public static SearcherService getInstance() {
+    public static ServiceSearcher getInstance() {
         if (instance == null) {
-            instance = new SearcherService();
+            instance = new ServiceSearcher();
         }
 
         return instance;
@@ -126,7 +129,7 @@ public class SearcherService extends Searcher<Service> {
         List<Service> result = new ArrayList<>();
 
         for (Service service : services) {
-            if (checkArea(search, getServiceArea(service))) {
+            if (searcherUtil.checkArea(search, service.getCustomer().getArea())) {
                 result.add(service);
             }
         }
@@ -141,7 +144,7 @@ public class SearcherService extends Searcher<Service> {
         String userId;
         for (Service service : services) {
             userId = service.getCustomer().toString();
-            if (userId.contains(search) || checkRegExp(search, userId)) {
+            if (userId.contains(search) || searcherUtil.checkRegExp(search, userId)) {
                 result.add(service);
             }
         }
@@ -155,7 +158,7 @@ public class SearcherService extends Searcher<Service> {
         String templateId;
         for (Service service : services) {
             templateId = service.getTemplate().toString();
-            if (templateId.contains(search) || checkRegExp(search, templateId)) {
+            if (templateId.contains(search) || searcherUtil.checkRegExp(search, templateId)) {
                 result.add(service);
             }
         }
@@ -169,7 +172,7 @@ public class SearcherService extends Searcher<Service> {
         String id;
         for (Service service : services) {
             id = service.getId().toString();
-            if (id.equals(search) || checkRegExp(search, id)) {
+            if (id.equals(search) || searcherUtil.checkRegExp(search, id)) {
                 result.add(service);
             }
         }

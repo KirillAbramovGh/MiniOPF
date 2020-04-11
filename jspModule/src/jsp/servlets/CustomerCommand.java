@@ -17,7 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jsp.ejb.CustomerSessionBean;
+import jsp.sessionBeans.CustomerSessionBean;
 
 
 public enum CustomerCommand

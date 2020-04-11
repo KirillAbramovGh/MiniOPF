@@ -1,19 +1,10 @@
-package com.netcracker.students.o3.model.serializer.XMLLog;
-
-import com.netcracker.students.o3.model.area.AreaImpl;
-import com.netcracker.students.o3.model.orders.OrderImpl;
-import com.netcracker.students.o3.model.services.ServiceImpl;
-import com.netcracker.students.o3.model.templates.TemplateImpl;
-import com.netcracker.students.o3.model.users.CustomerImpl;
-import com.netcracker.students.o3.model.users.EmployeeImpl;
+package com.netcracker.students.o3.model.serialization.log;
 
 import org.xml.sax.SAXException;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.HashSet;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;

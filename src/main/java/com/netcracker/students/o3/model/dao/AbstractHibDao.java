@@ -1,7 +1,7 @@
 package com.netcracker.students.o3.model.dao;
 
 import com.netcracker.students.o3.model.hibernate.HibernateSessionFactoryUtil;
-import com.netcracker.students.o3.model.serializer.XMLLog.XMLLogController;
+import com.netcracker.students.o3.model.serialization.log.XMLLogController;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;

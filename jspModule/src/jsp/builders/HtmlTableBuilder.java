@@ -12,6 +12,7 @@ import com.netcracker.students.o3.model.users.Employee;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class HtmlTableBuilder {
 
@@ -368,8 +369,16 @@ public class HtmlTableBuilder {
 
     private String getCustomerConnectedServiceIds(Customer customer) {
         StringBuilder result = new StringBuilder();
-        for (Service service : customer.getConnectedServices()) {
-            result.append(addId(service.getId())).append(",");
+        Set<Service> services = customer.getConnectedServices();
+        int i = 0;
+        for (Service service : services) {
+            if(i!=services.size()-1)
+            {
+                result.append(addId(service.getId())).append(",");
+            }else {
+                result.append(addId(service.getId()));
+            }
+            i++;
         }
         return result.toString();
     }

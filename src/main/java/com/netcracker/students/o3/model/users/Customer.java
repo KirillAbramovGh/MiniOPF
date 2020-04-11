@@ -1,7 +1,6 @@
 package com.netcracker.students.o3.model.users;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.services.Service;
@@ -10,7 +9,6 @@ import com.netcracker.students.o3.model.services.ServiceImpl;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Set;
-
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,14 +24,15 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "customers")
+@JsonDeserialize(as = CustomerImpl.class)
 public interface Customer extends User
 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
             generator = "last_id")
-    @SequenceGenerator(name="last_id",
-            sequenceName="last_id")
+    @SequenceGenerator(name = "last_id",
+            sequenceName = "last_id")
     @Column(name = "id", updatable = false, nullable = false)
     @Override
     BigInteger getId();
@@ -64,9 +63,6 @@ public interface Customer extends User
     /**
      * @return set of connected customer services ids
      */
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
     @OneToMany(targetEntity = ServiceImpl.class, fetch = FetchType.EAGER,
             mappedBy = "customer")
     Set<Service> getConnectedServices();
@@ -80,9 +76,6 @@ public interface Customer extends User
     /**
      * @return customer area id
      */
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
     @ManyToOne(targetEntity = AreaImpl.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "areaid")
     Area getArea();

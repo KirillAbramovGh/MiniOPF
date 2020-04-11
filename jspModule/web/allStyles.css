@@ -145,3 +145,6 @@ p{
     display: grid;
     grid-auto-columns: 1fr 1fr;
 }
+.export{
+    margin-left: 950px;
+}

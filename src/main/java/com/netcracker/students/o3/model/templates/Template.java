@@ -1,9 +1,9 @@
 package com.netcracker.students.o3.model.templates;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
+import com.netcracker.students.o3.model.services.ServiceImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -24,6 +24,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "templates")
+@JsonDeserialize(as = TemplateImpl.class)
 public interface Template
 {
     /**
@@ -32,8 +33,8 @@ public interface Template
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
             generator = "last_id")
-    @SequenceGenerator(name="last_id",
-            sequenceName="last_id")
+    @SequenceGenerator(name = "last_id",
+            sequenceName = "last_id")
     @Column(name = "id", updatable = false, nullable = false)
     BigInteger getId();
 
@@ -78,20 +79,16 @@ public interface Template
     /**
      * @return possible area id by connected services
      */
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
-    @ManyToMany(targetEntity = AreaImpl.class,fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = AreaImpl.class, fetch = FetchType.EAGER)
     @JoinTable(
-            name="template_area_link",
-            joinColumns=@JoinColumn(name="templateid"),
-            inverseJoinColumns=@JoinColumn(name="areaid")
+            name = "template_area_link",
+            joinColumns = @JoinColumn(name = "templateid"),
+            inverseJoinColumns = @JoinColumn(name = "areaid")
     )
     List<Area> getPossibleAreas();
 
-     /**
-      * set possible area id
-      * @param possibleAreas
-      */
+    /**
+     * set possible area id
+     */
     void setPossibleAreas(final List<Area> possibleAreas);
 }

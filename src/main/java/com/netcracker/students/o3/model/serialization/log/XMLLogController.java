@@ -1,17 +1,4 @@
-package com.netcracker.students.o3.model.serializer.XMLLog;
-
-import com.netcracker.students.o3.model.area.Area;
-import com.netcracker.students.o3.model.orders.Order;
-import com.netcracker.students.o3.model.services.Service;
-import com.netcracker.students.o3.model.templates.Template;
-import com.netcracker.students.o3.model.users.Customer;
-import com.netcracker.students.o3.model.users.Employee;
-
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
-
-import javax.xml.bind.JAXBException;
+package com.netcracker.students.o3.model.serialization.log;
 
 public class XMLLogController
 {

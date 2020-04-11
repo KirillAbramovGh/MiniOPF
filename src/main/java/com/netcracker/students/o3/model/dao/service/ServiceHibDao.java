@@ -2,7 +2,7 @@ package com.netcracker.students.o3.model.dao.service;
 
 import com.netcracker.students.o3.model.dao.AbstractHibDao;
 import com.netcracker.students.o3.model.hibernate.HibernateSessionFactoryUtil;
-import com.netcracker.students.o3.model.serializer.XMLLog.XMLLogController;
+import com.netcracker.students.o3.model.serialization.log.XMLLogController;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.services.ServiceStatus;

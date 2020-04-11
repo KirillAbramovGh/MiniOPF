@@ -4,10 +4,13 @@ import com.netcracker.students.o3.model.users.Employee;
 
 import java.util.*;
 
-public class EmployeeSearcher extends Searcher<Employee>{
+public class EmployeeSearcher extends EntitySearcher<Employee>
+{
     private static EmployeeSearcher instance;
+    private SearcherUtil searcherUtil;
 
     private EmployeeSearcher(){
+        searcherUtil = SearcherUtil.getInstance();
     }
 
     public static EmployeeSearcher getInstance(){
@@ -39,7 +42,8 @@ public class EmployeeSearcher extends Searcher<Employee>{
         List<Employee> result = new ArrayList<>();
 
         for(Employee employee : employees){
-            if(employee.getLogin().contains(search) || checkRegExp(search,employee.getLogin())){
+            if(employee.getLogin().contains(search) ||
+                    searcherUtil.checkRegExp(search,employee.getLogin())){
                 result.add(employee);
             }
         }
@@ -51,7 +55,8 @@ public class EmployeeSearcher extends Searcher<Employee>{
         List<Employee> result = new ArrayList<>();
 
         for(Employee employee : employees){
-            if(employee.getName().contains(search) || checkRegExp(search,employee.getName())){
+            if(employee.getName().contains(search) ||
+                    searcherUtil.checkRegExp(search,employee.getName())){
                 result.add(employee);
             }
         }

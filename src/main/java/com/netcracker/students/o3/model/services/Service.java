@@ -1,7 +1,11 @@
 package com.netcracker.students.o3.model.services;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.netcracker.students.o3.model.orders.Order;
+import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
@@ -9,6 +13,7 @@ import com.netcracker.students.o3.model.users.CustomerImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -21,6 +26,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -29,6 +35,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "services")
+@JsonDeserialize(as = ServiceImpl.class)
 public interface Service
 {
     /**
@@ -52,9 +59,7 @@ public interface Service
     /**
      * @return user id if service connected to him
      */
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
+    @JsonIgnore
     @ManyToOne(targetEntity = CustomerImpl.class,fetch = FetchType.EAGER)
     @JoinColumn(name = "userid")
     Customer getCustomer();
@@ -69,9 +74,6 @@ public interface Service
     /**
      * @return template of service
      */
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
     @ManyToOne(targetEntity = TemplateImpl.class,fetch = FetchType.EAGER)
     @JoinColumn(name = "templateid")
     Template getTemplate();
@@ -82,6 +84,13 @@ public interface Service
      * @param template - template of service
      */
     void setTemplate(final Template template);
+
+    @OneToOne(targetEntity = OrderImpl.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "orderid")
+    Order getOrder();
+
+
+    void setOrder(Order order);
 
     /**
      * @return status of service

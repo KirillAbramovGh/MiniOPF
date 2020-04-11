@@ -2,7 +2,7 @@ package com.netcracker.students.o3.model.dao.employee;
 
 import com.netcracker.students.o3.model.dao.AbstractHibDao;
 import com.netcracker.students.o3.model.hibernate.HibernateSessionFactoryUtil;
-import com.netcracker.students.o3.model.serializer.XMLLog.XMLLogController;
+import com.netcracker.students.o3.model.serialization.log.XMLLogController;
 import com.netcracker.students.o3.model.users.Employee;
 import com.netcracker.students.o3.model.users.EmployeeImpl;
 
@@ -69,7 +69,11 @@ public class EmployeeHibDao extends AbstractHibDao<Employee> implements Employee
         query.executeUpdate();
         tx1.commit();
         session.close();
-        logController.addRequest("delete from EmployeeImpl where id=:"+id);
+        try
+        {
+            logController.addRequest("delete from EmployeeImpl where id=:" + id);
+        }catch (Exception ignore){
+        }
     }
 
 }

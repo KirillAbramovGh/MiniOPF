@@ -3,7 +3,7 @@ package com.netcracker.students.o3.controller;
 import com.netcracker.students.o3.Exceptions.IncorrectCredentialsException;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
-import com.netcracker.students.o3.model.model.Model;
+import com.netcracker.students.o3.model.Model;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.orders.OrderStatus;

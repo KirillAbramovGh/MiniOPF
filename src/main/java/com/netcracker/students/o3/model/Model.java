@@ -1,4 +1,4 @@
-package com.netcracker.students.o3.model.model;
+package com.netcracker.students.o3.model;
 
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.orders.Order;

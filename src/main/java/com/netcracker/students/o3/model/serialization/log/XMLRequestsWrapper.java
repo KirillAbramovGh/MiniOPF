@@ -1,4 +1,4 @@
-package com.netcracker.students.o3.model.serializer.XMLLog;
+package com.netcracker.students.o3.model.serialization.log;
 
 
 import java.util.ArrayList;

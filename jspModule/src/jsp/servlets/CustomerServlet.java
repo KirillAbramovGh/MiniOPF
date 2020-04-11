@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jsp.ejb.CustomerSessionBean;
+import jsp.sessionBeans.CustomerSessionBean;
 
 
 @WebServlet("/customerServlet")

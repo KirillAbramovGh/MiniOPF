@@ -3,6 +3,8 @@ package com.netcracker.students.o3.model.services;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.netcracker.students.o3.model.orders.Order;
+import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
@@ -16,11 +18,13 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -41,19 +45,20 @@ public class ServiceImpl implements Service
     @Column(name = "id", updatable = false, nullable = false)
     private BigInteger id;
 
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
+    @JsonIgnore
     @ManyToOne(targetEntity = CustomerImpl.class)
     @JoinColumn(name = "userid")
     private Customer customer;
 
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
+
     @ManyToOne(targetEntity = TemplateImpl.class)
     @JoinColumn(name = "templateid")
     private Template template;
+
+
+    @OneToOne(targetEntity = OrderImpl.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "orderid")
+    private Order order;
 
     @Column(name = "status")
     private ServiceStatus status;
@@ -65,7 +70,7 @@ public class ServiceImpl implements Service
     @Override
     public String toString()
     {
-        return "ServiceImpl{" + "</br>"+
+        return  "{" + "</br>"+
                 "       id:" + id + ",</br>"+
                 "       userId:" + addUrl(customer.getId()) + ",</br>"+
                 "       templateId:" + addUrl(template.getId()) + ",</br>"+
@@ -120,6 +125,18 @@ public class ServiceImpl implements Service
     public void setTemplate(final Template template)
     {
         this.template = template;
+    }
+
+    @Override
+    public Order getOrder()
+    {
+        return order;
+    }
+
+    @Override
+    public void setOrder(final Order order)
+    {
+        this.order = order;
     }
 
     public ServiceStatus getStatus()

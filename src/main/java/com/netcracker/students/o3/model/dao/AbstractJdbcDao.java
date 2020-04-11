@@ -1,11 +1,10 @@
 package com.netcracker.students.o3.model.dao;
 
-import com.netcracker.students.o3.model.serializer.XMLLog.XMLLogController;
+import com.netcracker.students.o3.model.serialization.log.XMLLogController;
 
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;

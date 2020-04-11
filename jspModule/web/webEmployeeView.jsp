@@ -7,8 +7,8 @@
 <%@ page import="com.netcracker.students.o3.model.users.Employee" %>
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="javax.inject.Inject" %>
-<%@ page import="jsp.EmployeeWebVisualiser" %>
-<%@ page import="jsp.ejb.EmployeeSessionBean" %>
+<%@ page import="jsp.helpers.EmployeeJspHelper" %>
+<%@ page import="jsp.sessionBeans.EmployeeSessionBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <html lang="en">
 <head>
@@ -20,7 +20,7 @@
         @Inject
         EmployeeSessionBean employeeSessionBean;
 
-        private EmployeeWebVisualiser employeeWebVisualiser = EmployeeWebVisualiser.getInstance();
+        private EmployeeJspHelper employeeJspHelper = EmployeeJspHelper.getInstance();
     %>
     <%
         BigInteger id = (BigInteger) request.getSession().getAttribute("id");
@@ -71,7 +71,7 @@
                         <option>Action</option>
                     </select>
                     <input type="submit" name="createOrder" value="Create">
-                    <%=employeeWebVisualiser.showFilteredOrdersByEmployeeId(
+                    <%=employeeJspHelper.showFilteredOrdersByEmployeeId(
                             request.getParameter("searchFieldEmployeeOrders"),
                             request.getParameter("employeeOrderSelectField"),
                             (OrderSortType) request.getSession().getAttribute("sortOrders"),
@@ -80,6 +80,9 @@
                             (BigInteger) request.getSession().getAttribute("id"),
                             employeeSessionBean
                     )%>
+                </form>
+                <form class="export" action="${pageContext.request.contextPath}/importType.jsp" method="post">
+                    <input type="submit" name="importEntities" value="import JSON">
                 </form>
             </div>
             <div class="tab tab-2">
@@ -95,7 +98,7 @@
                         <option>Action</option>
                     </select>
                     <input type="submit" name="createOrder" value="Create">
-                    <%=employeeWebVisualiser.showFilteredOrders(
+                    <%=employeeJspHelper.showFilteredOrders(
                             request.getParameter("searchFieldAllOrders"),
                             request.getParameter("allOrderSelectField"),
                             (OrderSortType) request.getSession().getAttribute("sortOrders"),
@@ -121,7 +124,7 @@
                         <option>Areas</option>
                     </select>
                     <input type="submit" name="createService" value="Create">
-                    <%=employeeWebVisualiser.showFilteredServices(
+                    <%=employeeJspHelper.showFilteredServices(
                             request.getParameter("searchFieldAllServices"),
                             request.getParameter("allServicesSelectField"),
                             (ServiceSortType) request.getSession().getAttribute("sortServices"),
@@ -143,7 +146,7 @@
                         <option>Areas</option>
                     </select>
                     <input type="submit" name="createTemplate" value="Create">
-                    <%=employeeWebVisualiser.showFilteredTemplates(
+                    <%=employeeJspHelper.showFilteredTemplates(
                             request.getParameter("searchFieldAllTemplates"),
                             request.getParameter("allTemplatesSelectField"),
                             (TemplateSortType) request.getSession().getAttribute("sortTemplates"),
@@ -151,6 +154,9 @@
                             request.getParameter("filterTemplateCost"),
                             employeeSessionBean
                     )%>
+                </form>
+                <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
+                    <input type="submit" name="exportTemplates" value="export JSON">
                 </form>
             </div>
             <div class="tab tab-5">
@@ -166,7 +172,7 @@
                         <option>ConnectedServices</option>
                     </select>
                     <input type="submit" name="createCustomer" value="Create">
-                    <%=employeeWebVisualiser.showFilteredCustomers(
+                    <%=employeeJspHelper.showFilteredCustomers(
                             request.getParameter("searchFieldAllCustomers"),
                             request.getParameter("allCustomersSelectField"),
                             (CustomerSortType) request.getSession().getAttribute("sortCustomers"),
@@ -174,6 +180,9 @@
                             request.getParameter("filterCustomerArea"),
                             employeeSessionBean
                     )%>
+                </form>
+                <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
+                    <input type="submit" name="exportCustomers" value="export JSON">
                 </form>
             </div>
             <div class="tab tab-6">
@@ -186,13 +195,16 @@
                         <option>Login</option>
                     </select>
                     <input type="submit" name="createEmployee" value="Create">
-                    <%=employeeWebVisualiser.showFilteredEmployees(
+                    <%=employeeJspHelper.showFilteredEmployees(
                             request.getParameter("searchFieldAllEmployees"),
                             request.getParameter("allEmployeesSelectField"),
                             (EmployeeSortType) request.getSession().getAttribute("sortEmployees"),
                             request.getParameter("filterEmployeeName"),
                             employeeSessionBean
                     )%>
+                </form>
+                <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
+                    <input type="submit" name="exportEmployees" value="export JSON">
                 </form>
             </div>
             <div class="tab tab-7">
@@ -206,13 +218,16 @@
                     </select>
                     <input type="submit" name="createArea" value="Create">
                     <input type="submit" name="filterArea" value="Filter">
-                    <%=employeeWebVisualiser.showFilteredAreas(
+                    <%=employeeJspHelper.showFilteredAreas(
                             request.getParameter("searchFieldAllAreas"),
                             request.getParameter("allAreasSelectField"),
                             (AreaSortType) request.getSession().getAttribute("sortAreas"),
                             request.getParameter("filterAreaName"),
                             employeeSessionBean
                     )%>
+                </form>
+                <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
+                    <input type="submit" name="exportAreas" value="export JSON">
                 </form>
             </div>
             <div class="tab tab-8">
@@ -233,7 +248,7 @@
                     <input name="customerRadio" type="radio" value="Customers">Customers</br>
                     <input name="employeeRadio" type="radio" value="Employees">Employees
                     <input type="submit" name="searchAll" value="Search">
-                    <%=employeeWebVisualiser.showAll(request.getParameter("searchAllEntities"),
+                    <%=employeeJspHelper.showAll(request.getParameter("searchAllEntities"),
                             employeeSessionBean,
                             request.getParameter("serviceRadio"),
                             request.getParameter("templateRadio"),

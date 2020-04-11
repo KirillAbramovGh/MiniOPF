@@ -1,7 +1,7 @@
 package com.netcracker.students.o3.model.orders;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.templates.Template;
@@ -29,6 +29,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "orders")
+@JsonDeserialize(as = OrderImpl.class)
 public interface Order
 {
     /**
@@ -37,8 +38,8 @@ public interface Order
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
             generator = "last_id")
-    @SequenceGenerator(name="last_id",
-            sequenceName="last_id")
+    @SequenceGenerator(name = "last_id",
+            sequenceName = "last_id")
     @Column(name = "id", updatable = false, nullable = false)
     BigInteger getId();
 
@@ -50,31 +51,30 @@ public interface Order
     /**
      * @return template id
      */
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
-    @ManyToOne(targetEntity = TemplateImpl.class,fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne(targetEntity = TemplateImpl.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "templateid")
     Template getTemplate();
 
     /**
      * set template id
-     * @param  template of template
+     *
+     * @param template of template
      */
     void setTemplate(final Template template);
 
     /**
      * @return service id
      */
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
-    @OneToOne(targetEntity = ServiceImpl.class,fetch = FetchType.EAGER)
+
+    @JsonIgnore
+    @OneToOne(targetEntity = ServiceImpl.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "serviceid")
     Service getService();
 
     /**
      * set service id
+     *
      * @param service of service which
      */
     void setService(final Service service);
@@ -82,10 +82,7 @@ public interface Order
     /**
      * @return employee id who response for order
      */
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
-    @ManyToOne(targetEntity = EmployeeImpl.class,fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = EmployeeImpl.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "employeeid")
     Employee getEmployee();
 
@@ -102,6 +99,7 @@ public interface Order
 
     /**
      * set order status
+     *
      * @param status - order status define stage
      */
     void setStatus(final OrderStatus status);
@@ -125,6 +123,7 @@ public interface Order
 
     /**
      * set date of creation
+     *
      * @param creationDate date of creation
      */
     void setCreationDate(final Date creationDate);

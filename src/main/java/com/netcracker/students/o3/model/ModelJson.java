@@ -1,4 +1,4 @@
-package com.netcracker.students.o3.model.model;
+package com.netcracker.students.o3.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -8,8 +8,8 @@ import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderAction;
 import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.orders.OrderStatus;
-import com.netcracker.students.o3.model.serializer.Serializer;
-import com.netcracker.students.o3.model.serializer.SerializerImpl;
+import com.netcracker.students.o3.model.serialization.Serializer;
+import com.netcracker.students.o3.model.serialization.SerializerImpl;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.services.ServiceStatus;
@@ -31,33 +31,33 @@ import java.util.Map;
 
 /**
  * GRUD class for entities
- * */
+ */
 public class ModelJson implements Model
 {
     private static ModelJson instance;
 
-    @JsonDeserialize(as = HashMap.class,keyAs = BigInteger.class,contentAs = OrderImpl.class)
+    @JsonDeserialize(as = HashMap.class, keyAs = BigInteger.class, contentAs = OrderImpl.class)
     private Map<BigInteger, Order> orders;
-    @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = TemplateImpl.class)
+    @JsonDeserialize(as = HashMap.class, keyAs = BigInteger.class, contentAs = TemplateImpl.class)
     private Map<BigInteger, Template> templates;
-    @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = ServiceImpl.class)
+    @JsonDeserialize(as = HashMap.class, keyAs = BigInteger.class, contentAs = ServiceImpl.class)
     private Map<BigInteger, Service> services;
-    @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = CustomerImpl.class)
+    @JsonDeserialize(as = HashMap.class, keyAs = BigInteger.class, contentAs = CustomerImpl.class)
     private Map<BigInteger, Customer> customers;
-    @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = EmployeeImpl.class)
+    @JsonDeserialize(as = HashMap.class, keyAs = BigInteger.class, contentAs = EmployeeImpl.class)
     private Map<BigInteger, Employee> employees;
-    @JsonDeserialize(as = HashMap.class,keyAs=BigInteger.class,contentAs = AreaImpl.class)
+    @JsonDeserialize(as = HashMap.class, keyAs = BigInteger.class, contentAs = AreaImpl.class)
     private Map<BigInteger, Area> areas;
 
     /**
      * last entity id
-     * */
+     */
     private BigInteger lastId;
 
 
     /**
      * method initialize model
-     * */
+     */
     private ModelJson()
     {
         orders = new HashMap<>();
@@ -71,7 +71,7 @@ public class ModelJson implements Model
 
     /**
      * Methods which set Map of entities
-     * */
+     */
     public void setOrders(final Map<BigInteger, Order> orders)
     {
         this.orders = orders;
@@ -103,11 +103,11 @@ public class ModelJson implements Model
     }
 
 
-
     /**
      * return set and return instance
+     *
      * @return instance
-     * */
+     */
     public static ModelJson getInstance()
     {
         if (instance == null)
@@ -118,10 +118,9 @@ public class ModelJson implements Model
     }
 
 
-
     /**
      * @return lastId
-     * */
+     */
     public BigInteger getLastId()
     {
         return lastId;
@@ -136,10 +135,12 @@ public class ModelJson implements Model
 
     /**
      * method increment lastId and return
+     *
      * @return lastId
-     * */
+     */
     @JsonIgnore
-    public BigInteger getNextId(){
+    public BigInteger getNextId()
+    {
         synchronized (lastId)
         {
             lastId = lastId.add(BigInteger.ONE);
@@ -148,11 +149,13 @@ public class ModelJson implements Model
     }
 
 
-/**
- *methods which create entities by credentials
- * @return id of created entity
- * */
-    public Customer createCustomer(String name,String login,String password, Area area){
+    /**
+     * methods which create entities by credentials
+     *
+     * @return id of created entity
+     */
+    public Customer createCustomer(final String name, final String login, final String password, final Area area)
+    {
         synchronized (customers)
         {
             Customer newCustomer = new CustomerImpl(getNextId(), name, login, password, area);
@@ -161,7 +164,8 @@ public class ModelJson implements Model
         }
     }
 
-    public Employee createEmployee(String name,String login,String password){
+    public Employee createEmployee(String name, String login, String password)
+    {
         synchronized (employees)
         {
             Employee newEmployee = new EmployeeImpl(getNextId(), name, login, password);
@@ -171,8 +175,10 @@ public class ModelJson implements Model
         }
     }
 
-    public Order createOrder(Template template, Service service,
-            OrderStatus status, OrderAction action){
+
+    public Order createOrder(final Template template, final Service service, final OrderStatus status,
+            final OrderAction action)
+    {
         synchronized (orders)
         {
             Order newOrder = new OrderImpl(getNextId(), template, service, status, action);
@@ -182,7 +188,8 @@ public class ModelJson implements Model
         }
     }
 
-    public Template createTemplate(String name, BigDecimal cost,String description){
+    public Template createTemplate(String name, BigDecimal cost, String description)
+    {
         synchronized (templates)
         {
             Template newTemplate = new TemplateImpl(getNextId(), name, cost, description);
@@ -193,7 +200,10 @@ public class ModelJson implements Model
         }
     }
 
-    public Service createService(Customer customer, Template template, ServiceStatus status){
+
+    @Override
+    public Service createService(Customer customer, Template template, ServiceStatus status)
+    {
         synchronized (services)
         {
             Service newService = new ServiceImpl(getNextId(), customer, template, status);
@@ -202,7 +212,8 @@ public class ModelJson implements Model
         }
     }
 
-    public Area createArea(String name,String description){
+    public Area createArea(String name, String description)
+    {
         synchronized (areas)
         {
             Area newArea = new AreaImpl(getNextId(), name, description);
@@ -214,8 +225,9 @@ public class ModelJson implements Model
 
     /**
      * methods return map of entities
+     *
      * @return map of entities
-     * */
+     */
     public Map<BigInteger, Order> getOrders()
     {
         return orders;
@@ -247,11 +259,11 @@ public class ModelJson implements Model
     }
 
 
-
     /**
      * methods which return entity by id
+     *
      * @return entity
-     * */
+     */
     public Order getOrder(BigInteger orderId)
     {
         return orders.get(orderId);
@@ -283,17 +295,17 @@ public class ModelJson implements Model
     }
 
 
-
     /**
      * methods which add entity to model
-     * */
+     */
     public void addOrder(Order order)
     {
         synchronized (orders)
         {
             orders.put(order.getId(), order);
         }
-        synchronized (this){
+        synchronized (this)
+        {
             onDataChange();
         }
     }
@@ -304,7 +316,8 @@ public class ModelJson implements Model
         {
             services.put(service.getId(), service);
         }
-        synchronized (this){
+        synchronized (this)
+        {
             onDataChange();
         }
     }
@@ -315,7 +328,8 @@ public class ModelJson implements Model
         {
             templates.put(template.getId(), template);
         }
-        synchronized (this){
+        synchronized (this)
+        {
             onDataChange();
         }
     }
@@ -326,7 +340,8 @@ public class ModelJson implements Model
         {
             customers.put(customer.getId(), customer);
         }
-        synchronized (this){
+        synchronized (this)
+        {
             onDataChange();
         }
     }
@@ -337,18 +352,20 @@ public class ModelJson implements Model
         {
             employees.put(employee.getId(), employee);
         }
-        synchronized (this){
+        synchronized (this)
+        {
             onDataChange();
         }
     }
 
     public void addArea(Area area)
     {
-            synchronized (areas)
-            {
-                areas.put(area.getId(), area);
-            }
-        synchronized (this){
+        synchronized (areas)
+        {
+            areas.put(area.getId(), area);
+        }
+        synchronized (this)
+        {
             onDataChange();
         }
     }
@@ -356,14 +373,14 @@ public class ModelJson implements Model
 
     /**
      * delete entity by id
-     * */
+     */
     public void deleteOrder(BigInteger id)
     {
         synchronized (orders)
         {
             orders.remove(id);
         }
-            onDataChange();
+        onDataChange();
     }
 
     public void deleteTemplate(BigInteger id)
@@ -372,7 +389,7 @@ public class ModelJson implements Model
         {
             templates.remove(id);
         }
-            onDataChange();
+        onDataChange();
     }
 
     public void deleteService(BigInteger id)
@@ -381,7 +398,7 @@ public class ModelJson implements Model
         {
             services.remove(id);
         }
-            onDataChange();
+        onDataChange();
     }
 
     public void deleteCustomer(BigInteger id)
@@ -390,7 +407,7 @@ public class ModelJson implements Model
         {
             customers.remove(id);
         }
-            onDataChange();
+        onDataChange();
     }
 
     public void deleteEmployee(BigInteger id)
@@ -399,7 +416,7 @@ public class ModelJson implements Model
         {
             employees.remove(id);
         }
-            onDataChange();
+        onDataChange();
     }
 
     public void deleteArea(BigInteger id)
@@ -408,20 +425,20 @@ public class ModelJson implements Model
         {
             areas.remove(id);
         }
-            onDataChange();
+        onDataChange();
     }
 
 
     /**
      * methods update entities
-     * */
+     */
     public void setOrder(Order order)
     {
         synchronized (orders)
         {
             orders.put(order.getId(), order);
         }
-            onDataChange();
+        onDataChange();
     }
 
     public void setTemplate(Template template)
@@ -430,7 +447,7 @@ public class ModelJson implements Model
         {
             templates.put(template.getId(), template);
         }
-            onDataChange();
+        onDataChange();
     }
 
     public void setService(Service service)
@@ -439,7 +456,7 @@ public class ModelJson implements Model
         {
             services.put(service.getId(), service);
         }
-            onDataChange();
+        onDataChange();
     }
 
     public void setCustomer(Customer customer)
@@ -448,7 +465,7 @@ public class ModelJson implements Model
         {
             customers.put(customer.getId(), customer);
         }
-            onDataChange();
+        onDataChange();
     }
 
     public void setEmployee(Employee employee)
@@ -457,15 +474,16 @@ public class ModelJson implements Model
         {
             employees.put(employee.getId(), employee);
         }
-            onDataChange();
+        onDataChange();
     }
 
     public void setArea(Area area)
     {
-        synchronized (areas){
-        areas.put(area.getId(), area);
+        synchronized (areas)
+        {
+            areas.put(area.getId(), area);
         }
-            onDataChange();
+        onDataChange();
     }
 
     @Override
@@ -528,18 +546,19 @@ public class ModelJson implements Model
         return null;
     }
 
+
     @Override
     public List<Service> getServicesByStatus(final ServiceStatus status)
     {
         return null;
     }
 
-
     @Override
     public List<Template> getTemplatesByArea(final Area area)
     {
         return null;
     }
+
 
     @Override
     public Template getTemplateByName(final String name)
@@ -550,8 +569,9 @@ public class ModelJson implements Model
 
     /**
      * on data change save model
-     * */
-    private void onDataChange(){
+     */
+    private void onDataChange()
+    {
         synchronized (this)
         {
             Serializer serializer = new SerializerImpl();

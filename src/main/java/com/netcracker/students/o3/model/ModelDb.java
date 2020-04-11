@@ -1,4 +1,4 @@
-package com.netcracker.students.o3.model.model;
+package com.netcracker.students.o3.model;
 
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
@@ -30,7 +30,6 @@ import com.netcracker.students.o3.model.users.EmployeeImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -69,7 +68,7 @@ public class ModelDb implements Model
                 {
                     orderDao.create(order);
                 }
-                catch (SQLException e)
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -88,7 +87,7 @@ public class ModelDb implements Model
                 {
                     templateDao.create(template);
                 }
-                catch (SQLException e)
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -107,7 +106,7 @@ public class ModelDb implements Model
                 {
                     serviceDao.create(service);
                 }
-                catch (SQLException e)
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -126,7 +125,7 @@ public class ModelDb implements Model
                 {
                     customerDao.create(customer);
                 }
-                catch (SQLException e)
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -145,7 +144,7 @@ public class ModelDb implements Model
                 {
                     employeeDao.create(employee);
                 }
-                catch (SQLException e)
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -164,7 +163,7 @@ public class ModelDb implements Model
                 {
                     areaDao.create(area);
                 }
-                catch (SQLException e)
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -285,7 +284,7 @@ public class ModelDb implements Model
                 }
             }
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -306,7 +305,7 @@ public class ModelDb implements Model
                 }
             }
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -327,7 +326,7 @@ public class ModelDb implements Model
                 }
             }
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -349,7 +348,7 @@ public class ModelDb implements Model
                 }
             }
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -370,7 +369,7 @@ public class ModelDb implements Model
                 }
             }
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -391,7 +390,7 @@ public class ModelDb implements Model
                 }
             }
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -410,7 +409,7 @@ public class ModelDb implements Model
             }
             return order;
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -429,7 +428,7 @@ public class ModelDb implements Model
             }
             return template;
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -449,7 +448,7 @@ public class ModelDb implements Model
             }
             return service;
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -469,7 +468,7 @@ public class ModelDb implements Model
             }
             return customer;
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -490,7 +489,7 @@ public class ModelDb implements Model
 
             return employee;
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -510,7 +509,7 @@ public class ModelDb implements Model
             }
             return area;
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -527,7 +526,7 @@ public class ModelDb implements Model
             {
                 orderDao.create(order);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -543,7 +542,7 @@ public class ModelDb implements Model
             {
                 serviceDao.create(service);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -560,7 +559,7 @@ public class ModelDb implements Model
                 templateDao.create(template);
             }
 
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -577,7 +576,7 @@ public class ModelDb implements Model
                 customerDao.create(customer);
             }
 
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -594,7 +593,7 @@ public class ModelDb implements Model
                 employeeDao.create(employee);
             }
 
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -610,7 +609,7 @@ public class ModelDb implements Model
             {
                 areaDao.create(area);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -626,7 +625,7 @@ public class ModelDb implements Model
             {
                 orderDao.delete(id);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -642,7 +641,7 @@ public class ModelDb implements Model
             {
                 templateDao.delete(id);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -658,7 +657,7 @@ public class ModelDb implements Model
             {
                 serviceDao.delete(id);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -674,7 +673,7 @@ public class ModelDb implements Model
             {
                 customerDao.delete(id);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -690,7 +689,7 @@ public class ModelDb implements Model
             {
                 employeeDao.delete(id);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -706,7 +705,7 @@ public class ModelDb implements Model
             {
                 areaDao.delete(id);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -722,7 +721,7 @@ public class ModelDb implements Model
             {
                 orderDao.update(order);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -738,7 +737,7 @@ public class ModelDb implements Model
             {
                 templateDao.update(template);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -754,7 +753,7 @@ public class ModelDb implements Model
             {
                 serviceDao.update(service);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -770,7 +769,7 @@ public class ModelDb implements Model
             {
                 customerDao.update(customer);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -786,7 +785,7 @@ public class ModelDb implements Model
             {
                 employeeDao.update(employee);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -802,7 +801,7 @@ public class ModelDb implements Model
             {
                 areaDao.update(area);
             }
-            catch (SQLException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -815,7 +814,7 @@ public class ModelDb implements Model
         {
             return  areaDao.getAreaByName(name);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -829,7 +828,7 @@ public class ModelDb implements Model
         {
             return customerDao.getCustomerByLogin(login);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -842,7 +841,7 @@ public class ModelDb implements Model
         {
             return  employeeDao.getEmployeeByLogin(login);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -855,7 +854,7 @@ public class ModelDb implements Model
         {
             return orderDao.getOrdersByTemplateId(templateId);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -868,7 +867,7 @@ public class ModelDb implements Model
         {
             return orderDao.getOrdersByServiceId(serviceId);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -881,7 +880,7 @@ public class ModelDb implements Model
         {
             return orderDao.getOrdersByEmployeeId(employeeId);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -894,7 +893,7 @@ public class ModelDb implements Model
         {
             return  orderDao.getOrdersByStatus(status);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -907,7 +906,7 @@ public class ModelDb implements Model
         {
             return  orderDao.getOrdersByAction(action);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -920,7 +919,7 @@ public class ModelDb implements Model
         {
             return serviceDao.getServicesByCustomer(customer);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -933,7 +932,7 @@ public class ModelDb implements Model
         {
             return serviceDao.getServicesByTemplate(template);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -946,7 +945,7 @@ public class ModelDb implements Model
         {
             return serviceDao.getServicesByStatus(status);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -966,7 +965,7 @@ public class ModelDb implements Model
         {
             return templateDao.getTemplateByName(name);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }

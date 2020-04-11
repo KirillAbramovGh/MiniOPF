@@ -1,4 +1,4 @@
-package jsp.ejb;
+package jsp.sessionBeans;
 
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;

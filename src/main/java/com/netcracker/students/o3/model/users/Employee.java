@@ -1,5 +1,8 @@
 package com.netcracker.students.o3.model.users;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.netcracker.students.o3.model.services.ServiceImpl;
+
 import java.math.BigInteger;
 
 import javax.persistence.Column;
@@ -12,6 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "employees")
+@JsonDeserialize(as = EmployeeImpl.class)
 public interface Employee extends User
 {
     @Column(name = "login")

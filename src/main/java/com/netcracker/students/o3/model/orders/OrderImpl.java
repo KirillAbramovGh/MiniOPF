@@ -1,7 +1,6 @@
 package com.netcracker.students.o3.model.orders;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.templates.Template;
@@ -35,29 +34,22 @@ public class OrderImpl implements Order
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
             generator = "last_id")
-    @SequenceGenerator(name="last_id",
-            sequenceName="last_id")
+    @SequenceGenerator(name = "last_id",
+            sequenceName = "last_id")
     @Column(name = "id", updatable = false, nullable = false)
     private BigInteger id;
 
 
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
+    @JsonIgnore
     @ManyToOne(targetEntity = TemplateImpl.class)
     @JoinColumn(name = "templateid")
     private Template template;
 
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
+    @JsonIgnore
     @OneToOne(targetEntity = ServiceImpl.class)
     @JoinColumn(name = "serviceid")
     private Service service;
 
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
     @ManyToOne(targetEntity = EmployeeImpl.class)
     @JoinColumn(name = "employeeid")
     private Employee employee;
@@ -92,20 +84,20 @@ public class OrderImpl implements Order
     public String toString()
     {
         BigInteger employeeId = null;
-        if(employee!=null){
+        if (employee != null)
+        {
             employeeId = employee.getId();
         }
-        return "OrderImpl{" + "</br>"+
-                "        id:" + id + ",</br>"+
-                "        serviceId:" + addUrl(service.getId()) + ",</br>"+
-                "        templateId:" + addUrl(template.getId()) + ",</br>"+
-                "        employeeId:" + addUrl(employeeId) + ",</br>"+
-                "        status:" + status + ",</br>"+
-                "        action:" + action +",</br>"+
-                "        creationDate:" + creationDate + "</br>"+
+        return  "{" + "</br>" +
+                "        id:" + id + ",</br>" +
+                "        serviceId:" + addUrl(service.getId()) + ",</br>" +
+                "        templateId:" + addUrl(template.getId()) + ",</br>" +
+                "        employeeId:" + addUrl(employeeId) + ",</br>" +
+                "        status:" + status + ",</br>" +
+                "        action:" + action + ",</br>" +
+                "        creationDate:" + creationDate + "</br>" +
                 "     }";
     }
-
 
 
     public BigInteger getId()
@@ -199,11 +191,12 @@ public class OrderImpl implements Order
         return Objects.hash(id);
     }
 
-    private String addUrl(BigInteger value){
+    private String addUrl(BigInteger value)
+    {
         String start = "<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId=";
         String mid = "' target=\"_blank\">";
         String close = "</a>";
 
-        return start+value+mid+value+close;
+        return start + value + mid + value + close;
     }
 }

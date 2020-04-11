@@ -46,9 +46,17 @@
             private String getPossibleAreasId()
             {
                 String res = "";
-                for (Area area : template.getPossibleAreas())
+                List<Area> areas = template.getPossibleAreas();
+                int i = 0;
+                for (Area area : areas)
                 {
-                    res += area.getId() + ",";
+                    if(i!=areas.size()-1)
+                    {
+                        res += area.getId() + ",";
+                    }else {
+                        res+= area.getId();
+                    }
+                    i++;
                 }
                 return res;
             }
@@ -59,7 +67,7 @@
 <%
     try
     {
-        if (controller.getServicesByTemplate(templateId).size() > 0)
+        if (controller.getServicesByTemplate(template).size() > 0)
         {
             response.getWriter().println("У этого template есть связанные services");
         }

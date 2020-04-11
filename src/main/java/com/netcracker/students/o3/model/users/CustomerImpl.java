@@ -1,7 +1,5 @@
 package com.netcracker.students.o3.model.users;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.services.Service;
@@ -13,7 +11,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,15 +36,15 @@ public class CustomerImpl implements Customer
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
             generator = "last_id")
-    @SequenceGenerator(name="last_id",
-            sequenceName="last_id")
+    @SequenceGenerator(name = "last_id",
+            sequenceName = "last_id")
     @Column(name = "id", updatable = false, nullable = false)
     private BigInteger id;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "login",unique = true)
+    @Column(name = "login", unique = true)
     private String login;
 
     @Column(name = "password")
@@ -56,15 +53,9 @@ public class CustomerImpl implements Customer
     @Column(name = "moneybalance")
     private BigDecimal moneyBalance;
 
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
     @OneToMany(targetEntity = ServiceImpl.class, fetch = FetchType.EAGER, mappedBy = "customer")
     private Set<Service> connectedServices;
 
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
     @ManyToOne(targetEntity = AreaImpl.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "areaid")
     private Area area;
@@ -92,27 +83,38 @@ public class CustomerImpl implements Customer
     public String toString()
     {
         String tmpr = "[";
-        for(Service service : connectedServices){
-            tmpr+=addUrl(service.getId())+",";
+        int i = 0;
+        for (Service service : connectedServices)
+        {
+            if (i != connectedServices.size() - 1)
+            {
+                tmpr += addUrl(service.getId()) + ",";
+            }
+            else
+            {
+                tmpr += addUrl(service.getId());
+            }
+            i++;
         }
-        tmpr+="]";
-        return "CustomerImpl{" + "</br>"+
-                "           id:" + id + ",</br>"+
-                "           name:'" + name + '\'' + ",</br>"+
-                "           login:'" + login + '\'' + ",</br>"+
-                "           password:'" + password + '\'' + ",</br>"+
-                "           moneyBalance:" + moneyBalance + ",</br>"+
-                "           connectedServicesIds:" + tmpr + ",</br>"+
-                "           areaId:" + addUrl(area.getId()) + "</br>"+
+        tmpr += "]";
+        return  "{" + "</br>" +
+                "           id:" + id + ",</br>" +
+                "           name:'" + name + '\'' + ",</br>" +
+                "           login:'" + login + '\'' + ",</br>" +
+                "           password:'" + password + '\'' + ",</br>" +
+                "           moneyBalance:" + moneyBalance + ",</br>" +
+                "           connectedServicesIds:" + tmpr + ",</br>" +
+                "           areaId:" + addUrl(area.getId()) + "</br>" +
                 "      }";
     }
 
-    private String addUrl(BigInteger value){
+    private String addUrl(BigInteger value)
+    {
         String start = "<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId=";
         String mid = "' target=\"_blank\">";
         String close = "</a>";
 
-        return start+value+mid+value+close;
+        return start + value + mid + value + close;
     }
 
     public BigDecimal getMoneyBalance()

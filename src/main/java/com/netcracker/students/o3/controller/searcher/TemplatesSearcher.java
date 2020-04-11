@@ -1,31 +1,41 @@
 package com.netcracker.students.o3.controller.searcher;
 
-import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.templates.Template;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * class search templates and services
  */
-public class SearcherTemplates extends Searcher<Template> {
-    private static SearcherTemplates instance;
+public class TemplatesSearcher extends EntitySearcher<Template>
+{
+    private static TemplatesSearcher instance;
+    private SearcherUtil searcherUtil;
 
-    private SearcherTemplates() {
+    private TemplatesSearcher()
+    {
+        searcherUtil = SearcherUtil.getInstance();
     }
 
     /**
      * search templates by area name
      */
-    public List<Template> searchTemplatesByArea(Collection<Template> templates, String areaName) {
+    public List<Template> searchTemplatesByArea(Collection<Template> templates, String areaName)
+    {
         List<Template> results = new ArrayList<>();
 
-        for (Template template : templates) {
-            for (Area area : template.getPossibleAreas()) {
-                if (area.getName().contains(areaName) || checkRegExp(areaName, area.getName())) {
+        for (Template template : templates)
+        {
+            for (Area area : template.getPossibleAreas())
+            {
+                if (area.getName().contains(areaName) || searcherUtil.checkRegExp(areaName, area.getName()))
+                {
                     results.add(template);
                 }
             }
@@ -36,13 +46,17 @@ public class SearcherTemplates extends Searcher<Template> {
     /**
      * search templates by cost
      */
-    public List<Template> searchTemplatesByCost(Collection<Template> templates, String search) {
+    public List<Template> searchTemplatesByCost(Collection<Template> templates, String search)
+    {
         List<Template> result = new ArrayList<>();
 
         BigDecimal cost;
-        for (Template template : templates) {
+        for (Template template : templates)
+        {
             cost = template.getCost();
-            if (isCostInDiapason(cost, search, 50) || checkRegExp(search, cost.toString())) {
+            if (searcherUtil.isCostInDiapason(cost, search, 50) ||
+                    searcherUtil.checkRegExp(search, cost.toString()))
+            {
                 result.add(template);
             }
         }
@@ -54,13 +68,16 @@ public class SearcherTemplates extends Searcher<Template> {
     /**
      * search templates by name
      */
-    public List<Template> searchTemplatesByName(Collection<Template> templates, String search) {
+    public List<Template> searchTemplatesByName(Collection<Template> templates, String search)
+    {
         List<Template> result = new ArrayList<>();
 
         String name;
-        for (Template template : templates) {
+        for (Template template : templates)
+        {
             name = template.getName();
-            if (name.contains(search) || checkRegExp(search, name)) {
+            if (name.contains(search) || searcherUtil.checkRegExp(search, name))
+            {
                 result.add(template);
             }
         }
@@ -72,13 +89,16 @@ public class SearcherTemplates extends Searcher<Template> {
     /**
      * search templates by description
      */
-    public List<Template> searchTemplatesByDescription(Collection<Template> templates, String search) {
+    public List<Template> searchTemplatesByDescription(Collection<Template> templates, String search)
+    {
         List<Template> result = new ArrayList<>();
 
         String description;
-        for (Template template : templates) {
+        for (Template template : templates)
+        {
             description = template.getDescription().toLowerCase();
-            if (description.contains(search) || checkRegExp(search, description)) {
+            if (description.contains(search) || searcherUtil.checkRegExp(search, description))
+            {
                 result.add(template);
             }
         }
@@ -87,16 +107,20 @@ public class SearcherTemplates extends Searcher<Template> {
     }
 
 
-    public static SearcherTemplates getInstance() {
-        if (instance == null) {
-            instance = new SearcherTemplates();
+    public static TemplatesSearcher getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new TemplatesSearcher();
         }
 
         return instance;
     }
 
-    public List<Template> search(String search, String field, Collection<Template> templates) {
-        switch (field) {
+    public List<Template> search(String search, String field, Collection<Template> templates)
+    {
+        switch (field)
+        {
             case "Id":
                 return searchTemplatesById(search, templates);
             case "Name":
@@ -120,13 +144,16 @@ public class SearcherTemplates extends Searcher<Template> {
         return new ArrayList<>();
     }
 
-    private List<Template> searchTemplatesById(String search, Collection<Template> templates) {
+    private List<Template> searchTemplatesById(String search, Collection<Template> templates)
+    {
         List<Template> result = new ArrayList<>();
 
         String id;
-        for (Template template : templates) {
+        for (Template template : templates)
+        {
             id = template.getId().toString();
-            if (id.equals(search) || checkRegExp(search, id)) {
+            if (id.equals(search) || searcherUtil.checkRegExp(search, id))
+            {
                 result.add(template);
             }
         }
@@ -134,7 +161,8 @@ public class SearcherTemplates extends Searcher<Template> {
         return result;
     }
 
-    public List<Template> searchTemplatesByAllFields(Collection<Template> templates, String req) {
+    public List<Template> searchTemplatesByAllFields(Collection<Template> templates, String req)
+    {
         Set<Template> result = new HashSet<>();
 
         templates.addAll(searchTemplatesByArea(templates, req));

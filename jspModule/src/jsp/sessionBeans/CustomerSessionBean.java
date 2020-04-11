@@ -1,11 +1,11 @@
-package jsp.ejb;
+package jsp.sessionBeans;
 
 import com.netcracker.students.o3.Exceptions.UnpossibleChangeAreaException;
 import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.controller.Controller;
 import com.netcracker.students.o3.controller.ControllerImpl;
-import com.netcracker.students.o3.controller.searcher.SearcherService;
-import com.netcracker.students.o3.controller.searcher.SearcherTemplates;
+import com.netcracker.students.o3.controller.searcher.ServiceSearcher;
+import com.netcracker.students.o3.controller.searcher.TemplatesSearcher;
 import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
 import com.netcracker.students.o3.controller.sorters.TemplateSorter;
 import com.netcracker.students.o3.model.area.Area;
@@ -30,7 +30,7 @@ public class CustomerSessionBean
     public List<Service> searchServices(String searchValue, BigInteger customerId)
     {
         Controller controller = ControllerImpl.getInstance();
-        SearcherService searcherService = SearcherService.getInstance();
+        ServiceSearcher searcherService = ServiceSearcher.getInstance();
         List<Service> result;
         if (searchValue != null)
         {
@@ -49,7 +49,7 @@ public class CustomerSessionBean
     public List<Template> searchTemplates(String searchValue, BigInteger customerId)
     {
         Controller controller = ControllerImpl.getInstance();
-        SearcherTemplates searcherTemplates = SearcherTemplates.getInstance();
+        TemplatesSearcher searcherTemplates = TemplatesSearcher.getInstance();
         List<Template> result;
         if (searchValue != null)
         {

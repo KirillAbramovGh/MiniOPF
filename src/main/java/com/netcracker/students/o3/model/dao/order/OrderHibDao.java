@@ -6,7 +6,7 @@ import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderAction;
 import com.netcracker.students.o3.model.orders.OrderImpl;
 import com.netcracker.students.o3.model.orders.OrderStatus;
-import com.netcracker.students.o3.model.serializer.XMLLog.XMLLogController;
+import com.netcracker.students.o3.model.serialization.log.XMLLogController;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;

@@ -1,7 +1,10 @@
 package com.netcracker.students.o3.model.area;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.netcracker.students.o3.model.services.ServiceImpl;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
 
@@ -26,6 +29,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "areas")
+@JsonDeserialize(as = AreaImpl.class)
 public interface Area
 {
     /**
@@ -73,9 +77,7 @@ public interface Area
     void setDescription(String description);
 
 
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.REFRESH,targetEntity = TemplateImpl.class,fetch = FetchType.EAGER)
     @JoinTable(
             name="template_area_link",

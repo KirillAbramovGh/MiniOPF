@@ -1,6 +1,7 @@
 package com.netcracker.students.o3.model.area;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
@@ -42,9 +43,7 @@ public class AreaImpl implements Area {
     private String description;
 
 
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
+    @JsonIgnore
     @ManyToMany(targetEntity = TemplateImpl.class,fetch = FetchType.EAGER)
     @JoinTable(
             name="template_area_link",
@@ -102,11 +101,18 @@ public class AreaImpl implements Area {
     public String toString()
     {
         String tmpls = "[";
+        int i = 0;
         for(Template template : templates){
-            tmpls+=addUrl(template.getId())+",";
+            if(i!=templates.size()-1)
+            {
+                tmpls += addUrl(template.getId()) + ",";
+            }else {
+                tmpls += addUrl(template.getId());
+            }
+            i++;
         }
         tmpls+="]";
-        return "AreaImpl{" + "</br>"+
+        return  "{" + "</br>"+
                 "      id:" + id + ",</br>"+
                 "      name:'" + name + '\'' + ",</br>"+
                 "      description:'" + description + '\'' +  ",</br>"+

@@ -49,9 +49,6 @@ public class TemplateImpl implements Template
     private String description;
 
 
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "id")
     @ManyToMany(targetEntity = AreaImpl.class,fetch = FetchType.EAGER)
     @JoinTable(
             name = "template_area_link",
@@ -78,16 +75,23 @@ public class TemplateImpl implements Template
     public String toString()
     {
         String areas ="[";
+        int i = 0;
         for(Area area : possibleAreas){
-            areas+= addUrl(area.getId())+",";
+            if(i!=possibleAreas.size()-1)
+            {
+                areas += addUrl(area.getId()) + ",";
+            }else {
+                areas += addUrl(area.getId());
+            }
+            i++;
         }
         areas+="]";
-        return "TemplateImpl{" + "</br>"+
+        return " {" + "</br>"+
                 "           id:" + id + ",</br>"+
                 "           name:'" + name + '\'' + ",</br>"+
                 "           cost:" + cost + ",</br>"+
-                "           description:'" + description + '\'' + "</br>"+
-                "           possibleAreasIds:'" + areas + '\'' + "</br>"+
+                "           description:'" + description + '\'' + ",</br>"+
+                "           possibleAreasIds:" + areas  + "</br>"+
                 "      }";
     }
 

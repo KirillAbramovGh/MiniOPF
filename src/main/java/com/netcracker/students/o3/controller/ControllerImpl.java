@@ -6,8 +6,9 @@ import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.controller.sorters.ServiceSorter;
 import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
 import com.netcracker.students.o3.model.area.Area;
-import com.netcracker.students.o3.model.model.Model;
-import com.netcracker.students.o3.model.model.ModelDb;
+import com.netcracker.students.o3.model.Model;
+import com.netcracker.students.o3.model.ModelDb;
+import com.netcracker.students.o3.model.serialization.JsonEntitiesStorage;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderAction;
 import com.netcracker.students.o3.model.orders.OrderStatus;
@@ -189,9 +190,8 @@ public class ControllerImpl implements Controller
     {
         Order order = getOrder(orderId);
         Service service = order.getService();
-        deepDeleteService(service.getId());
-
         model.deleteOrder(orderId);
+        deleteService(service.getId());
     }
 
     @Override
@@ -438,6 +438,74 @@ public class ControllerImpl implements Controller
         }
 
         return result;
+    }
+
+    @Override
+    public void importEntities(JsonEntitiesStorage jsonEntitiesStorage,boolean isIgnored)
+    {
+        importEmployees(new ArrayList<>(jsonEntitiesStorage.getEmployees()),isIgnored);
+        importAreas(new ArrayList<>(jsonEntitiesStorage.getAreas()),isIgnored);
+        importTemplates(new ArrayList<>(jsonEntitiesStorage.getTemplates()),isIgnored);
+        importServices(new ArrayList<>(jsonEntitiesStorage.getServices()),isIgnored);
+        importCustomers(new ArrayList<>(jsonEntitiesStorage.getCustomers()),isIgnored);
+        importOrders(new ArrayList<>(jsonEntitiesStorage.getOrders()),isIgnored);
+    }
+
+    private void importOrders(List<Order> orders,boolean isIgnored){
+        for(Order order : orders){
+            if(getEntity(order.getId())==null){
+                model.addOrder(order);
+            }else if(!isIgnored){
+                model.setOrder(order);
+            }
+        }
+    }
+    private void importCustomers(List<Customer> customers,boolean isIgnored){
+        for(Customer customer : customers){
+            if(getEntity(customer.getId())==null){
+                model.addCustomer(customer);
+            }else if(!isIgnored){
+                model.setCustomer(customer);
+            }
+        }
+    }
+
+    private void importEmployees(List<Employee> employees,boolean isIgnored){
+        for(Employee employee : employees){
+            if(getEntity(employee.getId())==null){
+                model.addEmployee(employee);
+            }else if(!isIgnored){
+                model.setEmployee(employee);
+            }
+        }
+    }
+
+    private void importAreas(List<Area> areas,boolean isIgnored){
+        for(Area area : areas){
+            if(getEntity(area.getId())==null){
+                model.addArea(area);
+            }else if(!isIgnored){
+                model.setArea(area);
+            }
+        }
+    }
+    private void importServices(List<Service> services,boolean isIgnored){
+        for(Service service : services){
+            if(getEntity(service.getId())==null){
+                model.addService(service);
+            }else if(!isIgnored){
+                model.setService(service);
+            }
+        }
+    }
+    private void importTemplates(List<Template> templates,boolean isIgnored){
+        for(Template template : templates){
+            if(getEntity(template.getId())==null){
+                model.addTemplate(template);
+            }else if(!isIgnored){
+                model.setTemplate(template);
+            }
+        }
     }
 
 
@@ -928,6 +996,8 @@ public class ControllerImpl implements Controller
     {
         return getService(serviceId).getTemplate().getDescription();
     }
+
+
 
 
     public void takeMoney(Timer timer){

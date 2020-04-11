@@ -4,9 +4,9 @@
 <%@ page import="com.netcracker.students.o3.model.templates.Template" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@ page import="java.math.BigInteger" %>
+<%@ page import="java.util.Collection" %>
 <%@ page import="javax.inject.Inject" %>
-<%@ page import="jsp.ejb.CustomerSessionBean" %>
-<%@ page import="javax.ejb.EJB" %>
+<%@ page import="jsp.sessionBeans.CustomerSessionBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -23,29 +23,29 @@
     <div style="size: 200px">
         <div class="name">
             Name: <input type="text" name="fio"
-                         value="<%=customerSessionBean.getFIO((BigInteger) request.getSession().getAttribute("id"))%>">
+                         value="<%=customerSessionBean.getFIO((BigInteger) request.getSession().getAttribute("updateCustomerId"))%>">
         </div>
 
         <div class="">
             Login: <input type="text" name="login"
-                          value="<%=customerSessionBean.getLogin((BigInteger) request.getSession().getAttribute("id"))%>">
+                          value="<%=customerSessionBean.getLogin((BigInteger) request.getSession().getAttribute("updateCustomerId"))%>">
         </div>
 
         <div class="password">
             Password: <input type="text" name="password"
-                             value=<%=customerSessionBean.getPassword((BigInteger) request.getSession().getAttribute("id"))%>>
+                             value=<%=customerSessionBean.getPassword((BigInteger) request.getSession().getAttribute("updateCustomerId"))%>>
         </div>
         <div class="">
             Balance: <input type="text" name="balance"
-                            value="<%=customerSessionBean.getBalance((BigInteger) request.getSession().getAttribute("id"))%>">
+                            value="<%=customerSessionBean.getBalance((BigInteger) request.getSession().getAttribute("updateCustomerId"))%>">
         </div>
         <div class="selectArea">
             Area: <input type="text" name="area"
-                         value=<%=customerSessionBean.getAreaId((BigInteger) request.getSession().getAttribute("id"))%>>
+                         value=<%=customerSessionBean.getAreaId((BigInteger) request.getSession().getAttribute("updateCustomerId"))%>>
         </div>
         <div>
             ConnectedTemplatesId: <input type="text" name="connectedTemplatesId" value="<%=getConnectedTemplatesId(
-                    (BigInteger)request.getSession().getAttribute("id")
+                    (BigInteger)request.getSession().getAttribute("updateCustomerId")
             )%>">
         </div>
         <input type="submit" name="save" class="button">
@@ -55,10 +55,21 @@
     private String getConnectedTemplatesId(BigInteger customerId)
     {
         String res = "";
-        for (Template template : customerSessionBean.getConnectedTemplates(customerId).values())
+        int i = 0;
+        Collection<Template> templates = customerSessionBean.getConnectedTemplates(customerId).values();
+        for (Template template : templates)
         {
-            res += template.getId() + ",";
+            if (i != templates.size() - 1)
+            {
+                res += template.getId() + ",";
+            }
+            else
+            {
+                res += template.getId();
+            }
+            i++;
         }
+
         return res;
     }
 %>
@@ -75,7 +86,7 @@
             String[] templates = servicesValue.split(",");
             String moneyBalance = request.getParameter("balance");
 
-            customerSessionBean.setCustomersFields((BigInteger) request.getSession().getAttribute("id"),
+            customerSessionBean.setCustomersFields((BigInteger) request.getSession().getAttribute("updateCustomerId"),
                     name, password, login, BigInteger.valueOf(Long.parseLong(area)),
                     BigDecimal.valueOf(Double.parseDouble(moneyBalance)));
 
@@ -86,12 +97,13 @@
                     BigInteger templateId = BigInteger.valueOf(Long.parseLong(s));
                     boolean connected = false;
                     for (BigInteger serviceId : customerSessionBean
-                            .getConnectedServicesIds((BigInteger) request.getSession().getAttribute("id")))
+                            .getConnectedServicesIds((BigInteger) request.getSession().getAttribute("updateCustomerId")))
                     {
                         Service service = ControllerImpl.getInstance().getService(serviceId);
                         Template template = service.getTemplate();
                         if (!template.getPossibleAreas()
-                                .contains(customerSessionBean.getAreaId((BigInteger) request.getSession().getAttribute("id"))))
+                                .contains(customerSessionBean
+                                        .getAreaId((BigInteger) request.getSession().getAttribute("updateCustomerId"))))
                         {
                             customerSessionBean.disconnectService(serviceId);
                             break;
@@ -103,10 +115,11 @@
                         }
                     }
                     if (!connected && ControllerImpl.getInstance().getTemplate(templateId).getPossibleAreas()
-                            .contains(customerSessionBean.getAreaId((BigInteger) request.getSession().getAttribute("id"))))
+                            .contains(customerSessionBean
+                                    .getAreaId((BigInteger) request.getSession().getAttribute("updateCustomerId"))))
                     {
                         customerSessionBean
-                                .connectService((BigInteger) request.getSession().getAttribute("id"), templateId);
+                                .connectService((BigInteger) request.getSession().getAttribute("updateCustomerId"), templateId);
                     }
                     else
                     {

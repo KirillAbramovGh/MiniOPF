@@ -3,11 +3,11 @@ package com.netcracker.students.o3;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
 import com.netcracker.students.o3.model.dao.area.AreaHibDao;
-import com.netcracker.students.o3.model.dao.сustomer.CustomerHibDao;
 import com.netcracker.students.o3.model.dao.employee.EmployeeHibDao;
 import com.netcracker.students.o3.model.dao.order.OrderHibDao;
 import com.netcracker.students.o3.model.dao.service.ServiceHibDao;
 import com.netcracker.students.o3.model.dao.template.TemplateHibDao;
+import com.netcracker.students.o3.model.dao.сustomer.CustomerHibDao;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
@@ -29,8 +29,9 @@ public class Main
 {
     public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException, JAXBException
     {
-        clearDB();
-        downloadDataFromJSON();
+       clearDB();
+       downloadDataFromJSON();
+
     }
 
     private static void clearDB()

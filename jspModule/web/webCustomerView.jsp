@@ -1,9 +1,9 @@
 <%@ page import="com.netcracker.students.o3.controller.ControllerImpl" %>
-<%@ page import="com.netcracker.students.o3.model.serializer.SerializerImpl" %>
+<%@ page import="com.netcracker.students.o3.model.serialization.SerializerImpl" %>
 <%@ page import="java.math.BigInteger" %>
 <%@ page import="javax.inject.Inject" %>
-<%@ page import="jsp.CustomerWebVisualiser" %>
-<%@ page import="jsp.ejb.CustomerSessionBean" %>
+<%@ page import="jsp.helpers.CustomerJspHelper" %>
+<%@ page import="jsp.sessionBeans.CustomerSessionBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="true" %>
 <html lang="en">
 <head>
@@ -16,7 +16,7 @@
         CustomerSessionBean customerSessionBean;
     %>
     <%
-        CustomerWebVisualiser customerWV = CustomerWebVisualiser.getInstance();
+        CustomerJspHelper customerWV = CustomerJspHelper.getInstance();
 
         customerSessionBean.addBalance(request.getParameter("sum"), (BigInteger) request.getSession().getAttribute("id"));
 

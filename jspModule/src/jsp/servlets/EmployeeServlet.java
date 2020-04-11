@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import jsp.ejb.EmployeeSessionBean;
+import jsp.sessionBeans.EmployeeSessionBean;
 
 @WebServlet("/employeeServlet")
 public class EmployeeServlet extends HttpServlet
@@ -45,6 +45,9 @@ public class EmployeeServlet extends HttpServlet
         {
             EmployeeCommand.valueOf(command).execute(req, resp, getServletContext(),
                     employeeSessionBean, key);
+        }
+        catch (IllegalArgumentException ignore){
+
         }
         catch (Exception e)
         {

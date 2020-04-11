@@ -1,26 +1,26 @@
-package jsp;
+package jsp.helpers;
 
 import com.netcracker.students.o3.model.area.Area;
 
 import javax.servlet.http.HttpSession;
 
 import jsp.builders.HtmlSelectBuilder;
-import jsp.ejb.StartSessionBean;
+import jsp.sessionBeans.StartSessionBean;
 
-public class StartWebVisualiser
+public class StartJspHelper
 {
 
-    private static StartWebVisualiser instance;
+    private static StartJspHelper instance;
 
-    private StartWebVisualiser()
+    private StartJspHelper()
     {
     }
 
-    public static StartWebVisualiser getInstance()
+    public static StartJspHelper getInstance()
     {
         if (instance == null)
         {
-            instance = new StartWebVisualiser();
+            instance = new StartJspHelper();
         }
         return instance;
     }

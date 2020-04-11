@@ -8,15 +8,18 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-public class SearcherCustomer extends Searcher<Customer> {
-    private static SearcherCustomer instance;
+public class CustomerSearcher extends EntitySearcher<Customer>
+{
+    private static CustomerSearcher instance;
+    private SearcherUtil searcherUtil;
 
-    private SearcherCustomer() {
+    private CustomerSearcher() {
+        searcherUtil = SearcherUtil.getInstance();
     }
 
-    public static SearcherCustomer getInstance() {
+    public static CustomerSearcher getInstance() {
         if (instance == null) {
-            instance = new SearcherCustomer();
+            instance = new CustomerSearcher();
         }
 
         return instance;
@@ -67,7 +70,7 @@ public class SearcherCustomer extends Searcher<Customer> {
 
     private boolean checkService(String search, BigInteger serviceId) {
         return serviceId.toString().equals(search) ||
-                checkRegExp(search, serviceId.toString()) ||
+                searcherUtil.checkRegExp(search, serviceId.toString()) ||
                 ControllerImpl.getInstance().getServiceName(serviceId).contains(search);
     }
 
@@ -75,7 +78,7 @@ public class SearcherCustomer extends Searcher<Customer> {
         List<Customer> result = new ArrayList<>();
 
         for (Customer customer : customers) {
-            if (checkArea(search, customer.getArea().getId())) {
+            if (searcherUtil.checkArea(search, customer.getArea())) {
                 result.add(customer);
             }
         }
@@ -90,7 +93,7 @@ public class SearcherCustomer extends Searcher<Customer> {
         BigDecimal balance;
         for (Customer customer : customers) {
             balance = customer.getMoneyBalance();
-            if (isCostInDiapason(balance, search, 50) || checkRegExp(search, balance.toString())) {
+            if (searcherUtil.isCostInDiapason(balance, search, 50) || searcherUtil.checkRegExp(search, balance.toString())) {
                 result.add(customer);
             }
         }
@@ -104,7 +107,7 @@ public class SearcherCustomer extends Searcher<Customer> {
         String login;
         for (Customer customer : customers) {
             login = customer.getLogin();
-            if (customer.getLogin().contains(search) || checkRegExp(search, login)) {
+            if (customer.getLogin().contains(search) || searcherUtil.checkRegExp(search, login)) {
                 result.add(customer);
             }
         }
@@ -118,7 +121,7 @@ public class SearcherCustomer extends Searcher<Customer> {
         String name;
         for (Customer customer : customers) {
             name = customer.getName();
-            if (name.contains(search) || checkRegExp(search, name)) {
+            if (name.contains(search) || searcherUtil.checkRegExp(search, name)) {
                 result.add(customer);
             }
         }

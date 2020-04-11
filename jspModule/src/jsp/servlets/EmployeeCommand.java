@@ -7,6 +7,12 @@ import com.netcracker.students.o3.controller.sorters.SortType.EmployeeSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.OrderSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
+import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.orders.Order;
+import com.netcracker.students.o3.model.services.Service;
+import com.netcracker.students.o3.model.templates.Template;
+import com.netcracker.students.o3.model.users.Customer;
+import com.netcracker.students.o3.model.users.Employee;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -17,12 +23,73 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jsp.ejb.EmployeeSessionBean;
-import jsp.ejb.EmployeeSessionBean;
+import jsp.sessionBeans.EmployeeSessionBean;
 
 public enum EmployeeCommand
 {
 
+    importEntities{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                final String key) throws ServletException, IOException
+        {
+            employeeSessionBean.importEntities(true);
+        }
+    },
+    exportOrders{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/JsonView.jsp");
+            req.getSession().setAttribute("exportJson", "order");
+        }
+    },
+    exportServices{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/JsonView.jsp");
+            req.getSession().setAttribute("exportJson", "service");
+        }
+    },
+    exportTemplates{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/JsonView.jsp");
+            req.getSession().setAttribute("exportJson", "template");
+        }
+    },
+    exportCustomers{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/JsonView.jsp");
+            req.getSession().setAttribute("exportJson", "customer");
+        }
+    },
+    exportEmployees{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/JsonView.jsp");
+            req.getSession().setAttribute("exportJson", "employee");
+        }
+    },
+    exportAreas{
+        public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                final String key) throws ServletException, IOException
+        {
+            req.getSession().setAttribute("nextPage","/JsonView.jsp");
+            req.getSession().setAttribute("exportJson", "area");
+        }
+    },
     cancelOrder{
         public void execute(HttpServletRequest req, final HttpServletResponse resp,
                 final ServletContext context, EmployeeSessionBean employeeSessionBean,
@@ -224,9 +291,13 @@ public enum EmployeeCommand
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                        final String key)
+                        final String key) throws ServletException, IOException
                 {
                     BigInteger id = getIdFromKey(key);
+                    if(id.equals(req.getSession().getAttribute("id"))){
+                        req.getSession().setAttribute("nextPage","/startView.jsp");
+                        EmployeeCommand.forward("/startView.jsp",context,req,resp);
+                    }
                     employeeSessionBean.deleteEmployee(id);
                 }
             },

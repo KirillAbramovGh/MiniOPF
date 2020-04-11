@@ -1,4 +1,4 @@
-package jsp;
+package jsp.helpers;
 
 import com.netcracker.students.o3.controller.sorters.SortType.AreaSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.CustomerSortType;
@@ -16,26 +16,27 @@ import com.netcracker.students.o3.model.users.Employee;
 import java.math.BigInteger;
 import java.util.List;
 
+import jsp.builders.HtmlCheckboxBuilder;
 import jsp.builders.HtmlTableBuilder;
-import jsp.ejb.EmployeeSessionBean;
+import jsp.sessionBeans.EmployeeSessionBean;
 
-public class EmployeeWebVisualiser
+public class EmployeeJspHelper
 {
-    private static EmployeeWebVisualiser instance;
+    private static EmployeeJspHelper instance;
 
     private HtmlTableBuilder htmlTableBuilder;
 
 
-    private EmployeeWebVisualiser()
+    private EmployeeJspHelper()
     {
         htmlTableBuilder = HtmlTableBuilder.getInstance();
     }
 
-    public static EmployeeWebVisualiser getInstance()
+    public static EmployeeJspHelper getInstance()
     {
         if (instance == null)
         {
-            instance = new EmployeeWebVisualiser();
+            instance = new EmployeeJspHelper();
         }
         return instance;
     }
@@ -134,5 +135,74 @@ public class EmployeeWebVisualiser
         }
 
         return result.toString();
+    }
+
+    public String checkBocksEntities(EmployeeSessionBean sessionBean,String type){
+        HtmlCheckboxBuilder checkboxBuilder = HtmlCheckboxBuilder.getInstance();
+        String result = "error";
+        switch (type){
+            case "area":
+                result = checkboxBuilder.makeCheckboxesFromAreas(sessionBean.getAreas()); break;
+            case "customer":
+                result = checkboxBuilder.makeCheckboxesFromCustomers(sessionBean.getCustomers()); break;
+            case "template":
+                result = checkboxBuilder.makeCheckboxesFromTemplates(sessionBean.getTemplates()); break;
+            case "service":
+                result = checkboxBuilder.makeCheckboxesFromServices(sessionBean.getServices()); break;
+            case "employee":
+                result = checkboxBuilder.makeCheckboxesFromEmployees(sessionBean.getEmployees()); break;
+            case "order":
+                result = checkboxBuilder.makeCheckboxesFromOrders(sessionBean.getOrders()); break;
+        }
+
+        return result;
+    }
+
+    public String transformAreasToHtml(List<Area> areas){
+       StringBuilder res = new StringBuilder();
+       for(Area area : areas){
+           res.append(area.toString()).append(",</br>");
+       }
+       return res.toString();
+    }
+
+    public String transformCustomersToHtml(List<Customer> customers){
+        StringBuilder res = new StringBuilder();
+        for(Customer customer : customers){
+            res.append(customer.toString()).append(",</br>");
+        }
+        return res.toString();
+    }
+
+    public String transformTemplatesToHtml(List<Template> templates){
+        StringBuilder res = new StringBuilder();
+        for(Template template : templates){
+            res.append(template.toString()).append(",</br>");
+        }
+        return res.toString();
+    }
+
+    public String transformEmployeesToHtml(List<Employee> employees){
+        StringBuilder res = new StringBuilder();
+        for(Employee employee : employees){
+            res.append(employee.toString()).append(",</br>");
+        }
+        return res.toString();
+    }
+
+    public String transformServicesToHtml(List<Service> services){
+        StringBuilder res = new StringBuilder();
+        for(Service service : services){
+            res.append(service.toString()).append(",</br>");
+        }
+        return res.toString();
+    }
+
+    public String transformOrdersToHtml(List<Order> orders){
+        StringBuilder res = new StringBuilder();
+        for(Order order : orders){
+            res.append(order.toString()).append(",</br>");
+        }
+        return res.toString();
     }
 }

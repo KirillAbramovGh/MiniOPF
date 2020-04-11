@@ -1,4 +1,4 @@
-package jsp;
+package jsp.helpers;
 
 import com.netcracker.students.o3.controller.ControllerImpl;
 import com.netcracker.students.o3.model.area.Area;
@@ -9,14 +9,14 @@ import java.math.BigInteger;
 import java.util.List;
 
 import jsp.builders.CardBuilder;
-import jsp.ejb.CustomerSessionBean;
+import jsp.sessionBeans.CustomerSessionBean;
 
-public class CustomerWebVisualiser
+public class CustomerJspHelper
 {
-    private static CustomerWebVisualiser instance;
+    private static CustomerJspHelper instance;
 
 
-    private CustomerWebVisualiser()
+    private CustomerJspHelper()
     {
     }
 
@@ -63,11 +63,11 @@ public class CustomerWebVisualiser
     }
 
 
-    public static CustomerWebVisualiser getInstance()
+    public static CustomerJspHelper getInstance()
     {
         if (instance == null)
         {
-            instance = new CustomerWebVisualiser();
+            instance = new CustomerJspHelper();
         }
 
         return instance;

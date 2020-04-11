@@ -4,15 +4,18 @@ import com.netcracker.students.o3.model.orders.Order;
 
 import java.util.*;
 
-public class SearcherOrders extends Searcher<Order> {
-    private static SearcherOrders instance;
+public class OrdersSearcher extends EntitySearcher<Order>
+{
+    private static OrdersSearcher instance;
+    private SearcherUtil searcherUtil;
 
-    private SearcherOrders() {
+    private OrdersSearcher() {
+        searcherUtil = SearcherUtil.getInstance();
     }
 
-    public static SearcherOrders getInstance() {
+    public static OrdersSearcher getInstance() {
         if (instance == null) {
-            instance = new SearcherOrders();
+            instance = new OrdersSearcher();
         }
 
         return instance;
@@ -53,7 +56,7 @@ public class SearcherOrders extends Searcher<Order> {
         String action;
         for (Order order : orders) {
             action = order.getAction().toString();
-            if (action.contains(search) || checkRegExp(search, action)) {
+            if (action.contains(search) || searcherUtil.checkRegExp(search, action)) {
                 result.add(order);
             }
         }
@@ -67,7 +70,7 @@ public class SearcherOrders extends Searcher<Order> {
         String status;
         for (Order order : orders) {
             status = order.getStatus().toString();
-            if (status.contains(search) || checkRegExp(search, status)) {
+            if (status.contains(search) || searcherUtil.checkRegExp(search, status)) {
                 result.add(order);
             }
         }
@@ -81,7 +84,7 @@ public class SearcherOrders extends Searcher<Order> {
         String employeeId;
         for (Order order : orders) {
             employeeId = order.getEmployee().toString();
-            if (employeeId.contains(search) || checkRegExp(search, employeeId)) {
+            if (employeeId.contains(search) || searcherUtil.checkRegExp(search, employeeId)) {
                 result.add(order);
             }
         }
@@ -95,7 +98,7 @@ public class SearcherOrders extends Searcher<Order> {
         String serviceId;
         for (Order order : orders) {
             serviceId = order.getService().toString();
-            if (serviceId.contains(search) || checkRegExp(search, serviceId)) {
+            if (serviceId.contains(search) || searcherUtil.checkRegExp(search, serviceId)) {
                 result.add(order);
             }
         }
@@ -109,7 +112,7 @@ public class SearcherOrders extends Searcher<Order> {
         String templateId;
         for (Order order : orders) {
             templateId = order.getTemplate().toString();
-            if (templateId.contains(search) || checkRegExp(search, templateId)) {
+            if (templateId.contains(search) || searcherUtil.checkRegExp(search, templateId)) {
                 result.add(order);
             }
         }
@@ -123,7 +126,7 @@ public class SearcherOrders extends Searcher<Order> {
         String id;
         for (Order order : orders) {
             id = order.getId().toString();
-            if (id.equals(search) || checkRegExp(search, id)) {
+            if (id.equals(search) || searcherUtil.checkRegExp(search, id)) {
                 result.add(order);
             }
         }
