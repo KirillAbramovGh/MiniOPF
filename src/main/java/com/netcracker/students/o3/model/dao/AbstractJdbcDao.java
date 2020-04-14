@@ -1,5 +1,6 @@
 package com.netcracker.students.o3.model.dao;
 
+import com.netcracker.students.o3.model.Entity;
 import com.netcracker.students.o3.model.serialization.log.XMLLogController;
 
 import java.math.BigInteger;
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public abstract class AbstractJdbcDao<T> implements Dao<T>
+public abstract class AbstractJdbcDao<T extends Entity> implements Dao<T>
 {
     private static final String USER_NAME = "postgres";
     private static final String PASSWORD = "postgres";

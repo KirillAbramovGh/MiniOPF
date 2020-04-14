@@ -3,7 +3,6 @@ package com.netcracker.students.o3.model.templates;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.area.AreaImpl;
-import com.netcracker.students.o3.model.services.ServiceImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -25,7 +24,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "templates")
 @JsonDeserialize(as = TemplateImpl.class)
-public interface Template
+public interface Template extends com.netcracker.students.o3.model.Entity
 {
     /**
      * @return Template id

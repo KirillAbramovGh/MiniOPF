@@ -1,10 +1,12 @@
 package com.netcracker.students.o3.model.dao;
 
+import com.netcracker.students.o3.model.Entity;
+
 import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface Dao<T>
+public interface Dao<T extends Entity>
 {
     List<T> getAll()throws SQLException;
 

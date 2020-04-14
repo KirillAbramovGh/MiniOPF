@@ -1,5 +1,6 @@
 package com.netcracker.students.o3.model.dao;
 
+import com.netcracker.students.o3.model.Entity;
 import com.netcracker.students.o3.model.hibernate.HibernateSessionFactoryUtil;
 import com.netcracker.students.o3.model.serialization.log.XMLLogController;
 
@@ -9,7 +10,7 @@ import org.hibernate.Transaction;
 import java.math.BigInteger;
 import java.sql.SQLException;
 
-public abstract class AbstractHibDao<T> implements Dao<T>
+public abstract class AbstractHibDao<T extends Entity> implements Dao<T>
 {
     XMLLogController logController = XMLLogController.getInstance();
     @Override

@@ -1,8 +1,6 @@
 package com.netcracker.students.o3.model.services;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.orders.OrderImpl;
@@ -13,10 +11,8 @@ import com.netcracker.students.o3.model.users.CustomerImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,7 +21,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -36,7 +31,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "services")
 @JsonDeserialize(as = ServiceImpl.class)
-public interface Service
+public interface Service extends com.netcracker.students.o3.model.Entity
 {
     /**
      * @return service id
@@ -44,8 +39,8 @@ public interface Service
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
             generator = "last_id")
-    @SequenceGenerator(name="last_id",
-            sequenceName="last_id")
+    @SequenceGenerator(name = "last_id",
+            sequenceName = "last_id")
     @Column(name = "id", updatable = false, nullable = false)
     BigInteger getId();
 
@@ -60,7 +55,7 @@ public interface Service
      * @return user id if service connected to him
      */
     @JsonIgnore
-    @ManyToOne(targetEntity = CustomerImpl.class,fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = CustomerImpl.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "userid")
     Customer getCustomer();
 
@@ -74,7 +69,7 @@ public interface Service
     /**
      * @return template of service
      */
-    @ManyToOne(targetEntity = TemplateImpl.class,fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = TemplateImpl.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "templateid")
     Template getTemplate();
 

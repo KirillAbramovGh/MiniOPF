@@ -30,7 +30,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "orders")
 @JsonDeserialize(as = OrderImpl.class)
-public interface Order
+public interface Order extends com.netcracker.students.o3.model.Entity
 {
     /**
      * @return id of order

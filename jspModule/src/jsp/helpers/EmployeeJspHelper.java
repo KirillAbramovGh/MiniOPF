@@ -7,6 +7,8 @@ import com.netcracker.students.o3.controller.sorters.SortType.OrderSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
 import com.netcracker.students.o3.model.area.Area;
+import com.netcracker.students.o3.model.dto.DtoTransformer;
+import com.netcracker.students.o3.model.dto.HtmlParser;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
@@ -159,49 +161,62 @@ public class EmployeeJspHelper
     }
 
     public String transformAreasToHtml(List<Area> areas){
-       StringBuilder res = new StringBuilder();
+        StringBuilder res = new StringBuilder("</br>");
+        DtoTransformer transformer = new DtoTransformer();
+        HtmlParser parser = new HtmlParser();
        for(Area area : areas){
-           res.append(area.toString()).append(",</br>");
+           res.append(parser.parseToHtml(transformer.transformToDto(area))).append(",</br>");
        }
        return res.toString();
     }
 
     public String transformCustomersToHtml(List<Customer> customers){
-        StringBuilder res = new StringBuilder();
+        StringBuilder res = new StringBuilder("</br>");
+        DtoTransformer transformer = new DtoTransformer();
+        HtmlParser parser = new HtmlParser();
         for(Customer customer : customers){
-            res.append(customer.toString()).append(",</br>");
+            res.append(parser.parseToHtml(transformer.transformToDto(customer))).append(",</br>");
         }
         return res.toString();
     }
 
     public String transformTemplatesToHtml(List<Template> templates){
-        StringBuilder res = new StringBuilder();
+        StringBuilder res = new StringBuilder("</br>");
+        DtoTransformer transformer = new DtoTransformer();
+        HtmlParser parser = new HtmlParser();
         for(Template template : templates){
-            res.append(template.toString()).append(",</br>");
+            res.append(parser.parseToHtml(transformer.transformToDto(template))).append(",</br>");
         }
         return res.toString();
     }
 
     public String transformEmployeesToHtml(List<Employee> employees){
-        StringBuilder res = new StringBuilder();
+        StringBuilder res = new StringBuilder("</br>");
+        DtoTransformer transformer = new DtoTransformer();
+        HtmlParser parser = new HtmlParser();
         for(Employee employee : employees){
-            res.append(employee.toString()).append(",</br>");
+            res.append(parser.parseToHtml(transformer.transformToDto(employee))).append(",</br>");
         }
         return res.toString();
     }
 
     public String transformServicesToHtml(List<Service> services){
-        StringBuilder res = new StringBuilder();
+        StringBuilder res = new StringBuilder("</br>");
+        DtoTransformer transformer = new DtoTransformer();
+        HtmlParser parser = new HtmlParser();
         for(Service service : services){
-            res.append(service.toString()).append(",</br>");
+            res.append(parser.parseToHtml(transformer.transformToDto(service))).append(",</br>");
+
         }
         return res.toString();
     }
 
     public String transformOrdersToHtml(List<Order> orders){
-        StringBuilder res = new StringBuilder();
+        StringBuilder res = new StringBuilder("</br>");
+        DtoTransformer transformer = new DtoTransformer();
+        HtmlParser parser = new HtmlParser();
         for(Order order : orders){
-            res.append(order.toString()).append(",</br>");
+            res.append(parser.parseToHtml(transformer.transformToDto(order))).append(",</br>");
         }
         return res.toString();
     }
