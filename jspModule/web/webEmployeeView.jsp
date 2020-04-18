@@ -71,6 +71,7 @@
                         <option>Action</option>
                     </select>
                     <input type="submit" name="createOrder" value="Create">
+                    <input type="submit" name="Editing" value="Editing">
                     <%=employeeJspHelper.showFilteredOrdersByEmployeeId(
                             request.getParameter("searchFieldEmployeeOrders"),
                             request.getParameter("employeeOrderSelectField"),
@@ -98,6 +99,7 @@
                         <option>Action</option>
                     </select>
                     <input type="submit" name="createOrder" value="Create">
+                    <input type="submit" name="Editing" value="Editing">
                     <%=employeeJspHelper.showFilteredOrders(
                             request.getParameter("searchFieldAllOrders"),
                             request.getParameter("allOrderSelectField"),
@@ -124,6 +126,7 @@
                         <option>Areas</option>
                     </select>
                     <input type="submit" name="createService" value="Create">
+                    <input type="submit" name="Editing" value="Editing">
                     <%=employeeJspHelper.showFilteredServices(
                             request.getParameter("searchFieldAllServices"),
                             request.getParameter("allServicesSelectField"),
@@ -146,6 +149,7 @@
                         <option>Areas</option>
                     </select>
                     <input type="submit" name="createTemplate" value="Create">
+                    <input type="submit" name="Editing" value="Editing">
                     <%=employeeJspHelper.showFilteredTemplates(
                             request.getParameter("searchFieldAllTemplates"),
                             request.getParameter("allTemplatesSelectField"),
@@ -172,6 +176,7 @@
                         <option>ConnectedServices</option>
                     </select>
                     <input type="submit" name="createCustomer" value="Create">
+                    <input type="submit" name="Editing" value="Editing">
                     <%=employeeJspHelper.showFilteredCustomers(
                             request.getParameter("searchFieldAllCustomers"),
                             request.getParameter("allCustomersSelectField"),
@@ -195,6 +200,7 @@
                         <option>Login</option>
                     </select>
                     <input type="submit" name="createEmployee" value="Create">
+                    <input type="submit" name="Editing" value="Editing">
                     <%=employeeJspHelper.showFilteredEmployees(
                             request.getParameter("searchFieldAllEmployees"),
                             request.getParameter("allEmployeesSelectField"),
@@ -218,6 +224,7 @@
                     </select>
                     <input type="submit" name="createArea" value="Create">
                     <input type="submit" name="filterArea" value="Filter">
+                    <input type="submit" name="Editing" value="Editing">
                     <%=employeeJspHelper.showFilteredAreas(
                             request.getParameter("searchFieldAllAreas"),
                             request.getParameter("allAreasSelectField"),

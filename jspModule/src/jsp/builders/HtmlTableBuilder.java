@@ -34,7 +34,7 @@ public class HtmlTableBuilder {
         String innerPart = "";
 
         innerPart +=
-                addColumns(
+                addColumns("",
                         "id"+createButton("↑","ServiceSortUpById")+
                                 createButton("↓","ServiceSortDownById"),
                         "Name"+createButton("↑","ServiceSortDownByName")+
@@ -58,7 +58,7 @@ public class HtmlTableBuilder {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
-                addColumns("Id"+createButton("↑","TemplateSortDownById")
+                addColumns("","Id"+createButton("↑","TemplateSortDownById")
                                 +createButton("↓","TemplateSortUpById")
                         , "Name"+createButton("↑","TemplateSortDownByName")
                                 +createButton("↓","TemplateSortUpByName")
@@ -82,7 +82,7 @@ public class HtmlTableBuilder {
             final String eId) {
         StringBuilder innerPart = new StringBuilder();
 
-        innerPart.append(addColumns(
+        innerPart.append(addColumns("",
                         "id"+createButton("↑","OrderSortDownById")
                 +createButton("↓","OrderSortUpById")
                 ,"TemplateId"+createInput("filterOrderTemplateId",templateId),
@@ -101,7 +101,7 @@ public class HtmlTableBuilder {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
-                addColumns(
+                addColumns("",
                         "Id"+createButton("↑","CustomerSortDownById")+
                                 createButton("↓","CustomerSortUpById")
                         , "Name"+createButton("↑","CustomerSortDownByName")+
@@ -128,7 +128,7 @@ public class HtmlTableBuilder {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
-                addColumns(
+                addColumns("",
                         "Id"+createButton("↑","EmployeeSortDownById")+
                                 createButton("↓","EmployeeSortUpById")
                         , "Name"+createButton("↑","EmployeeSortDownByName")+
@@ -152,7 +152,7 @@ public class HtmlTableBuilder {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
-                addColumns("Id"+createButton("↑","AreaSortDownById")+
+                addColumns("","Id"+createButton("↑","AreaSortDownById")+
                                 createButton("↓","AreaSortUpById")
                         , "Name"+createButton("↑","AreaSortDownByName")+
                                 createButton("↓","AreaSortUpByName")
@@ -192,6 +192,8 @@ public class HtmlTableBuilder {
     private String addOrderToHtmlTable(Order order, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
+        result += addCell(createCheckbox("orderChecked "+order.getId(),
+                "orderChecked "+order.getId()));
         result += addCell(addId(order.getId()));
         result += addCell(addId(order.getTemplate().getId()));
         result += addCell(addId(order.getService().getId()));
@@ -226,6 +228,8 @@ public class HtmlTableBuilder {
     private String addEmployeeServiceToHtmlTable(Service service, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
+        result += addCell(createCheckbox("serviceChecked "+service.getId(),
+                "serviceChecked "+service.getId()));
         result += addCell(addId(service.getId()));
         result += addCell(controller.getServiceName(service.getId()));
         result += addCell(service.templateGetCost() + "");
@@ -244,6 +248,8 @@ public class HtmlTableBuilder {
     private String addEmployeeTemplateToHtmlTable(Template template, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
+        result += addCell(createCheckbox("templateChecked "+template.getId(),
+                "templateChecked "+template.getId()));
         result += addCell(addId(template.getId()));
         result += addCell(template.getName() + "");
         result += addCell(template.getCost() + "");
@@ -258,6 +264,8 @@ public class HtmlTableBuilder {
     private String addCustomerToHtmlTable(Customer customer, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
+        result += addCell(createCheckbox("customerChecked "+customer.getId(),
+                "customerChecked "+customer.getId()));
         result += addCell(addId(customer.getId()));
         result += addCell(customer.getName() + "");
         result += addCell(customer.getLogin());
@@ -277,6 +285,8 @@ public class HtmlTableBuilder {
     private String addEmployeeToHtmlTable(Employee employee, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
+        result += addCell(createCheckbox("employeeChecked "+employee.getId(),
+                "employeeChecked "+employee.getId()));
         result += addCell(addId(employee.getId()));
         result += addCell(employee.getName() + "");
         result += addCell(employee.getLogin());
@@ -290,6 +300,8 @@ public class HtmlTableBuilder {
     private String addAreaToHtmlTable(Area area, String color) {
         String result = "<tr bgcolor='" + color + "'>";
 
+        result += addCell(createCheckbox("areaChecked "+area.getId(),
+                "areaChecked "+area.getId()));
         result += addCell(addId(area.getId()));
         result += addCell(area.getName() + "");
         result += addCell(area.getDescription());
@@ -392,6 +404,10 @@ public class HtmlTableBuilder {
             value = "";
         }
         return "<input type=\"text\" name=\""+name+"\" value=\""+value+"\">";
+    }
+
+    private String createCheckbox(String name,String value){
+        return  "<input type=\"checkbox\" name=\""+name+"\" value=\""+value+"\">";
     }
 
     private String addId(BigInteger id){

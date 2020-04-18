@@ -1,23 +1,29 @@
 package com.netcracker.students.o3.model.dto;
 
-import com.netcracker.students.o3.model.orders.OrderAction;
-import com.netcracker.students.o3.model.orders.OrderStatus;
-import com.netcracker.students.o3.model.services.ServiceStatus;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.Collection;
+import java.util.Set;
 
 public class HtmlParser
 {
     public String parseToHtml(Dto dto)
     {
         StringBuilder res = new StringBuilder("{</br>");
-        for (String key : dto.getParameters().keySet())
+
+        int i = 0;
+        Set<String> keys = dto.getParameters().keySet();
+        final int lastElementIndex = keys.size() - 1;
+        for (String key : keys)
         {
             Object value = dto.getParameters().get(key);
             appendPair(key, value, res).append("</br>");
+            if(i< lastElementIndex)
+            {
+                res.append(",");
+            }
+            i++;
         }
         res.append("}</br>");
+
         return res.toString();
     }
 
@@ -30,40 +36,35 @@ public class HtmlParser
 
     private void appendObject(Object value, StringBuilder res)
     {
-        if (value instanceof BigInteger || value instanceof BigDecimal)
+        if (value instanceof Number)
         {
             res.append(value);
         }
-        else if (value instanceof String || value instanceof ServiceStatus || value instanceof OrderAction
-                || value instanceof OrderStatus)
+        else if (value instanceof Collection)
         {
-            res.append('"').append(value).append('"');
-        }
-        else if (value instanceof Iterable)
-        {
-            try
-            {
-                appendCollection((Iterable) value, res);
-            }
-            catch (ClassCastException e)
-            {
-                e.printStackTrace();
-            }
+            appendIterable((Collection<Object>) value, res);
         }
         else
         {
-            res.append(value);
+            res.append('"').append(value).append('"');
         }
-        res.append(",");
     }
 
-    private void appendCollection(Iterable value, StringBuilder res)
+    private void appendIterable(Collection<Object> value, StringBuilder res)
     {
         res.append("[");
+
+        int i = 0;
+        final int lastElementIndex = value.size() - 1;
         for (Object obj : value)
         {
             appendObject(obj, res);
+            if(i<lastElementIndex){
+                res.append(",");
+            }
+            i++;
         }
+
         res.append("]");
     }
 }

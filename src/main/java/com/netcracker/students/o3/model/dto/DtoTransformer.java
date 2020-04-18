@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DtoTransformer
 {
-    public Dto transformToDto(Order order)
+    public Dto transform(Order order)
     {
         Dto entityDto = new Dto(order.getId(), "order");
 
@@ -35,7 +35,7 @@ public class DtoTransformer
         return entityDto;
     }
 
-    public Dto transformToDto(Service service)
+    public Dto transform(Service service)
     {
         Dto entityDto = new Dto(service.getId(), "service");
 
@@ -48,7 +48,7 @@ public class DtoTransformer
         return entityDto;
     }
 
-    public Dto transformToDto(Template template)
+    public Dto transform(Template template)
     {
         Dto entityDto = new Dto(template.getId(), "template");
 
@@ -67,7 +67,7 @@ public class DtoTransformer
         return entityDto;
     }
 
-    public Dto transformToDto(Area area)
+    public Dto transform(Area area)
     {
         Dto entityDto = new Dto(area.getId(), "area");
 
@@ -78,7 +78,7 @@ public class DtoTransformer
         return entityDto;
     }
 
-    public Dto transformToDto(Customer customer)
+    public Dto transform(Customer customer)
     {
         Dto entityDto = new Dto(customer.getId(), "customer");
 
@@ -98,7 +98,7 @@ public class DtoTransformer
         return entityDto;
     }
 
-    public Dto transformToDto(Employee employee)
+    public Dto transform(Employee employee)
     {
         Dto entityDto = new Dto(employee.getId(), "employee");
 

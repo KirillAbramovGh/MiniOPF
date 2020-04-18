@@ -1,0 +1,53 @@
+<%@ page import="com.netcracker.students.o3.model.Entity" %>
+<%@ page import="java.io.PrintWriter" %>
+<%@ page import="java.math.BigInteger" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="javax.inject.Inject" %>
+<%@ page import="jsp.helpers.EmployeeJspHelper" %>
+<%@ page import="jsp.sessionBeans.EmployeeSessionBean" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/tabs.css">
+    <title>EditingOfEntities</title>
+    <%!
+        @Inject
+        EmployeeSessionBean employeeSessionBean;
+        EmployeeJspHelper jspHelper;
+        String type;
+    %>
+</head>
+<body>
+<%
+    PrintWriter writer = response.getWriter();
+    writer.println("<form action='/jspModule_war_exploded/massEditingOfEntities.jsp' method='post'>");
+    jspHelper = EmployeeJspHelper.getInstance();
+    Set<BigInteger> ids = (Set<BigInteger>) request.getSession().getAttribute("massEditing");
+    type = (String) request.getSession().getAttribute("massEditingType");
+
+    writer.println("<h1>EntitiesToBeGroupEdited</h1>");
+    for (BigInteger id : ids)
+    {
+        Entity entity = employeeSessionBean.getEntity(id);
+        response.getWriter().print(entity.getClass().getSimpleName() + "(" + id + ") ");
+    }
+    writer.println("<h2>Commons Entities fields </h2>");
+    writer.println(jspHelper.getEntitiesEditForm(type));
+    writer.println("<input type=\"submit\" name=\"submit\">");
+    writer.println("</form>");
+    if (request.getParameter("submit") != null)
+    {
+        employeeSessionBean.setFieldsOfEntities(ids, type, request.getParameterMap());
+
+%>
+<jsp:forward page="/webEmployeeView.jsp"/>
+<%
+
+    }
+
+%>
+
+</body>
+</html>

@@ -18,7 +18,7 @@ public class SearcherUtil
         return instance;
     }
 
-    protected boolean checkRegExp(String regExp, String input)
+    public boolean checkRegExp(String regExp, String input)
     {
         try
         {
@@ -30,7 +30,7 @@ public class SearcherUtil
         }
     }
 
-    protected BigDecimal parseBigDecimal(String value)
+    public BigDecimal parseBigDecimal(String value)
     {
         try
         {
@@ -43,12 +43,12 @@ public class SearcherUtil
         }
     }
 
-    protected boolean isCostInDiapason(BigDecimal cost, String value, double diapason)
+    public boolean isCostInDiapason(BigDecimal cost, String value, double diapason)
     {
         return Math.abs(cost.doubleValue() - parseBigDecimal(value).doubleValue()) < Math.abs(diapason);
     }
 
-    protected boolean checkArea(String search, Area area)
+    public boolean checkArea(String search, Area area)
     {
         String areaName = area.getName();
         return area.getId().toString().equals(search) ||

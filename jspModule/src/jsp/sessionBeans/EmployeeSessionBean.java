@@ -20,17 +20,24 @@ import com.netcracker.students.o3.controller.sorters.SortType.OrderSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
 import com.netcracker.students.o3.controller.sorters.TemplateSorter;
+import com.netcracker.students.o3.model.Entity;
+import com.netcracker.students.o3.model.orders.OrderAction;
+import com.netcracker.students.o3.model.orders.OrderStatus;
 import com.netcracker.students.o3.model.serialization.JsonEntitiesStorage;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.orders.Order;
 import com.netcracker.students.o3.model.services.Service;
+import com.netcracker.students.o3.model.services.ServiceStatus;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.Employee;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 
@@ -42,6 +49,24 @@ public class EmployeeSessionBean
         return ControllerImpl.getInstance().getEmployee(employeeId);
     }
 
+    public Entity getEntity(BigInteger id){
+        return ControllerImpl.getInstance().getEntity(id);
+    }
+    public Customer getCustomer(BigInteger customerId){
+        return ControllerImpl.getInstance().getCustomer(customerId);
+    }
+    public Template getTemplate(BigInteger templateId){
+        return ControllerImpl.getInstance().getTemplate(templateId);
+    }
+    public Service getService(BigInteger serviceId){
+        return ControllerImpl.getInstance().getService(serviceId);
+    }
+    public Order getOrder(BigInteger orderId){
+        return ControllerImpl.getInstance().getOrder(orderId);
+    }
+    public Area getArea(BigInteger areaId){
+        return ControllerImpl.getInstance().getArea(areaId);
+    }
     public void changeNameAndPassword(String name, String password, BigInteger employeeId)
     {
         Employee employee = ControllerImpl.getInstance().getEmployee(employeeId);
@@ -374,5 +399,119 @@ public class EmployeeSessionBean
         jsonEntitiesStorage.importFromFile();
 
         ControllerImpl.getInstance().importEntities(jsonEntitiesStorage,isIgnored);
+    }
+
+    public void setFieldsOfEntities(Set<BigInteger> idsOfEntities,String type, Map<String,String[]> params){
+        switch (type){
+            case "customer": setFieldsOfCustomers(idsOfEntities,params);break;
+            case "employee": setFieldsOfEmployees(idsOfEntities,params);break;
+            case "template": setFieldsOfTemplates(idsOfEntities,params);break;
+            case "service": setFieldsOfServices(idsOfEntities,params);break;
+            case "order": setFieldsOfOrders(idsOfEntities,params);break;
+            case "area": setFieldsOfAreas(idsOfEntities,params);break;
+        }
+    }
+
+    public void setFieldsOfCustomers(Set<BigInteger> idsOfCustomers, Map<String,String[]> params){
+        Controller controller = ControllerImpl.getInstance();
+        for(BigInteger id : idsOfCustomers){
+            Customer customer = controller.getCustomer(id);
+            String name = params.get("name")[0];
+            String login = params.get("login")[0];
+            String password = params.get("password")[0];
+            String balance = params.get("balance")[0];
+            if(!"".equals(name)){
+                customer.setName(name+customer.getId());
+            }
+            if(!"".equals(login)){
+                customer.setLogin(login+customer.getId());
+            }
+            if(!"".equals(password)){
+                customer.setPassword(password+customer.getId());
+            }
+            if(!"".equals(balance)){
+                customer.setMoneyBalance(BigDecimal.valueOf(Long.parseLong(balance)));
+            }
+            controller.setCustomer(customer);
+        }
+    }
+    public void setFieldsOfEmployees(Set<BigInteger> idsOfEmployees, Map<String,String[]> params){
+        Controller controller = ControllerImpl.getInstance();
+        for(BigInteger id : idsOfEmployees){
+            Employee employee = controller.getEmployee(id);
+            String name = params.get("name")[0];
+            String login = params.get("login")[0];
+            String password = params.get("password")[0];
+            if(!"".equals(name)){
+                employee.setName(name+employee.getId());
+            }
+            if(!"".equals(login)){
+                employee.setLogin(login+employee.getId());
+            }
+            if(!"".equals(password)){
+                employee.setPassword(password+employee.getId());
+            }
+            controller.setEmployee(employee);
+        }
+    }
+    public void setFieldsOfTemplates(Set<BigInteger> idsOfTemplates, Map<String,String[]> params){
+        Controller controller = ControllerImpl.getInstance();
+        for(BigInteger id : idsOfTemplates){
+            Template template = controller.getTemplate(id);
+            String name = params.get("name")[0];
+            String description = params.get("description")[0];
+            String cost = params.get("cost")[0];
+            if(!"".equals(name)){
+                template.setName(name+template.getId());
+            }
+            if(!"".equals(description)){
+                template.setDescription(description);
+            }
+            if(!"".equals(cost)){
+                template.setCost(BigDecimal.valueOf(Long.parseLong(cost)));
+            }
+            controller.setTemplate(template);
+        }
+    }
+    public void setFieldsOfServices(Set<BigInteger> idsOfServices, Map<String,String[]> params){
+        Controller controller = ControllerImpl.getInstance();
+        for(BigInteger id : idsOfServices){
+            Service service = controller.getService(id);
+            String status = params.get("status")[0];
+            if(!"".equals(status)){
+                service.setStatus(ServiceStatus.valueOf(status));
+            }
+            controller.setService(service);
+        }
+    }
+    public void setFieldsOfOrders(Set<BigInteger> idsOfOrders, Map<String,String[]> params){
+        Controller controller = ControllerImpl.getInstance();
+        for(BigInteger id : idsOfOrders){
+            Order order = controller.getOrder(id);
+            String status = params.get("status")[0];
+            String action = params.get("action")[0];
+            if(!"".equals(status)){
+                order.setStatus(OrderStatus.valueOf(status));
+            }
+            if(!"".equals(action)){
+                order.setAction(OrderAction.valueOf(status));
+            }
+            controller.setOrder(order);
+        }
+    }
+    public void setFieldsOfAreas(Set<BigInteger> idsOfAreas, Map<String,String[]> params){
+        Controller controller = ControllerImpl.getInstance();
+        for(BigInteger id : idsOfAreas){
+            Area area = controller.getArea(id);
+            String name = params.get("name")[0];
+            String description = params.get("description")[0];
+            if(!"".equals(name)){
+                area.setName(name+area.getId());
+            }
+            if(!"".equals(description)){
+                area.setDescription(description);
+            }
+            controller.setArea(area);
+        }
     }
 }

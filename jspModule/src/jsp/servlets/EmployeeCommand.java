@@ -7,15 +7,15 @@ import com.netcracker.students.o3.controller.sorters.SortType.EmployeeSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.OrderSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
-import com.netcracker.students.o3.model.area.Area;
-import com.netcracker.students.o3.model.orders.Order;
-import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.users.Customer;
-import com.netcracker.students.o3.model.users.Employee;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -28,177 +28,257 @@ import jsp.sessionBeans.EmployeeSessionBean;
 public enum EmployeeCommand
 {
 
-    importEntities{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            employeeSessionBean.importEntities(true);
-        }
-    },
-    exportOrders{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            req.getSession().setAttribute("nextPage","/JsonView.jsp");
-            req.getSession().setAttribute("exportJson", "order");
-        }
-    },
-    exportServices{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            req.getSession().setAttribute("nextPage","/JsonView.jsp");
-            req.getSession().setAttribute("exportJson", "service");
-        }
-    },
-    exportTemplates{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            req.getSession().setAttribute("nextPage","/JsonView.jsp");
-            req.getSession().setAttribute("exportJson", "template");
-        }
-    },
-    exportCustomers{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            req.getSession().setAttribute("nextPage","/JsonView.jsp");
-            req.getSession().setAttribute("exportJson", "customer");
-        }
-    },
-    exportEmployees{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            req.getSession().setAttribute("nextPage","/JsonView.jsp");
-            req.getSession().setAttribute("exportJson", "employee");
-        }
-    },
-    exportAreas{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            req.getSession().setAttribute("nextPage","/JsonView.jsp");
-            req.getSession().setAttribute("exportJson", "area");
-        }
-    },
-    cancelOrder{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            BigInteger id = getIdFromKey(key);
-            ControllerImpl.getInstance().suspendOrder(id);
-        }
-    },
-    createCustomer{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            req.getSession().setAttribute("nextPage","/CreateJSP/createCustomer.jsp");
-        }
-    },
-    createTemplate{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            req.getSession().setAttribute("nextPage","/CreateJSP/createTemplate.jsp");
-        }
-    },
-    createService{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            req.getSession().setAttribute("nextPage","/CreateJSP/createService.jsp");
-        }
-    },
-    createOrder{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            req.getSession().setAttribute("nextPage","/CreateJSP/createOrder.jsp");
-        }
-    },
-    createArea{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            req.getSession().setAttribute("nextPage","/CreateJSP/createArea.jsp");
-        }
-    },
-    updateCustomer{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            BigInteger id = getIdFromKey(key);
-            req.getSession().setAttribute("updateCustomerId",id);
-            req.getSession().setAttribute("nextPage","/UpdateJSP/updateCustomer.jsp");
-        }
-    },
-    updateService{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            BigInteger id = getIdFromKey(key);
-            req.getSession().setAttribute("updateServiceId",id);
-            req.getSession().setAttribute("nextPage","/UpdateJSP/updateService.jsp");
-        }
-    },
-    updateTemplate{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            BigInteger id = getIdFromKey(key);
-            req.getSession().setAttribute("updateTemplateId",id);
-            req.getSession().setAttribute("nextPage","/UpdateJSP/updateTemplate.jsp");
-        }
-    },
-    updateOrder{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            BigInteger id = getIdFromKey(key);
-            req.getSession().setAttribute("updateOrderId",id);
-            req.getSession().setAttribute("nextPage","/UpdateJSP/updateOrder.jsp");
-        }
-    },
-    updateArea{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            BigInteger id = getIdFromKey(key);
-            req.getSession().setAttribute("updateAreaId",id);
-            req.getSession().setAttribute("nextPage","/UpdateJSP/updateArea.jsp");
-        }
-    },
-    updateEmployee{
-        public void execute(HttpServletRequest req, final HttpServletResponse resp,
-                final ServletContext context, EmployeeSessionBean employeeSessionBean,
-                final String key) throws ServletException, IOException
-        {
-            BigInteger id = getIdFromKey(key);
-            req.getSession().setAttribute("updateEmployeeId",id);
-            req.getSession().setAttribute("nextPage","/UpdateJSP/updateEmployee.jsp");
-        }
-    },
+    customerChecked
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("massEditingType","customer");
+                    setMassEditingIds(req, key);
+                }
+            },
+    serviceChecked
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("massEditingType","service");
+                    setMassEditingIds(req, key);
+                }
+            },
+    employeeChecked
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("massEditingType","employee");
+                    setMassEditingIds(req, key);
+                }
+            },
+    templateChecked
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("massEditingType","template");
+                    setMassEditingIds(req, key);
+                }
+            },
+    orderChecked
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("massEditingType","order");
+                    setMassEditingIds(req, key);
+                }
+            },
+    areaChecked
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("massEditingType","area");
+                    setMassEditingIds(req, key);
+                }
+            },
+
+    importEntities
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    employeeSessionBean.importEntities(true);
+                }
+            },
+    exportOrders
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("nextPage", "/JsonView.jsp");
+                    req.getSession().setAttribute("exportJson", "order");
+                }
+            },
+    exportServices
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("nextPage", "/JsonView.jsp");
+                    req.getSession().setAttribute("exportJson", "service");
+                }
+            },
+    exportTemplates
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("nextPage", "/JsonView.jsp");
+                    req.getSession().setAttribute("exportJson", "template");
+                }
+            },
+    exportCustomers
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("nextPage", "/JsonView.jsp");
+                    req.getSession().setAttribute("exportJson", "customer");
+                }
+            },
+    exportEmployees
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("nextPage", "/JsonView.jsp");
+                    req.getSession().setAttribute("exportJson", "employee");
+                }
+            },
+    exportAreas
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("nextPage", "/JsonView.jsp");
+                    req.getSession().setAttribute("exportJson", "area");
+                }
+            },
+    cancelOrder
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    BigInteger id = getIdFromKey(key);
+                    ControllerImpl.getInstance().suspendOrder(id);
+                }
+            },
+    createCustomer
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("nextPage", "/CreateJSP/createCustomer.jsp");
+                }
+            },
+    createTemplate
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("nextPage", "/CreateJSP/createTemplate.jsp");
+                }
+            },
+    createService
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("nextPage", "/CreateJSP/createService.jsp");
+                }
+            },
+    createOrder
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("nextPage", "/CreateJSP/createOrder.jsp");
+                }
+            },
+    createArea
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    req.getSession().setAttribute("nextPage", "/CreateJSP/createArea.jsp");
+                }
+            },
+    updateCustomer
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    BigInteger id = getIdFromKey(key);
+                    req.getSession().setAttribute("updateCustomerId", id);
+                    req.getSession().setAttribute("nextPage", "/UpdateJSP/updateCustomer.jsp");
+                }
+            },
+    updateService
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    BigInteger id = getIdFromKey(key);
+                    req.getSession().setAttribute("updateServiceId", id);
+                    req.getSession().setAttribute("nextPage", "/UpdateJSP/updateService.jsp");
+                }
+            },
+    updateTemplate
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    BigInteger id = getIdFromKey(key);
+                    req.getSession().setAttribute("updateTemplateId", id);
+                    req.getSession().setAttribute("nextPage", "/UpdateJSP/updateTemplate.jsp");
+                }
+            },
+    updateOrder
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    BigInteger id = getIdFromKey(key);
+                    req.getSession().setAttribute("updateOrderId", id);
+                    req.getSession().setAttribute("nextPage", "/UpdateJSP/updateOrder.jsp");
+                }
+            },
+    updateArea
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    BigInteger id = getIdFromKey(key);
+                    req.getSession().setAttribute("updateAreaId", id);
+                    req.getSession().setAttribute("nextPage", "/UpdateJSP/updateArea.jsp");
+                }
+            },
+    updateEmployee
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key) throws ServletException, IOException
+                {
+                    BigInteger id = getIdFromKey(key);
+                    req.getSession().setAttribute("updateEmployeeId", id);
+                    req.getSession().setAttribute("nextPage", "/UpdateJSP/updateEmployee.jsp");
+                }
+            },
     save
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
@@ -208,7 +288,8 @@ public enum EmployeeCommand
                     String name = req.getParameter("fio");
                     String password = req.getParameter("password");
 
-                    employeeSessionBean.changeNameAndPassword(name, password,(BigInteger) req.getSession().getAttribute("id"));
+                    employeeSessionBean
+                            .changeNameAndPassword(name, password, (BigInteger) req.getSession().getAttribute("id"));
                 }
             },
 
@@ -219,8 +300,8 @@ public enum EmployeeCommand
                         final String key)
                 {
                     BigInteger id = getIdFromKey(key);
-                    BigInteger employeeId = (BigInteger)req.getSession().getAttribute("id");
-                    employeeSessionBean.startOrder(id,employeeId);
+                    BigInteger employeeId = (BigInteger) req.getSession().getAttribute("id");
+                    employeeSessionBean.startOrder(id, employeeId);
                 }
             },
 
@@ -294,9 +375,10 @@ public enum EmployeeCommand
                         final String key) throws ServletException, IOException
                 {
                     BigInteger id = getIdFromKey(key);
-                    if(id.equals(req.getSession().getAttribute("id"))){
-                        req.getSession().setAttribute("nextPage","/startView.jsp");
-                        EmployeeCommand.forward("/startView.jsp",context,req,resp);
+                    if (id.equals(req.getSession().getAttribute("id")))
+                    {
+                        req.getSession().setAttribute("nextPage", "/startView.jsp");
+                        EmployeeCommand.forward("/startView.jsp", context, req, resp);
                     }
                     employeeSessionBean.deleteEmployee(id);
                 }
@@ -728,5 +810,16 @@ public enum EmployeeCommand
         RequestDispatcher requestDispatcher = context.getRequestDispatcher(path);
 
         requestDispatcher.forward(request, response);
+    }
+    private static void setMassEditingIds(final HttpServletRequest req, final String key)
+    {
+        Set entities = (Set) req.getSession().getAttribute("massEditing");
+        if(entities == null){
+            entities = new HashSet<>();
+        }
+        entities.add(EmployeeCommand.getIdFromKey(key));
+        req.getSession().setAttribute("massEditing",entities);
+
+        req.getSession().setAttribute("nextPage", "/massEditingOfEntities.jsp");
     }
 }

@@ -5,6 +5,7 @@ import com.netcracker.students.o3.Exceptions.LoginOccupiedException;
 import com.netcracker.students.o3.Exceptions.WrongInputException;
 import com.netcracker.students.o3.controller.sorters.ServiceSorter;
 import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
+import com.netcracker.students.o3.model.Entity;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.Model;
 import com.netcracker.students.o3.model.ModelDb;
@@ -418,9 +419,9 @@ public class ControllerImpl implements Controller
     }
 
     @Override
-    public Object getEntity(final BigInteger entityId)
+    public Entity getEntity(final BigInteger entityId)
     {
-        Object result = getArea(entityId);
+        Entity result = getArea(entityId);
         if(result == null){
             result = getTemplate(entityId);
         }

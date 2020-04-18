@@ -73,6 +73,7 @@ public class EmployeeServlet extends HttpServlet
         session.setAttribute("sortAreas", null);
         session.setAttribute("sortTemplates", null);
         session.setAttribute("sortServices", null);
+        session.setAttribute("massEditing",null);
     }
 
 }

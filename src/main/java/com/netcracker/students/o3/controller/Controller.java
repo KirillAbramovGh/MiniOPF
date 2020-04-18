@@ -4,6 +4,7 @@ import com.netcracker.students.o3.Exceptions.IncorrectCredentialsException;
 import com.netcracker.students.o3.Exceptions.LoginOccupiedException;
 import com.netcracker.students.o3.Exceptions.UnpossibleChangeAreaException;
 import com.netcracker.students.o3.Exceptions.WrongInputException;
+import com.netcracker.students.o3.model.Entity;
 import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.serialization.JsonEntitiesStorage;
 import com.netcracker.students.o3.model.orders.Order;
@@ -327,7 +328,7 @@ public interface Controller
      * @param entityId
      * @return
      */
-    Object getEntity(BigInteger entityId);
+    Entity getEntity(BigInteger entityId);
 
     void importEntities(JsonEntitiesStorage jsonEntitiesStorage, boolean isIgnored);
 
