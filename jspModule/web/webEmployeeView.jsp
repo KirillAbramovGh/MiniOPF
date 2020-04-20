@@ -41,28 +41,34 @@
 <h1 align="right">
     <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
         You are logged in as:<%=name%>
-        <input type="submit" name="out" value="Out">
+        <input type="submit" name="out" value="Out" title="Выход в главное меню">
     </form>
 </h1>
 <div class="wrapper">
     <div class="tabs">
         <div class="tabs__nav tabs-nav">
-            <div class="tabs-nav__item is-active" data-tab-name="tab-1">My orders</div>
-            <div class="tabs-nav__item" data-tab-name="tab-2">All orders</div>
-            <div class="tabs-nav__item" data-tab-name="tab-3">All services</div>
-            <div class="tabs-nav__item" data-tab-name="tab-4">All templates</div>
-            <div class="tabs-nav__item" data-tab-name="tab-5">All customers</div>
-            <div class="tabs-nav__item" data-tab-name="tab-6">All employees</div>
-            <div class="tabs-nav__item" data-tab-name="tab-7">All areas</div>
-            <div class="tabs-nav__item" data-tab-name="tab-8">Settings</div>
-            <div class="tabs-nav__item" data-tab-name="tab-9">Search</div>
+            <div class="tabs-nav__item is-active" data-tab-name="tab-1" title="In this tab all orders assigned to you">
+                My orders
+            </div>
+            <div class="tabs-nav__item" data-tab-name="tab-2" title="Here you can take new task">All orders</div>
+            <div class="tabs-nav__item" data-tab-name="tab-3" title="There are all services of customers">All services
+            </div>
+            <div class="tabs-nav__item" data-tab-name="tab-4" title="There are all possible products">All templates
+            </div>
+            <div class="tabs-nav__item" data-tab-name="tab-5" title="There are all our clients">All customers</div>
+            <div class="tabs-nav__item" data-tab-name="tab-6" title="There are all employees of our Company">All
+                employees
+            </div>
+            <div class="tabs-nav__item" data-tab-name="tab-7" title="There are all areas where we work">All areas</div>
+            <div class="tabs-nav__item" data-tab-name="tab-8" title="Settings of your profile">Settings</div>
+            <div class="tabs-nav__item" data-tab-name="tab-9" title="Comfortable search for all entities">Search</div>
         </div>
         <div class="tabs__content">
             <div class="tab is-active tab-1">
                 <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
                     <input type="text" name="searchFieldEmployeeOrders" value="">
-                    <input type="submit" name="searchButtonEmployeeOrders" value="Search">
-                    <select name="employeeOrderSelectField">
+                    <input type="submit" name="searchButtonEmployeeOrders" value="Search" title="Search from Orders">
+                    <select name="employeeOrderSelectField" title="Select field fot search">
                         <option selected="selected">Id</option>
                         <option>TemplateId</option>
                         <option>ServiceId</option>
@@ -70,8 +76,8 @@
                         <option>Status</option>
                         <option>Action</option>
                     </select>
-                    <input type="submit" name="createOrder" value="Create">
-                    <input type="submit" name="Editing" value="Editing">
+                    <input type="submit" name="createOrder" value="Create" title="Create new Order">
+                    <input type="submit" name="Editing" value="Editing" title="Edit several Orders which you check">
                     <%=employeeJspHelper.showFilteredOrdersByEmployeeId(
                             request.getParameter("searchFieldEmployeeOrders"),
                             request.getParameter("employeeOrderSelectField"),
@@ -83,14 +89,21 @@
                     )%>
                 </form>
                 <form class="export" action="${pageContext.request.contextPath}/importType.jsp" method="post">
-                    <input type="submit" name="importEntities" value="import JSON">
+                    <input type="submit" name="importEntities" value="import JSON" title="Import entities from file">
+                    <input type="button" name="infoEmployeeOrders" value="info" onclick="function showInfoForEmployeeOrders() {
+    alert('There are orders assigned to you. They have unique id,\n'
+                    + 'action - it means what you need to do and status -\n'
+                    + 'it means your progress. Also here you can search from orders\n'
+                    + 'by different fields, import Entities from file, create and\n'
+                    + 'edit entities')
+                    }showInfoForEmployeeOrders()">
                 </form>
             </div>
             <div class="tab tab-2">
                 <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
                     <input type="text" name="searchFieldAllOrders" value="">
-                    <input type="submit" name="searchButtonAllOrders" value="Search">
-                    <select name="allOrderSelectField">
+                    <input type="submit" name="searchButtonAllOrders" value="Search" title="Search from all Orders">
+                    <select name="allOrderSelectField" title="Choose search field">
                         <option selected="selected">Id</option>
                         <option>TemplateId</option>
                         <option>ServiceId</option>
@@ -98,8 +111,8 @@
                         <option>Status</option>
                         <option>Action</option>
                     </select>
-                    <input type="submit" name="createOrder" value="Create">
-                    <input type="submit" name="Editing" value="Editing">
+                    <input type="submit" name="createOrder" value="Create" title="Create new Order">
+                    <input type="submit" name="Editing" value="Editing" title="Edit several Orders which you check">
                     <%=employeeJspHelper.showFilteredOrders(
                             request.getParameter("searchFieldAllOrders"),
                             request.getParameter("allOrderSelectField"),
@@ -110,12 +123,18 @@
                             employeeSessionBean
                     )%>
                 </form>
+                <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
+                    <input type="button" name="infoAllOrders" value="info" onclick="
+                    function showInfoForAllOrders() {
+                         alert('There are all orders. You can assign them to you to execute')
+                    }showInfoForAllOrders()">
+                </form>
             </div>
             <div class="tab tab-3">
                 <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
                     <input type="text" name="searchFieldAllServices" value="">
                     <input type="submit" name="searchButtonAllServices" value="Search">
-                    <select name="allServicesSelectField">
+                    <select name="allServicesSelectField" title="Choose search field">
                         <option selected="selected">Id</option>
                         <option>Name</option>
                         <option>Cost</option>
@@ -135,6 +154,12 @@
                             request.getParameter("filterServiceCost"),
                             employeeSessionBean
                     )%>
+                </form>
+                <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
+                    <input type="button" name="infoServices" value="info" onclick="function showInfoForServices() {
+                         alert('There are customer\'s services. Service has customer,\n'
+                    + 'template, cost and area')
+                    }showInfoForServices()">
                 </form>
             </div>
             <div class="tab tab-4">
@@ -161,6 +186,11 @@
                 </form>
                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
                     <input type="submit" name="exportTemplates" value="export JSON">
+                    <input type="button" name="infoTemplates" value="info" onclick="
+                    function showInfoForTemplates() {
+                          alert('Templates for services with area, where we sale them\n'
+                    + 'cost and description')
+                    }showInfoForTemplates()">
                 </form>
             </div>
             <div class="tab tab-5">
@@ -188,6 +218,9 @@
                 </form>
                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
                     <input type="submit" name="exportCustomers" value="export JSON">
+                    <input type="button" name="infoCustomers" value="info" onclick="function showInfoForCustomers() {
+                         alert('Customers who uses our services')
+                    }showInfoForCustomers()">
                 </form>
             </div>
             <div class="tab tab-6">
@@ -211,6 +244,11 @@
                 </form>
                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
                     <input type="submit" name="exportEmployees" value="export JSON">
+                    <input type="button" name="infoEmployees" value="info" onclick="
+                    function showInfoForEmployees() {
+                        alert('Full list of your colleges')
+                    }
+                    showInfoForEmployees()">
                 </form>
             </div>
             <div class="tab tab-7">
@@ -235,6 +273,10 @@
                 </form>
                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
                     <input type="submit" name="exportAreas" value="export JSON">
+                    <input type="button" value="info" onclick="function showInfoForAreas() {
+                        alert('Areas where we have our services')
+                    }
+                    showInfoForAreas()">
                 </form>
             </div>
             <div class="tab tab-8">

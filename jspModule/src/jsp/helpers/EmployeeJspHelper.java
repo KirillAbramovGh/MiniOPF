@@ -279,14 +279,30 @@ public class EmployeeJspHelper
 
     public String getServicesEditForm(){
         String res = "";
-        res+= "<p>status " + createInput("status")+"</p>";
+        res+= "<p>status " + "<select name=\"status\">" +
+                "                <option>Planned</option>" +
+                "                <option>Active</option>" +
+                "                <option>Processing</option>" +
+                "                <option>Disconnected</option>" +
+                "                <option>Suspended</option>" +
+                "            </select>"+"</p>";
         return res;
     }
 
     public String getOrdersEditForm(){
         String res = "";
-        res+= "<p>action " + createInput("action")+"</p>";
-        res+= "<p>status " + createInput("status")+"</p>";
+        res+= "<p>action " + "<select name=\"action\">" +
+                "            <option>New</option>" +
+                "            <option>Disconnect</option>" +
+                "            <option>Resume</option>" +
+                "            <option>Suspend</option>" +
+                "        </select>"+"</p>";
+        res+= "<p>status " + "<select name=\"status\">" +
+                "            <option>Entering</option>" +
+                "            <option>Active</option>" +
+                "            <option>Processing</option>" +
+                "            <option>Disconnected</option>" +
+                "        </select>"+"</p>";
         return res;
     }
 

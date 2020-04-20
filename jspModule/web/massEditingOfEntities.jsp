@@ -21,32 +21,37 @@
 </head>
 <body>
 <%
-    PrintWriter writer = response.getWriter();
-    writer.println("<form action='/jspModule_war_exploded/massEditingOfEntities.jsp' method='post'>");
-    jspHelper = EmployeeJspHelper.getInstance();
-    Set<BigInteger> ids = (Set<BigInteger>) request.getSession().getAttribute("massEditing");
-    type = (String) request.getSession().getAttribute("massEditingType");
+    try
+    {
+        PrintWriter writer = response.getWriter();
+        writer.println("<form action='/jspModule_war_exploded/massEditingOfEntities.jsp' method='post'>");
+        jspHelper = EmployeeJspHelper.getInstance();
+        Set<BigInteger> ids = (Set<BigInteger>) request.getSession().getAttribute("massEditing");
+        type = (String) request.getSession().getAttribute("massEditingType");
 
-    writer.println("<h1>EntitiesToBeGroupEdited</h1>");
-    for (BigInteger id : ids)
-    {
-        Entity entity = employeeSessionBean.getEntity(id);
-        response.getWriter().print(entity.getClass().getSimpleName() + "(" + id + ") ");
-    }
-    writer.println("<h2>Commons Entities fields </h2>");
-    writer.println(jspHelper.getEntitiesEditForm(type));
-    writer.println("<input type=\"submit\" name=\"submit\">");
-    writer.println("</form>");
-    if (request.getParameter("submit") != null)
-    {
-        employeeSessionBean.setFieldsOfEntities(ids, type, request.getParameterMap());
+        writer.println("<h1>EntitiesToBeGroupEdited</h1>");
+        for (BigInteger id : ids)
+        {
+            Entity entity = employeeSessionBean.getEntity(id);
+            response.getWriter().print(entity.getClass().getSimpleName() + "(" + id + ") ");
+        }
+        writer.println("<h2>Commons Entities fields </h2>");
+        writer.println(jspHelper.getEntitiesEditForm(type));
+        writer.println("<input type=\"submit\" name=\"submit\">");
+        writer.println("</form>");
+        if (request.getParameter("submit") != null)
+        {
+            employeeSessionBean.setFieldsOfEntities(ids, type, request.getParameterMap());
 
 %>
 <jsp:forward page="/webEmployeeView.jsp"/>
 <%
-
+        }
     }
-
+    catch (Exception e)
+    {
+        response.getWriter().println("Wrong input!");
+    }
 %>
 
 </body>
