@@ -9,16 +9,6 @@ import java.math.BigInteger;
 public interface User extends com.netcracker.students.o3.model.Entity
 {
     /**
-     * @return user id
-     */
-    BigInteger getId();
-
-    /**
-     * set user id
-     */
-    void setId(final BigInteger id);
-
-    /**
      * @return user name
      */
     String getName();

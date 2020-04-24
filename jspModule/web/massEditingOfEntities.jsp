@@ -29,7 +29,7 @@
         Set<BigInteger> ids = (Set<BigInteger>) request.getSession().getAttribute("massEditing");
         type = (String) request.getSession().getAttribute("massEditingType");
 
-        writer.println("<h1>EntitiesToBeGroupEdited</h1>");
+        writer.println("<h1>EntitiesToBeMassEdited</h1>");
         for (BigInteger id : ids)
         {
             Entity entity = employeeSessionBean.getEntity(id);

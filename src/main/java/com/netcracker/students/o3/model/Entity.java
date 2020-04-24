@@ -7,4 +7,6 @@ public interface Entity
     BigInteger getId();
 
     void setId(BigInteger id);
+
+    String getName();
 }
