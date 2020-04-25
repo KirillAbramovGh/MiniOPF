@@ -107,6 +107,12 @@ public class ServiceImpl implements Service
         this.id = id;
     }
 
+    @Override
+    public String getName()
+    {
+        return template.getName();
+    }
+
     public Customer getCustomer()
     {
         return customer;

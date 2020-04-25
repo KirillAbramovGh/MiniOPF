@@ -24,16 +24,16 @@
     try
     {
         PrintWriter writer = response.getWriter();
-        writer.println("<form action='/jspModule_war_exploded/massEditingOfEntities.jsp' method='post'>");
+        writer.println("<form action='/jspModule_war_exploded/massEditOfEntities.jsp' method='post'>");
         jspHelper = EmployeeJspHelper.getInstance();
-        Set<BigInteger> ids = (Set<BigInteger>) request.getSession().getAttribute("massEditing");
-        type = (String) request.getSession().getAttribute("massEditingType");
+        Set<BigInteger> ids = (Set<BigInteger>) request.getSession().getAttribute("massEdit");
+        type = (String) request.getSession().getAttribute("massEditType");
 
-        writer.println("<h1>EntitiesToBeMassEdited</h1>");
+        writer.println("<h1>EntitiesToMassEdit</h1>");
         for (BigInteger id : ids)
         {
             Entity entity = employeeSessionBean.getEntity(id);
-            response.getWriter().print(entity.getClass().getSimpleName() + "(" + id + ") ");
+            response.getWriter().print(entity.getName() + "(" + id + ") ");
         }
         writer.println("<h2>Commons Entities fields </h2>");
         writer.println(jspHelper.getEntitiesEditForm(type));

@@ -110,6 +110,12 @@ public class OrderImpl implements Order
         this.id = id;
     }
 
+    @Override
+    public String getName()
+    {
+        return "Order";
+    }
+
     public Template getTemplate()
     {
         return template;

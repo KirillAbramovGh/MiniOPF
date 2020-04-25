@@ -7,14 +7,10 @@ import com.netcracker.students.o3.controller.sorters.SortType.EmployeeSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.OrderSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
-import com.netcracker.students.o3.model.templates.Template;
-import com.netcracker.students.o3.model.users.Customer;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
@@ -34,8 +30,8 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    req.getSession().setAttribute("massEditingType","customer");
-                    setMassEditingIds(req, key);
+                    req.getSession().setAttribute("massEditType","customer");
+                    setMassEditIds(req, key);
                 }
             },
     serviceChecked
@@ -44,8 +40,8 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    req.getSession().setAttribute("massEditingType","service");
-                    setMassEditingIds(req, key);
+                    req.getSession().setAttribute("massEditType","service");
+                    setMassEditIds(req, key);
                 }
             },
     employeeChecked
@@ -54,8 +50,8 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    req.getSession().setAttribute("massEditingType","employee");
-                    setMassEditingIds(req, key);
+                    req.getSession().setAttribute("massEditType","employee");
+                    setMassEditIds(req, key);
                 }
             },
     templateChecked
@@ -64,8 +60,8 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    req.getSession().setAttribute("massEditingType","template");
-                    setMassEditingIds(req, key);
+                    req.getSession().setAttribute("massEditType","template");
+                    setMassEditIds(req, key);
                 }
             },
     orderChecked
@@ -74,8 +70,8 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    req.getSession().setAttribute("massEditingType","order");
-                    setMassEditingIds(req, key);
+                    req.getSession().setAttribute("massEditType","order");
+                    setMassEditIds(req, key);
                 }
             },
     areaChecked
@@ -84,8 +80,8 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    req.getSession().setAttribute("massEditingType","area");
-                    setMassEditingIds(req, key);
+                    req.getSession().setAttribute("massEditType","area");
+                    setMassEditIds(req, key);
                 }
             },
 
@@ -811,15 +807,15 @@ public enum EmployeeCommand
 
         requestDispatcher.forward(request, response);
     }
-    private static void setMassEditingIds(final HttpServletRequest req, final String key)
+    private static void setMassEditIds(final HttpServletRequest req, final String key)
     {
-        Set entities = (Set) req.getSession().getAttribute("massEditing");
+        Set entities = (Set) req.getSession().getAttribute("massEdit");
         if(entities == null){
             entities = new HashSet<>();
         }
         entities.add(EmployeeCommand.getIdFromKey(key));
-        req.getSession().setAttribute("massEditing",entities);
+        req.getSession().setAttribute("massEdit",entities);
 
-        req.getSession().setAttribute("nextPage", "/massEditingOfEntities.jsp");
+        req.getSession().setAttribute("nextPage", "/massEditOfEntities.jsp");
     }
 }

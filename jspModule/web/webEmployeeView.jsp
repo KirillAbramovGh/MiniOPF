@@ -14,7 +14,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/tabs.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/employeeTabs.css">
     <title>MiniOPF</title>
     <%!
         @Inject
@@ -66,217 +66,329 @@
         <div class="tabs__content">
             <div class="tab is-active tab-1">
                 <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="text" name="searchFieldEmployeeOrders" value="">
-                    <input type="submit" name="searchButtonEmployeeOrders" value="Search" title="Search from Orders">
-                    <select name="employeeOrderSelectField" title="Select field fot search">
-                        <option selected="selected">Id</option>
-                        <option>TemplateId</option>
-                        <option>ServiceId</option>
-                        <option>EmployeeId</option>
-                        <option>Status</option>
-                        <option>Action</option>
-                    </select>
-                    <input type="submit" name="createOrder" value="Create" title="Create new Order">
-                    <input type="submit" name="Editing" value="Editing" title="Edit several Orders which you check">
-                    <%=employeeJspHelper.showFilteredOrdersByEmployeeId(
-                            request.getParameter("searchFieldEmployeeOrders"),
-                            request.getParameter("employeeOrderSelectField"),
-                            (OrderSortType) request.getSession().getAttribute("sortOrders"),
-                            request.getParameter("filterOrderTemplateId"),
-                            request.getParameter("filterOrderServiceId"),
-                            (BigInteger) request.getSession().getAttribute("id"),
-                            employeeSessionBean
-                    )%>
-                </form>
-                <form class="export" action="${pageContext.request.contextPath}/importType.jsp" method="post">
-                    <input type="submit" name="importEntities" value="import JSON" title="Import entities from file">
-                    <input type="button" name="infoEmployeeOrders" value="info" onclick="function showInfoForEmployeeOrders() {
+                    <div>
+                        <div class="employeeOrdersForm">
+                            <div>
+                                <input type="text" name="searchFieldEmployeeOrders" value="">
+                                <input type="submit" name="searchButtonEmployeeOrders" value="Search"
+                                       title="Search from Orders">
+                                <select name="employeeOrderSelectField" title="Select field fot search">
+                                    <option selected="selected">Id</option>
+                                    <option>TemplateId</option>
+                                    <option>ServiceId</option>
+                                    <option>EmployeeId</option>
+                                    <option>Status</option>
+                                    <option>Action</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="submit" name="createOrder" value="Create" title="Create new Order">
+                            </div>
+                            <div>
+                                <input type="submit" name="Edit" value="Editing"
+                                       title="Edit several Orders which you check">
+                            </div>
+                            <div>
+                                <form class="export" action="${pageContext.request.contextPath}/importType.jsp"
+                                      method="post">
+                                    <input type="submit" name="importEntities" value="import JSON"
+                                           title="Import entities from file">
+                                    <input type="button" name="infoEmployeeOrders" value="info" onclick="function showInfoForEmployeeOrders() {
     alert('There are orders assigned to you. They have unique id,\n'
                     + 'action - it means what you need to do and status -\n'
                     + 'it means your progress. Also here you can search from orders\n'
                     + 'by different fields, import Entities from file, create and\n'
                     + 'edit entities')
                     }showInfoForEmployeeOrders()">
+                                </form>
+                            </div>
+                        </div>
+
+                        <div>
+                            <%=employeeJspHelper.showFilteredOrdersByEmployeeId(
+                                    request.getParameter("searchFieldEmployeeOrders"),
+                                    request.getParameter("employeeOrderSelectField"),
+                                    (OrderSortType) request.getSession().getAttribute("sortOrders"),
+                                    request.getParameter("filterOrderTemplateId"),
+                                    request.getParameter("filterOrderServiceId"),
+                                    (BigInteger) request.getSession().getAttribute("id"),
+                                    employeeSessionBean
+                            )%>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="tab tab-2">
                 <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="text" name="searchFieldAllOrders" value="">
-                    <input type="submit" name="searchButtonAllOrders" value="Search" title="Search from all Orders">
-                    <select name="allOrderSelectField" title="Choose search field">
-                        <option selected="selected">Id</option>
-                        <option>TemplateId</option>
-                        <option>ServiceId</option>
-                        <option>EmployeeId</option>
-                        <option>Status</option>
-                        <option>Action</option>
-                    </select>
-                    <input type="submit" name="createOrder" value="Create" title="Create new Order">
-                    <input type="submit" name="Editing" value="Editing" title="Edit several Orders which you check">
-                    <%=employeeJspHelper.showFilteredOrders(
-                            request.getParameter("searchFieldAllOrders"),
-                            request.getParameter("allOrderSelectField"),
-                            (OrderSortType) request.getSession().getAttribute("sortOrders"),
-                            request.getParameter("filterOrderTemplateId"),
-                            request.getParameter("filterOrderServiceId"),
-                            request.getParameter("filterOrderEmployeeId"),
-                            employeeSessionBean
-                    )%>
-                </form>
-                <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="button" name="infoAllOrders" value="info" onclick="
+                    <div>
+                        <div class="employeeOrdersForm">
+                            <div>
+                                <input type="text" name="searchFieldAllOrders" value="">
+                                <input type="submit" name="searchButtonAllOrders" value="Search"
+                                       title="Search from all Orders">
+                                <select name="allOrderSelectField" title="Choose search field">
+                                    <option selected="selected">Id</option>
+                                    <option>TemplateId</option>
+                                    <option>ServiceId</option>
+                                    <option>EmployeeId</option>
+                                    <option>Status</option>
+                                    <option>Action</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="submit" name="createOrder" value="Create" title="Create new Order">
+                            </div>
+                            <div>
+                                <input type="submit" name="Editing" value="Editing"
+                                       title="Edit several Orders which you check">
+                            </div>
+                            <div>
+                                <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
+                                      method="post">
+                                    <input type="button" name="infoAllOrders" value="info" onclick="
                     function showInfoForAllOrders() {
                          alert('There are all orders. You can assign them to you to execute')
                     }showInfoForAllOrders()">
+                                </form>
+                            </div>
+                        </div>
+
+                        <div>
+                            <%=employeeJspHelper.showFilteredOrders(
+                                    request.getParameter("searchFieldAllOrders"),
+                                    request.getParameter("allOrderSelectField"),
+                                    (OrderSortType) request.getSession().getAttribute("sortOrders"),
+                                    request.getParameter("filterOrderTemplateId"),
+                                    request.getParameter("filterOrderServiceId"),
+                                    request.getParameter("filterOrderEmployeeId"),
+                                    employeeSessionBean
+                            )%>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="tab tab-3">
                 <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="text" name="searchFieldAllServices" value="">
-                    <input type="submit" name="searchButtonAllServices" value="Search">
-                    <select name="allServicesSelectField" title="Choose search field">
-                        <option selected="selected">Id</option>
-                        <option>Name</option>
-                        <option>Cost</option>
-                        <option>Status</option>
-                        <option>TemplateId</option>
-                        <option>UserId</option>
-                        <option>ActivationDate</option>
-                        <option>Areas</option>
-                    </select>
-                    <input type="submit" name="createService" value="Create">
-                    <input type="submit" name="Editing" value="Editing">
-                    <%=employeeJspHelper.showFilteredServices(
-                            request.getParameter("searchFieldAllServices"),
-                            request.getParameter("allServicesSelectField"),
-                            (ServiceSortType) request.getSession().getAttribute("sortServices"),
-                            request.getParameter("filterServiceName"),
-                            request.getParameter("filterServiceCost"),
-                            employeeSessionBean
-                    )%>
-                </form>
-                <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="button" name="infoServices" value="info" onclick="function showInfoForServices() {
+                    <div>
+                        <div class="employeeOrdersForm">
+                            <div>
+                                <input type="text" name="searchFieldAllServices" value="">
+                                <input type="submit" name="searchButtonAllServices" value="Search">
+                                <select name="allServicesSelectField" title="Choose search field">
+                                    <option selected="selected">Id</option>
+                                    <option>Name</option>
+                                    <option>Cost</option>
+                                    <option>Status</option>
+                                    <option>TemplateId</option>
+                                    <option>UserId</option>
+                                    <option>ActivationDate</option>
+                                    <option>Areas</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="submit" name="createService" value="Create">
+                            </div>
+                            <div>
+                                <input type="submit" name="Editing" value="Editing">
+                            </div>
+                            <div>
+                                <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
+                                      method="post">
+                                    <input type="button" name="infoServices" value="info" onclick="function showInfoForServices() {
                          alert('There are customer\'s services. Service has customer,\n'
                     + 'template, cost and area')
                     }showInfoForServices()">
+
+                                </form>
+                            </div>
+                        </div>
+                        <div>
+                            <%=employeeJspHelper.showFilteredServices(
+                                    request.getParameter("searchFieldAllServices"),
+                                    request.getParameter("allServicesSelectField"),
+                                    (ServiceSortType) request.getSession().getAttribute("sortServices"),
+                                    request.getParameter("filterServiceName"),
+                                    request.getParameter("filterServiceCost"),
+                                    employeeSessionBean
+                            )%>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="tab tab-4">
                 <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="text" name="searchFieldAllTemplates" value="">
-                    <input type="submit" name="searchButtonAllTemplates" value="Search">
-                    <select name="allTemplatesSelectField">
-                        <option selected="selected">Id</option>
-                        <option>Name</option>
-                        <option>Cost</option>
-                        <option>Description</option>
-                        <option>Areas</option>
-                    </select>
-                    <input type="submit" name="createTemplate" value="Create">
-                    <input type="submit" name="Editing" value="Editing">
-                    <%=employeeJspHelper.showFilteredTemplates(
-                            request.getParameter("searchFieldAllTemplates"),
-                            request.getParameter("allTemplatesSelectField"),
-                            (TemplateSortType) request.getSession().getAttribute("sortTemplates"),
-                            request.getParameter("filterTemplateName"),
-                            request.getParameter("filterTemplateCost"),
-                            employeeSessionBean
-                    )%>
-                </form>
-                <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="submit" name="exportTemplates" value="export JSON">
-                    <input type="button" name="infoTemplates" value="info" onclick="
+                    <div>
+                        <div class="employeeOrdersForm">
+                            <div>
+                                <input type="text" name="searchFieldAllTemplates" value="">
+                                <input type="submit" name="searchButtonAllTemplates" value="Search">
+                                <select name="allTemplatesSelectField">
+                                    <option selected="selected">Id</option>
+                                    <option>Name</option>
+                                    <option>Cost</option>
+                                    <option>Description</option>
+                                    <option>Areas</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="submit" name="createTemplate" value="Create">
+                            </div>
+                            <div>
+                                <input type="submit" name="Editing" value="Editing">
+                            </div>
+                            <div>
+                                <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
+                                      method="post">
+                                    <input type="submit" name="exportTemplates" value="export JSON">
+                                    <input type="button" name="infoTemplates" value="info" onclick="
                     function showInfoForTemplates() {
                           alert('Templates for services with area, where we sale them\n'
                     + 'cost and description')
                     }showInfoForTemplates()">
+                                </form>
+                            </div>
+                        </div>
+                        <div>
+                            <%=employeeJspHelper.showFilteredTemplates(
+                                    request.getParameter("searchFieldAllTemplates"),
+                                    request.getParameter("allTemplatesSelectField"),
+                                    (TemplateSortType) request.getSession().getAttribute("sortTemplates"),
+                                    request.getParameter("filterTemplateName"),
+                                    request.getParameter("filterTemplateCost"),
+                                    employeeSessionBean
+                            )%>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="tab tab-5">
                 <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="text" name="searchFieldAllCustomers" value="">
-                    <input type="submit" name="searchButtonAllCustomers" value="Search">
-                    <select name="allCustomersSelectField">
-                        <option selected="selected">Id</option>
-                        <option>Name</option>
-                        <option>Login</option>
-                        <option>Area</option>
-                        <option>Balance</option>
-                        <option>ConnectedServices</option>
-                    </select>
-                    <input type="submit" name="createCustomer" value="Create">
-                    <input type="submit" name="Editing" value="Editing">
-                    <%=employeeJspHelper.showFilteredCustomers(
-                            request.getParameter("searchFieldAllCustomers"),
-                            request.getParameter("allCustomersSelectField"),
-                            (CustomerSortType) request.getSession().getAttribute("sortCustomers"),
-                            request.getParameter("filterCustomerName"),
-                            request.getParameter("filterCustomerArea"),
-                            employeeSessionBean
-                    )%>
-                </form>
-                <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="submit" name="exportCustomers" value="export JSON">
-                    <input type="button" name="infoCustomers" value="info" onclick="function showInfoForCustomers() {
+                    <div>
+                        <div class="employeeOrdersForm">
+                            <div>
+                                <input type="text" name="searchFieldAllCustomers" value="">
+                                <input type="submit" name="searchButtonAllCustomers" value="Search">
+                                <select name="allCustomersSelectField">
+                                    <option selected="selected">Id</option>
+                                    <option>Name</option>
+                                    <option>Login</option>
+                                    <option>Area</option>
+                                    <option>Balance</option>
+                                    <option>ConnectedServices</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="submit" name="createCustomer" value="Create">
+                            </div>
+                            <div>
+                                <input type="submit" name="Editing" value="Editing">
+                            </div>
+                            <div>
+                                <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
+                                      method="post">
+                                    <input type="submit" name="exportCustomers" value="export JSON">
+                                    <input type="button" name="infoCustomers" value="info" onclick="function showInfoForCustomers() {
                          alert('Customers who uses our services')
                     }showInfoForCustomers()">
+                                </form>
+                            </div>
+                        </div>
+                        <div>
+                            <%=employeeJspHelper.showFilteredCustomers(
+                                    request.getParameter("searchFieldAllCustomers"),
+                                    request.getParameter("allCustomersSelectField"),
+                                    (CustomerSortType) request.getSession().getAttribute("sortCustomers"),
+                                    request.getParameter("filterCustomerName"),
+                                    request.getParameter("filterCustomerArea"),
+                                    employeeSessionBean
+                            )%>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="tab tab-6">
                 <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="text" name="searchFieldAllEmployees" value="">
-                    <input type="submit" name="searchButtonAllEmployees" value="Search">
-                    <select name="allEmployeesSelectField">
-                        <option selected="selected">Id</option>
-                        <option>Name</option>
-                        <option>Login</option>
-                    </select>
-                    <input type="submit" name="createEmployee" value="Create">
-                    <input type="submit" name="Editing" value="Editing">
-                    <%=employeeJspHelper.showFilteredEmployees(
-                            request.getParameter("searchFieldAllEmployees"),
-                            request.getParameter("allEmployeesSelectField"),
-                            (EmployeeSortType) request.getSession().getAttribute("sortEmployees"),
-                            request.getParameter("filterEmployeeName"),
-                            employeeSessionBean
-                    )%>
-                </form>
-                <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="submit" name="exportEmployees" value="export JSON">
-                    <input type="button" name="infoEmployees" value="info" onclick="
+                    <div>
+                        <div class="employeeOrdersForm">
+                            <div>
+                                <input type="text" name="searchFieldAllEmployees" value="">
+                                <input type="submit" name="searchButtonAllEmployees" value="Search">
+                                <select name="allEmployeesSelectField">
+                                    <option selected="selected">Id</option>
+                                    <option>Name</option>
+                                    <option>Login</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="submit" name="createEmployee" value="Create">
+                            </div>
+                            <div>
+                                <input type="submit" name="Editing" value="Editing">
+                            </div>
+                            <div>
+                                <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
+                                      method="post">
+                                    <input type="submit" name="exportEmployees" value="export JSON">
+                                    <input type="button" name="infoEmployees" value="info" onclick="
                     function showInfoForEmployees() {
                         alert('Full list of your colleges')
                     }
                     showInfoForEmployees()">
+                                </form>
+                            </div>
+                        </div>
+                        <div>
+                            <%=employeeJspHelper.showFilteredEmployees(
+                                    request.getParameter("searchFieldAllEmployees"),
+                                    request.getParameter("allEmployeesSelectField"),
+                                    (EmployeeSortType) request.getSession().getAttribute("sortEmployees"),
+                                    request.getParameter("filterEmployeeName"),
+                                    employeeSessionBean
+                            )%>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="tab tab-7">
                 <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="text" name="searchFieldAllAreas" value="">
-                    <input type="submit" name="searchButtonAllAreas" value="Search">
-                    <select name="allAreasSelectField">
-                        <option selected="selected">Id</option>
-                        <option>Name</option>
-                        <option>Description</option>
-                    </select>
-                    <input type="submit" name="createArea" value="Create">
-                    <input type="submit" name="filterArea" value="Filter">
-                    <input type="submit" name="Editing" value="Editing">
-                    <%=employeeJspHelper.showFilteredAreas(
-                            request.getParameter("searchFieldAllAreas"),
-                            request.getParameter("allAreasSelectField"),
-                            (AreaSortType) request.getSession().getAttribute("sortAreas"),
-                            request.getParameter("filterAreaName"),
-                            employeeSessionBean
-                    )%>
-                </form>
-                <form class="export" action="${pageContext.request.contextPath}/employeeServlet" method="post">
-                    <input type="submit" name="exportAreas" value="export JSON">
-                    <input type="button" value="info" onclick="function showInfoForAreas() {
+                    <div>
+                        <div class="employeeOrdersForm">
+                            <div>
+                                <input type="text" name="searchFieldAllAreas" value="">
+                                <input type="submit" name="searchButtonAllAreas" value="Search">
+                                <select name="allAreasSelectField">
+                                    <option selected="selected">Id</option>
+                                    <option>Name</option>
+                                    <option>Description</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="submit" name="createArea" value="Create">
+                            </div>
+                            <div>
+                                <input type="submit" name="Editing" value="Editing">
+                            </div>
+                            <div>
+                                <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
+                                      method="post">
+                                    <input type="submit" name="exportAreas" value="export JSON">
+                                    <input type="button" value="info" onclick="function showInfoForAreas() {
                         alert('Areas where we have our services')
                     }
                     showInfoForAreas()">
+                                </form>
+                            </div>
+                        </div>
+                        <div>
+                            <%=employeeJspHelper.showFilteredAreas(
+                                    request.getParameter("searchFieldAllAreas"),
+                                    request.getParameter("allAreasSelectField"),
+                                    (AreaSortType) request.getSession().getAttribute("sortAreas"),
+                                    request.getParameter("filterAreaName"),
+                                    employeeSessionBean
+                            )%>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="tab tab-8">

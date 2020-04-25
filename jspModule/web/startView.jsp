@@ -69,7 +69,7 @@
 
 <footer>
     <div align="center">
-        © NetCracker ERC
+        Разработал в рамках работы над кураторским заданием Романа Храпко в УНЦ Netcracker Абрамов Кирилл
     </div>
 </footer>
 
