@@ -28,14 +28,14 @@ public class HtmlTableBuilder {
 
 
 
-
     public String createServicesHtmlTable(Collection<Service> services, final String name,
             final String cost) {
         String innerPart = "";
 
         innerPart +=
                 addColumns(new String[]{"","unique id", "name of service","cost of service","status of service show his state",
-                        "id of template","id of customer","date when service was activated","areas where status is availabel","",""},"",
+                        "id of template","id of customer","date when service was activated","areas where status is availabel","",""},
+                        addCheckboxImg(),
                         "id"+createButton("↑","ServiceSortUpById")+
                                 createButton("↓","ServiceSortDownById"),
                         "Name"+createButton("↑","ServiceSortDownByName")+
@@ -60,7 +60,7 @@ public class HtmlTableBuilder {
 
         innerPart.append(
                 addColumns(new String[]{"","unique id","name of template","cost of template","description of " +
-                                "template","areas where template is available","",""},"","Id"+createButton("↑","TemplateSortDownById")
+                                "template","areas where template is available","",""},addCheckboxImg(),"Id"+createButton("↑","TemplateSortDownById")
                                 +createButton("↓","TemplateSortUpById")
                         , "Name"+createButton("↑","TemplateSortDownByName")
                                 +createButton("↓","TemplateSortUpByName")
@@ -86,7 +86,7 @@ public class HtmlTableBuilder {
 
         innerPart.append(addColumns(new String[]{"","unique id","id of template",
                 "id of service","id of employee","status show state of order",
-                "action show what need to do","date of creation",""},"",
+                "action show what need to do","date of creation",""},addCheckboxImg(),
                         "id"+createButton("↑","OrderSortDownById")
                 +createButton("↓","OrderSortUpById")
                 ,"TemplateId"+createInput("filterOrderTemplateId",templateId),
@@ -107,7 +107,7 @@ public class HtmlTableBuilder {
 
         innerPart.append(
                 addColumns(new String[]{"","unique id","name of customer","login of customer",
-                        "password of customer","area of customer","balance of customer","list of connected ids","",""},"",
+                        "password of customer","area of customer","balance of customer","list of connected ids","",""},addCheckboxImg(),
                         "Id"+createButton("↑","CustomerSortDownById")+
                                 createButton("↓","CustomerSortUpById")
                         , "Name"+createButton("↑","CustomerSortDownByName")+
@@ -135,7 +135,7 @@ public class HtmlTableBuilder {
 
         innerPart.append(
                 addColumns(new String[]{"","unique id","name of employee","login of employee",
-                        "login of employee","password of employee","",""},"",
+                        "login of employee","password of employee","",""},addCheckboxImg(),
                         "Id"+createButton("↑","EmployeeSortDownById")+
                                 createButton("↓","EmployeeSortUpById")
                         , "Name"+createButton("↑","EmployeeSortDownByName")+
@@ -159,7 +159,7 @@ public class HtmlTableBuilder {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
-                addColumns(new String[]{"","unique id","area name","area description","",""},"","Id"+createButton("↑","AreaSortDownById")+
+                addColumns(new String[]{"","unique id","area name","area description","",""},addCheckboxImg(),"Id"+createButton("↑","AreaSortDownById")+
                                 createButton("↓","AreaSortUpById")
                         , "Name"+createButton("↑","AreaSortDownByName")+
                                 createButton("↓","AreaSortUpByName")
@@ -321,7 +321,7 @@ public class HtmlTableBuilder {
 
     private String addColumns(String[] titles,String... columnNames) {
         StringBuilder result = new StringBuilder();
-        String rowStart = "<tr>";
+        String rowStart = "<tr class='tableHeader'>";
         result.append(rowStart);
         int i = 0;
         for (String columnName : columnNames) {
@@ -432,5 +432,9 @@ public class HtmlTableBuilder {
         }
 
         return instance;
+    }
+
+    public String addCheckboxImg(){
+        return "<img src='resources/checkbox.jpg'/>";
     }
 }

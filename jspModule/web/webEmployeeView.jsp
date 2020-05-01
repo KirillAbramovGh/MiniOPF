@@ -15,6 +15,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/employeeTabs.css">
+    <link rel="icon" href="${pageContext.request.contextPath}/resources/checkbox.jpg">
     <title>MiniOPF</title>
     <%!
         @Inject
@@ -85,15 +86,17 @@
                                 <input type="submit" name="createOrder" value="Create" title="Create new Order">
                             </div>
                             <div>
-                                <input type="submit" name="Edit" value="Editing"
+                                <input type="submit" name="edit" value="Edit"
                                        title="Edit several Orders which you check">
+                                <input type="submit" name="delete" value="Delete"
+                                       title="Delete several Orders which you check">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/importType.jsp"
                                       method="post">
                                     <input type="submit" name="importEntities" value="import JSON"
                                            title="Import entities from file">
-                                    <input type="button" name="infoEmployeeOrders" value="info" onclick="function showInfoForEmployeeOrders() {
+                                    <input type="button" class="info" name="infoEmployeeOrders" value="i" onclick="function showInfoForEmployeeOrders() {
     alert('There are orders assigned to you. They have unique id,\n'
                     + 'action - it means what you need to do and status -\n'
                     + 'it means your progress. Also here you can search from orders\n'
@@ -139,13 +142,15 @@
                                 <input type="submit" name="createOrder" value="Create" title="Create new Order">
                             </div>
                             <div>
-                                <input type="submit" name="Editing" value="Editing"
+                                <input type="submit" name="edit" value="Edit"
                                        title="Edit several Orders which you check">
+                                <input type="submit" name="delete" value="Delete"
+                                       title="Delete several Orders which you check">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
                                       method="post">
-                                    <input type="button" name="infoAllOrders" value="info" onclick="
+                                    <input type="button" class="info" name="infoAllOrders" value="i" onclick="
                     function showInfoForAllOrders() {
                          alert('There are all orders. You can assign them to you to execute')
                     }showInfoForAllOrders()">
@@ -189,12 +194,13 @@
                                 <input type="submit" name="createService" value="Create">
                             </div>
                             <div>
-                                <input type="submit" name="Editing" value="Editing">
+                                <input type="submit" name="edit" value="Edit">
+                                <input type="submit" name="delete" value="Delete">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
                                       method="post">
-                                    <input type="button" name="infoServices" value="info" onclick="function showInfoForServices() {
+                                    <input type="button" class="info" name="infoServices" value="i" onclick="function showInfoForServices() {
                          alert('There are customer\'s services. Service has customer,\n'
                     + 'template, cost and area')
                     }showInfoForServices()">
@@ -234,13 +240,14 @@
                                 <input type="submit" name="createTemplate" value="Create">
                             </div>
                             <div>
-                                <input type="submit" name="Editing" value="Editing">
+                                <input type="submit" name="edit" value="Edit">
+                                <input type="submit" name="delete" value="Delete">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
                                       method="post">
                                     <input type="submit" name="exportTemplates" value="export JSON">
-                                    <input type="button" name="infoTemplates" value="info" onclick="
+                                    <input type="button" class="info" name="infoTemplates" value="i" onclick="
                     function showInfoForTemplates() {
                           alert('Templates for services with area, where we sale them\n'
                     + 'cost and description')
@@ -281,13 +288,14 @@
                                 <input type="submit" name="createCustomer" value="Create">
                             </div>
                             <div>
-                                <input type="submit" name="Editing" value="Editing">
+                                <input type="submit" name="edit" value="Edit">
+                                <input type="submit" name="delete" value="Delete">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
                                       method="post">
                                     <input type="submit" name="exportCustomers" value="export JSON">
-                                    <input type="button" name="infoCustomers" value="info" onclick="function showInfoForCustomers() {
+                                    <input type="button" class="info" name="infoCustomers" value="i" onclick="function showInfoForCustomers() {
                          alert('Customers who uses our services')
                     }showInfoForCustomers()">
                                 </form>
@@ -323,13 +331,14 @@
                                 <input type="submit" name="createEmployee" value="Create">
                             </div>
                             <div>
-                                <input type="submit" name="Editing" value="Editing">
+                                <input type="submit" name="edit" value="Edit">
+                                <input type="submit" name="delete" value="Delete">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
                                       method="post">
                                     <input type="submit" name="exportEmployees" value="export JSON">
-                                    <input type="button" name="infoEmployees" value="info" onclick="
+                                    <input type="button" class="info" name="infoEmployees" value="i" onclick="
                     function showInfoForEmployees() {
                         alert('Full list of your colleges')
                     }
@@ -366,13 +375,14 @@
                                 <input type="submit" name="createArea" value="Create">
                             </div>
                             <div>
-                                <input type="submit" name="Editing" value="Editing">
+                                <input type="submit" name="edit" value="Edit">
+                                <input type="submit" name="delete" value="Delete">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
                                       method="post">
                                     <input type="submit" name="exportAreas" value="export JSON">
-                                    <input type="button" value="info" onclick="function showInfoForAreas() {
+                                    <input type="button" class="info" value="i" onclick="function showInfoForAreas() {
                         alert('Areas where we have our services')
                     }
                     showInfoForAreas()">

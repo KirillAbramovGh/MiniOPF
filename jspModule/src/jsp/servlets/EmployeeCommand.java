@@ -30,8 +30,15 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    req.getSession().setAttribute("massEditType","customer");
-                    setMassEditIds(req, key);
+                    if (req.getParameter("edit") != null)
+                    {
+                        req.getSession().setAttribute("massEditType", "customer");
+                        setMassEditIds(req, key);
+                    }
+                    else if (req.getParameter("delete") != null)
+                    {
+                        employeeSessionBean.deleteCustomer(EmployeeCommand.getIdFromKey(key));
+                    }
                 }
             },
     serviceChecked
@@ -40,8 +47,15 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    req.getSession().setAttribute("massEditType","service");
-                    setMassEditIds(req, key);
+                    if (req.getParameter("edit") != null)
+                    {
+                        req.getSession().setAttribute("massEditType", "service");
+                        setMassEditIds(req, key);
+                    }
+                    else if (req.getParameter("delete") != null)
+                    {
+                        employeeSessionBean.deleteService(EmployeeCommand.getIdFromKey(key));
+                    }
                 }
             },
     employeeChecked
@@ -50,8 +64,13 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    req.getSession().setAttribute("massEditType","employee");
-                    setMassEditIds(req, key);
+                    if(req.getParameter("edit")!=null)
+                    {
+                        req.getSession().setAttribute("massEditType", "employee");
+                        setMassEditIds(req, key);
+                    }else if(req.getParameter("delete")!=null){
+                        employeeSessionBean.deleteEmployee(EmployeeCommand.getIdFromKey(key));
+                    }
                 }
             },
     templateChecked
@@ -60,8 +79,13 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    req.getSession().setAttribute("massEditType","template");
-                    setMassEditIds(req, key);
+                    if(req.getParameter("edit")!=null)
+                    {
+                        req.getSession().setAttribute("massEditType", "template");
+                        setMassEditIds(req, key);
+                    }else if(req.getParameter("delete")!=null){
+                        employeeSessionBean.deleteTemplate(EmployeeCommand.getIdFromKey(key));
+                    }
                 }
             },
     orderChecked
@@ -70,8 +94,13 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    req.getSession().setAttribute("massEditType","order");
-                    setMassEditIds(req, key);
+                    if(req.getParameter("edit")!=null)
+                    {
+                        req.getSession().setAttribute("massEditType", "order");
+                        setMassEditIds(req, key);
+                    }else if(req.getParameter("delete")!=null){
+                        employeeSessionBean.deleteOrder(EmployeeCommand.getIdFromKey(key));
+                    }
                 }
             },
     areaChecked
@@ -80,8 +109,13 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    req.getSession().setAttribute("massEditType","area");
-                    setMassEditIds(req, key);
+                    if(req.getParameter("edit")!=null)
+                    {
+                        req.getSession().setAttribute("massEditType", "area");
+                        setMassEditIds(req, key);
+                    }else if(req.getParameter("delete")!=null){
+                        employeeSessionBean.deleteArea(EmployeeCommand.getIdFromKey(key));
+                    }
                 }
             },
 
@@ -807,14 +841,16 @@ public enum EmployeeCommand
 
         requestDispatcher.forward(request, response);
     }
+
     private static void setMassEditIds(final HttpServletRequest req, final String key)
     {
         Set entities = (Set) req.getSession().getAttribute("massEdit");
-        if(entities == null){
+        if (entities == null)
+        {
             entities = new HashSet<>();
         }
         entities.add(EmployeeCommand.getIdFromKey(key));
-        req.getSession().setAttribute("massEdit",entities);
+        req.getSession().setAttribute("massEdit", entities);
 
         req.getSession().setAttribute("nextPage", "/massEditOfEntities.jsp");
     }
