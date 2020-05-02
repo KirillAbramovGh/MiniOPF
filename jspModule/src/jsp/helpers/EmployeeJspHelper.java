@@ -11,15 +11,20 @@ import com.netcracker.students.o3.model.area.Area;
 import com.netcracker.students.o3.model.dto.DtoTransformer;
 import com.netcracker.students.o3.model.dto.HtmlParser;
 import com.netcracker.students.o3.model.orders.Order;
+import com.netcracker.students.o3.model.orders.OrderAction;
 import com.netcracker.students.o3.model.orders.OrderImpl;
+import com.netcracker.students.o3.model.orders.OrderStatus;
 import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.services.ServiceImpl;
+import com.netcracker.students.o3.model.services.ServiceStatus;
 import com.netcracker.students.o3.model.templates.Template;
 import com.netcracker.students.o3.model.templates.TemplateImpl;
 import com.netcracker.students.o3.model.users.Customer;
 import com.netcracker.students.o3.model.users.Employee;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 import jsp.builders.HtmlCheckboxBuilder;
@@ -47,44 +52,52 @@ public class EmployeeJspHelper
         return instance;
     }
 
-    public String showFilteredOrdersByEmployeeId(String search, String field, OrderSortType sortOrders,
-            String templateId, String serviceId, BigInteger eId, EmployeeSessionBean employeeSessionBean)
+    public String showFilteredOrdersByEmployeeId(OrderSortType sortOrders,
+            BigInteger templateId, BigInteger serviceId, BigInteger eId, EmployeeSessionBean employeeSessionBean,
+            BigInteger id, OrderStatus status, OrderAction action, Date creationDate)
     {
-        List<Order> orders = employeeSessionBean.getFilteredOrdersByEmployeeId(search, field, sortOrders,
-                templateId, serviceId, eId);
-        return htmlTableBuilder.createOrdersHtmlTable(orders, templateId, serviceId, eId.toString());
+        List<Order> orders = employeeSessionBean.getFilteredOrdersByEmployeeId(sortOrders,
+                templateId,serviceId,eId,id,status,action,creationDate);
+        return htmlTableBuilder.createOrdersHtmlTable(orders, id+"",templateId+"",serviceId+"",eId+"",
+                status+"",action+"",creationDate+"");
     }
 
-    public String showFilteredOrders(String search, String field, OrderSortType sortOrders,
-            String templateId, String serviceId, String employeeId, EmployeeSessionBean employeeSessionBean)
+    public String showFilteredOrders(OrderSortType sortOrders,
+            BigInteger templateId, BigInteger serviceId, BigInteger eId, EmployeeSessionBean employeeSessionBean,
+            BigInteger id, OrderStatus status, OrderAction action, Date creationDate)
     {
-        List<Order> orders = employeeSessionBean.getFilteredOrders(search, field, sortOrders,
-                templateId, serviceId, employeeId);
-        return htmlTableBuilder.createOrdersHtmlTable(orders, templateId, serviceId, employeeId);
+        List<Order> orders = employeeSessionBean.getFilteredOrders(sortOrders,
+                templateId,serviceId,eId,id,status,action,creationDate);
+        return htmlTableBuilder.createOrdersHtmlTable(orders, id+"",templateId+"",serviceId+"",eId+"",
+                status+"",action+"",creationDate+"");
     }
 
-    public String showFilteredServices(String search, String field, ServiceSortType sortService,
-            String name, String cost, EmployeeSessionBean employeeSessionBean)
+    public String showFilteredServices(ServiceSortType sortService,String id,
+            String name, String cost, String status, String templateId,
+            String customerId, String activationDate, String areas,EmployeeSessionBean employeeSessionBean)
     {
-        List<Service> services = employeeSessionBean.getFilteredServices(search, field, sortService,
-                name, cost);
-        return htmlTableBuilder.createServicesHtmlTable(services, name, cost);
+        List<Service> services = employeeSessionBean.getFilteredServices(sortService,id,name,cost,status,
+                templateId,customerId,activationDate,areas);
+        return htmlTableBuilder.createServicesHtmlTable(services,id,name,cost,status,templateId,
+                customerId,activationDate,areas);
     }
 
-    public String showFilteredTemplates(String search, String field, TemplateSortType sortTemplates,
-            String name, String cost, EmployeeSessionBean employeeSessionBean)
+    public String showFilteredTemplates(TemplateSortType sortTemplates,
+            String name, String cost,String id,String description, EmployeeSessionBean employeeSessionBean)
     {
-        List<Template> templates = employeeSessionBean.getFilteredTemplates(search, field, sortTemplates, name,
-                cost);
-        return htmlTableBuilder.createTemplatesHtmlTable(templates, name, cost);
+        List<Template> templates = employeeSessionBean.getFilteredTemplates(sortTemplates,name,
+                cost,id,description);
+        return htmlTableBuilder.createTemplatesHtmlTable(templates,id,name,cost,description);
     }
 
-    public String showFilteredCustomers(String search, String field, CustomerSortType sortCustomers,
-            String name, String area, EmployeeSessionBean employeeSessionBean)
+    public String showFilteredCustomers(CustomerSortType sortCustomers,
+            String id, String name, String area, String login,
+            String password, String balance, String connectedServices,EmployeeSessionBean employeeSessionBean)
     {
-        List<Customer> customers = employeeSessionBean.getFilteredCustomers(search, field, sortCustomers,
-                name, area);
-        return htmlTableBuilder.createCustomersHtmlTable(customers, name, area);
+        List<Customer> customers = employeeSessionBean.getFilteredCustomers(sortCustomers,id,
+                name,area,login,password,balance,connectedServices);
+        return htmlTableBuilder.createCustomersHtmlTable(customers,id,name,area,login,password,balance,
+                connectedServices);
     }
 
 

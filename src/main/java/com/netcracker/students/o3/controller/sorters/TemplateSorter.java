@@ -1,6 +1,8 @@
 package com.netcracker.students.o3.controller.sorters;
 
+import com.netcracker.students.o3.controller.comparators.template.ComparatorTemplatesByAreas;
 import com.netcracker.students.o3.controller.comparators.template.ComparatorTemplatesByCost;
+import com.netcracker.students.o3.controller.comparators.template.ComparatorTemplatesByDescription;
 import com.netcracker.students.o3.controller.comparators.template.ComparatorTemplatesById;
 import com.netcracker.students.o3.controller.comparators.template.ComparatorTemplatesByName;
 import com.netcracker.students.o3.controller.sorters.SortType.TemplateSortType;
@@ -28,18 +30,26 @@ public class TemplateSorter {
      */
     private Comparator<Template> defineSortType(TemplateSortType type) {
         switch (type) {
-            case DownByName:
+            case TemplateSortDownByName:
                 return new ComparatorTemplatesByName(false);
-            case DownByCost:
+            case TemplateSortDownByCost:
                 return new ComparatorTemplatesByCost(false);
-            case UpByName:
+            case TemplateSortUpByName:
                 return new ComparatorTemplatesByName(true);
-            case UpByCost:
+            case TemplateSortUpByCost:
                 return new ComparatorTemplatesByCost(true);
-            case UpById:
+            case TemplateSortUpById:
                 return new ComparatorTemplatesById(true);
-            case DownById:
+            case TemplateSortDownById:
                 return new ComparatorTemplatesById(false);
+            case TemplateSortUpByAreas:
+                return new ComparatorTemplatesByAreas(true);
+            case TemplateSortDownByAreas:
+                return new ComparatorTemplatesByAreas(false);
+            case TemplateSortUpByDescription:
+                return new ComparatorTemplatesByDescription(true);
+            case TemplateSortDownByDescription:
+                return new ComparatorTemplatesByDescription(false);
         }
         return new ComparatorTemplatesByName(false);
     }

@@ -45,25 +45,25 @@
 
 .tab.is-active {
     height: 450px;
-    overflow-y: auto;
+    overflow-y: hidden;
     border: 1px solid #343434;
     background-color: #343434;
     display: flex;
-    overflow-x: auto;
+    overflow-x: hidden;
     border-radius: 5px;
 }
 
 
 .tabs__content {
     display: grid;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
     border-radius: 5px;
     height: 100%;
 }
 
 .tabs {
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
     border-radius: 5px;
 

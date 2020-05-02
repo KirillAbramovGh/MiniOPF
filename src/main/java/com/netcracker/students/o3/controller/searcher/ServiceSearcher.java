@@ -109,6 +109,8 @@ public class ServiceSearcher extends EntitySearcher<Service>
                 return searchServiceByUserId(search, services);
             case "Areas":
                 return searchServiceByArea(search, services);
+            case "ActivationDate":
+                return searchServiceByActivationDate(search,services);
             case "all":
                 Set<Service> result = new HashSet<>(searchServiceById(search, services));
 
@@ -123,6 +125,19 @@ public class ServiceSearcher extends EntitySearcher<Service>
         }
 
         return new ArrayList<>();
+    }
+
+    private List<Service> searchServiceByActivationDate(final String search, final Collection<Service> services)
+    {
+        List<Service> result = new ArrayList<>();
+
+        for (Service service : services) {
+            if (service.getActivationDate().toString().contains(search)) {
+                result.add(service);
+            }
+        }
+
+        return result;
     }
 
     private List<Service> searchServiceByArea(String search, Collection<Service> services) {

@@ -40,8 +40,8 @@
 </head>
 <body>
 <h1 align="right">
-    <form action="${pageContext.request.contextPath}/employeeServlet" method="post">
-        You are logged in as:<%=name%>
+    <form action="${pageContext.request.contextPath}/employeeServlet" class="employeeHeader" method="post">
+        <span>You are logged in as:<%=name%></span>
         <input type="submit" name="out" value="Out" title="Выход в главное меню">
     </form>
 </h1>
@@ -70,19 +70,6 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="text" name="searchFieldEmployeeOrders" value="">
-                                <input type="submit" name="searchButtonEmployeeOrders" value="Search"
-                                       title="Search from Orders">
-                                <select name="employeeOrderSelectField" title="Select field fot search">
-                                    <option selected="selected">Id</option>
-                                    <option>TemplateId</option>
-                                    <option>ServiceId</option>
-                                    <option>EmployeeId</option>
-                                    <option>Status</option>
-                                    <option>Action</option>
-                                </select>
-                            </div>
-                            <div>
                                 <input type="submit" name="createOrder" value="Create" title="Create new Order">
                             </div>
                             <div>
@@ -90,6 +77,9 @@
                                        title="Edit several Orders which you check">
                                 <input type="submit" name="delete" value="Delete"
                                        title="Delete several Orders which you check">
+                            </div>
+                            <div>
+                                <input type="submit" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/importType.jsp"
@@ -107,10 +97,8 @@
                             </div>
                         </div>
 
-                        <div>
+                        <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredOrdersByEmployeeId(
-                                    request.getParameter("searchFieldEmployeeOrders"),
-                                    request.getParameter("employeeOrderSelectField"),
                                     (OrderSortType) request.getSession().getAttribute("sortOrders"),
                                     request.getParameter("filterOrderTemplateId"),
                                     request.getParameter("filterOrderServiceId"),
@@ -126,19 +114,6 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="text" name="searchFieldAllOrders" value="">
-                                <input type="submit" name="searchButtonAllOrders" value="Search"
-                                       title="Search from all Orders">
-                                <select name="allOrderSelectField" title="Choose search field">
-                                    <option selected="selected">Id</option>
-                                    <option>TemplateId</option>
-                                    <option>ServiceId</option>
-                                    <option>EmployeeId</option>
-                                    <option>Status</option>
-                                    <option>Action</option>
-                                </select>
-                            </div>
-                            <div>
                                 <input type="submit" name="createOrder" value="Create" title="Create new Order">
                             </div>
                             <div>
@@ -146,6 +121,9 @@
                                        title="Edit several Orders which you check">
                                 <input type="submit" name="delete" value="Delete"
                                        title="Delete several Orders which you check">
+                            </div>
+                            <div>
+                                <input type="submit" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
@@ -158,7 +136,7 @@
                             </div>
                         </div>
 
-                        <div>
+                        <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredOrders(
                                     request.getParameter("searchFieldAllOrders"),
                                     request.getParameter("allOrderSelectField"),
@@ -177,25 +155,14 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="text" name="searchFieldAllServices" value="">
-                                <input type="submit" name="searchButtonAllServices" value="Search">
-                                <select name="allServicesSelectField" title="Choose search field">
-                                    <option selected="selected">Id</option>
-                                    <option>Name</option>
-                                    <option>Cost</option>
-                                    <option>Status</option>
-                                    <option>TemplateId</option>
-                                    <option>UserId</option>
-                                    <option>ActivationDate</option>
-                                    <option>Areas</option>
-                                </select>
-                            </div>
-                            <div>
                                 <input type="submit" name="createService" value="Create">
                             </div>
                             <div>
                                 <input type="submit" name="edit" value="Edit">
                                 <input type="submit" name="delete" value="Delete">
+                            </div>
+                            <div>
+                                <input type="submit" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
@@ -208,7 +175,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div>
+                        <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredServices(
                                     request.getParameter("searchFieldAllServices"),
                                     request.getParameter("allServicesSelectField"),
@@ -226,22 +193,14 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="text" name="searchFieldAllTemplates" value="">
-                                <input type="submit" name="searchButtonAllTemplates" value="Search">
-                                <select name="allTemplatesSelectField">
-                                    <option selected="selected">Id</option>
-                                    <option>Name</option>
-                                    <option>Cost</option>
-                                    <option>Description</option>
-                                    <option>Areas</option>
-                                </select>
-                            </div>
-                            <div>
                                 <input type="submit" name="createTemplate" value="Create">
                             </div>
                             <div>
                                 <input type="submit" name="edit" value="Edit">
                                 <input type="submit" name="delete" value="Delete">
+                            </div>
+                            <div>
+                                <input type="submit" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
@@ -255,7 +214,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div>
+                        <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredTemplates(
                                     request.getParameter("searchFieldAllTemplates"),
                                     request.getParameter("allTemplatesSelectField"),
@@ -273,23 +232,14 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="text" name="searchFieldAllCustomers" value="">
-                                <input type="submit" name="searchButtonAllCustomers" value="Search">
-                                <select name="allCustomersSelectField">
-                                    <option selected="selected">Id</option>
-                                    <option>Name</option>
-                                    <option>Login</option>
-                                    <option>Area</option>
-                                    <option>Balance</option>
-                                    <option>ConnectedServices</option>
-                                </select>
-                            </div>
-                            <div>
                                 <input type="submit" name="createCustomer" value="Create">
                             </div>
                             <div>
                                 <input type="submit" name="edit" value="Edit">
                                 <input type="submit" name="delete" value="Delete">
+                            </div>
+                            <div>
+                                <input type="submit" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
@@ -301,7 +251,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div>
+                        <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredCustomers(
                                     request.getParameter("searchFieldAllCustomers"),
                                     request.getParameter("allCustomersSelectField"),
@@ -319,20 +269,14 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="text" name="searchFieldAllEmployees" value="">
-                                <input type="submit" name="searchButtonAllEmployees" value="Search">
-                                <select name="allEmployeesSelectField">
-                                    <option selected="selected">Id</option>
-                                    <option>Name</option>
-                                    <option>Login</option>
-                                </select>
-                            </div>
-                            <div>
                                 <input type="submit" name="createEmployee" value="Create">
                             </div>
                             <div>
                                 <input type="submit" name="edit" value="Edit">
                                 <input type="submit" name="delete" value="Delete">
+                            </div>
+                            <div>
+                                <input type="submit" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
@@ -346,7 +290,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div>
+                        <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredEmployees(
                                     request.getParameter("searchFieldAllEmployees"),
                                     request.getParameter("allEmployeesSelectField"),
@@ -363,20 +307,14 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="text" name="searchFieldAllAreas" value="">
-                                <input type="submit" name="searchButtonAllAreas" value="Search">
-                                <select name="allAreasSelectField">
-                                    <option selected="selected">Id</option>
-                                    <option>Name</option>
-                                    <option>Description</option>
-                                </select>
-                            </div>
-                            <div>
                                 <input type="submit" name="createArea" value="Create">
                             </div>
                             <div>
                                 <input type="submit" name="edit" value="Edit">
                                 <input type="submit" name="delete" value="Delete">
+                            </div>
+                            <div>
+                                <input type="submit" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
@@ -389,7 +327,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div>
+                        <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredAreas(
                                     request.getParameter("searchFieldAllAreas"),
                                     request.getParameter("allAreasSelectField"),

@@ -1,6 +1,12 @@
 package com.netcracker.students.o3.controller.sorters;
 
+import com.netcracker.students.o3.controller.comparators.order.ComparatorOrdersByAction;
+import com.netcracker.students.o3.controller.comparators.order.ComparatorOrdersByCreationDate;
+import com.netcracker.students.o3.controller.comparators.order.ComparatorOrdersByEmployeeId;
 import com.netcracker.students.o3.controller.comparators.order.ComparatorOrdersById;
+import com.netcracker.students.o3.controller.comparators.order.ComparatorOrdersByServiceId;
+import com.netcracker.students.o3.controller.comparators.order.ComparatorOrdersByStatus;
+import com.netcracker.students.o3.controller.comparators.order.ComparatorOrdersByTemplateId;
 import com.netcracker.students.o3.controller.sorters.SortType.OrderSortType;
 import com.netcracker.students.o3.model.orders.Order;
 
@@ -23,10 +29,34 @@ public class OrderSorter {
      */
     private Comparator<Order> defineSortType(OrderSortType type) {
         switch (type) {
-            case DownById:
+            case OrderSortDownById:
                 return new ComparatorOrdersById(false);
-            case UpById:
+            case OrderSortUpById:
                 return new ComparatorOrdersById(true);
+            case OrderSortUpByAction:
+                return new ComparatorOrdersByAction(true);
+            case OrderSortUpByStatus:
+                return new ComparatorOrdersByStatus(true);
+            case OrderSortDownByAction:
+                return new ComparatorOrdersByAction(false);
+            case OrderSortDownByStatus:
+                return new ComparatorOrdersByStatus(false);
+            case OrderSortUpByServiceId:
+                return new ComparatorOrdersByServiceId(true);
+            case OrderSortUpByEmployeeId:
+                return new ComparatorOrdersByEmployeeId(true);
+            case OrderSortUpByTemplateId:
+                return new ComparatorOrdersByTemplateId(true);
+            case OrderSortDownByServiceId:
+                return new ComparatorOrdersByServiceId(false);
+            case OrderSortDownByEmployeeId:
+                return new ComparatorOrdersByEmployeeId(false);
+            case OrderSortDownByTemplateId:
+                return new ComparatorOrdersByTemplateId(false);
+            case OrderSortUpByCreationDate:
+                return new ComparatorOrdersByCreationDate(true);
+            case OrderSortDownByCreationDate:
+                return new ComparatorOrdersByCreationDate(false);
         }
         return new ComparatorOrdersById(true);
     }

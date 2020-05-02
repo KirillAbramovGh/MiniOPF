@@ -28,8 +28,9 @@ public class HtmlTableBuilder {
 
 
 
-    public String createServicesHtmlTable(Collection<Service> services, final String name,
-            final String cost) {
+    public String createServicesHtmlTable(Collection<Service> services,final String id, final String name,
+            final String cost,final String status,final String templateId,final String customerId,final String activationDate,
+            final String areas) {
         String innerPart = "";
 
         innerPart +=
@@ -37,38 +38,62 @@ public class HtmlTableBuilder {
                         "id of template","id of customer","date when service was activated","areas where status is availabel","",""},
                         addCheckboxImg(),
                         "id"+createButton("↑","ServiceSortUpById")+
-                                createButton("↓","ServiceSortDownById"),
+                                createButton("↓","ServiceSortDownById")+
+                                createInput("filterServiceId",id),
                         "Name"+createButton("↑","ServiceSortDownByName")+
                                 createButton("↓","ServiceSortUpByName")+
                         createInput("filterServiceName",name),
                         "Cost"+createButton("↑","ServiceSortDownByCost")+
                                 createButton("↓","ServiceSortUpByCost")+
                         createInput("filterServiceCost",cost),
-                        "Status",
-                        "TemplateId",
-                        "CustomerId",
-                        "ActivationDate", "Areas",createButton("filter","filter"),"");
+                        "Status"+createButton("↑","ServiceSortDownByStatus")+
+                                createButton("↓","ServiceSortUpByStatus")+
+                                createInput("filterServiceStatus",status),
+                        "TemplateId"+createButton("↑","ServiceSortDownByTemplateId")+
+                                createButton("↓","ServiceSortUpByTemplateId")+
+                                createInput("filterServiceTemplateId",templateId),
+                        "CustomerId"+createButton("↑","ServiceSortDownByCustomerId")+
+                                createButton("↓","ServiceSortUpByCustomerId")+
+                                createInput("filterServiceCustomerId",customerId),
+                        "ActivationDate"+createButton("↑","ServiceSortDownByActivationDate")+
+                                createButton("↓","ServiceSortUpByActivationDate")+
+                                createInput("filterServiceActivationDate",activationDate)
+                        , "Areas"+createButton("↑","ServiceSortDownByAreas")+
+                                createButton("↓","ServiceSortUpByAreas")+
+                                createInput("filterServiceAreas",areas)
+                        ,createButton("filter","filter"),"");
 
         innerPart += addServicesToHtmlTable(services);
 
         return build(innerPart);
     }
 
-    public String createTemplatesHtmlTable(Collection<Template> templates, final String name,
-            final String cost) {
+    public String createTemplatesHtmlTable(Collection<Template> templates,final String id, final String name,
+            final String cost,final String description) {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
                 addColumns(new String[]{"","unique id","name of template","cost of template","description of " +
-                                "template","areas where template is available","",""},addCheckboxImg(),"Id"+createButton("↑","TemplateSortDownById")
+                                "template","areas where template is available","",""},
+                        addCheckboxImg(),
+                        "Id"+createButton("↑","TemplateSortDownById")
                                 +createButton("↓","TemplateSortUpById")
+                                +createInput("filterTemplateId",id)
                         , "Name"+createButton("↑","TemplateSortDownByName")
                                 +createButton("↓","TemplateSortUpByName")
                         +createInput("filterTemplateName",name)
                         , "Cost"+createButton("↑","TemplateSortDownByCost")
                                 +createButton("↓","TemplateSortUpByCost")
                         +createInput("filterTemplateCost",cost)
-                        , "Description", "Areas",createButton("filter","filter"),"")
+                        , "Description"
+                                +createButton("↑","TemplateSortDownByDescription")
+                                +createButton("↓","TemplateSortUpByDescription")
+                                +createInput("filterTemplateDescription",description)
+                        , "Areas"
+                                +createButton("↑","TemplateSortDownByAreas")
+                                +createButton("↓","TemplateSortUpByAreas")
+                                +createInput("filterTemplateAreas",description)
+                        ,createButton("filter","filter"),"")
         );
 
         int i = 1;
@@ -80,18 +105,43 @@ public class HtmlTableBuilder {
         return build(innerPart.toString());
     }
 
-    public String createOrdersHtmlTable(Collection<Order> orders, final String templateId, final String serviceId,
-            final String eId) {
+    public String createOrdersHtmlTable(Collection<Order> orders,final String id, final String templateId, final String serviceId,
+            final String eId,final String status,final String action,final String creationDate) {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(addColumns(new String[]{"","unique id","id of template",
                 "id of service","id of employee","status show state of order",
-                "action show what need to do","date of creation",""},addCheckboxImg(),
-                        "id"+createButton("↑","OrderSortDownById")
-                +createButton("↓","OrderSortUpById")
-                ,"TemplateId"+createInput("filterOrderTemplateId",templateId),
-                "ServiceId"+createInput("filterOrderServiceId",serviceId),
-                "EmployeeId"+createInput("filterOrderEmployeeId",eId), "Status", "Action", "CreationDate",
+                "action show what need to do","date of creation",""},
+                addCheckboxImg(),
+                 "id"
+                 +createButton("↑","OrderSortDownById")
+                 +createButton("↓","OrderSortUpById")
+                 +createInput("filterOrderId",id)
+                ,"TemplateId"
+                        +createButton("↑","OrderSortDownByTemplateId")
+                        +createButton("↓","OrderSortUpByTemplateId")
+                        +createInput("filterOrderTemplateId",templateId),
+                "ServiceId"
+                        +createButton("↑","OrderSortDownByServiceId")
+                        +createButton("↓","OrderSortUpByServiceId")
+                        +createInput("filterOrderServiceId",serviceId),
+                "EmployeeId"
+                        +createButton("↑","OrderSortDownByEmployeeId")
+                        +createButton("↓","OrderSortUpByEmployeeId")
+                        +createInput("filterOrderEmployeeId",eId),
+                "Status"
+                        +createButton("↑","OrderSortDownByStatus")
+                        +createButton("↓","OrderSortUpByStatus")
+                        +createInput("filterOrderStatus",status)
+                , "Action"
+                        +createButton("↑","OrderSortDownByAction")
+                        +createButton("↓","OrderSortUpByAction")
+                        +createInput("filterOrderAction",action)
+                , "CreationDate"
+                        +createButton("↑","OrderSortDownByCreationDate")
+                        +createButton("↓","OrderSortUpByCreationDate")
+                        +createInput("filterOrderCreationDate",creationDate)
+                ,
                 createButton("filter","filter")));
         int i = 1;
         for (Order order : orders) {
@@ -102,23 +152,43 @@ public class HtmlTableBuilder {
         return build(innerPart.toString());
     }
 
-    public String createCustomersHtmlTable(Collection<Customer> customers, final String name, final String area) {
+    public String createCustomersHtmlTable(Collection<Customer> customers,final String id, final String name, final String area,
+            final String login,final String password,final String balance,final String connectedServices) {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
                 addColumns(new String[]{"","unique id","name of customer","login of customer",
-                        "password of customer","area of customer","balance of customer","list of connected ids","",""},addCheckboxImg(),
-                        "Id"+createButton("↑","CustomerSortDownById")+
+                        "password of customer","area of customer","balance of customer","list of connected ids","",""},
+                        addCheckboxImg(),
+                        "Id"
+                                +createButton("↑","CustomerSortDownById")+
                                 createButton("↓","CustomerSortUpById")
-                        , "Name"+createButton("↑","CustomerSortDownByName")+
-                                createButton("↓","CustomerSortUpByName")
-                        +createInput("filterCustomerName",name)
-                        , "Login"+createButton("↑","CustomerSortDownByLogin")+
-                                createButton("↓","CustomerSortUpByLogin")
-                        , "Password", "Area"+createInput("filterCustomerArea",area),
-                        "Balance"+createButton("↑","CustomerSortDownByBalance")+
-                                createButton("↓","CustomerSortUpByBalance")
-                        , "ConnectedServices",createButton("filter","filter"),"")
+                                +createInput("filterCustomerId",id)
+                        , "Name"
+                                +createButton("↑","CustomerSortDownByName")
+                                +createButton("↓","CustomerSortUpByName")
+                                +createInput("filterCustomerName",name)
+                        , "Login"
+                                +createButton("↑","CustomerSortDownByLogin")
+                                +createButton("↓","CustomerSortUpByLogin")
+                                +createInput("filterCustomerLogin",login)
+                        , "Password"
+                                +createButton("↑","CustomerSortDownByPassword")
+                                +createButton("↓","CustomerSortUpByPassword")
+                                +createInput("filterCustomerLogin",password)
+                        , "Area"
+                                +createButton("↑","CustomerSortDownByArea")
+                                +createButton("↓","CustomerSortUpByArea")
+                                +createInput("filterCustomerArea",area),
+                        "Balance"
+                                +createButton("↑","CustomerSortDownByBalance")
+                                +createButton("↓","CustomerSortUpByBalance")
+                                +createInput("filterCustomerBalance",balance)
+                        , "ConnectedServices"
+                                +createButton("↑","CustomerSortDownByConnectedServices")
+                                +createButton("↓","CustomerSortUpByConnectedServices")
+                                +createInput("filterCustomerConnectedServices",connectedServices)
+                        ,createButton("filter","filter"),"")
         );
 
         int i = 1;
@@ -130,20 +200,31 @@ public class HtmlTableBuilder {
         return build(innerPart.toString());
     }
 
-    public String createEmployeesHtmlTable(Collection<Employee> employees, final String name) {
+    public String createEmployeesHtmlTable(Collection<Employee> employees,final String id, final String name,
+            final String login,final String password) {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
                 addColumns(new String[]{"","unique id","name of employee","login of employee",
-                        "login of employee","password of employee","",""},addCheckboxImg(),
-                        "Id"+createButton("↑","EmployeeSortDownById")+
-                                createButton("↓","EmployeeSortUpById")
-                        , "Name"+createButton("↑","EmployeeSortDownByName")+
-                                createButton("↓","EmployeeSortUpByName")
-                        +createInput("filterEmployeeName",name)
-                        , "Login"+createButton("↑","EmployeeSortDownByLogin")+
-                                createButton("↓","EmployeeSortUpByLogin")
-                        , "Password",createButton("filter","filter"),"")
+                        "login of employee","password of employee","",""},
+                        addCheckboxImg(),
+                        "Id"
+                                +createButton("↑","EmployeeSortDownById")
+                                +createButton("↓","EmployeeSortUpById")
+                                +createInput("filterEmployeeId",id)
+                        , "Name"
+                                +createButton("↑","EmployeeSortDownByName")
+                                +createButton("↓","EmployeeSortUpByName")
+                                +createInput("filterEmployeeName",name)
+                        , "Login"
+                                +createButton("↑","EmployeeSortDownByLogin")
+                                +createButton("↓","EmployeeSortUpByLogin")
+                                +createInput("filterEmployeeLogin",login)
+                        , "Password"
+                                +createButton("↑","EmployeeSortDownByPassword")
+                                +createButton("↓","EmployeeSortUpByPassword")
+                                +createInput("filterEmployeePassword",password)
+                        ,createButton("filter","filter"),"")
         );
 
         int i = 1;
@@ -155,17 +236,24 @@ public class HtmlTableBuilder {
         return build(innerPart.toString());
     }
 
-    public String createAreasHtmlTable(Collection<Area> areas, final String name) {
+    public String createAreasHtmlTable(Collection<Area> areas,final String id, final String name,final String description) {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
-                addColumns(new String[]{"","unique id","area name","area description","",""},addCheckboxImg(),"Id"+createButton("↑","AreaSortDownById")+
-                                createButton("↓","AreaSortUpById")
-                        , "Name"+createButton("↑","AreaSortDownByName")+
-                                createButton("↓","AreaSortUpByName")
-                        +createInput("filterAreaName",name)
-                        , "Description"+createButton("↑","AreaSortDownByDescription")+
-                                createButton("↓","AreaSortUpByDescription")
+                addColumns(new String[]{"","unique id","area name","area description","",""},
+                        addCheckboxImg(),
+                        "Id"
+                                +createButton("↑","AreaSortDownById")
+                                +createButton("↓","AreaSortUpById")
+                                +createInput("filterAreaId",id)
+                        , "Name"
+                                +createButton("↑","AreaSortDownByName")
+                                +createButton("↓","AreaSortUpByName")
+                                +createInput("filterAreaName",name)
+                        , "Description"
+                                +createButton("↑","AreaSortDownByDescription")
+                                +createButton("↓","AreaSortUpByDescription")
+                                +createInput("filterAreaDescription",description)
                         ,createButton("filter","filter"),"")
         );
 
@@ -359,7 +447,7 @@ public class HtmlTableBuilder {
 
 
     private String build(String innerPart) {
-        String start = "<table border='0' width='auto' cellpadding='20' class='table'>";
+        String start = "<table cellpadding='10' class='table'>";
         String end = "</table>";
         return start + innerPart + end;
     }

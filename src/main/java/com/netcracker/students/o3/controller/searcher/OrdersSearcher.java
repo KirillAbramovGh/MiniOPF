@@ -35,6 +35,8 @@ public class OrdersSearcher extends EntitySearcher<Order>
                 return searchOrderByStatus(search, orders);
             case "Action":
                 return searchOrderByAction(search, orders);
+            case "CreationDate":
+                return searchOrderByCreationDate(search,orders);
             case "all":
                 Set<Order> res = new HashSet<>(searchOrderById(search, orders));
 
@@ -48,6 +50,21 @@ public class OrdersSearcher extends EntitySearcher<Order>
         }
 
         return new ArrayList<>();
+    }
+
+    private List<Order> searchOrderByCreationDate(final String search, final Collection<Order> orders)
+    {
+        List<Order> result = new ArrayList<>();
+
+        String date;
+        for (Order order : orders) {
+            date = order.getCreationDate().toString();
+            if (date.contains(search) || searcherUtil.checkRegExp(search, date)) {
+                result.add(order);
+            }
+        }
+
+        return result;
     }
 
     private List<Order> searchOrderByAction(String search, Collection<Order> orders) {

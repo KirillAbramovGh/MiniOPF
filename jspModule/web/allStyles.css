@@ -136,10 +136,11 @@ input{
      text-align: center;
  }
  .table{
-     width: 1000px;
+     width: auto;
      height: auto;
-     overflow-y: auto;
-     overflow-x: hidden;
+     overflow: hidden;
+     border: 0;
+     padding: 10px;
  }
 .searchWrapper{
 
@@ -179,4 +180,14 @@ input{
 
 .tableHeader{
     background-color: #292929;
+}
+
+.employeeHeader {
+    margin: 0;
+}
+
+.tableWrapper {
+    width: 90%;
+    height: 100%;
+    overflow: auto;
 }

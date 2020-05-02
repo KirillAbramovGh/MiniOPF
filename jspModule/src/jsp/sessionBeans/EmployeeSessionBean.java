@@ -35,6 +35,7 @@ import com.netcracker.students.o3.model.users.Employee;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -77,24 +78,34 @@ public class EmployeeSessionBean
         ControllerImpl.getInstance().setEmployee(employee);
     }
 
-    public List<Order> getFilteredOrdersByEmployeeId(String search, String field, OrderSortType sortOrders,
-            String templateId, String serviceId, BigInteger eId)
+    public List<Order> getFilteredOrdersByEmployeeId( OrderSortType sortOrders,
+            BigInteger templateId, BigInteger serviceId, BigInteger eId,
+            BigInteger id, OrderStatus status, OrderAction action, Date creationDate)
     {
         OrdersSearcher searcherOrders = OrdersSearcher.getInstance();
         List<Order> orders = ControllerImpl.getInstance().getOrdersByEmployeeId(eId);
 
-        if (isNotNullOrEmpty(search))
-        {
-            orders = searcherOrders.search(search, field, orders);
-        }
         if (isNotNullOrEmpty(templateId))
         {
-            orders = searcherOrders.search(templateId, "TemplateId", orders);
+            orders = searcherOrders.search(templateId+"", "TemplateId", orders);
         }
         if (isNotNullOrEmpty(serviceId))
         {
-            orders = searcherOrders.search(serviceId, "ServiceId", orders);
+            orders = searcherOrders.search(serviceId+"", "ServiceId", orders);
         }
+        if(isNotNullOrEmpty(id)){
+            orders = searcherOrders.search(id+"", "Id", orders);
+        }
+        if(isNotNullOrEmpty(status)){
+            orders = searcherOrders.search(status+"", "Status", orders);
+        }
+        if(isNotNullOrEmpty(action)){
+            orders = searcherOrders.search(action+"", "Action", orders);
+        }
+        if(isNotNullOrEmpty(creationDate)){
+            orders = searcherOrders.search(creationDate+"", "CreationDate", orders);
+        }
+
 
         if (sortOrders != null)
         {
@@ -104,27 +115,37 @@ public class EmployeeSessionBean
         return orders;
     }
 
-    public List<Order> getFilteredOrders(String search, String field, OrderSortType sortOrders,
-            String templateId, String serviceId, String employeeId)
+    public List<Order> getFilteredOrders(OrderSortType sortOrders,
+            BigInteger templateId, BigInteger serviceId, BigInteger eId,
+            BigInteger id, OrderStatus status, OrderAction action, Date creationDate)
     {
         OrdersSearcher searcherOrders = OrdersSearcher.getInstance();
-        List<Order> orders = ControllerImpl.getInstance().getOrders();
-        if (isNotNullOrEmpty(search))
-        {
-            orders = searcherOrders.search(search, field, orders);
+        List<Order> orders = ControllerImpl.getInstance().getOrdersByEmployeeId(eId);
+
+        if(isNotNullOrEmpty(eId)){
+            orders = searcherOrders.search(eId+"","EmployeeId",orders);
         }
         if (isNotNullOrEmpty(templateId))
         {
-            orders = searcherOrders.search(templateId, "TemplateId", orders);
+            orders = searcherOrders.search(templateId+"", "TemplateId", orders);
         }
         if (isNotNullOrEmpty(serviceId))
         {
-            orders = searcherOrders.search(serviceId, "ServiceId", orders);
+            orders = searcherOrders.search(serviceId+"", "ServiceId", orders);
         }
-        if (isNotNullOrEmpty(employeeId))
-        {
-            orders = searcherOrders.search(employeeId, "EmployeeId", orders);
+        if(isNotNullOrEmpty(id)){
+            orders = searcherOrders.search(id+"", "Id", orders);
         }
+        if(isNotNullOrEmpty(status)){
+            orders = searcherOrders.search(status+"", "Status", orders);
+        }
+        if(isNotNullOrEmpty(action)){
+            orders = searcherOrders.search(action+"", "Action", orders);
+        }
+        if(isNotNullOrEmpty(creationDate)){
+            orders = searcherOrders.search(creationDate+"", "CreationDate", orders);
+        }
+
 
         if (sortOrders != null)
         {
@@ -134,15 +155,12 @@ public class EmployeeSessionBean
         return orders;
     }
 
-    public List<Service> getFilteredServices(String search, String field, ServiceSortType sortService,
-            String name, String cost)
+    public List<Service> getFilteredServices(ServiceSortType sortService,String id,
+            String name, String cost, String status, String templateId,
+            String customerId, String activationDate, String areas)
     {
         ServiceSearcher searcherService = ServiceSearcher.getInstance();
         List<Service> services = ControllerImpl.getInstance().getServices();
-        if (isNotNullOrEmpty(search))
-        {
-            services = searcherService.search(search, field, services);
-        }
 
         if (isNotNullOrEmpty(name))
         {
@@ -152,6 +170,24 @@ public class EmployeeSessionBean
         {
             services = searcherService.search(cost, "Cost", services);
         }
+        if(isNotNullOrEmpty(status)){
+            services = searcherService.search(status,"Status",services);
+        }
+        if(isNotNullOrEmpty(templateId)){
+            services = searcherService.search(templateId,"TemplateId",services);
+        }
+        if(isNotNullOrEmpty(id)){
+            services = searcherService.search(id,"Id",services);
+        }
+        if(isNotNullOrEmpty(customerId)){
+            services = searcherService.search(templateId,"TemplateId",services);
+        }
+        if(isNotNullOrEmpty(activationDate)){
+            services = searcherService.search(activationDate,"ActivationDate",services);
+        }
+        if(isNotNullOrEmpty(areas)){
+            services = searcherService.search(areas,"Areas",services);
+        }
 
         if (sortService != null)
         {
@@ -160,15 +196,12 @@ public class EmployeeSessionBean
         return services;
     }
 
-    public List<Template> getFilteredTemplates(String search, String field, TemplateSortType sortTemplates,
-            String name, String cost)
+    public List<Template> getFilteredTemplates(TemplateSortType sortTemplates,
+            String name, String cost,String id,String description)
     {
         TemplatesSearcher searcherTemplates = TemplatesSearcher.getInstance();
         List<Template> templates = ControllerImpl.getInstance().getTemplates();
-        if (isNotNullOrEmpty(search))
-        {
-            templates = searcherTemplates.search(search, field, templates);
-        }
+
         if (isNotNullOrEmpty(name))
         {
             templates = searcherTemplates.search(name, "Name", templates);
@@ -176,6 +209,14 @@ public class EmployeeSessionBean
         if (isNotNullOrEmpty(cost))
         {
             templates = searcherTemplates.search(cost, "Cost", templates);
+        }
+        if (isNotNullOrEmpty(id))
+        {
+            templates = searcherTemplates.search(id, "Id", templates);
+        }
+        if (isNotNullOrEmpty(description))
+        {
+            templates = searcherTemplates.search(description, "Description", templates);
         }
 
         if (sortTemplates != null)
@@ -185,15 +226,13 @@ public class EmployeeSessionBean
         return templates;
     }
 
-    public List<Customer> getFilteredCustomers(String search, String field, CustomerSortType sortCustomers,
-            String name, String area)
+    public List<Customer> getFilteredCustomers(CustomerSortType sortCustomers,
+            String id, String name, String area, String login,
+            String password, String balance, String connectedServices)
     {
         CustomerSearcher searcherCustomer = CustomerSearcher.getInstance();
         List<Customer> customers = ControllerImpl.getInstance().getCustomers();
-        if (isNotNullOrEmpty(search))
-        {
-            customers = searcherCustomer.search(search, field, customers);
-        }
+
         if (isNotNullOrEmpty(name))
         {
             customers = searcherCustomer.search(name, "Name", customers);
@@ -201,6 +240,22 @@ public class EmployeeSessionBean
         if (isNotNullOrEmpty(area))
         {
             customers = searcherCustomer.search(area, "Area", customers);
+        }
+        if (isNotNullOrEmpty(login))
+        {
+            customers = searcherCustomer.search(login, "Login", customers);
+        }
+        if (isNotNullOrEmpty(password))
+        {
+            customers = searcherCustomer.search(password, "Password", customers);
+        }
+        if (isNotNullOrEmpty(balance))
+        {
+            customers = searcherCustomer.search(balance, "Balance", customers);
+        }
+        if (isNotNullOrEmpty(connectedServices))
+        {
+            customers = searcherCustomer.search(connectedServices, "ConnectedServices", customers);
         }
 
         if (sortCustomers != null)
@@ -263,9 +318,9 @@ public class EmployeeSessionBean
         }
     }
 
-    private boolean isNotNullOrEmpty(String value)
+    private boolean isNotNullOrEmpty(Object value)
     {
-        return value != null && !value.replaceAll(" ", "").isEmpty();
+        return value != null && !value.toString().replaceAll(" ", "").isEmpty();
     }
 
     public void resumeOrder(BigInteger orderId)

@@ -1,8 +1,13 @@
 package com.netcracker.students.o3.controller.sorters;
 
+import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesByActivationDate;
+import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesByAreas;
 import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesByCost;
+import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesByCustomerId;
 import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesById;
 import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesByName;
+import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesByStatus;
+import com.netcracker.students.o3.controller.comparators.service.ComparatorServicesByTemplateId;
 import com.netcracker.students.o3.controller.sorters.SortType.ServiceSortType;
 import com.netcracker.students.o3.model.services.Service;
 
@@ -18,18 +23,40 @@ public class ServiceSorter {
     private ServiceSorter(){}
 
     private Comparator<Service> defineSortType(ServiceSortType type) {
-        if (ServiceSortType.UpByCost.equals(type)) {
-            return new ComparatorServicesByCost(true);
-        } else if (ServiceSortType.UpByName.equals(type)) {
-            return new ComparatorServicesByName(true);
-        } else if (ServiceSortType.DownByCost.equals(type)) {
-            return new ComparatorServicesByCost(false);
-        }else if (ServiceSortType.UpById.equals(type)){
-            return new ComparatorServicesById(true);
-        }else if (ServiceSortType.DownById.equals(type)){
-            return new ComparatorServicesById(false);
+        switch (type){
+            case ServiceSortUpById:
+                return new ComparatorServicesById(true);
+            case ServiceSortDownById:
+                return new ComparatorServicesById(false);
+            case ServiceSortUpByCost:
+                return new ComparatorServicesByCost(true);
+            case ServiceSortUpByName:
+                return new ComparatorServicesByName(true);
+            case ServiceSortUpByAreas:
+                return new ComparatorServicesByAreas(true);
+            case ServiceSortDownByCost:
+                return new ComparatorServicesByCost(false);
+            case ServiceSortDownByName:
+                return  new ComparatorServicesByName(false);
+            case ServiceSortUpByStatus:
+                return new ComparatorServicesByStatus(true);
+            case ServiceSortDownByAreas:
+                return new ComparatorServicesByAreas(false);
+            case ServiceSortDownByStatus:
+                return new ComparatorServicesByStatus(false);
+            case ServiceSortUpByCustomerId:
+                return new ComparatorServicesByCustomerId(true);
+            case ServiceSortUpByTemplateId:
+                return new ComparatorServicesByTemplateId(true);
+            case ServiceSortDownByCustomerId:
+                return new ComparatorServicesByCustomerId(false);
+            case ServiceSortDownByTemplateId:
+                return new ComparatorServicesByTemplateId(false);
+            case ServiceSortUpByActivationDate:
+                return new ComparatorServicesByActivationDate(true);
+            case ServiceSortDownByActivationDate:
+                return new ComparatorServicesByActivationDate(false);
         }
-
         return new ComparatorServicesByName(false);
     }
 
