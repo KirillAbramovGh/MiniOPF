@@ -56,16 +56,4 @@ public class CustomerHibDao extends AbstractHibDao<Customer> implements Customer
         return customer;
     }
 
-    @Override
-    public void delete(final BigInteger id)
-    {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        Query query = session.createQuery("delete from CustomerImpl where id=:id");
-        query.setParameter("id",id);
-        query.executeUpdate();
-        tx1.commit();
-        session.close();
-        logController.addRequest("delete from CustomerImpl where id=:"+id);
-    }
 }

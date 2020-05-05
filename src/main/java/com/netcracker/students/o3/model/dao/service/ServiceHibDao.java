@@ -93,17 +93,5 @@ public class ServiceHibDao extends AbstractHibDao<Service> implements ServiceDao
         return service;
     }
 
-    @Override
-    public void delete(final BigInteger id)
-    {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        Query query = session.createQuery("delete from ServiceImpl where id=:id");
-        query.setParameter("id",id);
-        query.executeUpdate();
-        tx1.commit();
-        session.close();
-        logController.addRequest("delete from ServiceImpl where id=:"+id);
-    }
 
 }

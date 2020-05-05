@@ -10,6 +10,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/allStyles.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/tabs.css">
+    <link rel="script" href="${pageContext.request.contextPath}/main1.js">
     <title>MiniOPF</title>
     <%!
         @Inject
@@ -17,8 +18,9 @@
     %>
     <%
         CustomerJspHelper customerWV = CustomerJspHelper.getInstance();
-
-        customerSessionBean.addBalance(request.getParameter("sum"), (BigInteger) request.getSession().getAttribute("id"));
+        String sum = request.getParameter("sum");
+        BigInteger id = (BigInteger) request.getSession().getAttribute("id");
+        customerSessionBean.addBalance(sum, id);
 
         String services = new SerializerImpl().serializeToString(
                 ControllerImpl.getInstance().getPlannedActiveSuspendedProvisioningService(

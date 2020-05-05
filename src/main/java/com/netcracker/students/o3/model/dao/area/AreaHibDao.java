@@ -57,16 +57,4 @@ public class AreaHibDao extends AbstractHibDao<Area> implements AreaDao
         return area;
     }
 
-    @Override
-    public void delete(final BigInteger id)
-    {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        Query query = session.createQuery("delete from AreaImpl where id=:id");
-        query.setParameter("id",id);
-        query.executeUpdate();
-        tx1.commit();
-        session.close();
-        logController.addRequest("delete from AreaImpl where id=:"+id);
-    }
 }

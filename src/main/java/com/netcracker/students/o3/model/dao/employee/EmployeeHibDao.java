@@ -59,21 +59,5 @@ public class EmployeeHibDao extends AbstractHibDao<Employee> implements Employee
         return employee;
     }
 
-    @Override
-    public void delete(final BigInteger id)
-    {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        Query query = session.createQuery("delete from EmployeeImpl where id=:id");
-        query.setParameter("id",id);
-        query.executeUpdate();
-        tx1.commit();
-        session.close();
-        try
-        {
-            logController.addRequest("delete from EmployeeImpl where id=:" + id);
-        }catch (Exception ignore){
-        }
-    }
 
 }

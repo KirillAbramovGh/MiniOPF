@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -199,7 +200,7 @@ public class OrderImpl implements Order
 
     private String addUrl(BigInteger value)
     {
-        String start = "<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId=";
+        String start = "<a href='http://localhost:8080/JSONVisual.jsp?entityId=";
         String mid = "' target=\"_blank\">";
         String close = "</a>";
 

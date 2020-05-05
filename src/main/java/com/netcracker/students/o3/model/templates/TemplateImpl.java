@@ -168,7 +168,7 @@ public class TemplateImpl implements Template
     }
 
     private String addUrl(BigInteger value){
-        String start = "<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId=";
+        String start = "<a href='http://localhost:8080/JSONVisual.jsp?entityId=";
         String mid = "' target=\"_blank\">";
         String close = "</a>";
 

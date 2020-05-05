@@ -6,7 +6,9 @@ import com.netcracker.students.o3.model.services.Service;
 import com.netcracker.students.o3.model.templates.Template;
 
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jsp.builders.CardBuilder;
 import jsp.sessionBeans.CustomerSessionBean;
@@ -52,7 +54,7 @@ public class CustomerJspHelper
      */
     public String showAllTemplates(BigInteger customerId, CustomerSessionBean customerSessionBean)
     {
-        List<Template> templates = customerSessionBean.getUnconnectedTemplates(customerId);
+        Set<Template> templates = new HashSet<>(customerSessionBean.getUnconnectedTemplates(customerId));
 
         if (templates.isEmpty())
         {

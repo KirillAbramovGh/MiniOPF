@@ -30,7 +30,7 @@ public class Main
     public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException, JAXBException
     {
        clearDB();
-       downloadDataFromJSON();
+      downloadDataFromJSON();
 
     }
 
@@ -51,6 +51,10 @@ public class Main
         {
             serviceHibDao.delete(service);
         }
+        for (Customer customer : customerHibDao.getAll())
+        {
+            customerHibDao.delete(customer);
+        }
         for (Area area : areaHibDao.getAll())
         {
             areaHibDao.delete(area);
@@ -61,10 +65,6 @@ public class Main
             templateHibDao.delete(template);
         }
 
-        for (Customer customer : customerHibDao.getAll())
-        {
-            customerHibDao.delete(customer);
-        }
         for (Employee employee : employeeHibDao.getAll())
         {
             employeeHibDao.delete(employee);

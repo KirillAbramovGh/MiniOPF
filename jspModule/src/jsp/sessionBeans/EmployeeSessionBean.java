@@ -145,7 +145,7 @@ public class EmployeeSessionBean
             String id, String status, String action, String creationDate)
     {
         OrdersSearcher searcherOrders = OrdersSearcher.getInstance();
-        List<Order> orders = null;
+        List<Order> orders = ControllerImpl.getInstance().getOrders();
         try
         {
             if (isNotNullOrEmpty(eId))
@@ -396,9 +396,9 @@ try
     public void startOrder(BigInteger orderId, BigInteger employeeId)
     {
         Order order = ControllerImpl.getInstance().getOrder(orderId);
-        if (order.getEmployee().getId().longValue() == 0 || order.getEmployee().getId().equals(employeeId))
+        if (order.getEmployee() == null || order.getEmployee().getId().equals(employeeId))
         {
-            ControllerImpl.getInstance().startOrder(orderId, order.getEmployee());
+            ControllerImpl.getInstance().startOrder(orderId, getEmployee(employeeId));
         }
     }
 

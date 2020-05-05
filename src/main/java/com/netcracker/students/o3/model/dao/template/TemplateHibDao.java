@@ -58,16 +58,4 @@ public class TemplateHibDao extends AbstractHibDao<Template> implements Template
         logController.addRequest("from TemplateImpl where id=:"+id);
         return template;
     }
-    @Override
-    public void delete(final BigInteger id)
-    {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        Query query = session.createQuery("delete from TemplateImpl where id=:id");
-        query.setParameter("id",id);
-        query.executeUpdate();
-        tx1.commit();
-        session.close();
-        logController.addRequest("delete from TemplateImpl where id=:"+id);
-    }
 }

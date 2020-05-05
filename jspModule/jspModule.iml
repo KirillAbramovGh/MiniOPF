@@ -31,7 +31,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="TomEE 9.0.30" level="application_server_libraries" />
     <orderEntry type="module" module-name="MiniOPF" />
-    <orderEntry type="library" name="openejb-core-8.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20160810" level="project" />
     <orderEntry type="library" name="Maven: org.everit.json:org.everit.json.schema:1.5.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:19.0" level="project" />

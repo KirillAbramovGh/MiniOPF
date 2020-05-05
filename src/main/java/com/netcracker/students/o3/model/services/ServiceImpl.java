@@ -56,7 +56,7 @@ public class ServiceImpl implements Service
     private Template template;
 
 
-    @OneToOne(targetEntity = OrderImpl.class, fetch = FetchType.EAGER)
+    @OneToOne(optional = true,targetEntity = OrderImpl.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "orderid")
     private Order order;
 
@@ -193,7 +193,7 @@ public class ServiceImpl implements Service
     }
 
     private String addUrl(BigInteger value){
-        String start = "<a href='http://localhost:8080/jspModule_war_exploded/JSONVisual.jsp?entityId=";
+        String start = "<a href='http://localhost:8080/JSONVisual.jsp?entityId=";
         String mid = "' target=\"_blank\">";
         String close = "</a>";
 

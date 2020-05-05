@@ -118,17 +118,4 @@ public class OrderHibDao extends AbstractHibDao<Order> implements OrderDao
         logController.addRequest("from OrderImpl where id=:"+id);
         return order;
     }
-
-    @Override
-    public void delete(final BigInteger id)
-    {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        Query query = session.createQuery("delete from OrderImpl where id=:id");
-        query.setParameter("id",id);
-        query.executeUpdate();
-        tx1.commit();
-        logController.addRequest("delete from OrderImpl where id=:"+id);
-        session.close();
-    }
 }

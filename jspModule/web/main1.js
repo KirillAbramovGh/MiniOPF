@@ -38,8 +38,8 @@ function showBalanceForm() {
     let request = new XMLHttpRequest();
     let sum = prompt("Введите сумму пополнения", "0");
     if (parseFloat(sum)) {
-        var body = "sum=" + sum;
-        request.open("POST", "http://localhost:8080/jspModule2_war_exploded2/webCustomerView.jsp?" + body);
+        let body = "sum=" + sum;
+        request.open("POST", "http://localhost:8080/webCustomerView.jsp?" + body);
         request.onreadystatechange = reqReadyStateChange(request);
         request.send();
     } else {
