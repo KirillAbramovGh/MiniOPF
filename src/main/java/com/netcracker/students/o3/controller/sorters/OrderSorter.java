@@ -29,33 +29,33 @@ public class OrderSorter {
      */
     private Comparator<Order> defineSortType(OrderSortType type) {
         switch (type) {
-            case OrderSortDownById:
+            case DownById:
                 return new ComparatorOrdersById(false);
-            case OrderSortUpById:
+            case UpById:
                 return new ComparatorOrdersById(true);
-            case OrderSortUpByAction:
+            case UpByAction:
                 return new ComparatorOrdersByAction(true);
-            case OrderSortUpByStatus:
+            case UpByStatus:
                 return new ComparatorOrdersByStatus(true);
-            case OrderSortDownByAction:
+            case DownByAction:
                 return new ComparatorOrdersByAction(false);
-            case OrderSortDownByStatus:
+            case DownByStatus:
                 return new ComparatorOrdersByStatus(false);
-            case OrderSortUpByServiceId:
+            case UpByServiceId:
                 return new ComparatorOrdersByServiceId(true);
-            case OrderSortUpByEmployeeId:
+            case UpByEmployeeId:
                 return new ComparatorOrdersByEmployeeId(true);
-            case OrderSortUpByTemplateId:
+            case UpByTemplateId:
                 return new ComparatorOrdersByTemplateId(true);
-            case OrderSortDownByServiceId:
+            case DownByServiceId:
                 return new ComparatorOrdersByServiceId(false);
-            case OrderSortDownByEmployeeId:
+            case DownByEmployeeId:
                 return new ComparatorOrdersByEmployeeId(false);
-            case OrderSortDownByTemplateId:
+            case DownByTemplateId:
                 return new ComparatorOrdersByTemplateId(false);
-            case OrderSortUpByCreationDate:
+            case UpByCreationDate:
                 return new ComparatorOrdersByCreationDate(true);
-            case OrderSortDownByCreationDate:
+            case DownByCreationDate:
                 return new ComparatorOrdersByCreationDate(false);
         }
         return new ComparatorOrdersById(true);

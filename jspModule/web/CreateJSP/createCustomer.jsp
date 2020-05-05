@@ -50,14 +50,16 @@
             String[] templates = servicesValue.split(",");
 
            Customer customer = ControllerImpl.getInstance()
-                   .createCustomer(name,login,password,BigInteger.valueOf(Long.parseLong(area)));
+                   .createCustomer(name,login,password,controller.getArea(BigInteger.valueOf(Long.parseLong(area))));
 
            BigInteger customerId = customer.getId();
             for (String s : templates)
             {
                 if (s != null && !s.isEmpty()){
                     BigInteger templateId = BigInteger.valueOf(Long.parseLong(s));
-                    controller.createService(customerId,templateId, ServiceStatus.Planned);
+                    controller.createService(
+                            controller.getCustomer(customerId),
+                            controller.getTemplate(templateId), ServiceStatus.Planned);
                 }
             }
             ControllerImpl.getInstance().setCustomer(customer);

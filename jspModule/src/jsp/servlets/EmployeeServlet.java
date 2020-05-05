@@ -29,11 +29,21 @@ public class EmployeeServlet extends HttpServlet
         {
             if (req.getParameterMap().get(key) != null)
             {
-                parse(key, req, resp);
+                parse(keyToNormalForm(key), req, resp);
             }
         }
 
         forward((String) req.getSession().getAttribute("nextPage"), req, resp);
+    }
+
+    private String keyToNormalForm(final String key)
+    {
+        String dot = ".";
+        if(key.contains(dot)){
+            return key.split("\\.")[0];
+        }else {
+            return key;
+        }
     }
 
     private void parse(String key, HttpServletRequest req, HttpServletResponse resp)

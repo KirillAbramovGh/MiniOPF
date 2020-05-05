@@ -24,37 +24,37 @@ public class ServiceSorter {
 
     private Comparator<Service> defineSortType(ServiceSortType type) {
         switch (type){
-            case ServiceSortUpById:
+            case UpById:
                 return new ComparatorServicesById(true);
-            case ServiceSortDownById:
+            case DownById:
                 return new ComparatorServicesById(false);
-            case ServiceSortUpByCost:
+            case UpByCost:
                 return new ComparatorServicesByCost(true);
-            case ServiceSortUpByName:
+            case UpByName:
                 return new ComparatorServicesByName(true);
-            case ServiceSortUpByAreas:
+            case UpByAreas:
                 return new ComparatorServicesByAreas(true);
-            case ServiceSortDownByCost:
+            case DownByCost:
                 return new ComparatorServicesByCost(false);
-            case ServiceSortDownByName:
+            case DownByName:
                 return  new ComparatorServicesByName(false);
-            case ServiceSortUpByStatus:
+            case UpByStatus:
                 return new ComparatorServicesByStatus(true);
-            case ServiceSortDownByAreas:
+            case DownByAreas:
                 return new ComparatorServicesByAreas(false);
-            case ServiceSortDownByStatus:
+            case DownByStatus:
                 return new ComparatorServicesByStatus(false);
-            case ServiceSortUpByCustomerId:
+            case UpByCustomerId:
                 return new ComparatorServicesByCustomerId(true);
-            case ServiceSortUpByTemplateId:
+            case UpByTemplateId:
                 return new ComparatorServicesByTemplateId(true);
-            case ServiceSortDownByCustomerId:
+            case DownByCustomerId:
                 return new ComparatorServicesByCustomerId(false);
-            case ServiceSortDownByTemplateId:
+            case DownByTemplateId:
                 return new ComparatorServicesByTemplateId(false);
-            case ServiceSortUpByActivationDate:
+            case UpByActivationDate:
                 return new ComparatorServicesByActivationDate(true);
-            case ServiceSortDownByActivationDate:
+            case DownByActivationDate:
                 return new ComparatorServicesByActivationDate(false);
         }
         return new ComparatorServicesByName(false);

@@ -2,6 +2,7 @@ package jsp.servlets;
 
 
 import com.netcracker.students.o3.controller.ControllerImpl;
+import com.netcracker.students.o3.controller.sorters.SortType.AreaSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.CustomerSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.EmployeeSortType;
 import com.netcracker.students.o3.controller.sorters.SortType.OrderSortType;
@@ -30,12 +31,12 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    if (req.getParameter("edit") != null)
+                    if (req.getParameter("edit.x") != null)
                     {
                         req.getSession().setAttribute("massEditType", "customer");
                         setMassEditIds(req, key);
                     }
-                    else if (req.getParameter("delete") != null)
+                    else if (req.getParameter("delete.x") != null)
                     {
                         employeeSessionBean.deleteCustomer(EmployeeCommand.getIdFromKey(key));
                     }
@@ -47,12 +48,12 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    if (req.getParameter("edit") != null)
+                    if (req.getParameter("edit.x") != null)
                     {
                         req.getSession().setAttribute("massEditType", "service");
                         setMassEditIds(req, key);
                     }
-                    else if (req.getParameter("delete") != null)
+                    else if (req.getParameter("delete.x") != null)
                     {
                         employeeSessionBean.deleteService(EmployeeCommand.getIdFromKey(key));
                     }
@@ -64,11 +65,11 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    if(req.getParameter("edit")!=null)
+                    if(req.getParameter("edit.x")!=null)
                     {
                         req.getSession().setAttribute("massEditType", "employee");
                         setMassEditIds(req, key);
-                    }else if(req.getParameter("delete")!=null){
+                    }else if(req.getParameter("delete.x")!=null){
                         employeeSessionBean.deleteEmployee(EmployeeCommand.getIdFromKey(key));
                     }
                 }
@@ -79,11 +80,11 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    if(req.getParameter("edit")!=null)
+                    if(req.getParameter("edit.x")!=null)
                     {
                         req.getSession().setAttribute("massEditType", "template");
                         setMassEditIds(req, key);
-                    }else if(req.getParameter("delete")!=null){
+                    }else if(req.getParameter("delete.x")!=null){
                         employeeSessionBean.deleteTemplate(EmployeeCommand.getIdFromKey(key));
                     }
                 }
@@ -94,11 +95,11 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    if(req.getParameter("edit")!=null)
+                    if(req.getParameter("edit.x")!=null)
                     {
                         req.getSession().setAttribute("massEditType", "order");
                         setMassEditIds(req, key);
-                    }else if(req.getParameter("delete")!=null){
+                    }else if(req.getParameter("delete.x")!=null){
                         employeeSessionBean.deleteOrder(EmployeeCommand.getIdFromKey(key));
                     }
                 }
@@ -109,11 +110,11 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key) throws ServletException, IOException
                 {
-                    if(req.getParameter("edit")!=null)
+                    if(req.getParameter("edit.x")!=null)
                     {
                         req.getSession().setAttribute("massEditType", "area");
                         setMassEditIds(req, key);
-                    }else if(req.getParameter("delete")!=null){
+                    }else if(req.getParameter("delete.x")!=null){
                         employeeSessionBean.deleteArea(EmployeeCommand.getIdFromKey(key));
                     }
                 }
@@ -481,6 +482,96 @@ public enum EmployeeCommand
                     setAttribute("sortServices", ServiceSortType.DownById, req);
                 }
             },
+    ServiceSortDownByStatus
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.DownByStatus, req);
+                }
+            },
+    ServiceSortUpByStatus
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.UpByStatus, req);
+                }
+            },
+    ServiceSortUpByTemplateId
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.UpByTemplateId, req);
+                }
+            },
+    ServiceSortDownByTemplateId
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.DownByTemplateId, req);
+                }
+            },
+    ServiceSortDownByCustomerId
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.DownByCustomerId, req);
+                }
+            },
+    ServiceSortUpByCustomerId
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.UpByCustomerId, req);
+                }
+            },
+    ServiceSortUpByActivationDate
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.UpByActivationDate, req);
+                }
+            },
+    ServiceSortDownByActivationDate
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.DownByActivationDate, req);
+                }
+            },
+    ServiceSortUpByAreas
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.UpByAreas, req);
+                }
+            },
+    ServiceSortDownByAreas
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortServices", ServiceSortType.DownByAreas, req);
+                }
+            },
 
 
     TemplateSortUpByName
@@ -542,6 +633,45 @@ public enum EmployeeCommand
                     setAttribute("sortTemplates", TemplateSortType.DownById, req);
                 }
             },
+
+    TemplateSortUpByDescription
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortTemplates", TemplateSortType.UpByDescription, req);
+                }
+            },
+    TemplateSortDownByDescription
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortTemplates", TemplateSortType.DownByDescription, req);
+                }
+            },
+    TemplateSortUpByAreas
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortTemplates", TemplateSortType.UpByAreas, req);
+                }
+            },
+    TemplateSortDownByAreas
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortTemplates", TemplateSortType.DownByAreas, req);
+                }
+            },
+
+
     OrderSortUpById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
@@ -560,6 +690,98 @@ public enum EmployeeCommand
                     setAttribute("sortOrders", OrderSortType.DownById, req);
                 }
             },
+    OrderSortUpByAction
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortOrders", OrderSortType.UpByAction, req);
+                }
+            },
+    OrderSortDownByAction
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortOrders", OrderSortType.UpByAction, req);
+                }
+            },
+    OrderSortUpByTemplateId
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortOrders", OrderSortType.UpByTemplateId, req);
+                }
+            },
+    OrderSortDownByTemplateId
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortOrders", OrderSortType.DownByTemplateId, req);
+                }
+            },
+    OrderSortUpByServiceId
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortOrders", OrderSortType.UpByServiceId, req);
+                }
+            },
+    OrderSortDownByServiceId
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortOrders", OrderSortType.DownByServiceId, req);
+                }
+            },
+    OrderSortUpByEmployeeId
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortOrders", OrderSortType.UpByEmployeeId, req);
+                }
+            },
+    OrderSortDownByEmployeeId
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortOrders", OrderSortType.DownByEmployeeId, req);
+                }
+            },
+    OrderSortUpByCreationDate
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortOrders", OrderSortType.UpByCreationDate, req);
+                }
+            },
+    OrderSortDownByCreationDate
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortOrders", OrderSortType.DownByCreationDate, req);
+                }
+            },
+
+
     EmployeeSortUpById
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
@@ -614,6 +836,26 @@ public enum EmployeeCommand
                     setAttribute("sortEmployees", EmployeeSortType.DownByName, req);
                 }
             },
+    EmployeeSortUpByPassword
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortEmployees", EmployeeSortType.UpByPassword, req);
+                }
+            },
+    EmployeeSortDownByPassword
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortEmployees", EmployeeSortType.DownByPassword, req);
+                }
+            },
+
+
     CustomerSortUpByBalance
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
@@ -679,7 +921,7 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
-
+                    setAttribute("sortCustomers", CustomerSortType.UpByName, req);
                 }
             },
     CustomerSortDownByName
@@ -688,16 +930,74 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
-
+                    setAttribute("sortCustomers", CustomerSortType.DownByName, req);
                 }
             },
+
+    CustomerSortUpByPassword
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortCustomers", CustomerSortType.UpByPassword, req);
+                }
+            },
+    CustomerSortDownByPassword
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortCustomers", CustomerSortType.DownByPassword, req);
+                }
+            },
+    CustomerSortUpByArea
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortCustomers", CustomerSortType.UpByArea, req);
+                }
+            },
+    CustomerSortDownByArea
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortCustomers", CustomerSortType.DownByArea, req);
+                }
+            },
+    CustomerSortUpByConnectedServices
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortCustomers", CustomerSortType.UpByConnectedServices, req);
+                }
+            },
+    CustomerSortDownByConnectedServices
+            {
+                public void execute(HttpServletRequest req, final HttpServletResponse resp,
+                        final ServletContext context, EmployeeSessionBean employeeSessionBean,
+                        final String key)
+                {
+                    setAttribute("sortCustomers", CustomerSortType.DownByConnectedServices, req);
+                }
+            },
+
+
+
     AreaSortUpByDescription
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
-
+                    setAttribute("sortAreas", AreaSortType.UpByDescription, req);
                 }
             },
     AreaSortDownByDescription
@@ -706,7 +1006,7 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
-
+                    setAttribute("sortAreas", AreaSortType.DownByDescription, req);
                 }
             },
     AreaSortUpById
@@ -715,7 +1015,7 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
-
+                    setAttribute("sortAreas", AreaSortType.UpById, req);
                 }
             },
     AreaSortDownById
@@ -724,7 +1024,7 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
-
+                    setAttribute("sortAreas", AreaSortType.DownById, req);
                 }
             },
     AreaSortUpByName
@@ -733,7 +1033,7 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
-
+                    setAttribute("sortAreas", AreaSortType.UpByName, req);
                 }
             },
     AreaSortDownByName
@@ -742,9 +1042,11 @@ public enum EmployeeCommand
                         final ServletContext context, EmployeeSessionBean employeeSessionBean,
                         final String key)
                 {
-
+                    setAttribute("sortAreas", AreaSortType.DownByName, req);
                 }
             },
+
+
     serviceRadio
             {
                 public void execute(HttpServletRequest req, final HttpServletResponse resp,

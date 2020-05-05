@@ -3,6 +3,7 @@ package com.netcracker.students.o3.controller.sorters;
 import com.netcracker.students.o3.controller.comparators.employee.ComparatorEmployeesById;
 import com.netcracker.students.o3.controller.comparators.employee.ComparatorEmployeesByLogin;
 import com.netcracker.students.o3.controller.comparators.employee.ComparatorEmployeesByName;
+import com.netcracker.students.o3.controller.comparators.employee.ComparatorEmployeesByPassword;
 import com.netcracker.students.o3.controller.sorters.SortType.EmployeeSortType;
 import com.netcracker.students.o3.model.users.Employee;
 
@@ -37,7 +38,10 @@ public class EmployeeSorter {
                 return new ComparatorEmployeesByLogin(true);
             case DownByLogin:
                 return new ComparatorEmployeesByLogin(false);
-
+            case UpByPassword:
+                return new ComparatorEmployeesByPassword(true);
+            case DownByPassword:
+                return new ComparatorEmployeesByPassword(false);
         }
         return new ComparatorEmployeesById(true);
     }

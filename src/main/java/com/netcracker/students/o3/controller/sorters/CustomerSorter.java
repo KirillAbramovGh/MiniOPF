@@ -29,33 +29,33 @@ public class CustomerSorter {
      */
     private Comparator<Customer> defineSortType(CustomerSortType type) {
         switch (type) {
-            case CustomerSortDownById:
+            case DownById:
                 return new ComparatorCustomersById(false);
-            case CustomerSortUpById:
+            case UpById:
                 return new ComparatorCustomersById(true);
-            case CustomerSortUpByName:
+            case UpByName:
                 return new ComparatorCustomersByName(true);
-            case CustomerSortDownByName:
+            case DownByName:
                 return new ComparatorCustomersByName(false);
-            case CustomerSortUpByLogin:
+            case UpByLogin:
                 return new ComparatorCustomersByLogin(true);
-            case CustomerSortDownByLogin:
+            case DownByLogin:
                 return new ComparatorCustomersByLogin(false);
-            case CustomerSortUpByBalance:
+            case UpByBalance:
                 return new ComparatorCustomersByBalance(true);
-            case CustomerSortDownByBalance:
+            case DownByBalance:
                 return new ComparatorCustomersByBalance(false);
-            case CustomerSortUpByArea:
+            case UpByArea:
                 return new ComparatorCustomersByArea(true);
-            case CustomerSortDownByArea:
+            case DownByArea:
                 return new ComparatorCustomersByArea(false);
-            case CustomerSortUpByPassword:
+            case UpByPassword:
                 return new ComparatorCustomersByPassword(true);
-            case CustomerSortDownByPassword:
+            case DownByPassword:
                 return new ComparatorCustomersByPassword(false);
-            case CustomerSortUpByConnectedServices:
+            case UpByConnectedServices:
                 return new ComparatorCustomersByConnectedServices(true);
-            case CustomerSortDownByConnectedServices:
+            case DownByConnectedServices:
                 return new ComparatorCustomersByConnectedServices(false);
         }
         return new ComparatorCustomersById(true);

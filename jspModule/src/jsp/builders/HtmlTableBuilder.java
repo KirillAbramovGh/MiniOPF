@@ -20,6 +20,7 @@ public class HtmlTableBuilder {
 
     private static HtmlTableBuilder instance;
     private Controller controller = ControllerImpl.getInstance();
+    private static final String nextLine = "<br>";
 
     private HtmlTableBuilder() {
         colors = new String[]{"#8c8888", "#5c5959"};
@@ -37,31 +38,39 @@ public class HtmlTableBuilder {
                 addColumns(new String[]{"","unique id", "name of service","cost of service","status of service show his state",
                         "id of template","id of customer","date when service was activated","areas where status is availabel","",""},
                         addCheckboxImg(),
-                        "id"+createButton("↑","ServiceSortUpById")+
-                                createButton("↓","ServiceSortDownById")+
+                        "id"+nextLine
+                                +createButton("↑","ServiceSortUpById")+
+                                createButton("↓","ServiceSortDownById")+nextLine+
                                 createInput("filterServiceId",id),
-                        "Name"+createButton("↑","ServiceSortDownByName")+
-                                createButton("↓","ServiceSortUpByName")+
+                        "Name"+nextLine
+                                +createButton("↑","ServiceSortDownByName")+
+                                createButton("↓","ServiceSortUpByName")+nextLine+
                         createInput("filterServiceName",name),
-                        "Cost"+createButton("↑","ServiceSortDownByCost")+
-                                createButton("↓","ServiceSortUpByCost")+
+                        "Cost"+nextLine
+                                +createButton("↑","ServiceSortDownByCost")+
+                                createButton("↓","ServiceSortUpByCost")+nextLine+
                         createInput("filterServiceCost",cost),
-                        "Status"+createButton("↑","ServiceSortDownByStatus")+
-                                createButton("↓","ServiceSortUpByStatus")+
+                        "Status"+nextLine
+                                +createButton("↑","ServiceSortDownByStatus")+
+                                createButton("↓","ServiceSortUpByStatus")+nextLine+
                                 createInput("filterServiceStatus",status),
-                        "TemplateId"+createButton("↑","ServiceSortDownByTemplateId")+
-                                createButton("↓","ServiceSortUpByTemplateId")+
+                        "TemplateId"+nextLine
+                                +createButton("↑","ServiceSortDownByTemplateId")+
+                                createButton("↓","ServiceSortUpByTemplateId")+nextLine+
                                 createInput("filterServiceTemplateId",templateId),
-                        "CustomerId"+createButton("↑","ServiceSortDownByCustomerId")+
-                                createButton("↓","ServiceSortUpByCustomerId")+
+                        "CustomerId"+nextLine
+                                +createButton("↑","ServiceSortDownByCustomerId")+
+                                createButton("↓","ServiceSortUpByCustomerId")+nextLine+
                                 createInput("filterServiceCustomerId",customerId),
-                        "ActivationDate"+createButton("↑","ServiceSortDownByActivationDate")+
-                                createButton("↓","ServiceSortUpByActivationDate")+
+                        "ActivationDate" +nextLine+
+                                createButton("↑","ServiceSortDownByActivationDate")+
+                                createButton("↓","ServiceSortUpByActivationDate")+nextLine+
                                 createInput("filterServiceActivationDate",activationDate)
-                        , "Areas"+createButton("↑","ServiceSortDownByAreas")+
-                                createButton("↓","ServiceSortUpByAreas")+
+                        , "Areas"+nextLine+
+                                createButton("↑","ServiceSortDownByAreas")+
+                                createButton("↓","ServiceSortUpByAreas")+nextLine+
                                 createInput("filterServiceAreas",areas)
-                        ,createButton("filter","filter"),"");
+                        ,"","");
 
         innerPart += addServicesToHtmlTable(services);
 
@@ -69,31 +78,34 @@ public class HtmlTableBuilder {
     }
 
     public String createTemplatesHtmlTable(Collection<Template> templates,final String id, final String name,
-            final String cost,final String description) {
+            final String cost,final String description,final String areas) {
         StringBuilder innerPart = new StringBuilder();
 
         innerPart.append(
                 addColumns(new String[]{"","unique id","name of template","cost of template","description of " +
                                 "template","areas where template is available","",""},
                         addCheckboxImg(),
-                        "Id"+createButton("↑","TemplateSortDownById")
-                                +createButton("↓","TemplateSortUpById")
+                        "Id"+nextLine+
+                                createButton("↑","TemplateSortDownById")
+                                +createButton("↓","TemplateSortUpById")+nextLine
                                 +createInput("filterTemplateId",id)
-                        , "Name"+createButton("↑","TemplateSortDownByName")
-                                +createButton("↓","TemplateSortUpByName")
+                        , "Name"+nextLine
+                                +createButton("↑","TemplateSortDownByName")
+                                +createButton("↓","TemplateSortUpByName")+nextLine
                         +createInput("filterTemplateName",name)
-                        , "Cost"+createButton("↑","TemplateSortDownByCost")
-                                +createButton("↓","TemplateSortUpByCost")
+                        , "Cost"+nextLine
+                                +createButton("↑","TemplateSortDownByCost")
+                                +createButton("↓","TemplateSortUpByCost")+nextLine
                         +createInput("filterTemplateCost",cost)
-                        , "Description"
+                        , "Description"+nextLine
                                 +createButton("↑","TemplateSortDownByDescription")
-                                +createButton("↓","TemplateSortUpByDescription")
+                                +createButton("↓","TemplateSortUpByDescription")+nextLine
                                 +createInput("filterTemplateDescription",description)
-                        , "Areas"
+                        , "Areas"+nextLine
                                 +createButton("↑","TemplateSortDownByAreas")
-                                +createButton("↓","TemplateSortUpByAreas")
-                                +createInput("filterTemplateAreas",description)
-                        ,createButton("filter","filter"),"")
+                                +createButton("↓","TemplateSortUpByAreas")+nextLine
+                                +createInput("filterTemplateAreas",areas)
+                        ,"","")
         );
 
         int i = 1;
@@ -113,37 +125,38 @@ public class HtmlTableBuilder {
                 "id of service","id of employee","status show state of order",
                 "action show what need to do","date of creation",""},
                 addCheckboxImg(),
-                 "id"
+                 "id"+nextLine
                  +createButton("↑","OrderSortDownById")
-                 +createButton("↓","OrderSortUpById")
+                 +createButton("↓","OrderSortUpById")+nextLine
                  +createInput("filterOrderId",id)
-                ,"TemplateId"
+                ,"TemplateId"+nextLine
                         +createButton("↑","OrderSortDownByTemplateId")
-                        +createButton("↓","OrderSortUpByTemplateId")
+                        +createButton("↓","OrderSortUpByTemplateId")+nextLine
                         +createInput("filterOrderTemplateId",templateId),
-                "ServiceId"
+                "ServiceId"+nextLine
                         +createButton("↑","OrderSortDownByServiceId")
-                        +createButton("↓","OrderSortUpByServiceId")
+                        +createButton("↓","OrderSortUpByServiceId")+nextLine
                         +createInput("filterOrderServiceId",serviceId),
-                "EmployeeId"
+                "EmployeeId"+nextLine
                         +createButton("↑","OrderSortDownByEmployeeId")
-                        +createButton("↓","OrderSortUpByEmployeeId")
+                        +createButton("↓","OrderSortUpByEmployeeId")+nextLine
                         +createInput("filterOrderEmployeeId",eId),
-                "Status"
+                "Status"+nextLine
                         +createButton("↑","OrderSortDownByStatus")
                         +createButton("↓","OrderSortUpByStatus")
                         +createInput("filterOrderStatus",status)
-                , "Action"
+                , "Action"+nextLine
                         +createButton("↑","OrderSortDownByAction")
                         +createButton("↓","OrderSortUpByAction")
                         +createInput("filterOrderAction",action)
-                , "CreationDate"
+                , "CreationDate"+nextLine
                         +createButton("↑","OrderSortDownByCreationDate")
-                        +createButton("↓","OrderSortUpByCreationDate")
+                        +createButton("↓","OrderSortUpByCreationDate")+nextLine
                         +createInput("filterOrderCreationDate",creationDate)
                 ,
-                createButton("filter","filter")));
+                ""));
         int i = 1;
+        if(orders!=null)
         for (Order order : orders) {
             i = getNextColorNumber(i);
             innerPart.append(addOrderToHtmlTable(order, colors[i]));
@@ -160,35 +173,35 @@ public class HtmlTableBuilder {
                 addColumns(new String[]{"","unique id","name of customer","login of customer",
                         "password of customer","area of customer","balance of customer","list of connected ids","",""},
                         addCheckboxImg(),
-                        "Id"
+                        "Id"+nextLine
                                 +createButton("↑","CustomerSortDownById")+
-                                createButton("↓","CustomerSortUpById")
+                                createButton("↓","CustomerSortUpById")+nextLine
                                 +createInput("filterCustomerId",id)
-                        , "Name"
+                        , "Name"+nextLine
                                 +createButton("↑","CustomerSortDownByName")
-                                +createButton("↓","CustomerSortUpByName")
+                                +createButton("↓","CustomerSortUpByName")+nextLine
                                 +createInput("filterCustomerName",name)
-                        , "Login"
+                        , "Login"+nextLine
                                 +createButton("↑","CustomerSortDownByLogin")
-                                +createButton("↓","CustomerSortUpByLogin")
+                                +createButton("↓","CustomerSortUpByLogin")+nextLine
                                 +createInput("filterCustomerLogin",login)
-                        , "Password"
+                        , "Password"+nextLine
                                 +createButton("↑","CustomerSortDownByPassword")
-                                +createButton("↓","CustomerSortUpByPassword")
+                                +createButton("↓","CustomerSortUpByPassword")+nextLine
                                 +createInput("filterCustomerLogin",password)
-                        , "Area"
+                        , "Area"+nextLine
                                 +createButton("↑","CustomerSortDownByArea")
-                                +createButton("↓","CustomerSortUpByArea")
+                                +createButton("↓","CustomerSortUpByArea")+nextLine
                                 +createInput("filterCustomerArea",area),
-                        "Balance"
+                        "Balance"+nextLine
                                 +createButton("↑","CustomerSortDownByBalance")
-                                +createButton("↓","CustomerSortUpByBalance")
+                                +createButton("↓","CustomerSortUpByBalance")+nextLine
                                 +createInput("filterCustomerBalance",balance)
-                        , "ConnectedServices"
+                        , "ConnectedServices"+nextLine
                                 +createButton("↑","CustomerSortDownByConnectedServices")
-                                +createButton("↓","CustomerSortUpByConnectedServices")
+                                +createButton("↓","CustomerSortUpByConnectedServices")+nextLine
                                 +createInput("filterCustomerConnectedServices",connectedServices)
-                        ,createButton("filter","filter"),"")
+                        ,"","")
         );
 
         int i = 1;
@@ -208,23 +221,23 @@ public class HtmlTableBuilder {
                 addColumns(new String[]{"","unique id","name of employee","login of employee",
                         "login of employee","password of employee","",""},
                         addCheckboxImg(),
-                        "Id"
+                        "Id"+nextLine
                                 +createButton("↑","EmployeeSortDownById")
-                                +createButton("↓","EmployeeSortUpById")
+                                +createButton("↓","EmployeeSortUpById")+nextLine
                                 +createInput("filterEmployeeId",id)
-                        , "Name"
+                        , "Name"+nextLine
                                 +createButton("↑","EmployeeSortDownByName")
-                                +createButton("↓","EmployeeSortUpByName")
+                                +createButton("↓","EmployeeSortUpByName")+nextLine
                                 +createInput("filterEmployeeName",name)
-                        , "Login"
+                        , "Login"+nextLine
                                 +createButton("↑","EmployeeSortDownByLogin")
-                                +createButton("↓","EmployeeSortUpByLogin")
+                                +createButton("↓","EmployeeSortUpByLogin")+nextLine
                                 +createInput("filterEmployeeLogin",login)
-                        , "Password"
+                        , "Password"+nextLine
                                 +createButton("↑","EmployeeSortDownByPassword")
-                                +createButton("↓","EmployeeSortUpByPassword")
+                                +createButton("↓","EmployeeSortUpByPassword")+nextLine
                                 +createInput("filterEmployeePassword",password)
-                        ,createButton("filter","filter"),"")
+                        ,"","")
         );
 
         int i = 1;
@@ -242,19 +255,19 @@ public class HtmlTableBuilder {
         innerPart.append(
                 addColumns(new String[]{"","unique id","area name","area description","",""},
                         addCheckboxImg(),
-                        "Id"
+                        "Id"+nextLine
                                 +createButton("↑","AreaSortDownById")
-                                +createButton("↓","AreaSortUpById")
+                                +createButton("↓","AreaSortUpById")+nextLine
                                 +createInput("filterAreaId",id)
-                        , "Name"
+                        , "Name"+nextLine
                                 +createButton("↑","AreaSortDownByName")
-                                +createButton("↓","AreaSortUpByName")
+                                +createButton("↓","AreaSortUpByName")+nextLine
                                 +createInput("filterAreaName",name)
-                        , "Description"
+                        , "Description"+nextLine
                                 +createButton("↑","AreaSortDownByDescription")
-                                +createButton("↓","AreaSortUpByDescription")
+                                +createButton("↓","AreaSortUpByDescription")+nextLine
                                 +createInput("filterAreaDescription",description)
-                        ,createButton("filter","filter"),"")
+                        ,"","")
         );
 
         int i = 1;
@@ -500,7 +513,7 @@ public class HtmlTableBuilder {
         if (value == null){
             value = "";
         }
-        return "<input type=\"text\" name=\""+name+"\" value=\""+value+"\">";
+        return "<input class='filterField' type=\"text\" name=\""+name+"\" value=\""+value+"\">";
     }
 
     private String createCheckbox(String name,String value){

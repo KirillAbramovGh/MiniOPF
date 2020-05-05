@@ -1,6 +1,7 @@
 <%@ page import="com.netcracker.students.o3.controller.ControllerImpl" %>
 <%@ page import="com.netcracker.students.o3.model.services.ServiceStatus" %>
 <%@ page import="java.math.BigInteger" %>
+<%@ page import="com.netcracker.students.o3.controller.Controller" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -35,13 +36,14 @@
     {
         if (request.getParameter("save") != null)
         {
+            Controller controller = ControllerImpl.getInstance();
             String templateId = request.getParameter("templateId");
             String userId = request.getParameter("userId");
             String status = request.getParameter("status");
 
-            ControllerImpl.getInstance().createService(
-                    BigInteger.valueOf(Long.parseLong(userId)),
-                    BigInteger.valueOf(Long.parseLong(templateId)),
+            controller.createService(
+                    controller.getCustomer(BigInteger.valueOf(Long.parseLong(userId))),
+                    controller.getTemplate(BigInteger.valueOf(Long.parseLong(templateId))),
                     ServiceStatus.valueOf(status)
             );
 %>

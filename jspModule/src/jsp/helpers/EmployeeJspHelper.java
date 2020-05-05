@@ -53,23 +53,23 @@ public class EmployeeJspHelper
     }
 
     public String showFilteredOrdersByEmployeeId(OrderSortType sortOrders,
-            BigInteger templateId, BigInteger serviceId, BigInteger eId, EmployeeSessionBean employeeSessionBean,
-            BigInteger id, OrderStatus status, OrderAction action, Date creationDate)
+            String templateId, String serviceId, String eId,
+            String id, String status, String action, String creationDate,EmployeeSessionBean employeeSessionBean)
     {
         List<Order> orders = employeeSessionBean.getFilteredOrdersByEmployeeId(sortOrders,
                 templateId,serviceId,eId,id,status,action,creationDate);
-        return htmlTableBuilder.createOrdersHtmlTable(orders, id+"",templateId+"",serviceId+"",eId+"",
-                status+"",action+"",creationDate+"");
+        return htmlTableBuilder.createOrdersHtmlTable(orders, id,templateId,serviceId,eId,
+                status,action,creationDate);
     }
 
     public String showFilteredOrders(OrderSortType sortOrders,
-            BigInteger templateId, BigInteger serviceId, BigInteger eId, EmployeeSessionBean employeeSessionBean,
-            BigInteger id, OrderStatus status, OrderAction action, Date creationDate)
+            String templateId, String serviceId, String eId,
+            String id, String status, String action, String creationDate,EmployeeSessionBean employeeSessionBean)
     {
         List<Order> orders = employeeSessionBean.getFilteredOrders(sortOrders,
                 templateId,serviceId,eId,id,status,action,creationDate);
-        return htmlTableBuilder.createOrdersHtmlTable(orders, id+"",templateId+"",serviceId+"",eId+"",
-                status+"",action+"",creationDate+"");
+        return htmlTableBuilder.createOrdersHtmlTable(orders, id,templateId,serviceId,eId,
+                status,action,creationDate);
     }
 
     public String showFilteredServices(ServiceSortType sortService,String id,
@@ -83,11 +83,11 @@ public class EmployeeJspHelper
     }
 
     public String showFilteredTemplates(TemplateSortType sortTemplates,
-            String name, String cost,String id,String description, EmployeeSessionBean employeeSessionBean)
+            String name, String cost,String id,String description,String areas, EmployeeSessionBean employeeSessionBean)
     {
         List<Template> templates = employeeSessionBean.getFilteredTemplates(sortTemplates,name,
-                cost,id,description);
-        return htmlTableBuilder.createTemplatesHtmlTable(templates,id,name,cost,description);
+                cost,id,description,areas);
+        return htmlTableBuilder.createTemplatesHtmlTable(templates,id,name,cost,description,areas);
     }
 
     public String showFilteredCustomers(CustomerSortType sortCustomers,
@@ -101,20 +101,19 @@ public class EmployeeJspHelper
     }
 
 
-    public String showFilteredEmployees(String searchValue, String searchField, EmployeeSortType sortEmployees,
-            String name, EmployeeSessionBean employeeSessionBean)
+    public String showFilteredEmployees(EmployeeSortType sortEmployees,
+            String id,String name,String login,String password, EmployeeSessionBean employeeSessionBean)
     {
-        List<Employee> employees = employeeSessionBean.getFilteredEmployees(searchValue, searchField, sortEmployees,
-                name);
-        return htmlTableBuilder.createEmployeesHtmlTable(employees, name);
+        List<Employee> employees = employeeSessionBean.getFilteredEmployees(sortEmployees,id,
+                name,login,password);
+        return htmlTableBuilder.createEmployeesHtmlTable(employees,id,name,login,password);
     }
 
-    public String showFilteredAreas(String search, String field, AreaSortType sortAreas,
-            String name, EmployeeSessionBean employeeSessionBean)
+    public String showFilteredAreas(AreaSortType sortAreas,
+            String id,String name,String description, EmployeeSessionBean employeeSessionBean)
     {
-        List<Area> areas = employeeSessionBean.getFilteredAreas(search, field, sortAreas,
-                name);
-        return htmlTableBuilder.createAreasHtmlTable(areas, name);
+        List<Area> areas = employeeSessionBean.getFilteredAreas(sortAreas,id,name,description);
+        return htmlTableBuilder.createAreasHtmlTable(areas,id,name,description);
     }
 
     public String showAll(String search, EmployeeSessionBean employeeSessionBean, String... entities)
@@ -129,26 +128,26 @@ public class EmployeeJspHelper
                 {
                     case "Services":
                         result.append("<h2>Services</h2><div class='table'>")
-                                .append(showFilteredServices(search, "all", null, "", "", employeeSessionBean))
+                                .append(showFilteredServices( null,search,search,search,search,search,search,search,search, employeeSessionBean))
                                 .append("</div>"); break;
                     case "Templates":
                         result.append("<h2>Templates</h2><div class='table'>")
-                                .append(showFilteredTemplates(search, "all", null, null, null, employeeSessionBean))
+                                .append(showFilteredTemplates(null,search,search,search,search,search, employeeSessionBean))
                                 .append("</div>"); break;
                     case "Orders":
                         result.append("<h2>Orders</h2><div class='table'>")
-                                .append(showFilteredOrders(search, "all", null, "", "", "", employeeSessionBean))
+                                .append(showFilteredOrders(null,search,search,search,search,search,search,search, employeeSessionBean))
                                 .append("</div>"); break;
                     case "Customers":
                         result.append("<h2>Customers</h2><div class='table'>")
-                                .append(showFilteredCustomers(search, "all", null, "", "", employeeSessionBean))
+                                .append(showFilteredCustomers(null,search,search,search,search,search,search,search, employeeSessionBean))
                                 .append("</div>"); break;
                     case "Areas":
                         result.append("<h2>Areas</h2><div class='table'>")
-                                .append(showFilteredAreas(search, "all", null, "", employeeSessionBean)).append("</div>"); break;
+                                .append(showFilteredAreas(null,search,search,search, employeeSessionBean)).append("</div>"); break;
                     case "Employees":
                         result.append("<h2>Employees</h2><div class='table'>")
-                                .append(showFilteredEmployees(search, "all", null, "", employeeSessionBean)).append("</div>"); break;
+                                .append(showFilteredEmployees(null,search,search,search,search, employeeSessionBean)).append("</div>"); break;
                 }
             }
         }

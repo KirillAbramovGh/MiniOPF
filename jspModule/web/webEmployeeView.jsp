@@ -70,16 +70,16 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="submit" name="createOrder" value="Create" title="Create new Order">
+                                <input type="image" name="createOrder" value="Create" src="resources/create.png" title="Create new Order">
                             </div>
                             <div>
-                                <input type="submit" name="edit" value="Edit"
+                                <input type="image" name="edit" src="resources/edit.png"
                                        title="Edit several Orders which you check">
-                                <input type="submit" name="delete" value="Delete"
+                                <input type="image"  name="delete" value="Delete" src="resources/delete.png"
                                        title="Delete several Orders which you check">
                             </div>
                             <div>
-                                <input type="submit" value="filter" name="filter">
+                                <input type="image" src="resources/search.PNG" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/importType.jsp"
@@ -99,12 +99,16 @@
 
                         <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredOrdersByEmployeeId(
-                                    (OrderSortType) request.getSession().getAttribute("sortOrders"),
-                                    request.getParameter("filterOrderTemplateId"),
+                                    (OrderSortType) request.getSession().getAttribute("sortOrders")
+                                    ,request.getParameter("filterOrderTemplateId"),
                                     request.getParameter("filterOrderServiceId"),
-                                    (BigInteger) request.getSession().getAttribute("id"),
+                                    request.getParameter("filterOrderEmployeeId"),
+                                    request.getParameter("filterOrderId"),
+                                    request.getParameter("filterOrderStatus"),
+                                    request.getParameter("filterOrderAction"),
+                                    request.getParameter("filterOrderCreationDate"),
                                     employeeSessionBean
-                            )%>
+                                    )%>
                         </div>
                     </div>
                 </form>
@@ -114,16 +118,16 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="submit" name="createOrder" value="Create" title="Create new Order">
+                                <input type="image" name="createOrder" src="resources/create.png" value="Create" title="Create new Order">
                             </div>
                             <div>
-                                <input type="submit" name="edit" value="Edit"
+                                <input type="image" name="edit" value="Edit" src="resources/edit.png"
                                        title="Edit several Orders which you check">
-                                <input type="submit" name="delete" value="Delete"
+                                <input type="image" name="delete" value="Delete" src="resources/delete.png"
                                        title="Delete several Orders which you check">
                             </div>
                             <div>
-                                <input type="submit" value="filter" name="filter">
+                                <input type="image" src="resources/search.PNG" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
@@ -138,12 +142,14 @@
 
                         <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredOrders(
-                                    request.getParameter("searchFieldAllOrders"),
-                                    request.getParameter("allOrderSelectField"),
-                                    (OrderSortType) request.getSession().getAttribute("sortOrders"),
-                                    request.getParameter("filterOrderTemplateId"),
+                                    (OrderSortType) request.getSession().getAttribute("sortOrders")
+                                    ,request.getParameter("filterOrderTemplateId"),
                                     request.getParameter("filterOrderServiceId"),
                                     request.getParameter("filterOrderEmployeeId"),
+                                    request.getParameter("filterOrderId"),
+                                    request.getParameter("filterOrderStatus"),
+                                    request.getParameter("filterOrderAction"),
+                                    request.getParameter("filterOrderCreationDate"),
                                     employeeSessionBean
                             )%>
                         </div>
@@ -155,14 +161,14 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="submit" name="createService" value="Create">
+                                <input type="image" src="resources/create.png" name="createService" value="Create">
                             </div>
                             <div>
-                                <input type="submit" name="edit" value="Edit">
-                                <input type="submit" name="delete" value="Delete">
+                                <input type="image" name="edit" value="Edit" src="resources/edit.png">
+                                <input type="image" src="resources/delete.png" name="delete" value="Delete">
                             </div>
                             <div>
-                                <input type="submit" value="filter" name="filter">
+                                <input type="image" src="resources/search.PNG" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
@@ -177,11 +183,15 @@
                         </div>
                         <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredServices(
-                                    request.getParameter("searchFieldAllServices"),
-                                    request.getParameter("allServicesSelectField"),
-                                    (ServiceSortType) request.getSession().getAttribute("sortServices"),
+                                    (ServiceSortType)request.getSession().getAttribute("sortServices"),
+                                    request.getParameter("filterServiceId"),
                                     request.getParameter("filterServiceName"),
                                     request.getParameter("filterServiceCost"),
+                                    request.getParameter("filterServiceStatus"),
+                                    request.getParameter("filterServiceTemplateId"),
+                                    request.getParameter("filterServiceCustomerId"),
+                                    request.getParameter("filterServiceActivationDate"),
+                                    request.getParameter("filterServiceAreas"),
                                     employeeSessionBean
                             )%>
                         </div>
@@ -193,14 +203,14 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="submit" name="createTemplate" value="Create">
+                                <input type="image" src="resources/create.png" name="createTemplate" value="Create">
                             </div>
                             <div>
-                                <input type="submit" name="edit" value="Edit">
-                                <input type="submit" name="delete" value="Delete">
+                                <input type="image" name="edit" value="Edit" src="resources/edit.png">
+                                <input type="image" src="resources/delete.png" name="delete" value="Delete">
                             </div>
                             <div>
-                                <input type="submit" value="filter" name="filter">
+                                <input type="image" src="resources/search.PNG" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
@@ -216,11 +226,12 @@
                         </div>
                         <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredTemplates(
-                                    request.getParameter("searchFieldAllTemplates"),
-                                    request.getParameter("allTemplatesSelectField"),
-                                    (TemplateSortType) request.getSession().getAttribute("sortTemplates"),
+                                    (TemplateSortType)request.getSession().getAttribute("sortTemplates"),
                                     request.getParameter("filterTemplateName"),
                                     request.getParameter("filterTemplateCost"),
+                                    request.getParameter("filterTemplateId"),
+                                    request.getParameter("filterTemplateDescription"),
+                                    request.getParameter("filterTemplateAreas"),
                                     employeeSessionBean
                             )%>
                         </div>
@@ -232,14 +243,14 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="submit" name="createCustomer" value="Create">
+                                <input type="image" src="resources/create.png" name="createCustomer" value="Create">
                             </div>
                             <div>
-                                <input type="submit" name="edit" value="Edit">
-                                <input type="submit" name="delete" value="Delete">
+                                <input type="image" src="resources/edit.png" name="edit" value="Edit">
+                                <input type="image" src="resources/delete.png" name="delete" value="Delete">
                             </div>
                             <div>
-                                <input type="submit" value="filter" name="filter">
+                                <input type="image" src="resources/search.PNG" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
@@ -253,11 +264,14 @@
                         </div>
                         <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredCustomers(
-                                    request.getParameter("searchFieldAllCustomers"),
-                                    request.getParameter("allCustomersSelectField"),
-                                    (CustomerSortType) request.getSession().getAttribute("sortCustomers"),
+                                    (CustomerSortType)request.getSession().getAttribute("sortCustomers"),
+                                    request.getParameter("filterCustomerId"),
                                     request.getParameter("filterCustomerName"),
                                     request.getParameter("filterCustomerArea"),
+                                    request.getParameter("filterCustomerLogin"),
+                                    request.getParameter("filterCustomerPassword"),
+                                    request.getParameter("filterCustomerBalance"),
+                                    request.getParameter("filterCustomerConnectedServices"),
                                     employeeSessionBean
                             )%>
                         </div>
@@ -269,14 +283,14 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="submit" name="createEmployee" value="Create">
+                                <input type="image" src="resources/create.png" name="createEmployee" value="Create">
                             </div>
                             <div>
-                                <input type="submit" name="edit" value="Edit">
-                                <input type="submit" name="delete" value="Delete">
+                                <input type="image" src="resources/edit.png" name="edit" value="Edit">
+                                <input type="image" src="resources/delete.png" name="delete" value="Delete">
                             </div>
                             <div>
-                                <input type="submit" value="filter" name="filter">
+                                <input type="image" src="resources/search.PNG" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
@@ -292,10 +306,11 @@
                         </div>
                         <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredEmployees(
-                                    request.getParameter("searchFieldAllEmployees"),
-                                    request.getParameter("allEmployeesSelectField"),
-                                    (EmployeeSortType) request.getSession().getAttribute("sortEmployees"),
+                                    (EmployeeSortType)request.getSession().getAttribute("sortEmployees"),
+                                    request.getParameter("filterEmployeeId"),
                                     request.getParameter("filterEmployeeName"),
+                                    request.getParameter("filterEmployeeLogin"),
+                                    request.getParameter("filterEmployeePassword"),
                                     employeeSessionBean
                             )%>
                         </div>
@@ -307,14 +322,14 @@
                     <div>
                         <div class="employeeOrdersForm">
                             <div>
-                                <input type="submit" name="createArea" value="Create">
+                                <input type="image" src="resources/create.png" name="createArea" value="Create">
                             </div>
                             <div>
-                                <input type="submit" name="edit" value="Edit">
-                                <input type="submit" name="delete" value="Delete">
+                                <input type="image" src="resources/edit.png" name="edit" value="Edit">
+                                <input type="image" src="resources/delete.png" name="delete" value="Delete">
                             </div>
                             <div>
-                                <input type="submit" value="filter" name="filter">
+                                <input type="image" src="resources/search.PNG" value="filter" name="filter">
                             </div>
                             <div>
                                 <form class="export" action="${pageContext.request.contextPath}/employeeServlet"
@@ -329,10 +344,10 @@
                         </div>
                         <div class="tableWrapper">
                             <%=employeeJspHelper.showFilteredAreas(
-                                    request.getParameter("searchFieldAllAreas"),
-                                    request.getParameter("allAreasSelectField"),
-                                    (AreaSortType) request.getSession().getAttribute("sortAreas"),
+                                    (AreaSortType)request.getSession().getAttribute("sortAreas"),
+                                    request.getParameter("filterAreaId"),
                                     request.getParameter("filterAreaName"),
+                                    request.getParameter("filterAreaDescription"),
                                     employeeSessionBean
                             )%>
                         </div>

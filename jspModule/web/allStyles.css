@@ -28,13 +28,16 @@ p{
     margin-block-start: 0;
     margin-block-end: 0;
 }
-input{
+input,select{
     color: white;
     border-radius: 3px;
     background-color: inherit;
     border-width: 1px;
     border-color: black;
     margin: 3px;
+}
+option{
+    color: #868383;
 }
 .wrapperGrid{
     display: grid;
@@ -140,7 +143,9 @@ input{
      height: auto;
      overflow: hidden;
      border: 0;
-     padding: 10px;
+     padding-right: 10px;
+     margin-right: 20px;
+     border-spacing: 0;
  }
 .searchWrapper{
 
@@ -190,4 +195,10 @@ input{
     width: 90%;
     height: 100%;
     overflow: auto;
+    padding-right: 20px;
+    margin-right: 20px;
+}
+
+.filterField{
+    width: 100px;
 }

@@ -30,25 +30,25 @@ public class TemplateSorter {
      */
     private Comparator<Template> defineSortType(TemplateSortType type) {
         switch (type) {
-            case TemplateSortDownByName:
+            case DownByName:
                 return new ComparatorTemplatesByName(false);
-            case TemplateSortDownByCost:
+            case DownByCost:
                 return new ComparatorTemplatesByCost(false);
-            case TemplateSortUpByName:
+            case UpByName:
                 return new ComparatorTemplatesByName(true);
-            case TemplateSortUpByCost:
+            case UpByCost:
                 return new ComparatorTemplatesByCost(true);
-            case TemplateSortUpById:
+            case UpById:
                 return new ComparatorTemplatesById(true);
-            case TemplateSortDownById:
+            case DownById:
                 return new ComparatorTemplatesById(false);
-            case TemplateSortUpByAreas:
+            case UpByAreas:
                 return new ComparatorTemplatesByAreas(true);
-            case TemplateSortDownByAreas:
+            case DownByAreas:
                 return new ComparatorTemplatesByAreas(false);
-            case TemplateSortUpByDescription:
+            case UpByDescription:
                 return new ComparatorTemplatesByDescription(true);
-            case TemplateSortDownByDescription:
+            case DownByDescription:
                 return new ComparatorTemplatesByDescription(false);
         }
         return new ComparatorTemplatesByName(false);

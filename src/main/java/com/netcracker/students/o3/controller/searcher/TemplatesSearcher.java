@@ -37,6 +37,7 @@ public class TemplatesSearcher extends EntitySearcher<Template>
                 if (area.getName().contains(areaName) || searcherUtil.checkRegExp(areaName, area.getName()))
                 {
                     results.add(template);
+                    break;
                 }
             }
         }
