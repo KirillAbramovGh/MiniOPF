@@ -63,7 +63,7 @@
 
 <%=startJspHelper.showErrorMessage(session)%>
 
-<script src="../../jspModule2/web/main1.js"></script>
+<script src="../web/main1.js"></script>
 
 </body>
 
