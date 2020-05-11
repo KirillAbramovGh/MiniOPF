@@ -63,7 +63,7 @@
 
 <%=startJspHelper.showErrorMessage(session)%>
 
-<script src="../web/main1.js"></script>
+<script src="${pageContext.request.contextPath}/main1.js"></script>
 
 </body>
 
