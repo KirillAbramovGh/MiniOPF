@@ -142,6 +142,11 @@
             <artifactId>spring-webmvc</artifactId>
             <version>5.2.5.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>com.netcracker.students.o3</groupId>
+            <artifactId>MiniOPF</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>
