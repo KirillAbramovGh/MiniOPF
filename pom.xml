@@ -64,6 +64,9 @@
     <artifactId>MiniOPF</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <modules>
+        <module>jspModule</module>
+    </modules>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
         <dependency>
