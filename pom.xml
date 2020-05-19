@@ -21,6 +21,7 @@
 
     <build>
         <finalName>MiniOpf</finalName>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
                 <plugin>
@@ -67,6 +68,7 @@
     <modules>
         <module>jspModule</module>
     </modules>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
         <dependency>
